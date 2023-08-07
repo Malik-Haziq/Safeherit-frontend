@@ -12,11 +12,9 @@ export function withCondition(
     }
 }
 
-/** A more specific variation */
 export const withLoggedIn = (Component: React.FunctionComponent) => {
     // TODO: add correct logic for is logged in
     const isLoggedIn: boolean = true;
-    // TODO: confirm path for login page
     const redirectTo: string = "/login"
     return withCondition(Component, isLoggedIn, redirectTo)
 }
