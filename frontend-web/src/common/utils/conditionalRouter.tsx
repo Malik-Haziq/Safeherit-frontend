@@ -1,5 +1,6 @@
-import { FunctionComponent, useContext } from "react"
+import { FunctionComponent, useContext } from "react";
 import { Navigate } from "react-router-dom";
+import { ROUTE_CONSTANTS } from "..";
 
 /** A higher-order component with conditional routing logic */
 export function withCondition(
@@ -15,6 +16,6 @@ export function withCondition(
 export const withLoggedIn = (Component: React.FunctionComponent) => {
     // TODO: add correct logic for is logged in
     const isLoggedIn: boolean = true;
-    const redirectTo: string = "/login"
+    const redirectTo: string = ROUTE_CONSTANTS.LOGIN;
     return withCondition(Component, isLoggedIn, redirectTo)
 }
