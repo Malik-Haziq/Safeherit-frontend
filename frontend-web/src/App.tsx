@@ -1,16 +1,26 @@
-import { withLoggedIn } from "./common/utils/conditionalRouter";
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { withLoggedIn } from "./common";
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { Login, SignUp, Dashboard, Pricing } from "./pages";
 
 function App() {
 
-  // const CounterPrivate = withLoggedIn(Counter)
+  const AuthDashboard = withLoggedIn(Dashboard)
+  const AuthPaymentPlan = withLoggedIn(Pricing)
 
   return (
     // TODO: add suspense with loading fallback to handle loading time delays.
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
-        {/* <Route path="/counter" element={<CounterPrivate />} /> */}
+        {/* Global Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+
+        {/* Protected Routes */}
+        <Route path="/dashboard" element={<AuthDashboard />} />
+        <Route path="/pricing" element={<AuthPaymentPlan />} />
+
+        {/* Default Route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   )
