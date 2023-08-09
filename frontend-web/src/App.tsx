@@ -31,12 +31,10 @@ function App() {
 function NavBarLayout () {
 
   return (
-    <div>
+    <>
       <NavBar />
-      <div className="md:container md:mx-auto">
-        <Outlet />
-      </div>
-    </div>
+      <Outlet />
+    </>
   )
 }
 

@@ -6,7 +6,7 @@ export function NavBar() {
   const { t } = useTranslation();
 
   return (
-    <div className='text-safe-text-gray h-20'>
+    <div className='text-safe-text-gray h-20 bg-safe-white'>
       <nav className="relative h-20 flex flex-wrap items-center justify-between navbar-expand-lg bg-white-500">
         <div className="w-full relative flex flex-row lg:w-auto pl-16 lg:static lg:block lg:justify-start">
           <img className="h-20" src={logo} alt="..."></img>
