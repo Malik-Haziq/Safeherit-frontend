@@ -1,9 +1,7 @@
-import {createReducer} from '@reduxjs/toolkit';
+import { createReducer } from "@reduxjs/toolkit"
 
-const initialState = {
-};
+const initialState = {}
 
-export const UserReducers = createReducer(initialState, builder => {
-  builder.addCase('getUser', (state, action) => {
-  });
-});
+export const UserReducers = createReducer(initialState, (builder) => {
+  builder.addCase("getUser", (state, action) => {})
+})
