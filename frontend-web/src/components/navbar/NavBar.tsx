@@ -6,10 +6,9 @@ export function NavBar() {
 
   return (
     <div className="text-safe-text-gray h-20 bg-safe-white shadow-sm">
-      <nav className="relative h-20 flex flex-wrap items-center justify-between navbar-expand-lg bg-white-500">
+      <nav className="relative h-20 flex flex-wrap items-center justify-between navbar-expand-lg bg-white-500 bg-safe-white">
         <div className="w-full relative flex flex-row lg:w-auto pl-16 lg:static lg:block lg:justify-start">
           <img className="w-48" src={logo} alt="..."></img>
-          {/* TODO Image need to be changed*/}
         </div>
         <div className="lg:flex flex-grow">
           <ul className="flex flex-col lg:flex-row list-none ml-auto">
