@@ -22,6 +22,9 @@ export default {
       fontFamily: {
         "safe-font-default": "Montserrat",
       },
+      width: {
+        "167px": "167px",
+      },
     },
   },
   plugins: [],
