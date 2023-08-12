@@ -2,10 +2,30 @@ import { useTranslation } from "react-i18next"
 import logo from "../../../assets/images/safeherit_logo.svg"
 import loginImg from "../../../assets/images/login-img.png"
 import star from "../../../assets/images/star.svg"
-import { startTransition } from "react"
+import { useState } from "react"
 
 export function Login() {
   const { t } = useTranslation()
+  const [formControl, setFormControl] = useState({
+    email: "",
+    password: "",
+  })
+  const [rememberMe, setRememberMe] = useState(false)
+
+  const _handleChange = (event: { target: { name: any; value: any } }) => {
+    const { name, value } = event.target
+    setFormControl({ ...formControl, [name]: value })
+  }
+
+  const _setRememberMe = (event: { target: { checked: boolean } }) => {
+    setRememberMe(event.target.checked)
+  }
+
+  const _handleSubmit = () => {
+    if (formControl.email && formControl.password) {
+      alert("handling submit here")
+    }
+  }
 
   return (
     <main className="flex flex-row justify-center lg:justify-between font-safe-font-default w-screen h-screen">
@@ -18,13 +38,19 @@ export function Login() {
           <p className="text-safe-text-dark-gray text-base mb-8">
             Please create your new account to continue
           </p>
-          <form className="flex flex-col gap-5 mb-6">
+          <form
+            className="flex flex-col gap-5 mb-6"
+            onSubmit={(e) => {
+              e.preventDefault()
+              _handleSubmit()
+            }}
+          >
             <InputField
               type="email"
               name="email"
               placeholder="Enter your email"
-              value=""
-              _handleChange={() => {}}
+              value={formControl.email}
+              _handleChange={_handleChange}
               inputLable="Email"
             />
 
@@ -32,16 +58,24 @@ export function Login() {
               type="password"
               name="password"
               placeholder="Enter your password"
-              value=""
-              _handleChange={() => {}}
+              value={formControl.password}
+              _handleChange={_handleChange}
               inputLable="password"
             />
             <div className="flex justify-between items-center ">
               <div className="flex gap-2 text-safe-text-gray items-center justify-center  ">
-                <input type="checkbox" className="mr-2 block h-5 w-5" />
+                <input
+                  type="checkbox"
+                  className="mr-2 block h-5 w-5"
+                  checked={rememberMe}
+                  onChange={_setRememberMe}
+                />
                 <small className="text-base ">Remember Me</small>
               </div>
-              <a href="#" className="text-safe-text-blue-shade font-medium">
+              <a
+                href="/login"
+                className="text-safe-text-blue-shade font-medium"
+              >
                 Forgot Password?
               </a>
             </div>
@@ -50,7 +84,10 @@ export function Login() {
             </button>
             <small className="text-sm text-safe-text-dark-gray mx-auto">
               Don't have an account?&nbsp;
-              <a href="#" className="text-safe-text-dark-link-blue font-bold">
+              <a
+                href="/signup"
+                className="text-safe-text-dark-link-blue font-bold"
+              >
                 Sign up
               </a>
             </small>
@@ -111,6 +148,7 @@ function InputField(_props: {
           placeholder={placeholder}
           value={value}
           onChange={_handleChange}
+          required
           className="bg-safe-white py-4 px-4 w-full divide-safe-color-gray border rounded-[6px]"
         />
       </label>

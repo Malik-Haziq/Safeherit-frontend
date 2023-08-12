@@ -32,7 +32,15 @@ export function SignUp() {
   }
 
   const _handleSubmit = () => {
-    alert("handling submit here")
+    if (
+      formControl.name &&
+      formControl.email &&
+      formControl.password &&
+      formControl.confirm_password &&
+      agreeTermAndCondition
+    ) {
+      alert("handling submit here")
+    }
   }
 
   return (
@@ -51,7 +59,13 @@ export function SignUp() {
             Please create your new account to continue
           </p>
         </div>
-        <form className="flex flex-col gap-4 mx-4 ">
+        <form
+          className="flex flex-col gap-4 mx-4 "
+          onSubmit={(e) => {
+            e.preventDefault()
+            _handleSubmit()
+          }}
+        >
           <InputField
             name="name"
             type="text"
@@ -109,6 +123,7 @@ export function SignUp() {
               name="checkbox"
               type="checkbox"
               checked={agreeTermAndCondition}
+              required
               className="mr-2 block h-5 w-5"
               onChange={_acceptTermCondition}
             />
@@ -122,10 +137,7 @@ export function SignUp() {
               </a>
             </small>
           </div>
-          <button
-            className="primary-btn px-16 uppercase w-fit mx-auto"
-            onClick={_handleSubmit}
-          >
+          <button className="primary-btn px-16 uppercase w-fit mx-auto">
             Sign up
           </button>
         </form>
