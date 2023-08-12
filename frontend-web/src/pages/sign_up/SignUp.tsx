@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import logo from "../../../assets/images/safeherit_logo.svg"
 import userIcon from "../../../assets/images/UserIcon.png"
@@ -7,6 +8,32 @@ import signUpImg from "../../../assets/images/sign-up-img.jpg"
 
 export function SignUp() {
   const { t } = useTranslation()
+  const [formControl, setFormControl] = useState({
+    name: "",
+    email: "",
+    password: "",
+    password_visibility: false,
+    confirm_password: "",
+    confirm_password_visibility: false,
+  })
+  const [agreeTermAndCondition, setAgreeTermAndCondition] = useState(false)
+
+  const _handleChange = (event: { target: { name: any; value: any } }) => {
+    const { name, value } = event.target
+    setFormControl({ ...formControl, [name]: value })
+  }
+
+  const _handlePasswordVisibility = (name: string, value: boolean) => {
+    setFormControl({ ...formControl, [name]: value })
+  }
+
+  const _acceptTermCondition = (event: { target: { checked: boolean } }) => {
+    setAgreeTermAndCondition(event.target.checked)
+  }
+
+  const _handleSubmit = () => {
+    alert("handling submit here")
+  }
 
   return (
     <main className="flex flex-col md:flex-row justify-center lg:justify-between font-safe-font-default w-screen h-[91vh]">
@@ -26,65 +53,85 @@ export function SignUp() {
         </div>
         <form className="flex flex-col gap-4 mx-4 ">
           <InputField
-            name="user name"
+            name="name"
             type="text"
             placeholder="Full Name"
-            value=""
+            value={formControl.name}
             iconAlt="user icon"
             icon={userIcon}
-            _handleChange={() => {}}
-            _imagePress={() => {}}
+            _handleChange={_handleChange}
           />
 
           <InputField
             name="email"
             type="email"
             placeholder="Email Address"
-            value=""
+            value={formControl.email}
             iconAlt="email icon"
             icon={emailIcon}
-            _handleChange={() => {}}
-            _imagePress={() => {}}
+            _handleChange={_handleChange}
           />
 
           <InputField
             name="password"
-            type="password"
+            type={formControl.password_visibility ? "text" : "password"}
             placeholder="Password"
-            value=""
+            value={formControl.password}
             iconAlt="password visibility icon"
             icon={passwordVisibilityIcon}
-            _handleChange={() => {}}
-            _imagePress={() => {}}
+            _handleChange={_handleChange}
+            _imagePress={() => {
+              _handlePasswordVisibility(
+                "password_visibility",
+                !formControl.password_visibility,
+              )
+            }}
           />
 
           <InputField
-            name="confirm password"
-            type="password"
+            name="confirm_password"
+            type={formControl.confirm_password_visibility ? "text" : "password"}
             placeholder="Confirm Password"
-            value=""
+            value={formControl.confirm_password}
             iconAlt="password visibility icon"
             icon={passwordVisibilityIcon}
-            _handleChange={() => {}}
-            _imagePress={() => {}}
+            _handleChange={_handleChange}
+            _imagePress={() => {
+              _handlePasswordVisibility(
+                "confirm_password_visibility",
+                !formControl.confirm_password_visibility,
+              )
+            }}
           />
 
           <div className="flex gap-2 text-safe-text-gray mt-2 mb-8">
-            <input type="checkbox" className="mr-2 block h-5 w-5" />
+            <input
+              name="checkbox"
+              type="checkbox"
+              checked={agreeTermAndCondition}
+              className="mr-2 block h-5 w-5"
+              onChange={_acceptTermCondition}
+            />
             <small>
               By Continuing you agree to our&nbsp;
-              <a href="#" className="text-safe-text-link-blue font-semibold">
+              <a
+                href="/about"
+                className="text-safe-text-link-blue font-semibold"
+              >
                 Terms of conditions Privacy policy
               </a>
             </small>
           </div>
-          <button className="primary-btn px-16 uppercase w-fit mx-auto ">
+          <button
+            className="primary-btn px-16 uppercase w-fit mx-auto"
+            onClick={_handleSubmit}
+          >
             Sign up
           </button>
         </form>
         <small className="text-sm text-safe-text-dark-gray mt-8">
           Already have an account?&nbsp;
-          <a href="#" className="text-safe-text-dark-link-blue font-bold">
+          <a href="/login" className="text-safe-text-dark-link-blue font-bold">
             Login
           </a>
         </small>
@@ -108,7 +155,7 @@ function InputField(_props: {
   iconAlt: string
   icon: any
   _handleChange: any
-  _imagePress: any
+  _imagePress?: any
 }) {
   const {
     name,
@@ -128,13 +175,14 @@ function InputField(_props: {
         placeholder={placeholder}
         value={value}
         onChange={_handleChange}
+        required
         className="bg-safe-gray py-4 px-4 w-full placeholder:text-safe-text-dark-blue placeholder:font-medium rounded-[22px]"
       />
       <img
         src={icon}
         alt={iconAlt}
         onClick={_imagePress}
-        className="absolute right-4 top-4"
+        className="absolute right-4 top-4 cursor-pointer"
       />
     </div>
   )
