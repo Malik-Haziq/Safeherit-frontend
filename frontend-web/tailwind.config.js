@@ -6,6 +6,7 @@ export default {
       backgroundColor: {
         "safe-blue": "#0C8AC1",
         "safe-white": "#FFFFFF",
+        "safe-gray": "#F5FAFD",
       },
       colors: {
         "safe-color-blue": "#0C8AC1",
