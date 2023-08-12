@@ -1,8 +1,12 @@
 import { useTranslation } from "react-i18next"
 import logo from "../../../assets/images/safeherit_logo.svg"
+import { useNavigate } from "react-router-dom"
 
 export function NavBar() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
+  const _handleLoginPress = () => navigate("/login")
 
   return (
     <div className="text-safe-text-gray h-20 bg-safe-white shadow-sm">
@@ -13,22 +17,33 @@ export function NavBar() {
         <div className="lg:flex flex-grow">
           <ul className="flex flex-col lg:flex-row list-none ml-auto">
             <li className="nav-item mr-16">
-              <p className="px-3 flex py-2 font-safe-font-default font-medium text-base hover:opacity-75 cursor-pointer">
+              <a
+                href="/"
+                className="px-3 flex py-2 font-safe-font-default font-medium text-base hover:opacity-75 cursor-pointer"
+              >
                 {t("Home")}
-              </p>
+              </a>
             </li>
             <li className="nav-item mr-16">
-              <p className="px-3 flex py-2 font-safe-font-default font-medium text-base hover:opacity-75 cursor-pointer">
+              <a
+                href="/about"
+                className="px-3 flex py-2 font-safe-font-default font-medium text-base hover:opacity-75 cursor-pointer"
+              >
                 {t("About us")}
-              </p>
+              </a>
             </li>
             <li className="nav-item mr-11">
-              <p className="px-3 flex py-2 font-safe-font-default font-medium text-base hover:opacity-75 cursor-pointer">
+              <a
+                href="/contact"
+                className="px-3 flex py-2 font-safe-font-default font-medium text-base hover:opacity-75 cursor-pointer"
+              >
                 {t("Contact")}
-              </p>
+              </a>
             </li>
             <li className="nav-item mr-14">
-              <button className="primary-btn">{t("Login Register")}</button>
+              <button className="primary-btn" onClick={_handleLoginPress}>
+                {t("Login Register")}
+              </button>
             </li>
           </ul>
         </div>
