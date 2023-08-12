@@ -1,4 +1,3 @@
-import styles from "./SignUp.module.css"
 import { useTranslation } from "react-i18next"
 import logo from "../../../assets/images/safeherit_logo.svg"
 import userIcon from "../../../assets/images/UserIcon.png"
