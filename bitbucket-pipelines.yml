@@ -13,7 +13,5 @@ pipelines:
           - npm run build  # Adjust the build command as needed
           - npm install -g firebase-tools
           - firebase deploy --token $FIREBASE_TOKEN --project $FIREBASE_PROJECT_ID
-        artifacts:
-          - build/**
         services:
           - docker
