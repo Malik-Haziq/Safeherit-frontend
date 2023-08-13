@@ -7,6 +7,7 @@ pipelines:
         caches:
           - node
         script:
+          - cd frontend-web
           - npm install
           - npm run build  # Adjust the build command as needed
           - npm install -g firebase-tools
