@@ -15,6 +15,7 @@ pipelines:
             name: Deploy to Firebase
             deployment: production
             script:
+              - cd frontend-web
               - pipe: atlassian/firebase-deploy:4.1.0
                 variables:
                   # KEY_FILE: '<string>'
