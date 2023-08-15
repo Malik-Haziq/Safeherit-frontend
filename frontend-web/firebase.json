@@ -1,5 +1,8 @@
 {
   "hosting": {
+    "test": {
+      "target": "testing-safeherit"
+    },
     "public": "build",
     "ignore": [
       "firebase.json",
