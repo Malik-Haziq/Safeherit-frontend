@@ -2,36 +2,17 @@
 image: node:18  # Choose the Node.js version that matches your project
 
 pipelines:
-  custom:
-      production:
-        - step:
-            name: Building the app
-            image: node:18
-            script:
-              - cd frontend-web
-              - npm install
-              - npm run build
-        - step:
-            name: Deploy to Firebase
-            deployment: production
-            script:
-              - pipe: atlassian/firebase-deploy:4.1.0
-                variables:
-                  # KEY_FILE: '<string>'
-                  NODE_JS_VERSION: '18'
-                  FIREBASE_TOKEN: $FIREBASE_TOKEN
-                  PROJECT_ID: $FIREBASE_PROJECT_ID # Optional.
-                  MESSAGE: 'Deploying safeHerit project' # Optional
-
-                  # NODE_JS_VERSION: '<string>' # Optional.
-                  # EXTRA_ARGS: '<string>' # Optional.
-                  # MULTI_SITES_CONFIG: '<json>' # Optional
-                  # DEBUG: '<boolean>' # Optional
-              # - cd frontend-web
-              # - node -v
-              # - npm install
-              # - npm run build  # Adjust the build command as needed
-              # - npm install -g firebase-tools
-              # - firebase deploy --token $FIREBASE_TOKEN --project $FIREBASE_PROJECT_ID
-            services:
-              - docker
+  default:
+    - step:
+        name: Build and Deploy to Firebase
+        caches:
+          - node
+        script:
+          - cd frontend-web
+          - node -v
+          - npm install
+          - npm run build  # Adjust the build command as needed
+          - npm install -g firebase-tools
+          - firebase deploy --only hosting:testing-safeherit --token $FIREBASE_TOKEN --project $FIREBASE_PROJECT_ID
+        services:
+          - docker
