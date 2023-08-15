@@ -1,14 +1,7 @@
 {
   "hosting": {
-    "test": {
-      "target": "testing-safeherit"
-    },
-    "public": "build",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "target": "default",
+    "public": "build", // or your public directory
     "rewrites": [
       {
         "source": "**",
