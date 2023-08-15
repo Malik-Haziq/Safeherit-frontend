@@ -1,37 +1,12 @@
 {
   "hosting": {
     "target": "default",
-    "public": "build",
+    "public": "build", // or your public directory
     "rewrites": [
       {
         "source": "**",
         "destination": "/index.html"
       }
-    ],
-    "targets": {
-      "testing-safeherit": {
-        "public": "testing-safeherit-build",
-        "ignore": [
-          "firebase.json",
-          "**/.*",
-          "**/node_modules/**"
-        ],
-        "rewrites": [
-          {
-            "source": "**",
-            "destination": "/index.html"
-          }
-        ]
-      },
-      "production-safeherit": {
-        "public": "production-safeherit-build",
-        "rewrites": [
-          {
-            "source": "**",
-            "destination": "/index.html"
-          }
-        ]
-      }
-    }
+    ]
   }
 }
