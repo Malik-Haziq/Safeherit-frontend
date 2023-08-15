@@ -33,7 +33,7 @@ export function Login() {
         <img src={logo} alt="safeherit logo" className="h-8 w-40" />
         <div className="mx-auto">
           <h2 className="text-3xl mb-2 font-semibold font-monstrate text-safe-text-black">
-            Login
+            Login2
           </h2>
           <p className="text-safe-text-dark-gray text-base mb-8">
             Please create your new account to continue
