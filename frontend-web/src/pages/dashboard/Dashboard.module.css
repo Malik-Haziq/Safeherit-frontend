@@ -1,12 +1,37 @@
 .App {
-  text-align: center;
+  display: flex;
 }
 
-.AppHeader {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.NavigationDrawer {
+  width: 300px;
+  height: 100vh;
+  background-color: antiquewhite;
 }
+
+ .DashboardBody {
+  width: 100%;
+ }
+
+ .NavigationDrawerIconView {
+  width: 100%;
+  margin-top: 44px;
+  background-color: aquamarine;
+ }
+
+ .IconView {
+  height: 50px;
+  width: 100%;
+  background-color: yellow;
+  display: flex;
+  align-items: center;
+ }
+
+ .IconViewIcon{
+  padding-left: 33px;
+  padding-right: 22px;
+ }
+
+ .LogoutIconView {
+  position: absolute;
+  bottom: 50px;
+ }

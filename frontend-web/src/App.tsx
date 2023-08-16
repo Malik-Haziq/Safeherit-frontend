@@ -6,7 +6,17 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom"
-import { Login, SignUp, Dashboard, Pricing } from "./pages"
+import {
+  Login,
+  SignUp,
+  Dashboard,
+  Pricing,
+  DashboardView,
+  AssetsView,
+  BeneficiariesView,
+  PulseView,
+  ValidatorsView,
+} from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar } from "./components"
 
@@ -30,22 +40,22 @@ function App() {
 
         <Route path={ROUTE_CONSTANTS.LOGIN} element={<Login />} />
         <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<AuthDashboard />}>
-          <Route path="" element={<div>Dashboard</div>} />
+          <Route path="" element={<DashboardView />} />
           <Route
             path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
-            element={<div>My Assets</div>}
+            element={<AssetsView />}
           />
           <Route
             path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}
-            element={<div>beneficiaries</div>}
+            element={<BeneficiariesView />}
           />
           <Route
             path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}
-            element={<div>validators</div>}
+            element={<ValidatorsView />}
           />
           <Route
             path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
-            element={<div>pulse</div>}
+            element={<PulseView />}
           />
           <Route path="*" element={<Navigate to={""} replace />} />
         </Route>
