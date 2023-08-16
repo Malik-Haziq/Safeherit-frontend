@@ -1,11 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { UserReducers } from './reducers/UserReducers';
+import { configureStore } from "@reduxjs/toolkit"
+import user from "./reducers/UserReducers"
 
 export const store = configureStore({
   reducer: {
-    user: UserReducers,
+    user: user,
   },
-});
+})
 
-export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType <typeof store.getState>;
+export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>
