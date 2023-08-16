@@ -39,14 +39,6 @@ export function SignUp() {
     setAgreeTermAndCondition(event.target.checked)
   }
 
-  const updateCurrentUser = () => {
-    updateProfile(auth?.currentUser, {
-      displayName: formControl.name,
-    })
-      .then(() => {})
-      .catch((error) => {})
-  }
-
   const _handleSubmit = () => {
     if (
       formControl.name &&
@@ -63,7 +55,6 @@ export function SignUp() {
         )
           .unwrap()
           .then(() => {
-            updateCurrentUser()
             navigate("/login")
           })
       }
