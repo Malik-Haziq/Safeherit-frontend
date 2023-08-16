@@ -29,7 +29,26 @@ function App() {
         </Route>
 
         <Route path={ROUTE_CONSTANTS.LOGIN} element={<Login />} />
-        <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<AuthDashboard />} />
+        <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<AuthDashboard />}>
+          <Route path="" element={<div>Dashboard</div>} />
+          <Route
+            path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
+            element={<div>My Assets</div>}
+          />
+          <Route
+            path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}
+            element={<div>beneficiaries</div>}
+          />
+          <Route
+            path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}
+            element={<div>validators</div>}
+          />
+          <Route
+            path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
+            element={<div>pulse</div>}
+          />
+          <Route path="*" element={<Navigate to={""} replace />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )
