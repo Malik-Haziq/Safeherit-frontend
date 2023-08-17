@@ -13,7 +13,7 @@ pipelines:
 
     - step:
         name: 'Deployment to Firebase Testing'
-        deployment: production
+        deployment: testing
         trigger: 'manual'
         caches:
           - node
