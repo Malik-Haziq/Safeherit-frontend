@@ -3,9 +3,15 @@ import logo from "../../../assets/images/safeherit_logo.svg"
 import loginImg from "../../../assets/images/login-img.png"
 import star from "../../../assets/images/star.svg"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { login } from "../../redux/actions/UserActions"
+import { useAppDispatch } from "../../redux/hooks"
 
 export function Login() {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
   const [formControl, setFormControl] = useState({
     email: "",
     password: "",
@@ -22,8 +28,15 @@ export function Login() {
   }
 
   const _handleSubmit = () => {
+    alert("logging in")
     if (formControl.email && formControl.password) {
-      alert("handling submit here")
+      dispatch(
+        login({ email: formControl.email, password: formControl.password }),
+      )
+        .unwrap()
+        .then(() => {
+          navigate("/dashboard")
+        })
     }
   }
 

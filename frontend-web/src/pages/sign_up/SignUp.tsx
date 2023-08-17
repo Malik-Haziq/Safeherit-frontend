@@ -5,9 +5,17 @@ import userIcon from "../../../assets/images/UserIcon.png"
 import emailIcon from "../../../assets/images/EmailIcon.png"
 import passwordVisibilityIcon from "../../../assets/images/PasswordVisibilityIcon.png"
 import signUpImg from "../../../assets/images/sign-up-img.jpg"
+import { auth } from "../../firebase"
+import { updateProfile } from "firebase/auth"
+import { useNavigate } from "react-router-dom"
+import { signup } from "../../redux/actions/UserActions"
+import { useAppDispatch } from "../../redux/hooks"
 
 export function SignUp() {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
   const [formControl, setFormControl] = useState({
     name: "",
     email: "",
@@ -39,7 +47,17 @@ export function SignUp() {
       formControl.confirm_password &&
       agreeTermAndCondition
     ) {
-      alert("handling submit here")
+      if (formControl.password !== formControl.confirm_password) {
+        alert("password must match")
+      } else {
+        dispatch(
+          signup({ email: formControl.email, password: formControl.password }),
+        )
+          .unwrap()
+          .then(() => {
+            navigate("/login")
+          })
+      }
     }
   }
 

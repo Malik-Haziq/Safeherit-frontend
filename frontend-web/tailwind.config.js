@@ -9,7 +9,10 @@ export default {
         "safe-white-shade": "#f2f2f2",
         "safe-gray": "#F5FAFD",
         "safe-blue-shade": "#04477B",
+        "safe-blue-tint": "#0971AA",
+        "safe-blue-light": "#B4DBEC",
         "safe-black": "#000000",
+        "safe-green-light": "##5CEAD2",
       },
       colors: {
         "safe-color-blue": "#0C8AC1",
@@ -19,11 +22,15 @@ export default {
         "safe-text-black": "#000000",
         "safe-text-gray": "#858992",
         "safe-text-dark-gray": "#4F4F4F",
+        "safe-text-light-gray": "#B4B4B4",
         "safe-text-white": "#FFFFFF",
         "safe-text-dark-blue": "#082A44",
         "safe-text-link-blue": "#2F80ED",
         "safe-text-dark-link-blue": "#065A93",
         "safe-text-blue-shade": "#04477B",
+      },
+      backgroundImage: {
+        "linear-gradient": "linear-gradient(180deg, #5CEAD2 0%, #065A93 100%);",
       },
       fontFamily: {
         "safe-font-default": "Montserrat",
