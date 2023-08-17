@@ -1,4 +1,4 @@
-image: node:18 # Choose the Node.js version that matches your project
+image: node:18  # Choose the Node.js version that matches your project
 
 pipelines:
   default:
