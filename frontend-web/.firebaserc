@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "safeherit-431c4"
-  }
+  },
+  "targets": {
+    "safeherit-431c4": {
+      "hosting": {
+        "testing": [
+          "testing-safeherit"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
