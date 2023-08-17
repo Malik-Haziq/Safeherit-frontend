@@ -8,6 +8,7 @@ export default {
         "safe-white": "#FFFFFF",
         "safe-white-shade": "#f2f2f2",
         "safe-gray": "#F5FAFD",
+        "safe-gray-shade": "#D7D7D7",
         "safe-blue-shade": "#04477B",
         "safe-blue-tint": "#0971AA",
         "safe-blue-light": "#B4DBEC",
@@ -20,6 +21,7 @@ export default {
       },
       textColor: {
         "safe-text-black": "#000000",
+        "safe-text-black-tint": "#00192B",
         "safe-text-gray": "#858992",
         "safe-text-dark-gray": "#4F4F4F",
         "safe-text-light-gray": "#B4B4B4",

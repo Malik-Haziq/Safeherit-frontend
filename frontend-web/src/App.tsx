@@ -6,7 +6,7 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom"
-import { Login, SignUp, Dashboard, Pricing } from "./pages"
+import { Login, SignUp, Dashboard, Pricing, RegisterKey } from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar } from "./components"
 
@@ -22,6 +22,10 @@ function App() {
         <Route path="/" element={<NavBarLayout />}>
           <Route path={ROUTE_CONSTANTS.SIGN_UP} element={<SignUp />} />
           <Route path={ROUTE_CONSTANTS.PRICING} element={<AuthPaymentPlan />} />
+          <Route
+            path={ROUTE_CONSTANTS.REGISTER_KEY}
+            element={<RegisterKey />}
+          />
           <Route
             path="*"
             element={<Navigate to={ROUTE_CONSTANTS.HOME} replace />}
