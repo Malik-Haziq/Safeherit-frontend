@@ -10,3 +10,19 @@ pipelines:
             - node -v
             - npm install
             - npm run build
+
+    - step:
+        name: 'Deployment to Firebase Testing'
+        deployment: testing
+        trigger: 'manual'
+        caches:
+          - node
+        script:
+          - cd frontend-web
+          - node -v
+          - npm install
+          - npm run build
+          - npm install -g firebase-tools
+          - firebase deploy --only hosting:testing --token $FIREBASE_TOKEN --project $FIREBASE_PROJECT_ID
+        services:
+          - docker
