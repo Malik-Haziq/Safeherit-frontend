@@ -3,18 +3,18 @@ image: node:18  # Choose the Node.js version that matches your project
 pipelines:
   default:
     - parallel:
-      - step:
-          name: 'Build and Test App'
-          script:
-            - cd frontend-web
-            - node -v
-            - npm install
-            - npm run build
+        - step:
+            name: "Build and Test App"
+            script:
+              - cd frontend-web
+              - node -v
+              - npm install
+              - npm run build
 
     - step:
-        name: 'Deployment to Firebase Testing'
-        deployment: production
-        trigger: 'manual'
+        name: "Deployment to Firebase Testing"
+        deployment: testing
+        trigger: "manual"
         caches:
           - node
         script:
