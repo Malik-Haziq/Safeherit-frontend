@@ -4,4 +4,8 @@ export const ROUTE_CONSTANTS = {
   DASHBOARD: "/dashboard",
   PRICING: "/pricing",
   HOME: "/",
+  DASHBOARD_ASSETS: "assets",
+  DASHBOARD_BENEFICIARIES: "beneficiaries",
+  DASHBOARD_VALIDATORS: "validators",
+  DASHBOARD_PULSE: "pulse",
 }
