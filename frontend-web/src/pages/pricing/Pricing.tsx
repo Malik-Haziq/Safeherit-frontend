@@ -19,7 +19,7 @@ export function Pricing() {
           Get Started Now Pick a Plan
         </h1>
         <p className="text-lg opacity-80 mb-9">
-          Purchase the premium plan and access all the features.
+          Purchase the Premium plan and access all the features.
         </p>
         <h3 className="text-base mb-3">Choose your plan</h3>
         <div className="flex justify-between items-center gap-5 bg-safe-blue-shade py-3 px-2 rounded-full">
