@@ -2,11 +2,24 @@ import styles from "./Dashboard.module.css"
 import { useTranslation } from "react-i18next"
 import { NavigationDrawer } from "./NavigationDrawer"
 import { DashboardNavbar } from "./DashboardNavbar"
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import { CONSTANT } from "../../common"
+import { useAppDispatch } from "../../redux/hooks"
+import { logout } from "../../redux/actions/UserActions"
 
 export function Dashboard() {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  const _handleLogout = () => {
+    dispatch(logout({}))
+      .unwrap()
+      .then((response) => {
+        console.log(response)
+        navigate("/login")
+      })
+  }
 
   return (
     <div className={styles.App}>

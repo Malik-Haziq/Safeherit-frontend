@@ -1,25 +1,15 @@
-import { FunctionComponent } from "react"
-import { Navigate } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom"
 import { ROUTE_CONSTANTS } from ".."
+import { auth } from "../../firebase"
 
-/** A higher-order component with conditional routing logic */
-export function withCondition(
-  Component: FunctionComponent,
-  condition: boolean,
-  redirectTo: string,
-) {
-  return function InnerComponent(props: any) {
-    return condition ? (
-      <Component {...props} />
-    ) : (
-      <Navigate to={redirectTo} replace />
-    )
-  }
-}
-
-export const withLoggedIn = (Component: React.FunctionComponent) => {
-  // TODO: add correct logic for is logged in
-  const isLoggedIn: boolean = true
+export const ProtectedRoute = () => {
+  const isLoggedIn: boolean = window.localStorage.getItem("user") ? true : false
   const redirectTo: string = ROUTE_CONSTANTS.LOGIN
-  return withCondition(Component, isLoggedIn, redirectTo)
+  return isLoggedIn ? <Outlet /> : <Navigate to={redirectTo} replace />
+}
+// TODO make sure that check at line 12 is being validated from server before returning authenticated route
+export const ProtectedRegisterationRoute = () => {
+  const isLoggedIn: boolean = window.localStorage.getItem("user") ? true : false
+  const redirectTo: string = ROUTE_CONSTANTS.DASHBOARD
+  return isLoggedIn ? <Navigate to={redirectTo} replace /> : <Outlet />
 }

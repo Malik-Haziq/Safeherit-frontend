@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { getFirestore } from "@firebase/firestore"
-import { getAuth } from "firebase/auth"
+import { getAuth, onAuthStateChanged } from "firebase/auth"
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_REACT_APP_apiKey,
@@ -15,3 +15,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const firestore = getFirestore(app)
+
+// TODO temporarily story this is local storage
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    window.localStorage.setItem("user", user.uid)
+    window.localStorage.setItem("token", user.refreshToken)
+  } else {
+    window.localStorage.clear()
+  }
+})

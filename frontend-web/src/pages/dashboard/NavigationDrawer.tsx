@@ -1,11 +1,25 @@
 import styles from "./Dashboard.module.css"
 import logo from "../../../assets/images/safeherit_logo.svg"
 import { CONSTANT } from "../../common"
+import { useAppDispatch } from "../../redux/hooks"
+import { logout } from "../../redux/actions/UserActions"
+import { useNavigate } from "react-router-dom"
 
 export const NavigationDrawer = (_props: {
   DRAWER_MENU: any[]
   DRAWER_SETTINGS: any[]
 }) => {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  const _handleLogout = () => {
+    dispatch(logout({}))
+      .unwrap()
+      .then((response) => {
+        console.log(response)
+        navigate("/login")
+      })
+  }
   return (
     <div className={styles.NavigationDrawer}>
       <div className="pt-8 pl-8">
@@ -25,9 +39,9 @@ export const NavigationDrawer = (_props: {
           )
         })}
       </div>
-      <div className={styles.LogoutIconView}>
+      <button className={styles.LogoutIconView} onClick={_handleLogout}>
         <IconView icon={"ICON"} option={CONSTANT.LOGOUT} />
-      </div>
+      </button>
     </div>
   )
 }
