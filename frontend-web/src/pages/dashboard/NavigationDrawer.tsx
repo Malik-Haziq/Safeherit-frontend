@@ -52,7 +52,7 @@ export const NavigationDrawer = (_props: {
 
 function IconView(_props: { icon: string; option: string }) {
   return (
-    <div className="flex items-center gap-5 w-full mb-5 py-2 px-5 selected">
+    <div className="flex items-center gap-5 w-full mb-5 py-2 px-5">
       <img src={_props.icon} alt={_props.option} />
       <p className="px-auto">{_props.option}</p>
     </div>
