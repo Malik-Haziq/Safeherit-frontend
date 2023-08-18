@@ -19,7 +19,7 @@ export function Pricing() {
           Get Started Now Pick a Plan
         </h1>
         <p className="text-lg opacity-80 mb-9">
-          Purchase the premium plan and access all the features.
+          Purchase the Premium plan and access all the features.
         </p>
         <h3 className="text-base mb-3">Choose your plan</h3>
         <div className="flex justify-between items-center gap-5 bg-safe-blue-shade py-3 px-2 rounded-full">
@@ -89,7 +89,9 @@ function PricingCards(_props: {
           {_props.priceTime ? `/ ${_props.priceTime}` : ""}
         </span>
       </p>
-      <h3 className="mb-12">Get the benefits</h3>
+      <h3 className="mb-12 text-safe-text-gray font-semibold">
+        Get the benefits
+      </h3>
       <ul className="mb-6 bg-safe-green-light ">
         <div className="flex gap-3 items-center justify-start mb-3">
           <img src={tick} alt="tick icon" />
