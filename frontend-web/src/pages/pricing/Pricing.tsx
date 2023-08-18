@@ -89,7 +89,9 @@ function PricingCards(_props: {
           {_props.priceTime ? `/ ${_props.priceTime}` : ""}
         </span>
       </p>
-      <h3 className="mb-12">Get the benefits</h3>
+      <h3 className="mb-12 text-safe-text-gray font-semibold">
+        Get the benefits
+      </h3>
       <ul className="mb-6 bg-safe-green-light ">
         <div className="flex gap-3 items-center justify-start mb-3">
           <img src={tick} alt="tick icon" />
