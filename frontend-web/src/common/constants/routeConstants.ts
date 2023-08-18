@@ -3,6 +3,10 @@ export const ROUTE_CONSTANTS = {
   SIGN_UP: "/signup",
   DASHBOARD: "/dashboard",
   PRICING: "/pricing",
-  REGISTER_KEY: "/RegisterKey",
+  REGISTER_KEY: "/register",
   HOME: "/",
+  DASHBOARD_ASSETS: "assets",
+  DASHBOARD_BENEFICIARIES: "beneficiaries",
+  DASHBOARD_VALIDATORS: "validators",
+  DASHBOARD_PULSE: "pulse",
 }

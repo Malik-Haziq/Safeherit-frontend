@@ -1,4 +1,4 @@
-import { withLoggedIn } from "./common"
+import { ProtectedRegisterationRoute, ProtectedRoute } from "./common"
 import {
   BrowserRouter,
   Route,
@@ -6,13 +6,22 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom"
-import { Login, SignUp, Dashboard, Pricing, RegisterKey } from "./pages"
+import {
+  Login,
+  SignUp,
+  Dashboard,
+  Pricing,
+  DashboardView,
+  AssetsView,
+  BeneficiariesView,
+  PulseView,
+  ValidatorsView,
+  RegisterKey,
+} from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar } from "./components"
 
 function App() {
-  const AuthDashboard = withLoggedIn(Dashboard)
-  const AuthPaymentPlan = withLoggedIn(Pricing)
   // TODO authenticate on signup only | not on login
 
   return (
@@ -20,8 +29,13 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<NavBarLayout />}>
-          <Route path={ROUTE_CONSTANTS.SIGN_UP} element={<SignUp />} />
-          <Route path={ROUTE_CONSTANTS.PRICING} element={<AuthPaymentPlan />} />
+          <Route element={<ProtectedRegisterationRoute />}>
+            <Route path={ROUTE_CONSTANTS.SIGN_UP} element={<SignUp />} />
+          </Route>
+
+          <Route element={<ProtectedRoute />}>
+            <Route path={ROUTE_CONSTANTS.PRICING} element={<Pricing />} />
+          </Route>
           <Route
             path={ROUTE_CONSTANTS.REGISTER_KEY}
             element={<RegisterKey />}
@@ -32,8 +46,32 @@ function App() {
           />
         </Route>
 
-        <Route path={ROUTE_CONSTANTS.LOGIN} element={<Login />} />
-        <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<AuthDashboard />} />
+        <Route element={<ProtectedRegisterationRoute />}>
+          <Route path={ROUTE_CONSTANTS.LOGIN} element={<Login />} />
+        </Route>
+
+        <Route element={<ProtectedRoute />}>
+          <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<Dashboard />}>
+            <Route path="" element={<DashboardView />} />
+            <Route
+              path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
+              element={<AssetsView />}
+            />
+            <Route
+              path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}
+              element={<BeneficiariesView />}
+            />
+            <Route
+              path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}
+              element={<ValidatorsView />}
+            />
+            <Route
+              path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
+              element={<PulseView />}
+            />
+            <Route path="*" element={<Navigate to={""} replace />} />
+          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   )
