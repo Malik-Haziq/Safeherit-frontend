@@ -1,10 +1,16 @@
 import { useTranslation } from "react-i18next"
 import logo from "../../../assets/images/safeherit_logo.svg"
+import userImg from "../../../assets/images/user.svg"
+import arrowDown from "../../../assets/images/chevron-down.svg"
 import { useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
 export function NavBar() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const currentPath = useLocation()
+
+  const registerBtn = ["/register", "/signup"]
 
   const _handleLoginPress = () => navigate("/login")
 
@@ -41,9 +47,17 @@ export function NavBar() {
               </a>
             </li>
             <li className="nav-item mr-14">
-              <button className="primary-btn" onClick={_handleLoginPress}>
-                {t("Login Register")}
-              </button>
+              {registerBtn.includes(currentPath.pathname) ? (
+                <button className="primary-btn" onClick={_handleLoginPress}>
+                  {t("Login Register")}
+                </button>
+              ) : (
+                <div className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer">
+                  <img src={userImg} alt="" />
+                  <p>James</p>
+                  <img src={arrowDown} alt="" className="ml-1" />
+                </div>
+              )}
             </li>
           </ul>
         </div>

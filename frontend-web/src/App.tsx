@@ -16,6 +16,7 @@ import {
   BeneficiariesView,
   PulseView,
   ValidatorsView,
+  RegisterKey,
 } from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar } from "./components"
@@ -35,6 +36,10 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path={ROUTE_CONSTANTS.PRICING} element={<Pricing />} />
           </Route>
+          <Route
+            path={ROUTE_CONSTANTS.REGISTER_KEY}
+            element={<RegisterKey />}
+          />
           <Route
             path="*"
             element={<Navigate to={ROUTE_CONSTANTS.HOME} replace />}
