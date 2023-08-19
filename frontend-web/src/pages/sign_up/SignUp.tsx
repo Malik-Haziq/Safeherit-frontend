@@ -49,6 +49,7 @@ export function SignUp() {
       if (formControl.password !== formControl.confirm_password) {
         alert("password must match")
       } else {
+        alert("signing up")
         dispatch(
           signup({ email: formControl.email, password: formControl.password }),
         )
