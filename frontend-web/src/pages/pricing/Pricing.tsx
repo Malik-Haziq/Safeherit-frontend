@@ -1,16 +1,33 @@
-import { useTranslation } from "react-i18next"
 import { useState } from "react"
 import tick from "../../../assets/images/tick.svg"
+import { useNavigate } from "react-router-dom"
+import { useAppDispatch } from "../../redux/hooks"
+import { logout } from "../../redux/actions/UserActions"
 
 export function Pricing() {
+  const [selectedPlan, setSelectedPlan] = useState("Yearly")
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const packagePlans = [
-    { plan: "Monthly", isSeleced: false },
-    { plan: "Yearly", isSeleced: true },
-    { plan: "Life time", isSeleced: false },
+    { plan: "Monthly", price: "19.99", priceTime: "month" },
+    { plan: "Yearly", price: "199", priceTime: "year" },
+    { plan: "Life time", price: "1,999", priceTime: "" },
   ]
 
-  const { t } = useTranslation()
-  const [isSelected, setIsSlected] = useState(packagePlans)
+  const _handleLogout = () => {
+    dispatch(logout({}))
+      .unwrap()
+      .then((response) => {
+        navigate("/login")
+      })
+  }
+
+  function _handlePlanSelect(selectedPlan: string) {
+    setSelectedPlan(selectedPlan)
+    setTimeout(() => {
+      _handleLogout()
+    }, 1000)
+  }
 
   return (
     <main className="font-safe-font-default">
@@ -26,63 +43,73 @@ export function Pricing() {
           {packagePlans.map((item, i) => {
             return (
               <PricingButtons
-                isSelected={item.isSeleced}
-                paymentPlan={item.plan}
                 key={i}
+                paymentPlan={item.plan}
+                selectedPlan={selectedPlan}
+                onclick={_handlePlanSelect}
               />
             )
           })}
         </div>
       </section>
       <section className="flex justify-center items-center flex-wrap gap-8">
-        <PricingCards
-          time="Monthly"
-          price={19.99}
-          priceTime="month"
-          isSelected={false}
-        />
-        <PricingCards
-          time="Yearly"
-          price={199}
-          priceTime="year"
-          isSelected={true}
-        />
-        <PricingCards
-          time="Life time"
-          price={"1,999"}
-          priceTime=""
-          isSelected={false}
-        />
+        {packagePlans.map((item, i) => {
+          return (
+            <PricingCards
+              key={i}
+              paymentPlan={item.plan}
+              price={item.price}
+              priceTime={item.price}
+              selectedPlan={selectedPlan}
+              onclick={_handlePlanSelect}
+            />
+          )
+        })}
       </section>
     </main>
   )
 }
 
-function PricingButtons(_props: { paymentPlan: string; isSelected: boolean }) {
+function PricingButtons(_props: {
+  paymentPlan: string
+  selectedPlan: string
+  onclick: Function
+}) {
   return (
     <div>
-      {_props.isSelected ? (
-        <span className="px-5 py-2 rounded-[50px] bg-linear-gradient">
+      {_props.selectedPlan === _props.paymentPlan ? (
+        <button
+          className="px-5 py-2 rounded-[50px] bg-linear-gradient"
+          onClick={() => {
+            _props.onclick(_props.paymentPlan)
+          }}
+        >
           {_props.paymentPlan}
-        </span>
+        </button>
       ) : (
-        <span className="px-5 py-2 rounded-[50px] opacity-80">
+        <button
+          className="px-5 py-2 rounded-[50px] opacity-80"
+          onClick={() => {
+            _props.onclick(_props.paymentPlan)
+          }}
+        >
           {_props.paymentPlan}
-        </span>
+        </button>
       )}
     </div>
   )
 }
 
 function PricingCards(_props: {
-  time: string
+  paymentPlan: string
   price: any
   priceTime: string
-  isSelected: boolean
+  selectedPlan: string
+  onclick: Function
 }) {
   return (
     <div className="card w-[256px] p-5 mb-5 rounded-xl -translate-y-7 bg-safe-white shadow-md">
-      <h1 className="text-[22px] font-bold mb-3">{_props.time}</h1>
+      <h1 className="text-[22px] font-bold mb-3">{_props.paymentPlan}</h1>
       <p className="text-[22px] flex gap-1 font-semibold mb-7">
         ${_props.price}
         <span className="text-safe-text-light-gray">
@@ -114,12 +141,22 @@ function PricingCards(_props: {
           <li>Lorem ipsum doner</li>
         </div>
       </ul>
-      {_props.isSelected ? (
-        <button className="primary-btn text-lg px-[46px] py-2 mx-auto">
+      {_props.selectedPlan === _props.paymentPlan ? (
+        <button
+          className="primary-btn text-lg px-[46px] py-2 mx-auto"
+          onClick={() => {
+            _props.onclick(_props.paymentPlan)
+          }}
+        >
           choose
         </button>
       ) : (
-        <button className="primary-btn text-lg text-safe-text-blue-shade px-[46px] py-2 mx-auto bg-safe-blue-light">
+        <button
+          className="primary-btn text-lg text-safe-text-blue-shade px-[46px] py-2 mx-auto bg-safe-blue-light"
+          onClick={() => {
+            _props.onclick(_props.paymentPlan)
+          }}
+        >
           choose
         </button>
       )}

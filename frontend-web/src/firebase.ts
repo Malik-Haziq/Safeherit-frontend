@@ -19,9 +19,14 @@ export const firestore = getFirestore(app)
 // TODO temporarily story this is local storage
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    window.localStorage.setItem("user", user.uid)
-    window.localStorage.setItem("token", user.refreshToken)
+    localStorage.setItem("user", user.uid)
+    localStorage.setItem("userName", user.displayName || "Profile")
+    localStorage.setItem("currentUser", JSON.stringify(user))
   } else {
-    window.localStorage.clear()
+    localStorage.clear()
   }
 })
+
+export const getCurrentUser = JSON.parse(
+  localStorage.getItem("currentUser") || "{}",
+)

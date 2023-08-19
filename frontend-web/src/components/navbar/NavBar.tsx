@@ -1,18 +1,31 @@
-import { useTranslation } from "react-i18next"
 import logo from "../../../assets/images/safeherit_logo.svg"
 import userImg from "../../../assets/images/user.svg"
 import arrowDown from "../../../assets/images/chevron-down.svg"
-import { useNavigate } from "react-router-dom"
-import { useLocation } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
+import { useAppDispatch } from "../../redux/hooks"
+import { logout } from "../../redux/actions/UserActions"
+import { DropDownButton } from ".."
 
 export function NavBar() {
-  const { t } = useTranslation()
+  const USER_NAME = window.localStorage.getItem("userName")
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const currentPath = useLocation()
+  const registerBtn = ["/register", "/signup", "/"]
 
-  const registerBtn = ["/register", "/signup"]
+  const _handleLogout = () => {
+    dispatch(logout({}))
+      .unwrap()
+      .then((response) => {
+        console.log(response)
+        navigate("/login")
+      })
+  }
 
-  const _handleLoginPress = () => navigate("/login")
+  const _handleLoginPress = () => {
+    _handleLogout()
+    navigate("/login")
+  }
 
   return (
     <div className="text-safe-text-gray h-20 bg-safe-white shadow-sm">
@@ -27,7 +40,7 @@ export function NavBar() {
                 href="/"
                 className="px-3 flex py-2 font-safe-font-default font-medium text-base hover:opacity-75 cursor-pointer"
               >
-                {t("Home")}
+                Home
               </a>
             </li>
             <li className="nav-item mr-16">
@@ -35,7 +48,7 @@ export function NavBar() {
                 href="/about"
                 className="px-3 flex py-2 font-safe-font-default font-medium text-base hover:opacity-75 cursor-pointer"
               >
-                {t("About us")}
+                About us
               </a>
             </li>
             <li className="nav-item mr-11">
@@ -43,20 +56,25 @@ export function NavBar() {
                 href="/contact"
                 className="px-3 flex py-2 font-safe-font-default font-medium text-base hover:opacity-75 cursor-pointer"
               >
-                {t("Contact")}
+                Contact
               </a>
             </li>
             <li className="nav-item mr-14">
               {registerBtn.includes(currentPath.pathname) ? (
                 <button className="primary-btn" onClick={_handleLoginPress}>
-                  {t("Login Register")}
+                  Login / Register
                 </button>
               ) : (
-                <div className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer">
-                  <img src={userImg} alt="" />
-                  <p>James</p>
-                  <img src={arrowDown} alt="" className="ml-1" />
-                </div>
+                <DropDownButton
+                  className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
+                  onClick={_handleLogout}
+                  title={USER_NAME}
+                  arrowIcon={arrowDown}
+                  arrowDownClassName={"ml-1"}
+                  userIcon={userImg}
+                  userIconClassName={""}
+                  optionText={"Logout"}
+                />
               )}
             </li>
           </ul>
