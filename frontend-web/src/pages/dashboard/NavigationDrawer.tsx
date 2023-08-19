@@ -1,5 +1,6 @@
 import styles from "./Dashboard.module.css"
 import logo from "../../../assets/images/safeherit_log_white.svg"
+import logoutIcon from "../../../assets/images/Logout.svg"
 import { CONSTANT } from "../../common"
 
 export const NavigationDrawer = (_props: {
@@ -38,7 +39,7 @@ export const NavigationDrawer = (_props: {
       </div>
       <div className="mt-36 cursor-pointer">
         <IconView
-          icon="../../../../assets/images/Logout.svg"
+          icon={logoutIcon}
           option={CONSTANT.LOGOUT}
           navigate={_props._handleLogout}
         />
