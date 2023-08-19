@@ -51,8 +51,8 @@ export function Login() {
           <h2 className="text-3xl mb-2 font-semibold font-monstrate text-safe-text-black">
             Login
           </h2>
-          <p className="text-safe-text-dark-gray text-base mb-8">
-            Please create your new account to continue
+          <p className="text-safe-text-black text-base mb-8 font-medium opacity-80">
+            Login with your credential information
           </p>
           <form
             className="flex flex-col gap-5 mb-6"
@@ -86,7 +86,9 @@ export function Login() {
                   checked={rememberMe}
                   onChange={_setRememberMe}
                 />
-                <small className="text-base ">Remember Me</small>
+                <small className="text-base text-safe-text-black font-medium">
+                  Remember Me
+                </small>
               </div>
               <a
                 href="/login"
@@ -98,7 +100,7 @@ export function Login() {
             <button className="primary-btn rounded-md bg-safe-blue-shade px-40">
               Login
             </button>
-            <small className="text-sm text-safe-text-dark-gray mx-auto">
+            <small className="text-sm text-safe-text-black font-medium mx-auto">
               Don't have an account?&nbsp;
               <a
                 href="/signup"
