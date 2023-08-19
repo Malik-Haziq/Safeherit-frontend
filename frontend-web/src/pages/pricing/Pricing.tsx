@@ -1,16 +1,32 @@
 import { useState } from "react"
 import tick from "../../../assets/images/tick.svg"
+import { useNavigate } from "react-router-dom"
+import { useAppDispatch } from "../../redux/hooks"
+import { logout } from "../../redux/actions/UserActions"
 
 export function Pricing() {
   const [selectedPlan, setSelectedPlan] = useState("Yearly")
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const packagePlans = [
     { plan: "Monthly", price: "19.99", priceTime: "month" },
     { plan: "Yearly", price: "199", priceTime: "year" },
     { plan: "Life time", price: "1,999", priceTime: "" },
   ]
 
+  const _handleLogout = () => {
+    dispatch(logout({}))
+      .unwrap()
+      .then((response) => {
+        navigate("/login")
+      })
+  }
+
   function _handlePlanSelect(selectedPlan: string) {
     setSelectedPlan(selectedPlan)
+    setTimeout(() => {
+      _handleLogout()
+    }, 1000)
   }
 
   return (

@@ -1,25 +1,12 @@
 import styles from "./Dashboard.module.css"
 import logo from "../../../assets/images/safeherit_log_white.svg"
 import { CONSTANT } from "../../common"
-import { useAppDispatch } from "../../redux/hooks"
-import { logout } from "../../redux/actions/UserActions"
-import { useNavigate } from "react-router-dom"
 
 export const NavigationDrawer = (_props: {
   DRAWER_MENU: any[]
   DRAWER_SETTINGS: any[]
+  _handleLogout: Function
 }) => {
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-
-  const _handleLogout = () => {
-    dispatch(logout({}))
-      .unwrap()
-      .then((response) => {
-        console.log(response)
-        navigate("/login")
-      })
-  }
   return (
     <div className={styles.NavigationDrawer}>
       <div className="flex items-center justify-center mt-7">
@@ -53,7 +40,7 @@ export const NavigationDrawer = (_props: {
         <IconView
           icon="../../../../assets/images/Logout.svg"
           option={CONSTANT.LOGOUT}
-          navigate={_handleLogout}
+          navigate={_props._handleLogout}
         />
       </div>
     </div>

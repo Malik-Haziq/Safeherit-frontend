@@ -10,11 +10,14 @@ import validator from "../../../assets/images/validarors.svg"
 import pulseCheck from "../../../assets/images/pulse-check.svg"
 import profile from "../../../assets/images/Profile.svg"
 import setting from "../../../assets/images/Setting.svg"
+import { useAppDispatch } from "../../redux/hooks"
+import { logout } from "../../redux/actions/UserActions"
 
 console.log(beneficiaries)
 
 export function Dashboard() {
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
 
   const DRAWER_MENU = [
     {
@@ -70,14 +73,23 @@ export function Dashboard() {
     },
   ]
 
+  const _handleLogout = () => {
+    dispatch(logout({}))
+      .unwrap()
+      .then((response) => {
+        navigate("/login")
+      })
+  }
+
   return (
     <div className={styles.App}>
       <NavigationDrawer
         DRAWER_MENU={DRAWER_MENU}
         DRAWER_SETTINGS={DRAWER_SETTINGS}
+        _handleLogout={_handleLogout}
       />
       <div className={styles.DashboardBody}>
-        <DashboardNavbar />
+        <DashboardNavbar _handleLogout={_handleLogout} />
         <Outlet />
       </div>
     </div>
