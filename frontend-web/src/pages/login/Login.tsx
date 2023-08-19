@@ -37,6 +37,9 @@ export function Login() {
         .then(() => {
           navigate("/dashboard")
         })
+        .catch((err) => {
+          alert(err.code)
+        })
     }
   }
 

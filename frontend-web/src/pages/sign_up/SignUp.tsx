@@ -5,7 +5,6 @@ import userIcon from "../../../assets/images/UserIcon.png"
 import emailIcon from "../../../assets/images/EmailIcon.png"
 import passwordVisibilityIcon from "../../../assets/images/PasswordVisibilityIcon.png"
 import signUpImg from "../../../assets/images/sign-up-img.jpg"
-import { auth } from "../../firebase"
 import { updateProfile } from "firebase/auth"
 import { useNavigate } from "react-router-dom"
 import { signup } from "../../redux/actions/UserActions"
@@ -54,8 +53,17 @@ export function SignUp() {
           signup({ email: formControl.email, password: formControl.password }),
         )
           .unwrap()
-          .then(() => {
-            navigate("/login")
+          .then((res) => {
+            updateProfile(res.user, {
+              displayName: formControl.name,
+            }).catch((err) => {
+              alert(err.code)
+            })
+            localStorage.setItem("userName", formControl.name)
+            navigate("/pricing")
+          })
+          .catch((err) => {
+            alert(err.code)
           })
       }
     }

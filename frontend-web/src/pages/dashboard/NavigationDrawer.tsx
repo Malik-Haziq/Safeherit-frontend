@@ -4,7 +4,6 @@ import { CONSTANT } from "../../common"
 import { useAppDispatch } from "../../redux/hooks"
 import { logout } from "../../redux/actions/UserActions"
 import { useNavigate } from "react-router-dom"
-import logoutIcon from "../../../../assets/images/Logout.svg"
 
 export const NavigationDrawer = (_props: {
   DRAWER_MENU: any[]
@@ -40,7 +39,7 @@ export const NavigationDrawer = (_props: {
           )
         })}
       </div>
-      <div className="mt-36" onClick={_handleLogout}>
+      <div className="mt-36 cursor-pointer" onClick={_handleLogout}>
         <IconView
           icon="../../../../assets/images/Logout.svg"
           option={CONSTANT.LOGOUT}
