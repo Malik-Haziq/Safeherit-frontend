@@ -1,8 +1,13 @@
 import arrowRight from "../../../assets/images/Arrow - Right.svg"
 import registerPageVideo from "../../../assets/images/register_page_video.png"
 import safepal from "../../../assets/images/Safepal.svg"
+import { useNavigate } from "react-router-dom"
 
 export function RegisterKey() {
+  const navigate = useNavigate()
+  const _handleRegister = () => {
+    navigate("/dashboard")
+  }
   return (
     <main className="flex  min-h-[calc(100vh-80px)] ">
       <section className="basis-2/5 flex flex-col justify-center items-center px-24 ">
@@ -15,7 +20,10 @@ export function RegisterKey() {
           Key Pair for you, or you can useone of the many generators on the web
           to generate them yourself. The choice is yours!
         </p>
-        <button className="primary-btn uppercase py-5 px-[86px] mb-28">
+        <button
+          className="primary-btn uppercase py-5 px-[86px] mb-28"
+          onClick={_handleRegister}
+        >
           Register
         </button>
 

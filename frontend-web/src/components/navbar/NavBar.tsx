@@ -2,14 +2,30 @@ import logo from "../../../assets/images/safeherit_logo.svg"
 import userImg from "../../../assets/images/user.svg"
 import arrowDown from "../../../assets/images/chevron-down.svg"
 import { useNavigate, useLocation } from "react-router-dom"
+import { useAppDispatch } from "../../redux/hooks"
+import { logout } from "../../redux/actions/UserActions"
+import { DropDownButton } from ".."
 
 export function NavBar() {
   const USER_NAME = window.localStorage.getItem("userName")
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const currentPath = useLocation()
   const registerBtn = ["/register", "/signup", "/"]
 
-  const _handleLoginPress = () => navigate("/login")
+  const _handleLogout = () => {
+    dispatch(logout({}))
+      .unwrap()
+      .then((response) => {
+        console.log(response)
+        navigate("/login")
+      })
+  }
+
+  const _handleLoginPress = () => {
+    _handleLogout()
+    navigate("/login")
+  }
 
   return (
     <div className="text-safe-text-gray h-20 bg-safe-white shadow-sm">
@@ -49,11 +65,16 @@ export function NavBar() {
                   Login / Register
                 </button>
               ) : (
-                <div className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer">
-                  <img src={userImg} alt="" />
-                  <p>{USER_NAME}</p>
-                  <img src={arrowDown} alt="" className="ml-1" />
-                </div>
+                <DropDownButton
+                  className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
+                  onClick={_handleLogout}
+                  title={USER_NAME}
+                  arrowIcon={arrowDown}
+                  arrowDownClassName={"ml-1"}
+                  userIcon={userImg}
+                  userIconClassName={""}
+                  optionText={"Logout"}
+                />
               )}
             </li>
           </ul>

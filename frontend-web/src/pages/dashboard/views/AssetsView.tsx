@@ -2,8 +2,8 @@ import styles from "../Dashboard.module.css"
 
 export function AssetsView() {
   return (
-    <div className={styles.App}>
-      <p>AssetsView</p>
+    <div className={styles.AppView}>
+      <p>Assets View</p>
     </div>
   )
 }

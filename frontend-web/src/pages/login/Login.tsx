@@ -35,7 +35,7 @@ export function Login() {
       )
         .unwrap()
         .then(() => {
-          navigate("/dashboard")
+          navigate("/register")
         })
         .catch((err) => {
           alert(err.code)

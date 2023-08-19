@@ -45,6 +45,7 @@ export function Pricing() {
               price={item.price}
               priceTime={item.price}
               selectedPlan={selectedPlan}
+              onclick={_handlePlanSelect}
             />
           )
         })}
@@ -88,6 +89,7 @@ function PricingCards(_props: {
   price: any
   priceTime: string
   selectedPlan: string
+  onclick: Function
 }) {
   return (
     <div className="card w-[256px] p-5 mb-5 rounded-xl -translate-y-7 bg-safe-white shadow-md">
@@ -124,11 +126,21 @@ function PricingCards(_props: {
         </div>
       </ul>
       {_props.selectedPlan === _props.paymentPlan ? (
-        <button className="primary-btn text-lg px-[46px] py-2 mx-auto">
+        <button
+          className="primary-btn text-lg px-[46px] py-2 mx-auto"
+          onClick={() => {
+            _props.onclick(_props.paymentPlan)
+          }}
+        >
           choose
         </button>
       ) : (
-        <button className="primary-btn text-lg text-safe-text-blue-shade px-[46px] py-2 mx-auto bg-safe-blue-light">
+        <button
+          className="primary-btn text-lg text-safe-text-blue-shade px-[46px] py-2 mx-auto bg-safe-blue-light"
+          onClick={() => {
+            _props.onclick(_props.paymentPlan)
+          }}
+        >
           choose
         </button>
       )}

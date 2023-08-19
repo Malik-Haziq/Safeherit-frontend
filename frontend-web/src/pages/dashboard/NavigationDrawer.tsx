@@ -28,30 +28,48 @@ export const NavigationDrawer = (_props: {
       <div className="mt-11 cursor-pointer">
         {_props.DRAWER_MENU.map((item) => {
           return (
-            <IconView key={item.option} icon={item.icon} option={item.option} />
+            <IconView
+              key={item.option}
+              icon={item.icon}
+              option={item.option}
+              navigate={item.navigate}
+            />
           )
         })}
       </div>
       <div className="mt-24 cursor-pointer">
         {_props.DRAWER_SETTINGS.map((item) => {
           return (
-            <IconView key={item.option} icon={item.icon} option={item.option} />
+            <IconView
+              key={item.option}
+              icon={item.icon}
+              option={item.option}
+              navigate={item.navigate}
+            />
           )
         })}
       </div>
-      <div className="mt-36 cursor-pointer" onClick={_handleLogout}>
+      <div className="mt-36 cursor-pointer">
         <IconView
           icon="../../../../assets/images/Logout.svg"
           option={CONSTANT.LOGOUT}
+          navigate={_handleLogout}
         />
       </div>
     </div>
   )
 }
 
-function IconView(_props: { icon: string; option: string }) {
+function IconView(_props: {
+  icon: string
+  option: string
+  navigate: Function
+}) {
   return (
-    <div className="flex items-center gap-5 w-full mb-5 py-2 px-5">
+    <div
+      className="flex items-center gap-5 w-full mb-5 py-2 px-5 cursor-pointer"
+      onClick={() => _props.navigate()}
+    >
       <img src={_props.icon} alt={_props.option} />
       <p className="px-auto">{_props.option}</p>
     </div>

@@ -1,11 +1,8 @@
 import styles from "./Dashboard.module.css"
-import { useTranslation } from "react-i18next"
 import { NavigationDrawer } from "./NavigationDrawer"
 import { DashboardNavbar } from "./DashboardNavbar"
 import { Outlet, useNavigate } from "react-router-dom"
 import { CONSTANT } from "../../common"
-import { useAppDispatch } from "../../redux/hooks"
-import { logout } from "../../redux/actions/UserActions"
 import dashboardIcon from "../../../assets/images/dashboard.svg"
 import assets from "../../../assets/images/assets.svg"
 import beneficiaries from "../../../assets/images/beneeficiaries.svg"
@@ -17,18 +14,61 @@ import setting from "../../../assets/images/Setting.svg"
 console.log(beneficiaries)
 
 export function Dashboard() {
-  const { t } = useTranslation()
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const _handleLogout = () => {
-    dispatch(logout({}))
-      .unwrap()
-      .then((response) => {
-        console.log(response)
-        navigate("/login")
-      })
-  }
+  const DRAWER_MENU = [
+    {
+      icon: dashboardIcon,
+      option: CONSTANT.DASHBOARD,
+      navigate: () => {
+        navigate("/dashboard")
+      },
+    },
+    {
+      icon: assets,
+      option: CONSTANT.MY_ASSETS,
+      navigate: () => {
+        navigate("/dashboard/assets")
+      },
+    },
+    {
+      icon: beneficiaries,
+      option: CONSTANT.BENEFICIARIES,
+      navigate: () => {
+        navigate("/dashboard/beneficiaries")
+      },
+    },
+    {
+      icon: validator,
+      option: CONSTANT.VALIDATORS,
+      navigate: () => {
+        navigate("/dashboard/validators")
+      },
+    },
+    {
+      icon: pulseCheck,
+      option: CONSTANT.PULSE_CHECK,
+      navigate: () => {
+        navigate("/dashboard/pulse")
+      },
+    },
+  ]
+  const DRAWER_SETTINGS = [
+    {
+      icon: profile,
+      option: CONSTANT.MY_ACCOUNT,
+      navigate: () => {
+        navigate("/dashboard")
+      },
+    },
+    {
+      icon: setting,
+      option: CONSTANT.HELP,
+      navigate: () => {
+        navigate("/dashboard")
+      },
+    },
+  ]
 
   return (
     <div className={styles.App}>
@@ -43,36 +83,3 @@ export function Dashboard() {
     </div>
   )
 }
-
-const DRAWER_MENU = [
-  {
-    icon: dashboardIcon,
-    option: CONSTANT.DASHBOARD,
-  },
-  {
-    icon: assets,
-    option: CONSTANT.MY_ASSETS,
-  },
-  {
-    icon: beneficiaries,
-    option: CONSTANT.BENEFICIARIES,
-  },
-  {
-    icon: validator,
-    option: CONSTANT.VALIDATORS,
-  },
-  {
-    icon: pulseCheck,
-    option: CONSTANT.PULSE_CHECK,
-  },
-]
-const DRAWER_SETTINGS = [
-  {
-    icon: profile,
-    option: CONSTANT.MY_ACCOUNT,
-  },
-  {
-    icon: setting,
-    option: CONSTANT.HELP,
-  },
-]
