@@ -14,6 +14,7 @@ export default {
         "safe-blue-light": "#B4DBEC",
         "safe-black": "#000000",
         "safe-green-light": "##5CEAD2",
+        "safe-green-shade": "rgba(82, 206, 183, .23)",
       },
       colors: {
         "safe-color-blue": "#0C8AC1",

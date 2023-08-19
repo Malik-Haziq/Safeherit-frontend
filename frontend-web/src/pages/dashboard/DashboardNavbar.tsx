@@ -1,30 +1,28 @@
+import notification from "../../../assets/images/Notification.svg"
+import userImg from "../../../assets/images/user.svg"
+import arrowDown from "../../../assets/images/chevron-down.svg"
 export const DashboardNavbar = () => {
   return (
-    <div
-      style={{
-        height: "83px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        backgroundColor: "pink",
-        paddingLeft: "20px",
-      }}
-    >
+    <div className="h-[83px] p-7 flex justify-between items-center shadow-sm">
       <div>
-        <p>DashboardNavbar</p>
-        <p>DashboardNavbar</p>
+        <h2 className="text-safe-text-black-tint font-xl font-bold">
+          Dashboard
+        </h2>
+        <p className="text-safe-text-dark-gray font-sm ">
+          View all your assets status
+        </p>
       </div>
-      <div
-        style={{
-          height: "83px",
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "pink",
-          paddingRight: "30px",
-        }}
-      >
-        <p>Icon</p>
-        <p>DashboardNavbar</p>
+      <div className="flex items-center gap-10">
+        <img
+          src={notification}
+          alt="notification icon  "
+          className="cursor-pointer"
+        />
+        <div className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer">
+          <img src={userImg} alt="user image" />
+          <p>James</p>
+          <img src={arrowDown} alt="arrow down" className="ml-1" />
+        </div>
       </div>
     </div>
   )

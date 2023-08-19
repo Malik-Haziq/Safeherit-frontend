@@ -2,36 +2,47 @@
   display: flex;
 }
 
+.drawerItems {
+  color: blue;
+  opacity: 0.4;
+}
+
 .NavigationDrawer {
   width: 300px;
   height: 100vh;
-  background-color: antiquewhite;
+  background-color: #04477b;
+  color: white;
+  font-size: 18px;
 }
 
- .DashboardBody {
+.DashboardBody {
   width: 100%;
- }
+}
 
- .NavigationDrawerIconView {
+.NavigationDrawerIconView {
   width: 100%;
   margin-top: 44px;
-  background-color: aquamarine;
- }
+  /* padding-left: 24px; */
+  cursor: pointer;
+}
 
- .IconView {
+.IconView {
   height: 50px;
   width: 100%;
-  background-color: yellow;
+  background-color: #04477b;
   display: flex;
   align-items: center;
- }
+  gap: 24px;
+}
 
- .IconViewIcon{
+.IconViewIcon {
   padding-left: 33px;
   padding-right: 22px;
- }
+}
 
- .LogoutIconView {
+.LogoutIconView {
   position: absolute;
   bottom: 50px;
- }
+  padding-left: 24px;
+  cursor: pointer;
+}

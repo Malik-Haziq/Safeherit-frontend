@@ -93,4 +93,18 @@ html {
   .primary-btn {
     @apply px-6 flex py-2.5 bg-blue-500 text-safe-text-white bg-safe-blue font-safe-font-default font-semibold text-base rounded-full shadow-md hover:opacity-75 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:ring-opacity-75;
   }
+  .selected {
+    @apply bg-safe-green-shade relative font-medium;
+  }
+  .selected::after {
+    content: "|";
+    display: inline-block;
+    width: 8px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    border-radius: 20px;
+    background: #52ceb7;
+    color: #52ceb7;
+  }
 }

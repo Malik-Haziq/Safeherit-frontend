@@ -1,9 +1,10 @@
 import styles from "./Dashboard.module.css"
-import logo from "../../../assets/images/safeherit_logo.svg"
+import logo from "../../../assets/images/safeherit_log_white.svg"
 import { CONSTANT } from "../../common"
 import { useAppDispatch } from "../../redux/hooks"
 import { logout } from "../../redux/actions/UserActions"
 import { useNavigate } from "react-router-dom"
+import logoutIcon from "../../../../assets/images/Logout.svg"
 
 export const NavigationDrawer = (_props: {
   DRAWER_MENU: any[]
@@ -22,35 +23,38 @@ export const NavigationDrawer = (_props: {
   }
   return (
     <div className={styles.NavigationDrawer}>
-      <div className="pt-8 pl-8">
-        <img className="w-48" src={logo} alt="..."></img>
+      <div className="flex items-center justify-center mt-7">
+        <img className="w-48 " src={logo} alt="safeherit logo"></img>
       </div>
-      <div className={styles.NavigationDrawerIconView}>
+      <div className="mt-11 cursor-pointer">
         {_props.DRAWER_MENU.map((item) => {
           return (
             <IconView key={item.option} icon={item.icon} option={item.option} />
           )
         })}
       </div>
-      <div className={styles.NavigationDrawerIconView}>
+      <div className="mt-24 cursor-pointer">
         {_props.DRAWER_SETTINGS.map((item) => {
           return (
             <IconView key={item.option} icon={item.icon} option={item.option} />
           )
         })}
       </div>
-      <button className={styles.LogoutIconView} onClick={_handleLogout}>
-        <IconView icon={"ICON"} option={CONSTANT.LOGOUT} />
-      </button>
+      <div className="mt-36" onClick={_handleLogout}>
+        <IconView
+          icon="../../../../assets/images/Logout.svg"
+          option={CONSTANT.LOGOUT}
+        />
+      </div>
     </div>
   )
 }
 
 function IconView(_props: { icon: string; option: string }) {
   return (
-    <div className={styles.IconView}>
-      <p className={styles.IconViewIcon}>{_props.icon}</p>
-      <p className={styles.IconViewIcon}>{_props.option}</p>
+    <div className="flex items-center gap-5 w-full mb-5 py-2 px-5">
+      <img src={_props.icon} alt={_props.option} />
+      <p className="px-auto">{_props.option}</p>
     </div>
   )
 }

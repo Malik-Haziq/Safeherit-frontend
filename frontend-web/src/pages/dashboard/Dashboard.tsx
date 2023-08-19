@@ -6,6 +6,15 @@ import { Outlet, useNavigate } from "react-router-dom"
 import { CONSTANT } from "../../common"
 import { useAppDispatch } from "../../redux/hooks"
 import { logout } from "../../redux/actions/UserActions"
+import dashboardIcon from "../../../assets/images/dashboard.svg"
+import assets from "../../../assets/images/assets.svg"
+import beneficiaries from "../../../assets/images/beneeficiaries.svg"
+import validator from "../../../assets/images/validarors.svg"
+import pulseCheck from "../../../assets/images/pulse-check.svg"
+import profile from "../../../assets/images/Profile.svg"
+import setting from "../../../assets/images/Setting.svg"
+
+console.log(beneficiaries)
 
 export function Dashboard() {
   const { t } = useTranslation()
@@ -37,33 +46,33 @@ export function Dashboard() {
 
 const DRAWER_MENU = [
   {
-    icon: "Icon",
+    icon: dashboardIcon,
     option: CONSTANT.DASHBOARD,
   },
   {
-    icon: "Icon",
+    icon: assets,
     option: CONSTANT.MY_ASSETS,
   },
   {
-    icon: "Icon",
+    icon: beneficiaries,
     option: CONSTANT.BENEFICIARIES,
   },
   {
-    icon: "Icon",
+    icon: validator,
     option: CONSTANT.VALIDATORS,
   },
   {
-    icon: "Icon",
+    icon: pulseCheck,
     option: CONSTANT.PULSE_CHECK,
   },
 ]
 const DRAWER_SETTINGS = [
   {
-    icon: "Icon",
+    icon: profile,
     option: CONSTANT.MY_ACCOUNT,
   },
   {
-    icon: "Icon",
+    icon: setting,
     option: CONSTANT.HELP,
   },
 ]
