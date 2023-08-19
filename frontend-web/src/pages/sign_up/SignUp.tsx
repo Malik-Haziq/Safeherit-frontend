@@ -62,8 +62,8 @@ export function SignUp() {
   }
 
   return (
-    <main className="flex flex-col md:flex-row justify-center lg:justify-between font-safe-font-default w-screen h-[91vh]">
-      <section className="flex items-center  flex-col gap-8 w-full lg:w-2/5">
+    <main className="flex flex-col md:flex-row justify-center lg:justify-between font-safe-font-default w-screen ">
+      <section className="flex items-center  flex-col gap-8 w-full lg:w-2/5 my-8">
         <div className="mt-6">
           <img
             src={logo}
@@ -159,7 +159,7 @@ export function SignUp() {
             Sign up
           </button>
         </form>
-        <small className="text-sm text-safe-text-dark-gray mt-8">
+        <small className="text-sm text-safe-text-dark-gray my-8">
           Already have an account?&nbsp;
           <a href="/login" className="text-safe-text-dark-link-blue font-bold">
             Login
@@ -170,7 +170,7 @@ export function SignUp() {
         <img
           src={signUpImg}
           alt="Sign up img"
-          className="min-h-full min-w-full shrink-0"
+          className="min-h-full min-w-full h-[91vh]"
         />
       </section>
     </main>
