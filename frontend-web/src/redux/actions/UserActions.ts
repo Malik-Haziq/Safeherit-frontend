@@ -2,6 +2,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
+  sendPasswordResetEmail,
 } from "firebase/auth"
 import { auth } from "../../firebase"
 import { createAsyncThunk } from "@reduxjs/toolkit"
@@ -37,6 +38,19 @@ export const logout = createAsyncThunk(
   async (Data: {}, { rejectWithValue }) => {
     try {
       let response = await signOut(auth)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const resetPassword = createAsyncThunk(
+  "resetPassword",
+  async (Data: { email: string }, { rejectWithValue }) => {
+    const { email } = Data
+    try {
+      let response = await sendPasswordResetEmail(auth, email)
       return response
     } catch (error) {
       return rejectWithValue(error)
