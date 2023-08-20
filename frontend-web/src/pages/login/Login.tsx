@@ -4,8 +4,9 @@ import loginImg from "../../../assets/images/login-img.png"
 import star from "../../../assets/images/star.svg"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { login } from "../../redux/actions/UserActions"
+import { login, resetPassword } from "../../redux/actions/UserActions"
 import { useAppDispatch } from "../../redux/hooks"
+import ForgotPasswordModal from "../../components/modal/forgotPasswordModal"
 
 export function Login() {
   const { t } = useTranslation()
@@ -17,6 +18,10 @@ export function Login() {
     password: "",
   })
   const [rememberMe, setRememberMe] = useState(false)
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false)
+  const [resetEmail, setResetEmail] = useState("")
+  const closeForgotEmailModal = () => setShowForgotPasswordModal(false)
+  const showForgotEmailModal = () => setShowForgotPasswordModal(true)
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
@@ -43,13 +48,40 @@ export function Login() {
     }
   }
 
+  const _handleForgotPassword = () => {
+    if (resetEmail) {
+      dispatch(resetPassword({ email: resetEmail }))
+        .unwrap()
+        .then((res) => {
+          alert("Email Sent")
+          closeForgotEmailModal()
+          setResetEmail("")
+        })
+        .catch((err) => {
+          alert(err.code)
+          closeForgotEmailModal()
+          setResetEmail("")
+        })
+    }
+  }
+
   return (
     <main className="flex flex-row justify-center lg:justify-between font-safe-font-default w-screen h-screen">
+      {showForgotPasswordModal && (
+        <ForgotPasswordModal
+          resetEmail={resetEmail}
+          setResetEmail={setResetEmail}
+          closeModalOnOverlayClick={true}
+          openModal={showForgotPasswordModal}
+          closeModal={closeForgotEmailModal}
+          sendEmail={_handleForgotPassword}
+        />
+      )}
       <section className="pt-10 px-10 basis-2/5 flex flex-col gap-48">
         <img src={logo} alt="safeherit logo" className="h-8 w-40" />
         <div className="mx-auto">
           <h2 className="text-3xl mb-2 font-semibold font-monstrate text-safe-text-black">
-            Login2
+            Login
           </h2>
           <p className="text-safe-text-black text-base mb-8 font-medium opacity-80">
             Login with your credential information
@@ -90,12 +122,12 @@ export function Login() {
                   Remember Me
                 </small>
               </div>
-              <a
-                href="/login"
-                className="text-safe-text-blue-shade font-medium"
+              <p
+                className="text-safe-text-blue-shade font-medium cursor-pointer"
+                onClick={showForgotEmailModal}
               >
                 Forgot Password?
-              </a>
+              </p>
             </div>
             <button className="primary-btn rounded-md bg-safe-blue-shade px-40">
               Login
