@@ -16,7 +16,7 @@ export function DropDownButton(_props: any) {
                   className={_props.userIconClassName}
                 />
               )}
-              <p>{_props.title}</p>
+              <p className={_props.titleClassName}>{_props.title}</p>
               {_props.arrowIcon && (
                 <img
                   src={_props.arrowIcon}

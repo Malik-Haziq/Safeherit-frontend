@@ -1,5 +1,6 @@
 .App {
   display: flex;
+  height: 100vh;
 }
 
 .AppView {
@@ -17,10 +18,12 @@
 
 .NavigationDrawer {
   width: 300px;
-  height: 100vh;
   background-color: #04477b;
   color: white;
   font-size: 18px;
+  height: 100%;
+  overflow-y: auto;
+  position: static;
 }
 
 .DashboardBody {

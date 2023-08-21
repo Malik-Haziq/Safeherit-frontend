@@ -16,14 +16,14 @@ export function Pricing() {
   return (
     <main className="font-safe-font-default">
       <section className="bg-safe-blue-tint text-safe-text-white flex justify-center items-center flex-col py-[74px]">
-        <h1 className="text-safe-text-white text-3xl font-bold mb-4">
+        <h1 className="text-safe-text-white text-2xl sm:text-3xl font-bold mb-4 text-center">
           Get Started Now Pick a Plan
         </h1>
-        <p className="text-lg opacity-80 mb-9">
+        <p className="text-base sm:text-lg opacity-80 mb-9 text-center mx-1">
           Purchase the Premium plan and access all the features.
         </p>
         <h3 className="text-base mb-3">Choose your plan</h3>
-        <div className="flex justify-between items-center gap-5 bg-safe-blue-shade py-3 px-2 rounded-full">
+        <div className="flex justify-between items-center gap-5 bg-safe-blue-shade py-1 px-2 rounded-full">
           {packagePlans.map((item, i) => {
             return (
               <PricingButtons
@@ -43,7 +43,7 @@ export function Pricing() {
               key={i}
               paymentPlan={item.plan}
               price={item.price}
-              priceTime={item.price}
+              priceTime={item.priceTime}
               selectedPlan={selectedPlan}
               onclick={_handlePlanSelect}
             />
@@ -63,7 +63,7 @@ function PricingButtons(_props: {
     <div>
       {_props.selectedPlan === _props.paymentPlan ? (
         <button
-          className="px-5 py-2 rounded-[50px] bg-linear-gradient"
+          className="px-5 py-2 rounded-[50px] bg-linear-gradient text-sm sm:text-base"
           onClick={() => {
             _props.onclick(_props.paymentPlan)
           }}
@@ -72,7 +72,7 @@ function PricingButtons(_props: {
         </button>
       ) : (
         <button
-          className="px-5 py-2 rounded-[50px] opacity-80"
+          className="px-5 py-2 rounded-[50px] opacity-80 text-sm sm:text-base"
           onClick={() => {
             _props.onclick(_props.paymentPlan)
           }}

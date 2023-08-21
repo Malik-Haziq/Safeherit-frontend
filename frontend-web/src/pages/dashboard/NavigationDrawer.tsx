@@ -11,7 +11,7 @@ export const NavigationDrawer = (_props: {
   return (
     <div className={styles.NavigationDrawer}>
       <div className="flex items-center justify-center mt-7">
-        <img className="w-48 " src={logo} alt="safeherit logo"></img>
+        <img className="w-32 md:w-48 " src={logo} alt="safeherit logo"></img>
       </div>
       <div className="mt-11 cursor-pointer">
         {_props.DRAWER_MENU.map((item) => {
@@ -25,7 +25,7 @@ export const NavigationDrawer = (_props: {
           )
         })}
       </div>
-      <div className="mt-24 cursor-pointer">
+      <div className="mt-12 sm:mt-24 cursor-pointer">
         {_props.DRAWER_SETTINGS.map((item) => {
           return (
             <IconView
@@ -37,7 +37,7 @@ export const NavigationDrawer = (_props: {
           )
         })}
       </div>
-      <div className="mt-36 cursor-pointer">
+      <div className="mt-24 sm:mt-36 cursor-pointer">
         <IconView
           icon={logoutIcon}
           option={CONSTANT.LOGOUT}
@@ -55,11 +55,15 @@ function IconView(_props: {
 }) {
   return (
     <div
-      className="flex items-center gap-5 w-full mb-5 py-2 px-5 cursor-pointer"
+      className="flex items-center gap-5 w-full mb-5 py-2 px-3 sm:px-5 cursor-pointer"
       onClick={() => _props.navigate()}
     >
-      <img src={_props.icon} alt={_props.option} />
-      <p className="px-auto">{_props.option}</p>
+      <img
+        src={_props.icon}
+        alt={_props.option}
+        className="w-4 sm:w-[22px] h-4 sm:h-[22px]"
+      />
+      <p className="px-auto text-sm sm:text-lg">{_props.option}</p>
     </div>
   )
 }
