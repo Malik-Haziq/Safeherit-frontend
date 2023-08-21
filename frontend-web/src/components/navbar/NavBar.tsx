@@ -29,11 +29,11 @@ export function NavBar() {
 
   return (
     <div className="text-safe-text-gray h-20 bg-safe-white shadow-sm">
-      <nav className="relative h-20 flex flex-wrap items-center justify-between navbar-expand-lg bg-white-500 bg-safe-white">
-        <div className="w-full relative flex flex-row lg:w-auto pl-16 lg:static lg:block lg:justify-start">
+      <nav className="relative h-20 flex flex-wrap items-center justify-between navbar-expand-lg bg-white-500 bg-safe-white px-16">
+        <div className="relative flex flex-row lg:w-auto  lg:static lg:block lg:justify-start">
           <img className="w-48" src={logo} alt="..."></img>
         </div>
-        <div className="lg:flex flex-grow">
+        <div className="flex flex-grow flex-col absolute top-12 lg:static">
           <ul className="flex flex-col lg:flex-row list-none ml-auto">
             <li className="nav-item mr-16">
               <a
@@ -59,26 +59,24 @@ export function NavBar() {
                 Contact
               </a>
             </li>
-            <li className="nav-item mr-14">
-              {registerBtn.includes(currentPath.pathname) ? (
-                <button className="primary-btn" onClick={_handleLoginPress}>
-                  Login / Register
-                </button>
-              ) : (
-                <DropDownButton
-                  className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
-                  onClick={_handleLogout}
-                  title={USER_NAME}
-                  arrowIcon={arrowDown}
-                  arrowDownClassName={"ml-1"}
-                  userIcon={userImg}
-                  userIconClassName={""}
-                  optionText={"Logout"}
-                />
-              )}
-            </li>
           </ul>
         </div>
+        {registerBtn.includes(currentPath.pathname) ? (
+          <button className="primary-btn " onClick={_handleLoginPress}>
+            Login / Register
+          </button>
+        ) : (
+          <DropDownButton
+            className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer "
+            onClick={_handleLogout}
+            title={USER_NAME}
+            arrowIcon={arrowDown}
+            arrowDownClassName={"ml-1"}
+            userIcon={userImg}
+            userIconClassName={""}
+            optionText={"Logout"}
+          />
+        )}
       </nav>
     </div>
   )
