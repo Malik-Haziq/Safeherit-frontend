@@ -1,6 +1,2 @@
 export * from "./Dashboard"
-export * from "./views/DashboardView"
-export * from "./views/AssetsView"
-export * from "./views/BeneficiariesView"
-export * from "./views/PulseView"
-export * from "./views/ValidatorsView"
+export * from "./views"
