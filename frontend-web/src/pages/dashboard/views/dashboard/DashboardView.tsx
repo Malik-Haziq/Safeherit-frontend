@@ -1,6 +1,6 @@
 import styles from "../../Dashboard.module.css"
 
-export function DashboardView() {
+export default function DashboardView() {
   return (
     <div className={styles.AppView}>
       <p>Dashboard View</p>

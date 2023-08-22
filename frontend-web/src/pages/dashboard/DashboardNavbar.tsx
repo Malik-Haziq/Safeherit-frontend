@@ -3,8 +3,8 @@ import userImg from "../../../assets/images/user.svg"
 import arrowDown from "../../../assets/images/chevron-down.svg"
 import { DropDownButton } from "../../components"
 
-export const DashboardNavbar = (_props: { _handleLogout: Function }) => {
-  const USER_NAME = window.localStorage.getItem("userName")
+export default function DashboardNavbar (_props: { _handleLogout: Function }) {
+  const USER_NAME = window.localStorage.getItem("userName") || "Profile"
 
   return (
     <div className="h-[83px] p-2 sm:p-7 flex justify-between items-center shadow-sm">

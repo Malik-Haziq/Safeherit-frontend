@@ -8,7 +8,7 @@ import instagram from "../../../../../assets/images/insta.svg"
 import twitter from "../../../../../assets/images/twitter.svg"
 import userImg from "../../../../../assets/images/user.svg"
 
-export function ValidatorsView() {
+export default function ValidatorsView() {
   const Validators = [
     {
       userImg: "../../../../../assets/images/user.svg",
