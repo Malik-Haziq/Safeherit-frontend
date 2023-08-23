@@ -60,7 +60,8 @@
   cursor: pointer;
 }
 
-.validators {
+.validators,
+.beneficiaries {
   padding: 18px 32px;
   height: calc(100vh - 236px);
 }
