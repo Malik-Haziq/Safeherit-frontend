@@ -1,7 +1,7 @@
 import { useState } from "react"
 import tick from "../../../assets/images/tick.svg"
 
-export function Pricing() {
+export default function Pricing() {
   const [selectedPlan, setSelectedPlan] = useState("Yearly")
   const packagePlans = [
     { plan: "Monthly", price: "19.99", priceTime: "month" },

@@ -7,17 +7,19 @@ import { logout } from "../../redux/actions/UserActions"
 import { DropDownButton } from ".."
 
 export function NavBar() {
-  const USER_NAME = window.localStorage.getItem("userName")
+  const USER_NAME = window.localStorage.getItem("userName") || "Profile"
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const currentPath = useLocation()
   const registerBtn = ["/register", "/signup", "/"]
-
+// TODO manually terminate the use session on logout failiure (browser storage etc)
+// Do the above commented change for all _handleLogout methods
   const _handleLogout = () => {
-    dispatch(logout({}))
-      .unwrap()
-      .then((response) => {
-        console.log(response)
+    dispatch(logout({})).unwrap()
+      .catch((err) => {
+        alert(err?.code)
+      })
+      .finally(() => {
         navigate("/login")
       })
   }
