@@ -1,0 +1,15 @@
+.selectContainer {
+  width: 490px;
+  height: 56px;
+  border-radius: 16px;
+  background-color: #F5FAFD;
+  padding-left: 8px;
+  padding-right: 16px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+.rightIconStyles {
+
+}

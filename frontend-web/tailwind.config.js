@@ -44,6 +44,8 @@ export default {
       },
       width: {
         "167px": "167px",
+        "570px": "570px",
+        "490px": "490px",
       },
     },
   },
