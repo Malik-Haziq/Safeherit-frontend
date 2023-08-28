@@ -5,7 +5,7 @@ import video from "../../../../../assets/images/register_page_video.png"
 export function DashboardModal() {
   return (
     <Modal
-      openModal={true}
+      openModal={false}
       closeModal={() => {}}
       closeModalOnOverlayClick={false}
       modalTitle="Welcome to SafeHerit!"
