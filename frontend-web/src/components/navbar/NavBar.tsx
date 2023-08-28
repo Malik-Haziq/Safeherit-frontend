@@ -11,11 +11,12 @@ export function NavBar() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const currentPath = useLocation()
-  const registerBtn = ["/register", "/signup", "/"]
-// TODO manually terminate the use session on logout failiure (browser storage etc)
-// Do the above commented change for all _handleLogout methods
+  const registerBtn = ["/signup", "/"]
+  // TODO manually terminate the use session on logout failiure (browser storage etc)
+  // Do the above commented change for all _handleLogout methods
   const _handleLogout = () => {
-    dispatch(logout({})).unwrap()
+    dispatch(logout({}))
+      .unwrap()
       .catch((err) => {
         alert(err?.code)
       })

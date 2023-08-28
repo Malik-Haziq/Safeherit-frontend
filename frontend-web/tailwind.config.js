@@ -10,6 +10,7 @@ export default {
         "safe-white-shade-1": "#EDEDED",
         "safe-gray": "#F5FAFD",
         "safe-gray-shade": "#D7D7D7",
+        "safe-gray-shade-1": "#E0E0E0",
         "safe-blue-shade": "#04477B",
         "safe-blue-tint": "#0971AA",
         "safe-blue-light": "#B4DBEC",
