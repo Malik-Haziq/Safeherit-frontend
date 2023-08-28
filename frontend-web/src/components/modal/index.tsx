@@ -161,12 +161,12 @@ function ModalHeader(_props: {
 
 function TextView(_props: { textStyles: string; onclick: any; text: string }) {
   return (
-    <span
+    <p
       className={_props.textStyles || "safe-font-default"}
       onClick={_props.onclick || ""}
     >
       {_props.text}
-    </span>
+    </p>
   )
 }
 
