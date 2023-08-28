@@ -5,7 +5,7 @@ import heart from "../../../../assets/images/heart.svg"
 import users from "../../../../assets/images/users.svg"
 import privateKeysIcon from "../../../../assets/images/key-icon.svg"
 
-export function DashboardView() {
+export default function DashboardView() {
   const cardDettails = [
     { img: diamond, numberOfItems: "58", title: "Total Assets" },
     { img: shield, numberOfItems: "6", title: "Beneficiaries" },
