@@ -7,7 +7,7 @@ import { logout } from "../../redux/actions/UserActions"
 import { DropDownButton } from ".."
 
 export function NavBar() {
-  const USER_NAME = window.localStorage.getItem("userName")
+  const USER_NAME = window.localStorage.getItem("userName") || "Profile"
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const currentPath = useLocation()

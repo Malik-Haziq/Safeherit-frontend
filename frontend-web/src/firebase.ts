@@ -21,12 +21,7 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     localStorage.setItem("user", user.uid)
     localStorage.setItem("userName", user.displayName || "Profile")
-    localStorage.setItem("currentUser", JSON.stringify(user))
   } else {
     localStorage.clear()
   }
 })
-
-export const getCurrentUser = JSON.parse(
-  localStorage.getItem("currentUser") || "{}",
-)

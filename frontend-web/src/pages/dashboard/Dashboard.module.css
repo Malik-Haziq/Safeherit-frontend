@@ -4,11 +4,13 @@
 }
 
 .AppView {
-  display: flex;
-  flex: 1;
-  min-height: 80%;
-  justify-content: center;
-  align-items: center;
+  min-height: calc(100vh - 83px);
+  background: linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.85) 100%
+    ),
+    #dae5ea;
 }
 
 .drawerItems {
@@ -56,4 +58,10 @@
   bottom: 50px;
   padding-left: 24px;
   cursor: pointer;
+}
+
+.validators,
+.beneficiaries {
+  padding: 18px 32px;
+  height: calc(100vh - 236px);
 }
