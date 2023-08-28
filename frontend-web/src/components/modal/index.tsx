@@ -1,39 +1,37 @@
 import styles from "./Modal.module.css"
 import defaultIcon from "../../../assets/images/safeherit_logo.svg"
+import closeIcon from "../../../assets/images/close-icon.svg"
 import { SelectField } from ".."
 
-const DisplayFieldComponent = (_props: {
-  element: any,
-  index: number
-}) => {
+const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   const element = _props.element
-  if (element?.type === 'textView') {
+  if (element?.type === "textView") {
     return (
       <TextView
-        text = {element?.props?.text}
-        onclick = {element?.props?.onclick}
-        textStyles = {element?.props?.textStyles}
+        text={element?.props?.text}
+        onclick={element?.props?.onclick}
+        textStyles={element?.props?.textStyles}
       />
     )
-  } else if (element?.type === 'iconView') {
+  } else if (element?.type === "iconView") {
     return (
       <IconView
-        image = {element?.props?.image}
-        onclick = {element?.props?.onclick}
-        imageStyles = {element?.props?.imageStyles}
-        imageContainerStyles = {element?.props?.imageContainerStyles}
+        image={element?.props?.image}
+        onclick={element?.props?.onclick}
+        imageStyles={element?.props?.imageStyles}
+        imageContainerStyles={element?.props?.imageContainerStyles}
       />
     )
-  } else if (element?.type === 'videoView') {
+  } else if (element?.type === "videoView") {
     return (
       <VideoView
-        video = {element?.props?.video}
-        onclick = {element?.props?.onclick}
-        videoStyles = {element?.props?.videoStyles}
-        videoContainerStyles = {element?.props?.videoContainerStyles}
+        video={element?.props?.video}
+        onclick={element?.props?.onclick}
+        videoStyles={element?.props?.videoStyles}
+        videoContainerStyles={element?.props?.videoContainerStyles}
       />
     )
-  } else if (element?.type === 'inputView') {
+  } else if (element?.type === "inputView") {
     return (
       <InputField
         name={element?.props?.name}
@@ -43,7 +41,7 @@ const DisplayFieldComponent = (_props: {
         _handleChange={element?.props?._handleChange}
         required={element?.props?.required}
         inputStyles={element?.props?.inputStyles}
-        inputContainerStyles = {element?.props?.inputContainerStyles}
+        inputContainerStyles={element?.props?.inputContainerStyles}
         hasRightIcon={element?.props?.hasRightIcon}
         icon={element?.props?.icon}
         iconAlt={element?.props?.iconAlt}
@@ -51,29 +49,32 @@ const DisplayFieldComponent = (_props: {
         rightIconStyles={element?.props?.rightIconStyles}
       />
     )
-  } else if (element?.type === 'selectView') {
+  } else if (element?.type === "selectView") {
     return (
       <SelectField
         data={element?.props?.data}
         value={element?.props?.value}
-        selectProps= {element?.props?.selectProps}
-        setSelectedValue= {element?.props?.setSelectedValue}
-        hasRightIcon= {element?.props?.hasRightIcon}
-        rightIcon= {element?.props?.rightIcon}
-        rightIconAlt= {element?.props?.rightIconAlt}
+        selectProps={element?.props?.selectProps}
+        setSelectedValue={element?.props?.setSelectedValue}
+        hasRightIcon={element?.props?.hasRightIcon}
+        rightIcon={element?.props?.rightIcon}
+        rightIconAlt={element?.props?.rightIconAlt}
         selectFieldWidth={element?.props?.selectFieldWidth}
+        rightIconStyles={element?.props?.rightIconStyles}
+        selectContainer={element?.props?.selectContainer}
+        selectFieldStyles={element?.props?.selectFieldStyles}
       />
     )
-  } else if (element?.type === 'buttonView') {
+  } else if (element?.type === "buttonView") {
     return (
       <ButtonView
-        title= {element?.props?.title}
-        onclick= {element?.props?.onclick}
-        buttonStyle= {element?.props?.buttonStyle}
-        buttonContainer= {element?.props?.buttonContainer}
+        title={element?.props?.title}
+        onclick={element?.props?.onclick}
+        buttonStyle={element?.props?.buttonStyle}
+        buttonContainer={element?.props?.buttonContainer}
       />
     )
-  } else if (element?.type === 'customView') {
+  } else if (element?.type === "customView") {
     const CustomView = element?.props?.CustomView
     return (
       <div className={element?.props?.customViewContainer}>
@@ -84,174 +85,141 @@ const DisplayFieldComponent = (_props: {
 }
 
 const MultiFieldComponent = (_props: {
-  component: any,
+  component: any
   parentIndex: number
 }) => {
-
   return (
     <div key={_props.parentIndex} className={_props.component?.containerStyles}>
       {_props.component?.props?.fields?.map((field: any, index: number) => {
-        return (
-          <DisplayFieldComponent
-            element= {field}
-            index= {index}
-          />
-        )
+        return <DisplayFieldComponent element={field} index={index} />
       })}
     </div>
-  );
+  )
 }
 
-const RenderModal = (_props: {
-  elements: any
-}) => {
+const RenderModal = (_props: { elements: any }) => {
   if (_props.elements.length > 0) {
-    return (
-      _props.elements?.map((element: any, index: number) => {
-        if (element?.type !== 'multiFields') {
-          return (
-            <DisplayFieldComponent
-              element= {element}
-              index= {index}
-            />
-          )
-        } else {
-          return (
-            <MultiFieldComponent
-              component= {element}
-              parentIndex= {index}
-            />
-          )
-        }
-      })
-    )
+    return _props.elements?.map((element: any, index: number) => {
+      if (element?.type !== "multiFields") {
+        return <DisplayFieldComponent element={element} index={index} />
+      } else {
+        return <MultiFieldComponent component={element} parentIndex={index} />
+      }
+    })
   } else {
     // TODO add an empty modal view here
-    return (
-      <div>Empty modal</div>
-    )
+    return <div>Empty modal</div>
   }
 }
 
 export const Modal = (_props: {
-  openModal: boolean | undefined;
-  closeModal: any;
-  closeModalOnOverlayClick: any;
-  elements: Array<any>;
-  modalTitle: string;
-  closeIconVisibility: boolean;
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  elements: Array<any>
+  modalTitle: string
+  closeIconVisibility: boolean
 }) => {
-  
   const elements = _props?.elements
   return (
-    <div className={styles.backDrop} onClick={() => {
-      _props.closeModalOnOverlayClick ? _props.closeModal() : ""
-    }}>
+    <div
+      className={styles.backDrop}
+      onClick={() => {
+        _props.closeModalOnOverlayClick ? _props.closeModal() : ""
+      }}
+    >
       <div className={styles.modalContainer}>
         <div className={styles.modal}>
           <ModalHeader
-            closeModal = {_props.closeModal}
-            title = {_props.modalTitle}
-            closeIconVisibility = {_props.closeIconVisibility}
+            closeModal={_props.closeModal}
+            title={_props.modalTitle}
+            closeIconVisibility={_props.closeIconVisibility}
           />
-          <RenderModal
-            elements={elements}
-          />
+          <RenderModal elements={elements} />
         </div>
       </div>
     </div>
   )
 }
 
-function ModalHeader (_props: {
-  closeModal: () => void;
-  title: string;
+function ModalHeader(_props: {
+  closeModal: () => void
+  title: string
   closeIconVisibility: boolean
 }) {
   return (
     <div className={styles.header}>
-      <div className={styles.title}>
-        {_props.title}
-      </div>
-      {
-        _props.closeIconVisibility && <div 
-        className={styles.icon}
-        onClick={_props.closeModal}>
-          close icon
+      <div className={styles.title}>{_props.title}</div>
+      {_props.closeIconVisibility && (
+        <div className={styles.icon} onClick={_props.closeModal}>
+          <img src={closeIcon} alt="close icon" className="cursor-pointer" />
         </div>
-      }
+      )}
     </div>
   )
 }
 
-function TextView (_props: {
-  textStyles: string,
-  onclick: any,
-  text: string
-}) {
+function TextView(_props: { textStyles: string; onclick: any; text: string }) {
   return (
     <span
-      className={ _props.textStyles || "safe-font-default"}
-      onClick={ _props.onclick || ""}
+      className={_props.textStyles || "safe-font-default"}
+      onClick={_props.onclick || ""}
     >
       {_props.text}
     </span>
   )
 }
 
-function IconView (_props: {
-  imageContainerStyles: string,
-  image: string,
-  imageStyles: string,
-  onclick: any,
+function IconView(_props: {
+  imageContainerStyles: string
+  image: string
+  imageStyles: string
+  onclick?: any
 }) {
   return (
-    <div
-      className={ _props.imageContainerStyles || ""}
-    >
+    <div className={_props.imageContainerStyles || ""}>
       <img
-        src={ _props.image || defaultIcon}
+        src={_props.image || defaultIcon}
         alt="icon"
-        className={ _props.imageStyles || ""}
+        className={_props.imageStyles || ""}
         onClick={_props.onclick || ""}
       />
     </div>
   )
 }
 
-function VideoView (_props: { //TODO revise this component
-  videoContainerStyles: string,
-  video: string,
-  videoStyles: string,
-  onclick: any,
+function VideoView(_props: {
+  //TODO revise this component
+  videoContainerStyles: string
+  video: string
+  videoStyles: string
+  onclick: any
 }) {
   return (
-    <div
-      className={ _props.videoContainerStyles || ""}
-    >
+    <div className={_props.videoContainerStyles || ""}>
       <img
-        src={ _props.video || defaultIcon}
+        src={_props.video || defaultIcon}
         alt="icon"
-        className={ _props.videoStyles || ""}
+        className={_props.videoStyles || ""}
         onClick={_props.onclick || ""}
       />
     </div>
   )
-} 
+}
 
-function InputField (_props: {
-  name: string,
-  type: string,
-  placeholder: string,
-  value: string,
-  _handleChange: any,
-  required: boolean,
-  inputStyles: string,
-  hasRightIcon: boolean,
-  icon: string,
-  iconAlt: string,
-  iconPress: any,
-  rightIconStyles: string,
+function InputField(_props: {
+  name: string
+  type: string
+  placeholder: string
+  value: string
+  _handleChange: any
+  required: boolean
+  inputStyles: string
+  hasRightIcon: boolean
+  icon: string
+  iconAlt: string
+  iconPress: any
+  rightIconStyles: string
   inputContainerStyles: string
 }) {
   return (
@@ -263,26 +231,31 @@ function InputField (_props: {
         value={_props.value}
         onChange={_props._handleChange}
         required={_props.required || false}
-        className={_props.inputStyles || "border-0 bg-safe-gray py-4 px-4 w-490px placeholder:text-safe-text-dark-blue placeholder:font-medium rounded-[22px]"}
+        className={
+          _props.inputStyles +
+          " border-0 bg-safe-gray py-4 px-4 w-490px placeholder:text-[#6F767B] outline-none rounded-[22px]"
+        }
       />
-      {_props.hasRightIcon && <img
-        src={_props.icon}
-        alt={_props.iconAlt}
-        onClick={_props.iconPress}
-        className={_props.rightIconStyles || "absolute right-4 top-4 cursor-pointer"}
-      />
-      }
+      {_props.hasRightIcon && (
+        <img
+          src={_props.icon}
+          alt={_props.iconAlt}
+          onClick={_props.iconPress}
+          className={
+            _props.rightIconStyles || "absolute right-4 top-4 cursor-pointer"
+          }
+        />
+      )}
     </div>
   )
 }
 
-function ButtonView (_props: {
+function ButtonView(_props: {
   title: string
   buttonStyle: string
   onclick: any
   buttonContainer: string
 }) {
-
   return (
     <div className={_props.buttonContainer || styles.buttonContainer}>
       <button
@@ -306,7 +279,8 @@ function ButtonView (_props: {
 //   />
 // }
 
-{/* <Modal
+{
+  /* <Modal
 openModal = {true}
 closeModal = {() => alert("modal closed")}
 closeModalOnOverlayClick = {() => alert("modal closed")}
@@ -368,6 +342,9 @@ elements = {[
       rightIcon: icon,
       rightIconAlt: "rightIcon",
       selectFieldWidth: 490,
+      selectContainer={element?.props?.selectContainer}
+      selectFieldStyles={element?.props?.selectFieldStyles}
+      rightIconStyles={element?.props?.rightIconStyles}
     }
   },
   {
@@ -416,4 +393,5 @@ elements = {[
     }
   }
 ]}
-/> */}
+/> */
+}
