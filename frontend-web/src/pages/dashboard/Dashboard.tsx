@@ -1,6 +1,5 @@
+import { lazy } from "react"
 import styles from "./Dashboard.module.css"
-import { NavigationDrawer } from "./NavigationDrawer"
-import { DashboardNavbar } from "./DashboardNavbar"
 import { Outlet, useNavigate } from "react-router-dom"
 import { CONSTANT } from "../../common"
 import dashboardIcon from "../../../assets/images/dashboard.svg"
@@ -13,9 +12,10 @@ import setting from "../../../assets/images/Setting.svg"
 import { useAppDispatch } from "../../redux/hooks"
 import { logout } from "../../redux/actions/UserActions"
 
-console.log(beneficiaries)
+const NavigationDrawer = lazy(() => import("./NavigationDrawer"))
+const DashboardNavbar = lazy(() => import("./DashboardNavbar"))
 
-export function Dashboard() {
+export default function Dashboard() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 

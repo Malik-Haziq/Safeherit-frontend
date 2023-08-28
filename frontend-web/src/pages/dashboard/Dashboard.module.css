@@ -64,3 +64,9 @@
   padding-left: 24px;
   cursor: pointer;
 }
+
+.validators,
+.beneficiaries {
+  padding: 18px 32px;
+  height: calc(100vh - 236px);
+}
