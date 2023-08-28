@@ -1,9 +1,9 @@
-import styles from "../Dashboard.module.css"
-import diamond from "../../../../assets/images/diamond.svg"
-import shield from "../../../../assets/images/Shield-done.svg"
-import heart from "../../../../assets/images/heart.svg"
-import users from "../../../../assets/images/users.svg"
-import privateKeysIcon from "../../../../assets/images/key-icon.svg"
+import styles from "../../Dashboard.module.css"
+import diamond from "../../../../../assets/images/diamond.svg"
+import shield from "../../../../../assets/images/Shield-done.svg"
+import heart from "../../../../../assets/images/heart.svg"
+import users from "../../../../../assets/images/users.svg"
+import privateKeysIcon from "../../../../../assets/images/key-icon.svg"
 
 export default function DashboardView() {
   const cardDettails = [
