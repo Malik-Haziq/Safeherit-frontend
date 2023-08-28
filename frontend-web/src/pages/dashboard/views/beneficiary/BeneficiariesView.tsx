@@ -1,3 +1,7 @@
+import {
+  EditBeneficiaryModal_1,
+  EditBeneficiaryModal_2,
+} from "./modal_beneficiary"
 import styles from "../../Dashboard.module.css"
 import userIcon from "../../../../../assets/images/user-icon.svg"
 import addIcon from "../../../../../assets/images/add-icon.svg"
@@ -40,6 +44,20 @@ export default function BeneficiariesView() {
   ]
   return (
     <div className={styles.AppView}>
+      <EditBeneficiaryModal_1
+        openModal={true}
+        closeModal={false}
+        closeModalOnOverlayClick={true}
+        modalTitle="Edit Beneficiary Details"
+        closeIconVisibility={true}
+      />
+      {/* <EditBeneficiaryModal_2
+        openModal={false}
+        closeModal={false}
+        closeModalOnOverlayClick={true}
+        modalTitle="Edit Beneficiary Details"
+        closeIconVisibility={true}
+      /> */}
       <section className="px-8 py-4">
         <div className="flex justify-between items-center shadow-md p-4 rounded-xl">
           <div className="flex">
