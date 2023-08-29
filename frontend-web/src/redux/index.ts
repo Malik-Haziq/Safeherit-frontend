@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import user from "./reducers/UserReducers"
+import user from "./reducers/UserSlice"
 import sessionStorage from "redux-persist/es/storage/session"
 
 const rootPersistConfig = {
