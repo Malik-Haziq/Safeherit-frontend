@@ -72,9 +72,10 @@ export default function Dashboard() {
       },
     },
   ]
-// TODO manually terminate the session on catch
+  // TODO manually terminate the session on catch
   const _handleLogout = () => {
-    dispatch(logout({})).unwrap()
+    dispatch(logout({}))
+      .unwrap()
       .catch((err) => {
         alert(err?.code)
       })
@@ -90,10 +91,10 @@ export default function Dashboard() {
         DRAWER_SETTINGS={DRAWER_SETTINGS}
         _handleLogout={_handleLogout}
       />
-      <div className={styles.DashboardBody}>
+      <section className={styles.DashboardBody}>
         <DashboardNavbar _handleLogout={_handleLogout} />
         <Outlet />
-      </div>
+      </section>
     </div>
   )
 }
