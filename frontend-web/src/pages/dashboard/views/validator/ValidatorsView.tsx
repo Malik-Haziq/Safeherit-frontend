@@ -7,6 +7,11 @@ import facebook from "../../../../../assets/images/facebook.svg"
 import instagram from "../../../../../assets/images/insta.svg"
 import twitter from "../../../../../assets/images/twitter.svg"
 import userImg from "../../../../../assets/images/user.svg"
+import {
+  EditValidatorModal_1,
+  EditValidatorModal_2,
+  EditValidatorModal_3,
+} from "./modal_validator"
 
 export default function ValidatorsView() {
   const Validators = [
@@ -41,6 +46,13 @@ export default function ValidatorsView() {
   ]
   return (
     <div className={styles.AppView}>
+      <EditValidatorModal_3
+        openModal={true}
+        closeModal={false}
+        closeModalOnOverlayClick={true}
+        modalTitle="Edit Validators"
+        closeIconVisibility={true}
+      />
       <section className="px-8 py-4">
         <div className="flex justify-between items-center shadow-md p-4 rounded-xl">
           <div className="flex">
