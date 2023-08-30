@@ -1,3 +1,4 @@
+import { DashboardModal } from "./modal_dashboard"
 import styles from "../../Dashboard.module.css"
 import diamond from "../../../../../assets/images/diamond.svg"
 import shield from "../../../../../assets/images/Shield-done.svg"
