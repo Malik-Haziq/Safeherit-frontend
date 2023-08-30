@@ -1,16 +1,21 @@
 import styles from "../../Dashboard.module.css"
 import userIcon from "../../../../../assets/images/user-icon.svg"
 import addIcon from "../../../../../assets/images/add-icon.svg"
-import socialMediaIcons from "../../../../../assets/images/social-media.svg"
 import dots from "../../../../../assets/images/dots.svg"
 import facebook from "../../../../../assets/images/facebook.svg"
 import instagram from "../../../../../assets/images/insta.svg"
 import twitter from "../../../../../assets/images/twitter.svg"
 import userImg from "../../../../../assets/images/user.svg"
+
 import {
   EditValidatorModal_1,
   EditValidatorModal_2,
   EditValidatorModal_3,
+  RegisterValidatorModal_0,
+  RegisterValidatorModal_1,
+  RegisterValidatorModal_2,
+  RegisterValidatorModal_3,
+  RegisterValidatorModal_4,
 } from "./modal_validator"
 
 export default function ValidatorsView() {
@@ -46,11 +51,11 @@ export default function ValidatorsView() {
   ]
   return (
     <div className={styles.AppView}>
-      <EditValidatorModal_3
+      <EditValidatorModal_2
         openModal={true}
         closeModal={false}
         closeModalOnOverlayClick={true}
-        modalTitle="Edit Validators"
+        modalTitle="Register Validators"
         closeIconVisibility={true}
       />
       <section className="px-8 py-4">
