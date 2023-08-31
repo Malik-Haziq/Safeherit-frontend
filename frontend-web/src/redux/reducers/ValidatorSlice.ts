@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { getAllValidator } from "../actions/ValidatorAction"
 
 const initialState = {
   name: "",
@@ -11,7 +12,7 @@ const initialState = {
   instagram_username: "",
   twitter_username: "",
   personalized_message: "",
-  validator_array: []
+  validator_array: [{}]
 }
 
 export const slice = createSlice({
@@ -20,6 +21,9 @@ export const slice = createSlice({
   reducers: {
   },
   extraReducers(builder) {
+    builder.addCase(getAllValidator.fulfilled, (state, action) => {
+      state.validator_array = action?.payload?.data?.data || []
+    })
   },
 })
 

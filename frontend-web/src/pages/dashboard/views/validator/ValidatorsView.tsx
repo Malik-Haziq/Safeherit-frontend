@@ -17,47 +17,80 @@ import {
   RegisterValidatorModal_3,
   RegisterValidatorModal_4,
 } from "./modal_validator"
+import { useEffect, useState } from "react"
+import { getAllValidator } from "../../../../redux/actions/ValidatorAction"
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 
 export default function ValidatorsView() {
-  const Validators = [
-    {
-      userImg: "../../../../../assets/images/user.svg",
-      userName: "Rock Miller",
-      email: "james@gmail.com",
-      phoneNumber: "+91 2541 3652 256",
-      backupPhoneNumber: "+91 2541 3652 256",
-    },
-    {
-      userImg: "../../../../../assets/images/user.svg",
-      userName: "Rock Miller",
-      email: "james@gmail.com",
-      phoneNumber: "+91 2541 3652 256",
-      backupPhoneNumber: "+91 2541 3652 256",
-    },
-    {
-      userImg: "../../../../../assets/images/user.svg",
-      userName: "Rock Miller",
-      email: "james@gmail.com",
-      phoneNumber: "+91 2541 3652 256",
-      backupPhoneNumber: "+91 2541 3652 256",
-    },
-    {
-      userImg: "../../../../../assets/images/user.svg",
-      userName: "Rock Miller",
-      email: "james@gmail.com",
-      phoneNumber: "+91 2541 3652 256",
-      backupPhoneNumber: "+91 2541 3652 256",
-    },
-  ]
+
+  const dispatch = useAppDispatch()
+  const [hasValidators, setHasValidators] = useState(false)
+
+  useEffect(() => {
+    dispatch(getAllValidator({}))
+      .unwrap()
+      .then((res) => {
+        if (res?.data.data && res?.data?.data.length > 0) {
+          setHasValidators(true)
+        }
+        else {
+          setHasValidators(false)
+        }
+      })
+      .catch(() => {
+        // TODO: show fallback page
+      })
+  }, [])
+  
+  if (hasValidators) {
+    return (
+      <Validators />
+    )
+  }
+  else {
+    return (
+      <AddValidators />
+    )
+  }
+  
+}
+
+function AddValidators () {
+
+  const addValidator = () => {
+    alert("show modals")
+  }
+
+  return (
+    <div>
+      <p>
+        Add Validators
+      </p>
+      <button onClick={addValidator}>Add</button>
+    </div>
+  )
+}
+
+function Validators () {
+
+  const validatorArray = useAppSelector(state => state.validator.validator_array)
+
+  const editValidator = (id: string) => {
+    alert(id)
+  }
+  const addValidator = () => {
+    
+  }
+
   return (
     <div className={styles.AppView}>
-      <EditValidatorModal_2
-        openModal={true}
+      {/* <EditValidatorModal_2
+        openModal={false}
         closeModal={false}
         closeModalOnOverlayClick={true}
         modalTitle="Register Validators"
         closeIconVisibility={true}
-      />
+      /> */}
       <section className="px-8 py-4">
         <div className="flex justify-between items-center shadow-md p-4 rounded-xl">
           <div className="flex">
@@ -65,13 +98,13 @@ export default function ValidatorsView() {
               <img src={userIcon} alt="user icon" />
             </div>
             <div className="ml-2 flex flex-col justify-center">
-              <p className="text-black font-semibold">5</p>
+              <p className="text-black font-semibold">{validatorArray.length}</p>
               <small className="text-safe-text-light-gray-tint text-xm">
                 validators
               </small>
             </div>
           </div>
-          <img src={addIcon} alt="add icon" className="cursor-pointer" />
+          <img onClick={addValidator} src={addIcon} alt="add icon" className="cursor-pointer" />
         </div>
       </section>
 
@@ -94,14 +127,18 @@ export default function ValidatorsView() {
             </li>
           </ul>
 
-          {Validators.map((validator) => {
+          {validatorArray.map((validator: any, index) => {
             return (
               <Validator
-                userImg={validator.userImg}
-                userName={validator.userName}
-                email={validator.email}
-                phoneNumber={validator.phoneNumber}
-                backupPhoneNumber={validator.backupPhoneNumber}
+                key={index}
+                // userImg={validator.userImg}
+                userImg={"../../../../../assets/images/user.svg"}
+                userName={validator.name}
+                email={validator.primary_email}
+                phoneNumber={validator.phone_number}
+                backupPhoneNumber={validator.backup_phone_number}
+                id={validator.id}
+                editValidator={editValidator}
               />
             )
           })}
@@ -117,6 +154,8 @@ function Validator(_props: {
   email: string
   phoneNumber: string
   backupPhoneNumber: string
+  id: string
+  editValidator: any
 }) {
   return (
     <ul className="grid grid-cols-5 items-center py-3 px-7 ">
@@ -151,7 +190,7 @@ function Validator(_props: {
             className="w-5 cursor-pointer "
           />
         </div>
-        <img src={dots} alt="dots" className="w-6 cursor-pointer" />
+        <img onClick={() => {_props.editValidator(_props.id)}} src={dots} alt="dots" className="w-6 cursor-pointer" />
       </li>
     </ul>
   )
