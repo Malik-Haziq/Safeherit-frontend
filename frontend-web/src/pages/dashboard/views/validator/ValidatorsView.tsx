@@ -6,6 +6,7 @@ import facebook from "../../../../../assets/images/facebook.svg"
 import instagram from "../../../../../assets/images/insta.svg"
 import twitter from "../../../../../assets/images/twitter.svg"
 import userImg from "../../../../../assets/images/user.svg"
+import validatorImage from "../../../../../assets/images/validator-screen.svg"
 
 import {
   EditValidatorModal_1,
@@ -22,7 +23,6 @@ import { getAllValidator } from "../../../../redux/actions/ValidatorAction"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 
 export default function ValidatorsView() {
-
   const dispatch = useAppDispatch()
   const [hasValidators, setHasValidators] = useState(false)
 
@@ -32,8 +32,7 @@ export default function ValidatorsView() {
       .then((res) => {
         if (res?.data.data && res?.data?.data.length > 0) {
           setHasValidators(true)
-        }
-        else {
+        } else {
           setHasValidators(false)
         }
       })
@@ -41,46 +40,51 @@ export default function ValidatorsView() {
         // TODO: show fallback page
       })
   }, [])
-  
+
   if (hasValidators) {
-    return (
-      <Validators />
-    )
+    return <Validators />
+  } else {
+    return <AddValidators />
   }
-  else {
-    return (
-      <AddValidators />
-    )
-  }
-  
 }
 
-function AddValidators () {
-
+function AddValidators() {
   const addValidator = () => {
     alert("show modals")
   }
 
   return (
-    <div>
-      <p>
-        Add Validators
-      </p>
-      <button onClick={addValidator}>Add</button>
+    <div className="h-[calc(100vh-83px)] p-7">
+      <main className="flex flex-col items-center justify-center shadow-xl h-full rounded-2xl">
+        <img
+          src={validatorImage}
+          className="mb-10"
+          alt="validator screen image"
+        />
+        <h2 className="text-[#00192B] text-xl font-bold mb-2">No Validators</h2>
+        <p className="text-[#868686] font-medium mb-10">
+          No registered validator yet
+        </p>
+        <button
+          onClick={addValidator}
+          className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
+        >
+          Register Validators
+        </button>
+      </main>
     </div>
   )
 }
 
-function Validators () {
-
-  const validatorArray = useAppSelector(state => state.validator.validator_array)
+function Validators() {
+  const validatorArray = useAppSelector(
+    (state) => state.validator.validator_array,
+  )
 
   const editValidator = (id: string) => {
     alert(id)
   }
-  const addValidator = () => {
-    
-  }
+  const addValidator = () => {}
 
   return (
     <div className={styles.AppView}>
@@ -98,13 +102,20 @@ function Validators () {
               <img src={userIcon} alt="user icon" />
             </div>
             <div className="ml-2 flex flex-col justify-center">
-              <p className="text-black font-semibold">{validatorArray.length}</p>
+              <p className="text-black font-semibold">
+                {validatorArray.length}
+              </p>
               <small className="text-safe-text-light-gray-tint text-xm">
                 validators
               </small>
             </div>
           </div>
-          <img onClick={addValidator} src={addIcon} alt="add icon" className="cursor-pointer" />
+          <img
+            onClick={addValidator}
+            src={addIcon}
+            alt="add icon"
+            className="cursor-pointer"
+          />
         </div>
       </section>
 
@@ -190,7 +201,14 @@ function Validator(_props: {
             className="w-5 cursor-pointer "
           />
         </div>
-        <img onClick={() => {_props.editValidator(_props.id)}} src={dots} alt="dots" className="w-6 cursor-pointer" />
+        <img
+          onClick={() => {
+            _props.editValidator(_props.id)
+          }}
+          src={dots}
+          alt="dots"
+          className="w-6 cursor-pointer"
+        />
       </li>
     </ul>
   )
