@@ -7,6 +7,7 @@ import instagram from "../../../../../assets/images/insta.svg"
 import twitter from "../../../../../assets/images/twitter.svg"
 import userImg from "../../../../../assets/images/user.svg"
 import validatorImage from "../../../../../assets/images/validator-screen.svg"
+import { ValidatorDropDown } from "../../../../components"
 
 import {
   EditValidatorModal_1,
@@ -201,14 +202,9 @@ function Validator(_props: {
             className="w-5 cursor-pointer "
           />
         </div>
-        <img
-          onClick={() => {
-            _props.editValidator(_props.id)
-          }}
-          src={dots}
-          alt="dots"
-          className="w-6 cursor-pointer"
-        />
+        <div className="relative">
+          <ValidatorDropDown />
+        </div>
       </li>
     </ul>
   )
