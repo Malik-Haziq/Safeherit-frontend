@@ -9,23 +9,29 @@ import {
 import {
   Login,
   SignUp,
-  Dashboard,
-  Pricing,
-  DashboardView,
-  AssetsView,
-  BeneficiariesView,
-  PulseView,
-  ValidatorsView,
   RegisterKey,
 } from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar } from "./components"
+import { lazy } from "react"
+
+const Pricing = lazy(() => import("./pages/pricing/Pricing"))
+const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"))
+const AssetsView = lazy(() => import("./pages/dashboard/views/asset/AssetsView"))
+const DashboardView = lazy(() => import("./pages/dashboard/views/dashboard/DashboardView"))
+const BeneficiariesView = lazy(() => import("./pages/dashboard/views/beneficiary/BeneficiariesView"))
+const PulseView = lazy(() => import("./pages/dashboard/views/pulse/PulseView"))
+const ValidatorsView = lazy(() => import("./pages/dashboard/views/validator/ValidatorsView"))
 
 function App() {
-  // TODO authenticate on signup only | not on login
-
   return (
     // TODO: add suspense with loading fallback to handle loading time delays.
+    <AppRoutes />
+  )
+}
+
+function AppRoutes() {
+  return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<NavBarLayout />}>
