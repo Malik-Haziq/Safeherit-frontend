@@ -12,7 +12,7 @@ export default function DashboardView() {
     { img: shield, numberOfItems: "6", title: "Beneficiaries" },
     { img: users, numberOfItems: "5", title: "Validators" },
     { img: heart, numberOfItems: "22 Days", title: "Total Assets" },
-    { img: privateKeysIcon, numberOfItems: "3", title: "Private Keys" },
+    { img: privateKeysIcon, numberOfItems: "Low", title: "Security Score" },
   ]
 
   const cardTitles = ["Assets", "Beneficiaries", "Validators"]
