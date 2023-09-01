@@ -14,14 +14,31 @@ import {
   EditValidatorModal_2,
   EditValidatorModal_3,
   RegisterValidatorModal_0,
-  RegisterValidatorModal_1,
-  RegisterValidatorModal_2,
-  RegisterValidatorModal_3,
+  StepOneModal,
+  StepTwoModal,
+  StepThreeModal,
   RegisterValidatorModal_4,
 } from "./modal_validator"
-import { useEffect, useState } from "react"
-import { getAllValidator } from "../../../../redux/actions/ValidatorAction"
+import { useCallback, useEffect, useState } from "react"
+import {
+  getAllValidator,
+  createValidator,
+} from "../../../../redux/actions/ValidatorAction"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
+
+const initialState = {
+  name: "",
+  primary_email: "",
+  backup_email: "",
+  backup_email2: "",
+  phone_number: "",
+  backup_phone_number: "",
+  facebook_link: "",
+  instagram_username: "",
+  twitter_username: "",
+  message: "",
+  image: "",
+}
 
 export default function ValidatorsView() {
   const dispatch = useAppDispatch()
@@ -50,7 +67,7 @@ export default function ValidatorsView() {
 }
 
 function AddValidators() {
-  const addValidator = () => {
+  const openStepOneModal = () => {
     alert("show modals")
   }
 
@@ -67,7 +84,7 @@ function AddValidators() {
           No registered validator yet
         </p>
         <button
-          onClick={addValidator}
+          onClick={openStepOneModal}
           className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
         >
           Register Validators
@@ -78,24 +95,104 @@ function AddValidators() {
 }
 
 function Validators() {
+  const dispatch = useAppDispatch()
   const validatorArray = useAppSelector(
     (state) => state.validator.validator_array,
   )
+  const [modalControl, setModalControl] = useState(initialState) // TODO Change this to redux initalState
+  const [stepOneModalVisibility, setStepOneModalVisibility] = useState(true)
+  const [stepTwoModalVisibility, setStepTwoModalVisibility] = useState(false)
+  const [stepThreeModalVisibility, setStepThreeModalVisibility] =
+    useState(false)
+
+  const closeStepOneModal = useCallback(() => {
+    setModalControl(initialState)
+    setStepOneModalVisibility(false)
+  }, [])
+  const closeStepTwoModal = useCallback(() => {
+    setModalControl(initialState)
+    setStepTwoModalVisibility(false)
+  }, [])
+  const closeStepThreeModal = useCallback(() => {
+    setModalControl(initialState)
+    setStepThreeModalVisibility(false)
+  }, [])
+
+  const openStepOneModal = useCallback(() => {
+    setStepOneModalVisibility(true)
+  }, [])
+  const openStepTwoModal = useCallback(() => {
+    setStepTwoModalVisibility(true)
+  }, [])
+  const openStepThreeModal = useCallback(() => {
+    setStepThreeModalVisibility(true)
+  }, [])
+
+  const _handleChange = (event: { target: { name: any; value: any } }) => {
+    const { name, value } = event.target
+    setModalControl({ ...modalControl, [name]: value })
+  }
+  const _submitStepOneModal = () => {
+    // validate input
+    setStepOneModalVisibility(false)
+    openStepTwoModal()
+  }
+  const _submitStepTwoModal = () => {
+    // validate input
+    setStepTwoModalVisibility(false)
+    openStepThreeModal()
+  }
+  const _submitStepThreeModal = () => {
+    // validate input
+    setStepThreeModalVisibility(false)
+    dispatch(createValidator(modalControl))
+      .unwrap()
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+        // TODO: show fallback page
+      })
+    // make a request to server
+  }
 
   const editValidator = (id: string) => {
     alert(id)
   }
-  const addValidator = () => {}
 
   return (
     <div className={styles.AppView}>
-      {/* <EditValidatorModal_2
-        openModal={false}
-        closeModal={false}
-        closeModalOnOverlayClick={true}
+      <StepOneModal
+        openModal={stepOneModalVisibility}
+        closeModal={closeStepOneModal}
+        closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
         closeIconVisibility={true}
-      /> */}
+        _handleChange={_handleChange}
+        modalControl={modalControl}
+        _submitModal={_submitStepOneModal}
+      />
+      <StepTwoModal
+        openModal={stepTwoModalVisibility}
+        closeModal={closeStepTwoModal}
+        closeModalOnOverlayClick={false}
+        modalTitle="Register Validators"
+        closeIconVisibility={true}
+        _handleChange={_handleChange}
+        modalControl={modalControl}
+        _submitModal={_submitStepTwoModal}
+      />
+      <StepThreeModal
+        openModal={stepThreeModalVisibility}
+        closeModal={closeStepThreeModal}
+        closeModalOnOverlayClick={false}
+        modalTitle="Register Validators"
+        closeIconVisibility={true}
+        _handleChange={_handleChange}
+        modalControl={modalControl}
+        _submitModal={_submitStepThreeModal}
+      />
       <section className="px-8 py-4">
         <div className="flex justify-between items-center shadow-md p-4 rounded-xl">
           <div className="flex">
@@ -112,7 +209,7 @@ function Validators() {
             </div>
           </div>
           <img
-            onClick={addValidator}
+            onClick={openStepOneModal}
             src={addIcon}
             alt="add icon"
             className="cursor-pointer"
