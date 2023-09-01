@@ -1,4 +1,6 @@
 import {
+  RegisterBeneficiaryModal_0,
+  RegisterBeneficiaryModal_4,
   EditBeneficiaryModal_1,
   EditBeneficiaryModal_2,
   EditBeneficiaryModal_3,
@@ -53,7 +55,7 @@ export default function BeneficiariesView() {
         modalTitle="Edit Beneficiary Details"
         closeIconVisibility={true}
       /> */}
-      <EditBeneficiaryModal_4
+      <RegisterBeneficiaryModal_4
         openModal={false}
         closeModal={false}
         closeModalOnOverlayClick={true}

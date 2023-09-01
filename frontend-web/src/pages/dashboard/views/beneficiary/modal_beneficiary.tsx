@@ -2,6 +2,160 @@ import { Modal } from "../../../../components"
 import facebook from "../../../../../assets/images/facebook.svg"
 import uploadVideoIcon from "../../../../../assets/images/upload-video.svg"
 import video from "../../../../../assets/images/register_page_video.png"
+import registerBeneficiaryImg from "../../../../../assets/images/register-beneficiary.svg"
+
+export function RegisterBeneficiaryModal_0(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  modalTitle: string
+  closeIconVisibility: boolean
+  //   elements: object
+}) {
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={_props.modalTitle}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "iconView",
+          props: {
+            image: registerBeneficiaryImg,
+            onclick: () => {},
+            imageStyles: "mx-auto",
+            imageContainerStyles: "my-10",
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "What is a Beneficiary",
+            onclick: () => {},
+            textStyles: "text=[#00192B] text-lg font-bold mb-4 mx-auto w-fit",
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "A beneficiary is who you choose to receive information about your assets after you're gone. It could be a family member, friend, or even an organization. They are the ones who will learn about your valuables and investments after you pass away. By naming a beneficiary on SafeHerit, you decide who gets this important information in the future.",
+            onclick: () => {},
+            textStyles: "text=[#868686] leading-7 px-7 mb-7 text-center ",
+          },
+        },
+        {
+          type: "buttonView",
+          props: {
+            title: "Register Beneficiaries",
+            onclick: () => {},
+            buttonStyle:
+              "bg-[#0971AA] font-bold text-white px-8 py-4 w-[233px] rounded-2xl",
+            buttonContainer: "mx-48 mb-10",
+          },
+        },
+
+        {
+          type: "multiFields",
+          containerStyles: "flex gap-5 items-center mb-7",
+          props: {
+            fields: [
+              {
+                type: "customView",
+                props: {
+                  customViewContainer: "",
+                  CustomView: function Name() {
+                    return (
+                      <div className="w-5 h-5 bg-[#EDEDED] rounded-md drop-shadow-lg ml-8"></div>
+                    )
+                  },
+                },
+              },
+              {
+                type: "textView",
+                props: {
+                  text: "Don’t display this next time",
+                  onclick: () => {},
+                  textStyles: "text-[#00192B] text-lg font-light",
+                },
+              },
+            ],
+          },
+        },
+      ]}
+    />
+  )
+}
+
+export function RegisterBeneficiaryModal_4(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  modalTitle: string
+  closeIconVisibility: boolean
+  //   elements: object
+}) {
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={_props.modalTitle}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "iconView",
+          props: {
+            image: "../../../../../assets/images/step_4_of_4.svg",
+            onclick: () => {},
+            imageStyles: "mx-auto",
+            imageContainerStyles: "mt-7 mb-24",
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "You successfully registered a new beneficiary!",
+            onclick: () => {},
+            textStyles:
+              "text=[#082A44] text-2xl font-bold text-center mb-32 px-12",
+          },
+        },
+
+        {
+          type: "customView",
+          props: {
+            customViewContainer: "",
+            CustomView: function Name() {
+              return (
+                <div className="flex gap-10 items-end mx-8 mb-10 ">
+                  <div className="flex flex-col gap-8 ">
+                    <p className="w-[194px] text-center text-[#4F4F4F] leading-tight">
+                      Click here if you want to register another beneficiary.
+                    </p>
+                    <button className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl">
+                      Register another Beneficiary
+                    </button>
+                  </div>
+                  <div className="flex flex-col gap-8 ">
+                    <p className="w-[194px] text-center text-[#4F4F4F] leading-tight">
+                      Click here to move on to register validators if you’re
+                      done registering beneficiaries.
+                    </p>
+                    <button className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl">
+                      Register Validators
+                    </button>
+                  </div>
+                </div>
+              )
+            },
+          },
+        },
+      ]}
+    />
+  )
+}
 
 export function EditBeneficiaryModal_1(_props: {
   openModal: boolean
