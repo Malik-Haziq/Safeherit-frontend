@@ -6,6 +6,7 @@ const initialState = {
   name: "",
   photo: "",
   phone: "",
+  access: "",
   active: false
 }
 
@@ -26,6 +27,7 @@ export const slice = createSlice({
       state.name = action.payload.user.displayName || ""
       state.photo = action.payload.user.photoURL || ""
       state.phone = action.payload.user.phoneNumber || ""
+      localStorage.setItem("access", action.payload?.user?.stsTokenManager?.accessToken)
       state.active = true
     })
     builder.addCase(signup.fulfilled, (state, action) => {

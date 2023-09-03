@@ -59,16 +59,17 @@ export function DropDownButton(_props: any) {
   )
 }
 
-export function ValidatorDropDown(_props: any) {
+export function ValidatorDropDown(_props: {
+  editValidator: Function
+  deleteValidator: Function
+  id: string
+}) {
   return (
     <div>
       <Menu as="div" className="inline-block text-left">
         <div>
           <Menu.Button as={React.Fragment}>
             <img
-              onClick={() => {
-                // _props.editValidator(_props.id)
-              }}
               src={dots}
               alt="dots"
               className="w-6 cursor-pointer"
@@ -93,7 +94,9 @@ export function ValidatorDropDown(_props: any) {
                       className={`${
                         active ? "bg-safe-blue text-white" : "text-gray-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                      onClick={_props.onClick}
+                      onClick={() => {
+                        _props.editValidator(_props.id)
+                      }}
                     >
                       Edit
                     </button>
@@ -107,7 +110,9 @@ export function ValidatorDropDown(_props: any) {
                       className={`${
                         active ? "bg-safe-blue text-white" : "text-gray-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                      onClick={_props.onClick}
+                      onClick={() => {
+                        _props.deleteValidator(_props.id)
+                      }}
                     >
                       Delete
                     </button>

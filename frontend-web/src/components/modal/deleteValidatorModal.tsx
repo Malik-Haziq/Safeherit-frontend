@@ -3,8 +3,9 @@ import { Fragment } from "react"
 
 export function DeleteValidatorModal(_props: {
   closeModalOnOverlayClick: boolean
-  openModal: any
-  closeModal: any
+  openModal: boolean
+  closeModal?: any
+  _submitModal: React.MouseEventHandler<HTMLButtonElement>
 }) {
   return (
     <>
@@ -41,20 +42,20 @@ export function DeleteValidatorModal(_props: {
               >
                 <Dialog.Panel className="transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all">
                   <Dialog.Title className="text-2xl font-monstrate leading-6 text-gray-900">
-                    Sure You Want to Become Validator
+                    Sure You Want to Remove Validator
                   </Dialog.Title>
-                  <Dialog.Description>
+                  <div>
                     <p>
                       Note that the validator will not be informed he was
                       removed
                     </p>
                     <div className="flex gap-5">
-                      <button className="primary-btn rounded-xl">Yes</button>
-                      <button className="primary-btn rounded-xl bg-[#D8D8D8] text-[#00192B]">
+                      <button onClick={_props._submitModal} className="primary-btn rounded-xl">Yes</button>
+                      <button onClick={_props.closeModal} className="primary-btn rounded-xl bg-[#D8D8D8] text-[#00192B]">
                         No
                       </button>
                     </div>
-                  </Dialog.Description>
+                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
