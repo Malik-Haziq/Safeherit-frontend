@@ -13,6 +13,7 @@ export const login = createAsyncThunk(
     const { email, password } = Data
     try {
       let response = await signInWithEmailAndPassword(auth, email, password)
+      localStorage.setItem("access", Object.values(response.user)[Object.keys(response.user).indexOf("stsTokenManager")].accessToken)
       return response
     } catch (error) {
       return rejectWithValue(error)
