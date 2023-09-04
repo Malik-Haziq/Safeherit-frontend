@@ -8,6 +8,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   if (element?.type === "textView") {
     return (
       <TextView
+        key={_props.index}
         text={element?.props?.text}
         onclick={element?.props?.onclick}
         textStyles={element?.props?.textStyles}
@@ -16,6 +17,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "iconView") {
     return (
       <IconView
+        key={_props.index}
         image={element?.props?.image}
         onclick={element?.props?.onclick}
         imageStyles={element?.props?.imageStyles}
@@ -25,6 +27,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "videoView") {
     return (
       <VideoView
+        key={_props.index}
         video={element?.props?.video}
         onclick={element?.props?.onclick}
         videoStyles={element?.props?.videoStyles}
@@ -34,6 +37,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "inputView") {
     return (
       <InputField
+        key={_props.index}
         name={element?.props?.name}
         type={element?.props?.type}
         placeholder={element?.props?.placeholder}
@@ -52,6 +56,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "selectView") {
     return (
       <SelectField
+        key={_props.index}
         data={element?.props?.data}
         value={element?.props?.value}
         selectProps={element?.props?.selectProps}
@@ -68,6 +73,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "buttonView") {
     return (
       <ButtonView
+        key={_props.index}
         title={element?.props?.title}
         onclick={element?.props?.onclick}
         buttonStyle={element?.props?.buttonStyle}
@@ -77,7 +83,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "customView") {
     const CustomView = element?.props?.CustomView
     return (
-      <div className={element?.props?.customViewContainer}>
+      <div className={element?.props?.customViewContainer} key={_props.index}>
         <CustomView />
       </div>
     )
@@ -91,7 +97,9 @@ const MultiFieldComponent = (_props: {
   return (
     <div key={_props.parentIndex} className={_props.component?.containerStyles}>
       {_props.component?.props?.fields?.map((field: any, index: number) => {
-        return <DisplayFieldComponent element={field} index={index} />
+        return (
+          <DisplayFieldComponent key={index} element={field} index={index} />
+        )
       })}
     </div>
   )
@@ -101,9 +109,17 @@ const RenderModal = (_props: { elements: any }) => {
   if (_props.elements.length > 0) {
     return _props.elements?.map((element: any, index: number) => {
       if (element?.type !== "multiFields") {
-        return <DisplayFieldComponent element={element} index={index} />
+        return (
+          <DisplayFieldComponent key={index} element={element} index={index} />
+        )
       } else {
-        return <MultiFieldComponent component={element} parentIndex={index} />
+        return (
+          <MultiFieldComponent
+            key={index}
+            component={element}
+            parentIndex={index}
+          />
+        )
       }
     })
   } else {
@@ -122,23 +138,27 @@ export const Modal = (_props: {
 }) => {
   const elements = _props?.elements
   return (
-    <div
-      className={styles.backDrop}
-      onClick={() => {
-        _props.closeModalOnOverlayClick ? _props.closeModal() : ""
-      }}
-    >
-      <div className={styles.modalContainer}>
-        <div className={styles.modal}>
-          <ModalHeader
-            closeModal={_props.closeModal}
-            title={_props.modalTitle}
-            closeIconVisibility={_props.closeIconVisibility}
-          />
-          <RenderModal elements={elements} />
+    <>
+      {_props.openModal && (
+        <div
+          className={styles.backDrop}
+          // onClick={() => {
+          //   _props.closeModalOnOverlayClick ? _props.closeModal() : ""
+          // }}
+        >
+          <div className={styles.modalContainer}>
+            <div className={styles.modal}>
+              <ModalHeader
+                closeModal={_props.closeModal}
+                title={_props.modalTitle}
+                closeIconVisibility={_props.closeIconVisibility}
+              />
+              <RenderModal elements={elements} />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   )
 }
 
@@ -159,11 +179,15 @@ function ModalHeader(_props: {
   )
 }
 
-function TextView(_props: { textStyles: string; onclick: any; text: string }) {
+function TextView(_props: {
+  textStyles: string
+  onclick?: React.MouseEventHandler<HTMLParagraphElement>
+  text: string
+}) {
   return (
     <p
       className={_props.textStyles || "safe-font-default"}
-      onClick={_props.onclick || ""}
+      onClick={_props.onclick}
     >
       {_props.text}
     </p>
@@ -174,7 +198,7 @@ function IconView(_props: {
   imageContainerStyles: string
   image: string
   imageStyles: string
-  onclick?: any
+  onclick?: React.MouseEventHandler<HTMLImageElement>
 }) {
   return (
     <div className={_props.imageContainerStyles || ""}>
@@ -182,7 +206,7 @@ function IconView(_props: {
         src={_props.image || defaultIcon}
         alt="icon"
         className={_props.imageStyles || ""}
-        onClick={_props.onclick || ""}
+        onClick={_props.onclick}
       />
     </div>
   )
@@ -193,7 +217,7 @@ function VideoView(_props: {
   videoContainerStyles: string
   video: string
   videoStyles: string
-  onclick: any
+  onclick?: React.MouseEventHandler<HTMLImageElement>
 }) {
   return (
     <div className={_props.videoContainerStyles || ""}>
@@ -201,7 +225,7 @@ function VideoView(_props: {
         src={_props.video || defaultIcon}
         alt="icon"
         className={_props.videoStyles || ""}
-        onClick={_props.onclick || ""}
+        onClick={_props.onclick}
       />
     </div>
   )
@@ -215,11 +239,11 @@ function InputField(_props: {
   _handleChange: any
   required: boolean
   inputStyles: string
-  hasRightIcon: boolean
-  icon: string
-  iconAlt: string
-  iconPress: any
-  rightIconStyles: string
+  hasRightIcon?: boolean
+  icon?: string
+  iconAlt?: string
+  iconPress?: React.MouseEventHandler<HTMLImageElement>
+  rightIconStyles?: string
   inputContainerStyles: string
 }) {
   return (
@@ -253,7 +277,7 @@ function InputField(_props: {
 function ButtonView(_props: {
   title: string
   buttonStyle: string
-  onclick: any
+  onclick: React.MouseEventHandler<HTMLButtonElement>
   buttonContainer: string
 }) {
   return (
