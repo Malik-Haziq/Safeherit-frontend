@@ -14,6 +14,7 @@ import facebook from "../../../../../assets/images/facebook.svg"
 import instagram from "../../../../../assets/images/insta.svg"
 import twitter from "../../../../../assets/images/twitter.svg"
 import userImg from "../../../../../assets/images/user.svg"
+import beneficiaryImg from "../../../../../assets/images/beneficiaryScreen.svg"
 
 export default function BeneficiariesView() {
   const beneficiaries = [
@@ -158,5 +159,36 @@ function Beneficiary(_props: {
         <img src={dots} alt="dots" className="w-6 cursor-pointer" />
       </li>
     </ul>
+  )
+}
+
+function AddBeneficiary() {
+  const openStepOneModal = () => {
+    alert("show modals")
+  }
+
+  return (
+    <div className="h-[calc(100vh-83px)] p-7">
+      <main className="flex flex-col items-center justify-center shadow-xl h-full rounded-2xl">
+        <img
+          src={beneficiaryImg}
+          className="mb-10"
+          alt="validator screen image"
+        />
+        <h2 className="text-[#00192B] text-xl font-bold mb-2">
+          No Beneficiaries
+        </h2>
+        <p className="text-[#868686] font-medium mb-10">
+          There is no any Beneficiaries in your Board please create
+          beneficiaries.
+        </p>
+        <button
+          onClick={openStepOneModal}
+          className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
+        >
+          Register Beneficiaries
+        </button>
+      </main>
+    </div>
   )
 }
