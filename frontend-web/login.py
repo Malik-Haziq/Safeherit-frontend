@@ -14,7 +14,7 @@ def highlight_element(driver, element):
     driver.execute_script("arguments[0].setAttribute('style', 'border: 0px;');", element)
 
 def login():
-    service = Service(ChromeDriverManager(browser_version="114.0.5735.90").install())  # Specify a valid version
+    service = Service(ChromeDriverManager().install())  # Specify a valid version
     driver = webdriver.Chrome(service=service)
     wait = WebDriverWait(driver, 8)
     driver.maximize_window()
