@@ -5,14 +5,14 @@ import { DropDownButton } from "../../components"
 import { useLocation } from "react-router-dom"
 
 type NavBarItem = {
-  screen: string;
-  title: string;
-};
+  screen: string
+  title: string
+}
 
-export default function DashboardNavbar (_props: { _handleLogout: Function }) {
+export default function DashboardNavbar(_props: { _handleLogout: Function }) {
   const currentPath = useLocation()
   const USER_NAME = window.localStorage.getItem("userName") || "Profile"
-  const navBarHeadings: Record<string, NavBarItem>  = {
+  const navBarHeadings: Record<string, NavBarItem> = {
     "/dashboard": {
       screen: "Dashboard",
       title: "View all your assets status",
@@ -35,9 +35,8 @@ export default function DashboardNavbar (_props: { _handleLogout: Function }) {
     },
   }
 
-
   return (
-    <div className="h-[83px] p-2 sm:p-7 flex justify-between items-center shadow-sm">
+    <div className="h-[83px] p-2 sm:p-7 flex justify-between items-center shadow-sm min-w-[1200px] max-w-[100vw]">
       <div>
         <h2 className="text-safe-text-black-tint sm:text-xl font-bold">
           {navBarHeadings[currentPath.pathname].screen}

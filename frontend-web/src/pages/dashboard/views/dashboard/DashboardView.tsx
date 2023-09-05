@@ -18,7 +18,7 @@ export default function DashboardView() {
   const cardTitles = ["Assets", "Beneficiaries", "Validators"]
 
   return (
-    <div className="flex flex-col px-8 gap-8 mt-8 items-center max-w-[1200px] mx-auto">
+    <div className="flex flex-col px-8 gap-8 mt-8 max-w-[1200px] mx-auto">
       <section className="flex gap-5 h-[240px] justify-between">
         {cardDettails.map((det) => {
           return (
@@ -30,7 +30,7 @@ export default function DashboardView() {
           )
         })}
       </section>
-      <section className=" flex gap-4 px-auto">
+      <section className=" flex gap-4 px-auto mx-auto">
         {cardTitles.map((title) => {
           return <Cards title={title} />
         })}
@@ -68,7 +68,7 @@ function Cards(_props: { title: string }) {
   ]
 
   return (
-    <div className="h-[500px] w-[350px] rounded-lg shadow-lg">
+    <div className="h-[500px] min-w-[350px] rounded-lg shadow-lg">
       <div className="flex justify-between items-center h-14 bg-safe-green-light-1 p-4 rounded-t-lg">
         <h3 className="text-safe-text-black-tint text-lg font-bold">
           {_props.title}
