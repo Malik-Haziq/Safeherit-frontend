@@ -10,6 +10,7 @@ pipelines:
             - cd frontend-web  # Replace 'backend' with the directory where your Python code is located
             - python -m venv venv
             - source venv/bin/activate
+            - pip freeze > requirements.txt
             - pip install -r requirements.txt  # Install Python dependencies
             - python run_tests.py  # Run your Python tests
       - step:
