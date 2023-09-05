@@ -1,4 +1,4 @@
-image: node:18  # Choose the Node.js version that matches your project
+image: python:3.9-nodejs12  # Choose the Node.js version that matches your project
 
 pipelines:
   default:
