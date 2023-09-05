@@ -6,6 +6,7 @@ const initialState = {
   name: "",
   photo: "",
   phone: "",
+  access: "",
   active: false
 }
 
