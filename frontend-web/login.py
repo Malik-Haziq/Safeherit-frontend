@@ -5,6 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+import chromedriver_autoinstaller
+
 
 def highlight_element(driver, element):
     # Execute JavaScript to highlight the element
@@ -14,8 +16,13 @@ def highlight_element(driver, element):
     driver.execute_script("arguments[0].setAttribute('style', 'border: 0px;');", element)
 
 def login():
-    service = Service(ChromeDriverManager().install())  # Specify a valid version
-    driver = webdriver.Chrome(service=service)
+    chromedriver_autoinstaller.install()
+    driver = webdriver.Chrome(ChromeDriverManager().install())
+
+    # webdriver_path = '/path/to/chromedriver'
+    # driver = webdriver.Chrome(executable_path=webdriver_path)
+    # service = Service(ChromeDriverManager().install())  # Specify a valid version
+    # driver = webdriver.Chrome(service=service)
     wait = WebDriverWait(driver, 8)
     driver.maximize_window()
     try:
