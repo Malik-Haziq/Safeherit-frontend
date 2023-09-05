@@ -1,11 +1,13 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment } from "react"
 
-export function DeleteValidatorModal(_props: {
+export function ConfirmationModal(_props: {
   closeModalOnOverlayClick: boolean
   openModal: boolean
   closeModal?: any
   _submitModal: React.MouseEventHandler<HTMLButtonElement>
+  heading: string
+  body: string
 }) {
   return (
     <>
@@ -42,12 +44,11 @@ export function DeleteValidatorModal(_props: {
               >
                 <Dialog.Panel className="transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all">
                   <Dialog.Title className="text-2xl leading-6 text-gray-900 mb-3 text-center font-bold">
-                    Sure You Want to Remove Validator
+                    {_props.heading}
                   </Dialog.Title>
                   <div className=" px-3">
                     <p className="text-[#868686] text-center mb-9">
-                      Note that the validator will not be informed he was
-                      removed
+                      {_props.body}
                     </p>
                     <div className="flex gap-5 justify-between itmes-center">
                       <button
