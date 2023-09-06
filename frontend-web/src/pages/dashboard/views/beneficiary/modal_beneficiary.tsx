@@ -492,7 +492,7 @@ export function StepThreeModal(_props: {
         {
           type: "textView",
           props: {
-            text: "Send a personalized message to your validator once your passing is confirmed.",
+            text: "Send a personalized message to your beneficiary once your passing is confirmed.",
             textStyles: "text=[#00192B] font-semibold pl-7 mb-3",
           },
         },

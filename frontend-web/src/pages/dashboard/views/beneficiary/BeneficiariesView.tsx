@@ -107,7 +107,7 @@ export default function BeneficiariesView() {
     }
   }
   const _submitStepTwoModal = () => {
-    if (!isValidFacebook(modalControl.facebook_link)) {
+    if (!modalControl.facebook_link) {
       alert("please enter valid facebook")
     }
     else if(!modalControl.instagram_username) {
