@@ -24,7 +24,7 @@ import {
   deleteValidator
 } from "../../../../redux/actions/ValidatorAction"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
-import { DeleteValidatorModal } from "../../../../components/modal/deleteValidatorModal"
+import { ConfirmationModal } from "../../../../components/modal/ConfirmationModal"
 import { useNavigate } from "react-router-dom"
 import { isValidEmail, isValidFacebook, isValidPhone } from "../../../../common"
 
@@ -60,8 +60,8 @@ export default function ValidatorsView() {
   const validatorArray = useAppSelector(
     (state) => state.validator.validator_array,
   )
-  const updateValidatorArrayCount = (res?: {data: {data: []}}) => {
-    if (res?.data.data && res?.data?.data.length > 0) {
+  const updateValidatorArrayCount = (res?: {data?: {data: []}}) => {
+    if (res?.data?.data && res?.data?.data.length > 0) {
       setHasValidators(1)
     } else {
       setHasValidators(0)
@@ -277,11 +277,13 @@ export default function ValidatorsView() {
         registerAnother={registerAnotherValidator}
         pulseCheck={pulseCheck}
       />
-      <DeleteValidatorModal
+      <ConfirmationModal
         closeModalOnOverlayClick={false}
         openModal={deleteModalVisibility}
         closeModal={modalOperations.closeDeleteModal}
         _submitModal={_submitDeleteModal}
+        heading="Sure You Want to Remove Validator"
+        body="Note that the validator will not be informed he was removed"
       />
       <StepOneModal
         openModal={stepOneModalVisibility}

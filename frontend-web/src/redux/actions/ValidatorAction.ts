@@ -4,8 +4,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 
 export const getAllValidator = createAsyncThunk(
   "getAllValidator",
-  async (Data: {}, { rejectWithValue }) => {
-    const params = { ROUTE: ALL_VALIDATORS, Body: {} }
+  async (Data: {}, {getState, rejectWithValue }) => {
+    const { user } = getState() as { user: {token: any} };
+    const params = { ROUTE: ALL_VALIDATORS, Body: {}, token: user.token }
     try {
       let response = await GET(params)
       return response
@@ -18,7 +19,8 @@ export const getAllValidator = createAsyncThunk(
 export const createValidator = createAsyncThunk(
   "createValidator",
   async (Data: {}, { getState, rejectWithValue }) => {
-    const params = { ROUTE: VALIDATORS, Body: JSON.stringify({ ...Data }) }
+    const { user } = getState() as { user: {token: any} };
+    const params = { ROUTE: VALIDATORS, Body: JSON.stringify({ ...Data }), token: user.token  }
     try {
       let response = await POST(params)
       return response
@@ -31,7 +33,8 @@ export const createValidator = createAsyncThunk(
 export const findValidator = createAsyncThunk(
   "findValidator",
   async (Data: {id: string}, { getState, rejectWithValue }) => {
-    const params = { ROUTE: `${VALIDATORS}?id=${Data.id}`, Body: {} }
+    const { user } = getState() as { user: {token: any} };
+    const params = { ROUTE: `${VALIDATORS}?id=${Data.id}`, Body: {}, token: user.token  }
     try {
       let response = await GET(params)
       return response
@@ -44,7 +47,8 @@ export const findValidator = createAsyncThunk(
 export const updateValidator = createAsyncThunk(
   "updateValidator",
   async (Data: {}, { getState, rejectWithValue }) => {
-    const params = { ROUTE: VALIDATORS, Body: JSON.stringify({ ...Data }) }
+    const { user } = getState() as { user: {token: any} };
+    const params = { ROUTE: VALIDATORS, Body: JSON.stringify({ ...Data }), token: user.token  }
     try {
       let response = await PUT(params)
       return response
@@ -55,9 +59,10 @@ export const updateValidator = createAsyncThunk(
 )
 
 export const deleteValidator = createAsyncThunk(
-  "findValidator",
+  "deleteValidator",
   async (Data: {id: string}, { getState, rejectWithValue }) => {
-    const params = { ROUTE: `${VALIDATORS}?id=${Data.id}`, Body: {} }
+    const { user } = getState() as { user: {token: any} };
+    const params = { ROUTE: `${VALIDATORS}?id=${Data.id}`, Body: {}, token: user.token  }
     try {
       let response = await DELETE(params)
       return response
