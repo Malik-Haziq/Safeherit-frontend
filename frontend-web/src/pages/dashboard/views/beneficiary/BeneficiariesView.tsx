@@ -8,6 +8,7 @@ import twitter from "../../../../../assets/images/twitter.svg"
 import userImg from "../../../../../assets/images/user.svg"
 import beneficiaryImg from "../../../../../assets/images/beneficiaryScreen.svg"
 import { ValidatorDropDown } from "../../../../components"
+import { Modal } from "../../../../components/modal/detailsModal"
 
 import {
   StepZeroInformationModal,
@@ -23,7 +24,7 @@ import {
   createBeneficiary,
   findBeneficiary,
   updateBeneficiary,
-  deleteBeneficiary
+  deleteBeneficiary,
 } from "../../../../redux/actions/BeneficiaryAction"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import { ConfirmationModal } from "../../../../components/modal/ConfirmationModal"
@@ -43,7 +44,7 @@ const initialState = {
   twitter_username: "",
   personalized_message: "",
   personalized_video_link: "",
-  image: ""
+  image: "",
 }
 
 export default function BeneficiariesView() {
@@ -52,13 +53,13 @@ export default function BeneficiariesView() {
 
   const [hasBeneficiaries, setHasBeneficiaries] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
-  const [modalAction, setModalAction] = useState('')
-  const [modalVisibility, setModalVisibility] = useState('none')
+  const [modalAction, setModalAction] = useState("")
+  const [modalVisibility, setModalVisibility] = useState("none")
 
   const beneficiaryArray = useAppSelector(
     (state) => state.beneficiary.beneficiary_array,
   )
-  const updateBeneficiaryArrayCount = (res?: {data?: {data: []}}) => {
+  const updateBeneficiaryArrayCount = (res?: { data?: { data: [] } }) => {
     if (res?.data?.data && res?.data?.data.length > 0) {
       setHasBeneficiaries(1)
     } else {
@@ -78,58 +79,51 @@ export default function BeneficiariesView() {
 
   const closeModal = useCallback(() => {
     setModalControl(initialState)
-    setModalVisibility('none')
+    setModalVisibility("none")
   }, [])
 
   const addBeneficiary = useCallback(() => {
-    setModalVisibility('Step-0')
+    setModalVisibility("Step-0")
   }, [])
 
   const _submitStepOneModal = () => {
     if (!modalControl.name) {
       alert("please enter a valid name")
-    }
-    else if (
+    } else if (
       !isValidEmail(modalControl.primary_email) ||
-      !isValidEmail(modalControl.backup_email) || 
+      !isValidEmail(modalControl.backup_email) ||
       !isValidEmail(modalControl.backup_email2)
     ) {
       alert("please enter a valid Email address")
-    }
-    else if (
+    } else if (
       !isValidPhone(modalControl.phone_number) ||
       !isValidPhone(modalControl.backup_phone_number)
     ) {
       alert("please enter valid Phone number")
-    }
-    else {
+    } else {
       setModalVisibility("Step-2")
     }
   }
   const _submitStepTwoModal = () => {
     if (!modalControl.facebook_link) {
       alert("please enter valid facebook")
-    }
-    else if(!modalControl.instagram_username) {
+    } else if (!modalControl.instagram_username) {
       alert("please enter valid instagram username")
-    }
-    else if(!modalControl.twitter_username) {
+    } else if (!modalControl.twitter_username) {
       alert("please enter valid twitter username")
-    }
-    else {
+    } else {
       setModalVisibility("Step-3")
     }
   }
   const _submitStepThreeModal = () => {
-    
-    if (modalAction == 'edit') {
+    if (modalAction == "edit") {
       dispatch(updateBeneficiary(modalControl))
         .unwrap()
         .then((res) => {
           dispatch(getAllBeneficiary({}))
             .unwrap()
             .then((res) => {
-              setModalVisibility('Step-pk')
+              setModalVisibility("Step-pk")
               updateBeneficiaryArrayCount(res)
             })
             .catch(() => {
@@ -140,21 +134,20 @@ export default function BeneficiariesView() {
           console.log(err)
           // TODO: show fallback page
         })
-    } 
-    else if (modalAction == 'create') {
+    } else if (modalAction == "create") {
       alert("creating beneficiary")
       dispatch(createBeneficiary(modalControl))
         .unwrap()
         .then((res) => {
           dispatch(getAllBeneficiary({}))
-          .unwrap()
-          .then((res) => {
-            setModalVisibility("Step-success")
-            updateBeneficiaryArrayCount(res)
-          })
-          .catch(() => {
-            // TODO: show fallback page
-          })
+            .unwrap()
+            .then((res) => {
+              setModalVisibility("Step-success")
+              updateBeneficiaryArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
         })
         .catch((err) => {
           console.log(err)
@@ -164,30 +157,30 @@ export default function BeneficiariesView() {
   }
   const _submitSuccessModal = () => {
     setModalControl(initialState)
-    setModalVisibility('none')
+    setModalVisibility("none")
   }
   const _submitRegisterPKModal = () => {
     if (modalAction == "create") {
       setModalVisibility("Step-1")
-    }
-    else {
-      setModalVisibility('Step-success')
+    } else {
+      setModalVisibility("Step-success")
     }
   }
   const _submitDeleteModal = () => {
     alert("deleting Beneficiary " + modalControl.name)
-    dispatch(deleteBeneficiary({id: modalControl.id})).unwrap()
-    .then((res) => {
-      dispatch(getAllBeneficiary({}))
+    dispatch(deleteBeneficiary({ id: modalControl.id }))
       .unwrap()
       .then((res) => {
-        setModalVisibility("none")
-        updateBeneficiaryArrayCount(res)
+        dispatch(getAllBeneficiary({}))
+          .unwrap()
+          .then((res) => {
+            setModalVisibility("none")
+            updateBeneficiaryArrayCount(res)
+          })
+          .catch(() => {
+            // TODO: show fallback page
+          })
       })
-      .catch(() => {
-        // TODO: show fallback page
-      })
-    })
   }
   const _submitStepZeroModal = () => {
     newBeneficiary()
@@ -198,28 +191,30 @@ export default function BeneficiariesView() {
     setModalControl({ ...modalControl, [name]: value })
   }
   const newBeneficiary = () => {
-    setModalAction('create')
+    setModalAction("create")
     setModalControl(initialState)
     setModalVisibility("Step-pk")
   }
   const editBeneficiary = (id: string) => {
-    dispatch(findBeneficiary({id: id})).unwrap()
-    .then((res) => {
-      setModalAction('edit')
-      setModalControl(res?.data?.data)
-      setModalVisibility('Step-1')
-    })
+    dispatch(findBeneficiary({ id: id }))
+      .unwrap()
+      .then((res) => {
+        setModalAction("edit")
+        setModalControl(res?.data?.data)
+        setModalVisibility("Step-1")
+      })
   }
   const destroyBeneficiary = (id: string) => {
-    dispatch(findBeneficiary({id: id})).unwrap()
-    .then((res) => {
-      setModalAction('delete')
-      setModalControl(res?.data?.data)
-      setModalVisibility('Step-delete')
-    })
+    dispatch(findBeneficiary({ id: id }))
+      .unwrap()
+      .then((res) => {
+        setModalAction("delete")
+        setModalControl(res?.data?.data)
+        setModalVisibility("Step-delete")
+      })
   }
   const registerAnotherBeneficiary = () => {
-    setModalAction('create')
+    setModalAction("create")
     closeModal()
     setModalVisibility("Step-pk")
   }
@@ -276,7 +271,9 @@ export default function BeneficiariesView() {
         closeIconVisibility={true}
         action={modalAction}
         _submitModal={_submitRegisterPKModal}
-        _handleKeyGeneration={() => {alert("generate key pair")}}
+        _handleKeyGeneration={() => {
+          alert("generate key pair")
+        }}
       />
       <ConfirmationModal
         openModal={modalVisibility == "Step-delete"}
@@ -294,20 +291,18 @@ export default function BeneficiariesView() {
         action={modalAction}
         _submitModal={_submitStepZeroModal}
       />
-      {
-        hasBeneficiaries == -1 ?
+      {hasBeneficiaries == -1 ? (
         <div>Loading Beneficiary</div>
-        : hasBeneficiaries == 0 ?
-        <AddBeneficiary 
-          openStepZeroModal={addBeneficiary}
-        /> : 
-        <Beneficiaries 
+      ) : hasBeneficiaries == 0 ? (
+        <AddBeneficiary openStepZeroModal={addBeneficiary} />
+      ) : (
+        <Beneficiaries
           beneficiaryArray={beneficiaryArray}
           createBeneficiary={newBeneficiary}
           editBeneficiary={editBeneficiary}
           deleteBeneficiary={destroyBeneficiary}
-        /> 
-      }
+        />
+      )}
     </>
   )
 }
@@ -315,7 +310,6 @@ export default function BeneficiariesView() {
 function AddBeneficiary(_props: {
   openStepZeroModal: React.MouseEventHandler<HTMLButtonElement>
 }) {
-
   return (
     <div className="h-[calc(100vh-83px)] p-7">
       <main className="flex flex-col items-center justify-center shadow-xl h-full rounded-2xl">
@@ -350,6 +344,23 @@ function Beneficiaries(_props: {
 }) {
   return (
     <div className={styles.AppView}>
+      {/* <Modal
+        openModal={true}
+        closeModal={undefined}
+        closeModalOnOverlayClick={false}
+        elements={[]}
+        modalTitle={"ajsdklfj"}
+        closeIconVisibility={true}
+        name={"jfaksdljf"}
+        email={"jklasdfjlk"}
+        backupEmail1={"lkafjsdklfj"}
+        backupEmail2={"sdafjldfjk"}
+        phoneNumber={"klsfjasd"}
+        backupPhoneNumber={"kasdjf;lk"}
+        facebookLink={"jkladfjsdklfj"}
+        instagramLink={"lkajdfkldj"}
+        twitterLink={"kljfklsdfakl"}
+      /> */}
       <section className="px-8 py-4">
         <div className="flex justify-between items-center shadow-md p-4 rounded-xl">
           <div className="flex">
@@ -357,13 +368,15 @@ function Beneficiaries(_props: {
               <img src={userIcon} alt="user icon" />
             </div>
             <div className="ml-2 flex flex-col justify-center">
-              <p className="text-black font-semibold">{_props.beneficiaryArray.length}</p>
+              <p className="text-black font-semibold">
+                {_props.beneficiaryArray.length}
+              </p>
               <small className="text-safe-text-light-gray-tint text-xm">
                 Beneficiaries
               </small>
             </div>
           </div>
-          <img 
+          <img
             onClick={_props.createBeneficiary}
             src={addIcon}
             alt="add icon"
