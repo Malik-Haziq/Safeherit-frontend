@@ -1,5 +1,5 @@
 import styles from "./Modal.module.css"
-import defaultIcon from "../../../assets/images/safeherit_logo.svg"
+import userImage from "../../../assets/images/user.svg"
 import closeIcon from "../../../assets/images/close-icon.svg"
 import facebookIcon from "../../../assets/images/facebook.svg"
 import instagramIcon from "../../../assets/images/insta.svg"
@@ -7,43 +7,43 @@ import twitterIcon from "../../../assets/images/twitter.svg"
 import copy from "../../../assets/images/copy-icon.svg"
 import testimentVideo from "../../../assets/images/register_page_video.png"
 
-export const Modal = (_props: {
+export const UserDetailsModal = (_props: {
   openModal: boolean
   closeModal: any
   closeModalOnOverlayClick: boolean
-  elements: Array<any>
-  modalTitle: string
+  view: string
   closeIconVisibility: boolean
-  name: string
-  email: string
-  backupEmail1: string
-  backupEmail2: string
-  phoneNumber: string
-  backupPhoneNumber: string
-  facebookLink: string
-  instagramLink: string
-  twitterLink: string
+  modalControl: {
+    name: string
+    primary_email: string
+    backup_email: string
+    backup_email2: string
+    phone_number: string
+    backup_phone_number: string
+    facebook_link: string
+    instagram_username: string
+    twitter_username: string
+    personalized_message: string
+    personalized_video_link: string
+    image: string
+  }
 }) => {
-  const elements = _props?.elements
   return (
     <>
       {_props.openModal && (
         <div
           className={styles.backDrop}
-          // onClick={() => {
-          //   _props.closeModalOnOverlayClick ? _props.closeModal() : ""
-          // }}
         >
           <div className={styles.modalContainer}>
             <div className="w-[1070px] bg-white rounded-2xl border border-[#04477B]">
               <ModalHeader
                 closeModal={_props.closeModal}
-                title={_props.modalTitle}
+                title={_props.view == 'validator' ? "View Validator Details" : "View Beneficiary Details"}
                 closeIconVisibility={_props.closeIconVisibility}
               />
               <main className="flex flex-col pl-11 pr-7 py-7">
                 <img
-                  src={copy}
+                  src={_props.modalControl.image || userImage}
                   alt="validator image"
                   className="w-[88px] h-[88px] rounded-full mx-auto"
                 />
@@ -60,11 +60,11 @@ export const Modal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
-                          value={_props.name}
+                          value={_props.modalControl.name}
                           _handleChange={() => {}}
                           hasRightIcon={false}
-                          name={""}
-                          type={""}
+                          name={"name"}
+                          type={"text"}
                           inputStyles={"w-[260px]"}
                           inputContainerStyles={""}
                         />
@@ -75,11 +75,11 @@ export const Modal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
-                          value={_props.email}
+                          value={_props.modalControl.primary_email}
                           _handleChange={() => {}}
                           hasRightIcon={false}
-                          name={""}
-                          type={""}
+                          name={"primary_email"}
+                          type={"text"}
                           inputStyles={"w-[260px]"}
                           inputContainerStyles={""}
                         />
@@ -90,11 +90,11 @@ export const Modal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
-                          value={_props.backupEmail1}
+                          value={_props.modalControl.backup_email}
                           _handleChange={() => {}}
                           hasRightIcon={false}
-                          name={""}
-                          type={""}
+                          name={"backup_email"}
+                          type={"text"}
                           inputStyles={"w-[260px]"}
                           inputContainerStyles={""}
                         />
@@ -105,11 +105,11 @@ export const Modal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
-                          value={_props.backupEmail2}
+                          value={_props.modalControl.backup_email2}
                           _handleChange={() => {}}
                           hasRightIcon={false}
-                          name={""}
-                          type={""}
+                          name={"backup_email2"}
+                          type={"text"}
                           inputStyles={"w-[260px]"}
                           inputContainerStyles={""}
                         />
@@ -120,11 +120,11 @@ export const Modal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
-                          value={_props.phoneNumber}
+                          value={_props.modalControl.phone_number}
                           _handleChange={() => {}}
                           hasRightIcon={false}
-                          name={""}
-                          type={""}
+                          name={"phone_number"}
+                          type={"text"}
                           inputStyles={"w-[260px]"}
                           inputContainerStyles={""}
                         />
@@ -135,11 +135,11 @@ export const Modal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
-                          value={_props.backupPhoneNumber}
+                          value={_props.modalControl.backup_phone_number}
                           _handleChange={() => {}}
                           hasRightIcon={false}
-                          name={""}
-                          type={""}
+                          name={"backup_phone_number"}
+                          type={"text"}
                           inputStyles={"w-[260px]"}
                           inputContainerStyles={""}
                         />
@@ -152,11 +152,11 @@ export const Modal = (_props: {
                       />
                       <div>
                         <InputField
-                          value={_props.facebookLink}
+                          value={_props.modalControl.facebook_link}
                           _handleChange={() => {}}
                           hasRightIcon={true}
-                          name={""}
-                          type={""}
+                          name={"facebook_link"}
+                          type={"text"}
                           inputStyles={""}
                           inputContainerStyles={""}
                           icon="../../../assets/images/facebook.svg"
@@ -166,35 +166,37 @@ export const Modal = (_props: {
                       </div>
                       <div>
                         <InputField
-                          value={_props.instagramLink}
+                          value={_props.modalControl.instagram_username}
                           _handleChange={() => {}}
                           hasRightIcon={true}
-                          name={""}
-                          type={""}
+                          name={"instagram_username"}
+                          type={"text"}
                           inputStyles={""}
                           inputContainerStyles={""}
                         />{" "}
                       </div>
                       <div>
                         <InputField
-                          value={_props.twitterLink}
+                          value={_props.modalControl.twitter_username}
                           _handleChange={() => {}}
                           hasRightIcon={true}
-                          name={""}
-                          type={""}
+                          name={"twitter_username"}
+                          type={"text"}
                           inputStyles={""}
                           inputContainerStyles={""}
                         />{" "}
                       </div>
                     </div>
                   </aside>
-                  {false ? (
+                  {_props.view == 'validator' ? (
                     <aside className="flex flex-col gap-5 items-end">
                       <TextView
                         text="Personalized Message"
                         textStyles="text-[#00192B] font-bold"
                       />
-                      <div className="w-[446px] h-[510px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-7 px-5 overflow-auto border-[rgba(6, 90, 147, 0.30)] border-2"></div>
+                      <div className="w-[446px] h-[510px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-7 px-5 overflow-auto border-[rgba(6, 90, 147, 0.30)] border-2">
+                        {_props.modalControl.personalized_message}
+                      </div>
                     </aside>
                   ) : (
                     <aside className="flex flex-col gap-5 items-end">
@@ -203,7 +205,9 @@ export const Modal = (_props: {
                           text="Personalized Message"
                           textStyles="text-[#00192B] font-bold"
                         />
-                        <div className="w-[446px] h-[112px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-2 px-4 overflow-auto border-[rgba(6, 90, 147, 0.30)]  border-2 "></div>
+                        <div className="w-[446px] h-[112px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-2 px-4 overflow-auto border-[rgba(6, 90, 147, 0.30)]  border-2 ">
+                          {_props.modalControl.personalized_message}
+                        </div>
                       </div>
                       <div className="flex flex-col items-end gap-1">
                         <TextView
@@ -211,7 +215,7 @@ export const Modal = (_props: {
                           textStyles="text-[#00192B] font-bold"
                         />
                         <img
-                          src={testimentVideo}
+                          src={_props.modalControl.personalized_video_link || testimentVideo}
                           alt="testment video"
                           className="h-[186px]"
                         />
@@ -227,7 +231,9 @@ export const Modal = (_props: {
                             textStyles="text-[#00192B] font-bold"
                           />
                         </div>
-                        <div className="w-[446px] h-[112px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-2 px-4 overflow-auto border-[rgba(6, 90, 147, 0.30)]  border-2  "></div>
+                        <div className="w-[446px] h-[112px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-2 px-4 overflow-auto border-[rgba(6, 90, 147, 0.30)]  border-2  ">
+                          Public key
+                        </div>
                       </div>
                     </aside>
                   )}
@@ -320,13 +326,13 @@ function InputField(_props: {
 function userDetails(_props: {
   name: string
   email: string
-  backupEmail1: string
-  backupEmail2: string
-  phoneNumber: string
-  backupPhoneNumber: string
-  facebookLink: string
-  instagramLink: string
-  twitterLink: string
+  backup_email: string
+  backup_email2: string
+  phone_number: string
+  backup_phone_number: string
+  facebook_link: string
+  instagram_username: string
+  twitter_username: string
 }) {
   return (
     <section>
@@ -362,7 +368,7 @@ function userDetails(_props: {
             textStyles="text-[#00192B] font-medium"
           />
           <InputField
-            value={_props.backupEmail1}
+            value={_props.backup_email}
             _handleChange={() => {}}
             hasRightIcon={false}
             name={""}
@@ -377,7 +383,7 @@ function userDetails(_props: {
             textStyles="text-[#00192B] font-medium"
           />
           <InputField
-            value={_props.backupEmail2}
+            value={_props.backup_email2}
             _handleChange={() => {}}
             hasRightIcon={false}
             name={""}
@@ -392,7 +398,7 @@ function userDetails(_props: {
             textStyles="text-[#00192B] font-medium"
           />
           <InputField
-            value={_props.phoneNumber}
+            value={_props.phone_number}
             _handleChange={() => {}}
             hasRightIcon={false}
             name={""}
@@ -407,7 +413,7 @@ function userDetails(_props: {
             textStyles="text-[#00192B] font-medium"
           />
           <InputField
-            value={_props.backupPhoneNumber}
+            value={_props.backup_phone_number}
             _handleChange={() => {}}
             hasRightIcon={false}
             name={""}
@@ -424,7 +430,7 @@ function userDetails(_props: {
         />
         <div>
           <InputField
-            value={_props.facebookLink}
+            value={_props.facebook_link}
             _handleChange={() => {}}
             hasRightIcon={false}
             name={""}
@@ -435,7 +441,7 @@ function userDetails(_props: {
         </div>
         <div>
           <InputField
-            value={_props.instagramLink}
+            value={_props.instagram_username}
             _handleChange={() => {}}
             hasRightIcon={false}
             name={""}
@@ -446,7 +452,7 @@ function userDetails(_props: {
         </div>
         <div>
           <InputField
-            value={_props.twitterLink}
+            value={_props.twitter_username}
             _handleChange={() => {}}
             hasRightIcon={false}
             name={""}
