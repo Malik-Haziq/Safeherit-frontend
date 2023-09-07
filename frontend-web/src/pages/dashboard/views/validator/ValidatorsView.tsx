@@ -21,7 +21,7 @@ import {
   createValidator,
   findValidator,
   updateValidator,
-  deleteValidator
+  deleteValidator,
 } from "../../../../redux/actions/ValidatorAction"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import { ConfirmationModal } from "../../../../components/modal/ConfirmationModal"
@@ -49,18 +49,19 @@ export default function ValidatorsView() {
 
   const [hasValidators, setHasValidators] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
-  const [modalAction, setModalAction] = useState('')
+  const [modalAction, setModalAction] = useState("")
   const [deleteModalVisibility, setDeleteModalVisibility] = useState(false)
   const [stepOneModalVisibility, setStepOneModalVisibility] = useState(false)
   const [stepTwoModalVisibility, setStepTwoModalVisibility] = useState(false)
-  const [stepThreeModalVisibility, setStepThreeModalVisibility] = useState(false)
+  const [stepThreeModalVisibility, setStepThreeModalVisibility] =
+    useState(false)
   const [stepFourModalVisibility, setStepFourModalVisibility] = useState(false)
   const [stepZeroModalVisibility, setStepZeroModalVisibility] = useState(false)
 
   const validatorArray = useAppSelector(
     (state) => state.validator.validator_array,
   )
-  const updateValidatorArrayCount = (res?: {data?: {data: []}}) => {
+  const updateValidatorArrayCount = (res?: { data?: { data: [] } }) => {
     if (res?.data?.data && res?.data?.data.length > 0) {
       setHasValidators(1)
     } else {
@@ -103,7 +104,7 @@ export default function ValidatorsView() {
       closeStepZeroModal: () => {
         setStepZeroModalVisibility(false)
       },
-      
+
       openStepOneModal: () => {
         setStepOneModalVisibility(true)
       },
@@ -128,21 +129,18 @@ export default function ValidatorsView() {
   const _submitStepOneModal = () => {
     if (!modalControl.name) {
       alert("please enter a valid input")
-    }
-    else if (
+    } else if (
       !isValidEmail(modalControl.primary_email) ||
-      !isValidEmail(modalControl.backup_email) || 
+      !isValidEmail(modalControl.backup_email) ||
       !isValidEmail(modalControl.backup_email2)
     ) {
       alert("please enter a valid Email address")
-    }
-    else if (
+    } else if (
       !isValidPhone(modalControl.phone_number) ||
       !isValidPhone(modalControl.backup_phone_number)
     ) {
       alert("please enter valid Phone number")
-    }
-    else {
+    } else {
       setStepOneModalVisibility(false)
       modalOperations.openStepTwoModal()
     }
@@ -150,22 +148,19 @@ export default function ValidatorsView() {
   const _submitStepTwoModal = () => {
     if (!modalControl.facebook_link) {
       alert("please enter valid facebook")
-    }
-    else if(!modalControl.instagram_username) {
+    } else if (!modalControl.instagram_username) {
       alert("please enter valid instagram username")
-    }
-    else if(!modalControl.twitter_username) {
+    } else if (!modalControl.twitter_username) {
       alert("please enter valid twitter username")
-    }
-    else {
+    } else {
       setStepTwoModalVisibility(false)
       modalOperations.openStepThreeModal()
     }
   }
   const _submitStepThreeModal = () => {
     // validate input
-    
-    if (modalAction == 'edit') {
+
+    if (modalAction == "edit") {
       dispatch(updateValidator(modalControl))
         .unwrap()
         .then((res) => {
@@ -183,21 +178,20 @@ export default function ValidatorsView() {
           console.log(err)
           // TODO: show fallback page
         })
-    } 
-    else if (modalAction == 'create') {
+    } else if (modalAction == "create") {
       dispatch(createValidator(modalControl))
         .unwrap()
         .then((res) => {
           dispatch(getAllValidator({}))
-          .unwrap()
-          .then((res) => {
-            modalOperations.closeStepThreeModal()
-            modalOperations.openStepFourModal()
-            updateValidatorArrayCount(res)
-          })
-          .catch(() => {
-            // TODO: show fallback page
-          })
+            .unwrap()
+            .then((res) => {
+              modalOperations.closeStepThreeModal()
+              modalOperations.openStepFourModal()
+              updateValidatorArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
         })
         .catch((err) => {
           console.log(err)
@@ -206,18 +200,19 @@ export default function ValidatorsView() {
     }
   }
   const _submitDeleteModal = () => {
-    dispatch(deleteValidator({id: modalControl.id})).unwrap()
-    .then((res) => {
-      dispatch(getAllValidator({}))
+    dispatch(deleteValidator({ id: modalControl.id }))
       .unwrap()
       .then((res) => {
-        modalOperations.closeDeleteModal()
-        updateValidatorArrayCount(res)
+        dispatch(getAllValidator({}))
+          .unwrap()
+          .then((res) => {
+            modalOperations.closeDeleteModal()
+            updateValidatorArrayCount(res)
+          })
+          .catch(() => {
+            // TODO: show fallback page
+          })
       })
-      .catch(() => {
-        // TODO: show fallback page
-      })
-    })
   }
   const _submitStepZeroModal = () => {
     modalOperations.closeStepZeroModal()
@@ -229,29 +224,31 @@ export default function ValidatorsView() {
     setModalControl({ ...modalControl, [name]: value })
   }
   const newValidator = () => {
-    setModalAction('create')
+    setModalAction("create")
     setModalControl(initialState)
     modalOperations.openStepOneModal()
   }
   const editValidator = (id: string) => {
-    dispatch(findValidator({id: id})).unwrap()
-    .then((res) => {
-      setModalAction('edit')
-      setModalControl(res?.data?.data)
-      modalOperations.openStepOneModal()
-    })
+    dispatch(findValidator({ id: id }))
+      .unwrap()
+      .then((res) => {
+        setModalAction("edit")
+        setModalControl(res?.data?.data)
+        modalOperations.openStepOneModal()
+      })
   }
   const destroyValidator = (id: string) => {
-    dispatch(findValidator({id: id})).unwrap()
-    .then((res) => {
-      setModalAction('delete')
-      setModalControl(res?.data?.data)
-      modalOperations.openDeleteModal()
-    })
+    dispatch(findValidator({ id: id }))
+      .unwrap()
+      .then((res) => {
+        setModalAction("delete")
+        setModalControl(res?.data?.data)
+        modalOperations.openDeleteModal()
+      })
   }
   const registerAnotherValidator = () => {
     modalOperations.closeStepFourModal()
-    setModalAction('create')
+    setModalAction("create")
     modalOperations.openStepOneModal()
   }
   const pulseCheck = () => {
@@ -264,7 +261,7 @@ export default function ValidatorsView() {
         openModal={stepZeroModalVisibility}
         closeModal={modalOperations.closeStepZeroModal}
         closeModalOnOverlayClick={false}
-        modalTitle= {"Register Validators"}
+        modalTitle={"Register Validators"}
         closeIconVisibility={true}
         _submitModal={_submitStepZeroModal}
       />
@@ -272,7 +269,7 @@ export default function ValidatorsView() {
         openModal={stepFourModalVisibility}
         closeModal={modalOperations.closeStepFourModal}
         closeModalOnOverlayClick={false}
-        modalTitle= {"Validator Registered"}
+        modalTitle={"Validator Registered"}
         closeIconVisibility={true}
         registerAnother={registerAnotherValidator}
         pulseCheck={pulseCheck}
@@ -315,20 +312,18 @@ export default function ValidatorsView() {
         modalControl={modalControl}
         _submitModal={_submitStepThreeModal}
       />
-      {
-        hasValidators == -1 ?
+      {hasValidators == -1 ? (
         <div>Loading Validators</div>
-        : hasValidators == 0 ?
-        <AddValidators 
-          openStepZeroModal={modalOperations.openStepZeroModal}
-        /> : 
-        <Validators 
+      ) : hasValidators == 0 ? (
+        <AddValidators openStepZeroModal={modalOperations.openStepZeroModal} />
+      ) : (
+        <Validators
           validatorArray={validatorArray}
           createValidator={newValidator}
           editValidator={editValidator}
           deleteValidator={destroyValidator}
-        /> 
-      }
+        />
+      )}
     </>
   )
 }
@@ -336,7 +331,6 @@ export default function ValidatorsView() {
 function AddValidators(_props: {
   openStepZeroModal: React.MouseEventHandler<HTMLButtonElement>
 }) {
-
   return (
     <div className="h-[calc(100vh-83px)] p-7">
       <main className="flex flex-col items-center justify-center shadow-xl h-full rounded-2xl">
@@ -396,7 +390,15 @@ function Validators(_props: {
         <div className="rounded-xl shadow-md h-full overflow-y-scroll no-scrollbar">
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
-              <div className="h-6 w-6 bg-safe-white-shade rounded-md shadow-lg cursor-pointer"></div>
+              <div className="relative">
+                <input type="checkbox" id="checkbox" />
+                <label
+                  htmlFor="checkbox"
+                  className="checkbox-label ml-1 -top-1"
+                >
+                  <div className="check_mark"></div>
+                </label>
+              </div>
               <p className="text-sm">Name</p>
             </li>
             <li className="text-safe-text-gray-shade text-sm">Email</li>

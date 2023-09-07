@@ -71,7 +71,12 @@ export function StepZeroInformationModal(_props: {
                   customViewContainer: "",
                   CustomView: () => {
                     return (
-                      <div className="w-5 h-5 bg-[#EDEDED] rounded-md drop-shadow-lg ml-8"></div>
+                      <div className="relative">
+                        <input type="checkbox" id="checkbox" />
+                        <label htmlFor="checkbox" className="checkbox-label">
+                          <div className="check_mark"></div>
+                        </label>
+                      </div>
                     )
                   },
                 },
@@ -81,7 +86,7 @@ export function StepZeroInformationModal(_props: {
                 props: {
                   text: "Don’t display this next time",
                   onclick: () => {},
-                  textStyles: "text-[#00192B] text-lg font-light",
+                  textStyles: "text-[#00192B] text-lg font-light ml-6",
                 },
               },
             ],
@@ -498,7 +503,10 @@ export function StepFourSuccessModal(_props: {
                     <p className="w-[194px] text-center text-[#4F4F4F] leading-tight">
                       Click here if you want to register another validator.
                     </p>
-                    <button onClick={_props.registerAnother} className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl">
+                    <button
+                      onClick={_props.registerAnother}
+                      className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl"
+                    >
                       Register another Validator
                     </button>
                   </div>
@@ -507,7 +515,10 @@ export function StepFourSuccessModal(_props: {
                       Click here to move on to Pulse Check setting if you’re
                       done registering validators.{" "}
                     </p>
-                    <button onClick={_props.pulseCheck} className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl">
+                    <button
+                      onClick={_props.pulseCheck}
+                      className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl"
+                    >
                       Setup Pulse Check
                     </button>
                   </div>
