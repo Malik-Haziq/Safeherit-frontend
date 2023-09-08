@@ -2,17 +2,18 @@ import notification from "../../../assets/images/Notification.svg"
 import userImg from "../../../assets/images/user.svg"
 import arrowDown from "../../../assets/images/chevron-down.svg"
 import { DropDownButton } from "../../components"
+import { Notifications } from "../../../src/components/notificationDropDown"
 import { useLocation } from "react-router-dom"
 
 type NavBarItem = {
-  screen: string;
-  title: string;
-};
+  screen: string
+  title: string
+}
 
-export default function DashboardNavbar (_props: { _handleLogout: Function }) {
+export default function DashboardNavbar(_props: { _handleLogout: Function }) {
   const currentPath = useLocation()
   const USER_NAME = window.localStorage.getItem("userName") || "Profile"
-  const navBarHeadings: Record<string, NavBarItem>  = {
+  const navBarHeadings: Record<string, NavBarItem> = {
     "/dashboard": {
       screen: "Dashboard",
       title: "View all your assets status",
@@ -35,9 +36,8 @@ export default function DashboardNavbar (_props: { _handleLogout: Function }) {
     },
   }
 
-
   return (
-    <div className="h-[83px] p-2 sm:p-7 flex justify-between items-center shadow-sm">
+    <div className="h-[83px] p-2 sm:p-7 flex justify-between items-center shadow-sm min-w-[1200px] max-w-[100vw]">
       <div>
         <h2 className="text-safe-text-black-tint sm:text-xl font-bold">
           {navBarHeadings[currentPath.pathname].screen}
@@ -47,11 +47,8 @@ export default function DashboardNavbar (_props: { _handleLogout: Function }) {
         </p>
       </div>
       <div className="flex items-center gap-3 md:gap-10">
-        <img
-          src={notification}
-          alt="notification icon"
-          className="cursor-pointer w-4 sm:w-5 h-[18px] sm:h-[22px]"
-        />
+        <Notifications />
+
         <DropDownButton
           className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
           onClick={_props._handleLogout}

@@ -91,7 +91,7 @@ html {
 
 @layer components {
   .primary-btn {
-    @apply px-6 flex py-2.5 bg-blue-500 text-safe-text-white bg-safe-blue font-safe-font-default font-semibold text-base rounded-full shadow-md hover:opacity-75 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:ring-opacity-75;
+    @apply px-6 flex py-2.5 bg-[#0C8AC1] text-safe-text-white font-safe-font-default font-semibold text-base rounded-full shadow-md focus:outline-none focus:ring-1  focus:ring-opacity-75;
   }
   .selected {
     @apply bg-safe-green-shade relative font-medium;
@@ -115,5 +115,15 @@ html {
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+  .scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-radius: 5px;
+  }
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c1c1c1;
   }
 }
