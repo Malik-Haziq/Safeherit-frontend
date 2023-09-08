@@ -8,6 +8,7 @@ import twitter from "../../../../../assets/images/twitter.svg"
 import userImg from "../../../../../assets/images/user.svg"
 import beneficiaryImg from "../../../../../assets/images/beneficiaryScreen.svg"
 import { ValidatorDropDown } from "../../../../components"
+import { UserDetailsModal } from "../../../../components/modal/UserDetailsModal"
 
 import {
   StepZeroInformationModal,
@@ -213,16 +214,32 @@ export default function BeneficiariesView() {
       })
   }
   const registerAnotherBeneficiary = () => {
-    setModalAction("create")
-    closeModal()
-    setModalVisibility("Step-pk")
+    newBeneficiary()
   }
   const gotoValidators = () => {
     navigate("/dashboard/validators")
   }
+  const viewBeneficiary = (id: string) => {
+    alert("showing user data")
+    dispatch(findBeneficiary({ id: id }))
+      .unwrap()
+      .then((res) => {
+        setModalAction("view")
+        setModalControl(res?.data?.data)
+        setModalVisibility("User-Info")
+      })
+  }
 
   return (
     <>
+      <UserDetailsModal
+        openModal={modalVisibility == "User-Info"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        view="beneficiary"
+        closeIconVisibility={true}
+        modalControl={modalControl}
+      />
       <StepOneModal
         openModal={modalVisibility == "Step-1"}
         closeModal={closeModal}
@@ -300,6 +317,7 @@ export default function BeneficiariesView() {
           createBeneficiary={newBeneficiary}
           editBeneficiary={editBeneficiary}
           deleteBeneficiary={destroyBeneficiary}
+          viewBeneficiary={viewBeneficiary}
         />
       )}
     </>
@@ -340,6 +358,7 @@ function Beneficiaries(_props: {
   createBeneficiary: React.MouseEventHandler<HTMLImageElement>
   editBeneficiary: Function
   deleteBeneficiary: Function
+  viewBeneficiary: Function
 }) {
   return (
     <div className={styles.AppView}>
@@ -407,6 +426,7 @@ function Beneficiaries(_props: {
                 id={beneficiary.id}
                 editBeneficiary={_props.editBeneficiary}
                 deleteBeneficiary={_props.deleteBeneficiary}
+                viewBeneficiary={_props.viewBeneficiary}
               />
             )
           })}
@@ -425,12 +445,18 @@ function Beneficiary(_props: {
   id: string
   editBeneficiary: Function
   deleteBeneficiary: Function
+  viewBeneficiary: Function
 }) {
   return (
     <ul className="grid grid-cols-5 items-center py-3 px-7 text-safe-text-black-tint">
       <li className="flex items-center gap-4 text-black">
         <img src={userImg} alt="user image" className="rounded-full" />
-        <p className="font-semibold">{_props.userName}</p>
+        <p
+          className="font-semibold cursor-pointer"
+          onClick={() => _props.viewBeneficiary(_props.id)}
+        >
+          {_props.userName}
+        </p>
       </li>
       <li className="font-semibold text-sm max-w-48 justify-self-center pr-9">
         {_props.email}
