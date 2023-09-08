@@ -2,6 +2,7 @@ import notification from "../../../assets/images/Notification.svg"
 import userImg from "../../../assets/images/user.svg"
 import arrowDown from "../../../assets/images/chevron-down.svg"
 import { DropDownButton } from "../../components"
+import { Notifications } from "../../../src/components/notificationDropDown"
 import { useLocation } from "react-router-dom"
 
 type NavBarItem = {
@@ -46,11 +47,8 @@ export default function DashboardNavbar(_props: { _handleLogout: Function }) {
         </p>
       </div>
       <div className="flex items-center gap-3 md:gap-10">
-        <img
-          src={notification}
-          alt="notification icon"
-          className="cursor-pointer w-4 sm:w-5 h-[18px] sm:h-[22px]"
-        />
+        <Notifications />
+
         <DropDownButton
           className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
           onClick={_props._handleLogout}
