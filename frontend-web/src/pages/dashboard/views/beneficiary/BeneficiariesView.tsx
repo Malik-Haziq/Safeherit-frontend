@@ -214,9 +214,7 @@ export default function BeneficiariesView() {
       })
   }
   const registerAnotherBeneficiary = () => {
-    setModalAction("create")
-    closeModal()
-    setModalVisibility("Step-pk")
+    newBeneficiary()
   }
   const gotoValidators = () => {
     navigate("/dashboard/validators")
