@@ -101,7 +101,11 @@ export function SuccessModal(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={_props.action == 'create' ? "Beneficiary Registered" : "Edit Beneficiary Details"}
+      modalTitle={
+        _props.action == "create"
+          ? "Beneficiary Registered"
+          : "Edit Beneficiary Details"
+      }
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {
@@ -115,50 +119,62 @@ export function SuccessModal(_props: {
         {
           type: "textView",
           props: {
-            text: _props.action == 'create' ? "You successfully registered a new beneficiary!" : "The details of your beneficiary have been successfully updated!",
+            text:
+              _props.action == "create"
+                ? "You successfully registered a new beneficiary!"
+                : "The details of your beneficiary have been successfully updated!",
             textStyles:
               "text=[#082A44] text-2xl font-bold text-center mb-32 px-12",
           },
         },
 
-        _props.action == 'create' ? {
-          type: "customView",
-          props: {
-            customViewContainer: "",
-            CustomView: () => {
-              return (
-                <div className="flex gap-10 items-end mx-8 mb-10 ">
-                  <div className="flex flex-col gap-8 ">
-                    <p className="w-[194px] text-center text-[#4F4F4F] leading-tight">
-                      Click here if you want to register another beneficiary.
-                    </p>
-                    <button onClick={_props.registerAnotherBeneficiary} className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl">
-                      Register another Beneficiary
-                    </button>
-                  </div>
-                  <div className="flex flex-col gap-8 ">
-                    <p className="w-[194px] text-center text-[#4F4F4F] leading-tight">
-                      Click here to move on to register validators if you’re
-                      done registering beneficiaries.
-                    </p>
-                    <button onClick={_props.gotoValidators} className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl">
-                      Register Validators
-                    </button>
-                  </div>
-                </div>
-              )
+        _props.action == "create"
+          ? {
+              type: "customView",
+              props: {
+                customViewContainer: "",
+                CustomView: () => {
+                  return (
+                    <div className="flex gap-10 items-end mx-8 mb-10 ">
+                      <div className="flex flex-col gap-8 ">
+                        <p className="w-[194px] text-center text-[#4F4F4F] leading-tight">
+                          Click here if you want to register another
+                          beneficiary.
+                        </p>
+                        <button
+                          onClick={_props.registerAnotherBeneficiary}
+                          className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl"
+                        >
+                          Register another Beneficiary
+                        </button>
+                      </div>
+                      <div className="flex flex-col gap-8 ">
+                        <p className="w-[194px] text-center text-[#4F4F4F] leading-tight">
+                          Click here to move on to register validators if you’re
+                          done registering beneficiaries.
+                        </p>
+                        <button
+                          onClick={_props.gotoValidators}
+                          className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl"
+                        >
+                          Register Validators
+                        </button>
+                      </div>
+                    </div>
+                  )
+                },
+              },
+            }
+          : {
+              type: "buttonView",
+              props: {
+                title: "Done",
+                onclick: _props._submitModal,
+                buttonStyle:
+                  "bg-[#0971AA] font-bold text-white px-8 py-4 w-[225px] rounded-2xl mx-auto",
+                buttonContainer: "flex mb-10",
+              },
             },
-          },
-        } : {
-          type: "buttonView",
-          props: {
-            title: "Done",
-            onclick: _props._submitModal,
-            buttonStyle:
-              "bg-[#0971AA]  font-bold text-white px-8 py-4 w-[225px] rounded-2xl",
-            buttonContainer: "mx-48 mb-10",
-          },
-        },
       ]}
     />
   )
@@ -186,13 +202,20 @@ export function StepOneModal(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={_props.action== "create" ? "Register Beneficiaries" : "Edit Beneficiary Details"}
+      modalTitle={
+        _props.action == "create"
+          ? "Register Beneficiaries"
+          : "Edit Beneficiary Details"
+      }
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {
           type: "iconView",
           props: {
-            image: _props.action == "create" ? "../../../../../assets/images/step_2_of_4.svg" : "../../../../../assets/images/step_1_of_4.svg",
+            image:
+              _props.action == "create"
+                ? "../../../../../assets/images/step_2_of_4.svg"
+                : "../../../../../assets/images/step_1_of_4.svg",
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -341,13 +364,20 @@ export function StepTwoModal(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={_props.action== "create" ? "Register Beneficiaries" : "Edit Beneficiary Details"}
+      modalTitle={
+        _props.action == "create"
+          ? "Register Beneficiaries"
+          : "Edit Beneficiary Details"
+      }
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {
           type: "iconView",
           props: {
-            image: _props.action== "create" ? "../../../../../assets/images/step_3_of_4.svg" : "../../../../../assets/images/step_2_of_4.svg",
+            image:
+              _props.action == "create"
+                ? "../../../../../assets/images/step_3_of_4.svg"
+                : "../../../../../assets/images/step_2_of_4.svg",
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -478,13 +508,20 @@ export function StepThreeModal(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={_props.action== "create" ? "Register Beneficiaries" : "Edit Beneficiary Details"}
+      modalTitle={
+        _props.action == "create"
+          ? "Register Beneficiaries"
+          : "Edit Beneficiary Details"
+      }
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {
           type: "iconView",
           props: {
-            image: _props.action== "create" ? "../../../../../assets/images/step_4_of_4.svg" : "../../../../../assets/images/step_3_of_4.svg",
+            image:
+              _props.action == "create"
+                ? "../../../../../assets/images/step_4_of_4.svg"
+                : "../../../../../assets/images/step_3_of_4.svg",
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -502,7 +539,10 @@ export function StepThreeModal(_props: {
             customViewContainer: "mx-auto w-[514px] h-[163px] mb-10",
             CustomView: () => {
               return (
-                <textarea name="personalized_message" className="bg-[#F5FAFD] text-[#6F767B] pl-5 py-6 font-base rounded-3xl w-full h-full resize-none focus:outline-none"></textarea>
+                <textarea
+                  name="personalized_message"
+                  className="bg-[#F5FAFD] text-[#6F767B] pl-5 py-6 font-base rounded-3xl w-full h-full resize-none focus:outline-none"
+                ></textarea>
               )
             },
           },
@@ -571,13 +611,20 @@ export function RegisterPKModal(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={_props.action== "create" ? "Register Beneficiaries" : "Edit Beneficiary Details"}
+      modalTitle={
+        _props.action == "create"
+          ? "Register Beneficiaries"
+          : "Edit Beneficiary Details"
+      }
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {
           type: "iconView",
           props: {
-            image: _props.action == "create" ?  "../../../../../assets/images/step_1_of_4.svg" : "../../../../../assets/images/step_4_of_4.svg",
+            image:
+              _props.action == "create"
+                ? "../../../../../assets/images/step_1_of_4.svg"
+                : "../../../../../assets/images/step_4_of_4.svg",
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -603,10 +650,16 @@ export function RegisterPKModal(_props: {
             CustomView: () => {
               return (
                 <div className="flex items-center justify-between px-7 mb-11">
-                  <button onClick={_props._handleKeyGeneration} className="primary-btn bg-[#D7D7D7] rounded-2xl text-[#04477B] px-8 py-4 font-bold">
+                  <button
+                    onClick={_props._handleKeyGeneration}
+                    className="primary-btn bg-[#D7D7D7] rounded-2xl text-[#04477B] px-8 py-4 font-bold"
+                  >
                     Generate a Key pair
                   </button>
-                  <button onClick={_props._submitModal} className="primary-btn bg-[#0971AA] rounded-2xl px-8 py-4 font-bold">
+                  <button
+                    onClick={_props._submitModal}
+                    className="primary-btn bg-[#0971AA] rounded-2xl px-8 py-4 font-bold"
+                  >
                     I have a Private Key
                   </button>
                 </div>
