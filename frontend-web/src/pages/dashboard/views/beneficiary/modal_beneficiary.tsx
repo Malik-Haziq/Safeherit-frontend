@@ -65,7 +65,12 @@ export function StepZeroInformationModal(_props: {
                   customViewContainer: "",
                   CustomView: () => {
                     return (
-                      <div className="w-5 h-5 bg-[#EDEDED] rounded-md drop-shadow-lg ml-8"></div>
+                      <div className="relative">
+                        <input type="checkbox" id="checkbox" />
+                        <label htmlFor="checkbox" className="checkbox-label">
+                          <div className="check_mark"></div>
+                        </label>
+                      </div>
                     )
                   },
                 },
@@ -75,7 +80,7 @@ export function StepZeroInformationModal(_props: {
                 props: {
                   text: "Don’t display this next time",
                   onclick: () => {},
-                  textStyles: "text-[#00192B] text-lg font-light",
+                  textStyles: "text-[#00192B] text-lg font-light ml-6",
                 },
               },
             ],
