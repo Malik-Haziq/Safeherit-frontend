@@ -2,6 +2,9 @@ import { Modal } from "../../../../components"
 import facebook from "../../../../../assets/images/facebook.svg"
 import profilePic from "../../../../../assets/images/profile-pic.svg"
 import registerValidatorImg from "../../../../../assets/images/register-validator-img.svg"
+import stepOne from "../../../../../assets/images/step_1_of_3.svg"
+import stepTwo from "../../../../../assets/images/step_2_of_3.svg"
+import stepThree from "../../../../../assets/images/step_3_of_3.svg"
 import { useRef } from "react"
 
 export function StepZeroInformationModal(_props: {
@@ -126,7 +129,7 @@ export function StepOneModal(_props: {
         {
           type: "iconView",
           props: {
-            image: "../../../../../assets/images/step_1_of_3.svg",
+            image: stepOne,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -281,7 +284,7 @@ export function StepTwoModal(_props: {
         {
           type: "iconView",
           props: {
-            image: "../../../../../assets/images/step_2_of_3.svg",
+            image: stepTwo,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -417,7 +420,7 @@ export function StepThreeModal(_props: {
         {
           type: "iconView",
           props: {
-            image: "../../../../../assets/images/step_3_of_3.svg",
+            image: stepThree,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -480,7 +483,7 @@ export function StepFourSuccessModal(_props: {
         {
           type: "iconView",
           props: {
-            image: "../../../../../assets/images/step_3_of_3.svg",
+            image: stepThree,
             imageStyles: "mx-auto",
             imageContainerStyles: "mt-7 mb-24",
           },

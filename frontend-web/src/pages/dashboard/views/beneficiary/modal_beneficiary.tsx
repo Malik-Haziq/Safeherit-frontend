@@ -1,9 +1,15 @@
 import { Modal } from "../../../../components"
 import facebook from "../../../../../assets/images/facebook.svg"
+import instagram from "../../../../../assets/images/insta.svg"
+import twitter from "../../../../../assets/images/twitter.svg"
 import uploadVideoIcon from "../../../../../assets/images/upload-video.svg"
 import video from "../../../../../assets/images/register_page_video.png"
 import profilePic from "../../../../../assets/images/profile-pic.svg"
 import registerBeneficiaryImg from "../../../../../assets/images/register-beneficiary.svg"
+import stepOne from "../../../../../assets/images/step_1_of_4.svg"
+import stepTwo from "../../../../../assets/images/step_2_of_4.svg"
+import stepThree from "../../../../../assets/images/step_3_of_4.svg"
+import stepFour from "../../../../../assets/images/step_4_of_4.svg"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
@@ -116,7 +122,7 @@ export function SuccessModal(_props: {
         {
           type: "iconView",
           props: {
-            image: "../../../../../assets/images/step_4_of_4.svg",
+            image: stepFour,
             imageStyles: "mx-auto",
             imageContainerStyles: "mt-7 mb-24",
           },
@@ -217,10 +223,7 @@ export function StepOneModal(_props: {
         {
           type: "iconView",
           props: {
-            image:
-              _props.action == "create"
-                ? "../../../../../assets/images/step_2_of_4.svg"
-                : "../../../../../assets/images/step_1_of_4.svg",
+            image: _props.action == "create" ? stepTwo : stepOne,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -379,10 +382,7 @@ export function StepTwoModal(_props: {
         {
           type: "iconView",
           props: {
-            image:
-              _props.action == "create"
-                ? "../../../../../assets/images/step_3_of_4.svg"
-                : "../../../../../assets/images/step_2_of_4.svg",
+            image: _props.action == "create" ? stepThree : stepTwo,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -422,7 +422,7 @@ export function StepTwoModal(_props: {
             required: true,
             inputStyles: "rounded-3xl w-full",
             hasRightIcon: true,
-            icon: "../../../../../assets/images/insta.svg",
+            icon: instagram,
             iconAlt: "instagram icon",
             rightIconStyles: "absolute right-4 top-4 w-6",
             inputContainerStyles: "mx-7 mb-4 relative",
@@ -439,7 +439,7 @@ export function StepTwoModal(_props: {
             required: true,
             inputStyles: "rounded-3xl w-full",
             hasRightIcon: true,
-            icon: "../../../../../assets/images/twitter.svg",
+            icon: twitter,
             iconAlt: "instagram icon",
             rightIconStyles: "absolute right-4 top-4 w-6",
             inputContainerStyles: "mx-7 mb-4 relative",
@@ -523,10 +523,7 @@ export function StepThreeModal(_props: {
         {
           type: "iconView",
           props: {
-            image:
-              _props.action == "create"
-                ? "../../../../../assets/images/step_4_of_4.svg"
-                : "../../../../../assets/images/step_3_of_4.svg",
+            image: _props.action == "create" ? stepFour : stepThree,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -626,10 +623,7 @@ export function RegisterPKModal(_props: {
         {
           type: "iconView",
           props: {
-            image:
-              _props.action == "create"
-                ? "../../../../../assets/images/step_1_of_4.svg"
-                : "../../../../../assets/images/step_4_of_4.svg",
+            image: _props.action == "create" ? stepOne : stepFour,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
