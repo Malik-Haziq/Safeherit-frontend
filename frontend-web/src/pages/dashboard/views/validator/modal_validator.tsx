@@ -35,21 +35,21 @@ export function StepZeroInformationModal(_props: {
           type: "textView",
           props: {
             text: "What is a Validator",
-            textStyles: "text=[#00192B] text-lg font-bold mb-4 mx-auto w-fit",
+            textStyles: "text-[#00192B] text-lg font-bold mb-4 mx-auto w-fit",
           },
         },
         {
           type: "textView",
           props: {
             text: "A validator is a trusted person you choose whose role is to confirm your status if SafeHerit cannot verify you are alive.",
-            textStyles: "text=[#868686]  leading-7 px-7 mb-7 text-center ",
+            textStyles: "text-[#868686]  leading-7 px-7 mb-7 text-center ",
           },
         },
         {
           type: "textView",
           props: {
             text: "If you are unresponsive and the validator confirms your passing, SafeHerit will then share your registered asset information with your chosen beneficiaries.",
-            textStyles: "text=[#868686]  leading-7 px-7 mb-8 text-center ",
+            textStyles: "text-[#868686]  leading-7 px-7 mb-8 text-center ",
           },
         },
         {
@@ -58,8 +58,8 @@ export function StepZeroInformationModal(_props: {
             title: "Register Validators",
             onclick: _props._submitModal,
             buttonStyle:
-              "bg-[#0971AA]  font-bold text-white px-8 py-4 w-[225px] rounded-2xl",
-            buttonContainer: "mx-48 mb-10",
+              "bg-[#0971AA]  font-bold text-white mx-auto px-8 py-4 w-[225px] rounded-2xl block",
+            buttonContainer: " mb-10",
           },
         },
 

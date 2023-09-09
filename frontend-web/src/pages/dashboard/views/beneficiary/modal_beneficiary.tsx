@@ -39,14 +39,14 @@ export function StepZeroInformationModal(_props: {
           type: "textView",
           props: {
             text: "What is a Beneficiary",
-            textStyles: "text=[#00192B] text-lg font-bold mb-4 mx-auto w-fit",
+            textStyles: "text-[#00192B] text-lg font-bold mb-4 mx-auto w-fit",
           },
         },
         {
           type: "textView",
           props: {
             text: "A beneficiary is who you choose to receive information about your assets after you're gone. It could be a family member, friend, or even an organization. They are the ones who will learn about your valuables and investments after you pass away. By naming a beneficiary on SafeHerit, you decide who gets this important information in the future.",
-            textStyles: "text=[#868686] leading-7 px-7 mb-7 text-center ",
+            textStyles: "text-[#868686] leading-7 px-7 mb-7 text-center ",
           },
         },
         {
@@ -55,8 +55,8 @@ export function StepZeroInformationModal(_props: {
             title: "Register Beneficiaries",
             onclick: _props._submitModal,
             buttonStyle:
-              "bg-[#0971AA] font-bold text-white px-8 py-4 w-[233px] rounded-2xl",
-            buttonContainer: "mx-48 mb-10",
+              "bg-[#0971AA] font-bold text-white mx-auto px-8 py-4 w-[233px] rounded-2xl block",
+            buttonContainer: " mb-10 ",
           },
         },
 
