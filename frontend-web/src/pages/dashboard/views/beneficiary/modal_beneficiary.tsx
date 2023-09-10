@@ -1,9 +1,15 @@
 import { Modal } from "../../../../components"
 import facebook from "../../../../../assets/images/facebook.svg"
+import instagram from "../../../../../assets/images/insta.svg"
+import twitter from "../../../../../assets/images/twitter.svg"
 import uploadVideoIcon from "../../../../../assets/images/upload-video.svg"
 import video from "../../../../../assets/images/register_page_video.png"
 import profilePic from "../../../../../assets/images/profile-pic.svg"
 import registerBeneficiaryImg from "../../../../../assets/images/register-beneficiary.svg"
+import stepOne from "../../../../../assets/images/step_1_of_4.svg"
+import stepTwo from "../../../../../assets/images/step_2_of_4.svg"
+import stepThree from "../../../../../assets/images/step_3_of_4.svg"
+import stepFour from "../../../../../assets/images/step_4_of_4.svg"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
@@ -33,14 +39,14 @@ export function StepZeroInformationModal(_props: {
           type: "textView",
           props: {
             text: "What is a Beneficiary",
-            textStyles: "text=[#00192B] text-lg font-bold mb-4 mx-auto w-fit",
+            textStyles: "text-[#00192B] text-lg font-bold mb-4 mx-auto w-fit",
           },
         },
         {
           type: "textView",
           props: {
             text: "A beneficiary is who you choose to receive information about your assets after you're gone. It could be a family member, friend, or even an organization. They are the ones who will learn about your valuables and investments after you pass away. By naming a beneficiary on SafeHerit, you decide who gets this important information in the future.",
-            textStyles: "text=[#868686] leading-7 px-7 mb-7 text-center ",
+            textStyles: "text-[#868686] leading-7 px-7 mb-7 text-center ",
           },
         },
         {
@@ -49,8 +55,8 @@ export function StepZeroInformationModal(_props: {
             title: "Register Beneficiaries",
             onclick: _props._submitModal,
             buttonStyle:
-              "bg-[#0971AA] font-bold text-white px-8 py-4 w-[233px] rounded-2xl",
-            buttonContainer: "mx-48 mb-10",
+              "bg-[#0971AA] font-bold text-white mx-auto px-8 py-4 w-[233px] rounded-2xl block",
+            buttonContainer: " mb-10 ",
           },
         },
 
@@ -116,7 +122,7 @@ export function SuccessModal(_props: {
         {
           type: "iconView",
           props: {
-            image: "../../../../../assets/images/step_4_of_4.svg",
+            image: stepFour,
             imageStyles: "mx-auto",
             imageContainerStyles: "mt-7 mb-24",
           },
@@ -217,10 +223,7 @@ export function StepOneModal(_props: {
         {
           type: "iconView",
           props: {
-            image:
-              _props.action == "create"
-                ? "../../../../../assets/images/step_2_of_4.svg"
-                : "../../../../../assets/images/step_1_of_4.svg",
+            image: _props.action == "create" ? stepTwo : stepOne,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -379,10 +382,7 @@ export function StepTwoModal(_props: {
         {
           type: "iconView",
           props: {
-            image:
-              _props.action == "create"
-                ? "../../../../../assets/images/step_3_of_4.svg"
-                : "../../../../../assets/images/step_2_of_4.svg",
+            image: _props.action == "create" ? stepThree : stepTwo,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -422,7 +422,7 @@ export function StepTwoModal(_props: {
             required: true,
             inputStyles: "rounded-3xl w-full",
             hasRightIcon: true,
-            icon: "../../../../../assets/images/insta.svg",
+            icon: instagram,
             iconAlt: "instagram icon",
             rightIconStyles: "absolute right-4 top-4 w-6",
             inputContainerStyles: "mx-7 mb-4 relative",
@@ -439,7 +439,7 @@ export function StepTwoModal(_props: {
             required: true,
             inputStyles: "rounded-3xl w-full",
             hasRightIcon: true,
-            icon: "../../../../../assets/images/twitter.svg",
+            icon: twitter,
             iconAlt: "instagram icon",
             rightIconStyles: "absolute right-4 top-4 w-6",
             inputContainerStyles: "mx-7 mb-4 relative",
@@ -523,10 +523,7 @@ export function StepThreeModal(_props: {
         {
           type: "iconView",
           props: {
-            image:
-              _props.action == "create"
-                ? "../../../../../assets/images/step_4_of_4.svg"
-                : "../../../../../assets/images/step_3_of_4.svg",
+            image: _props.action == "create" ? stepFour : stepThree,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -626,10 +623,7 @@ export function RegisterPKModal(_props: {
         {
           type: "iconView",
           props: {
-            image:
-              _props.action == "create"
-                ? "../../../../../assets/images/step_1_of_4.svg"
-                : "../../../../../assets/images/step_4_of_4.svg",
+            image: _props.action == "create" ? stepOne : stepFour,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
