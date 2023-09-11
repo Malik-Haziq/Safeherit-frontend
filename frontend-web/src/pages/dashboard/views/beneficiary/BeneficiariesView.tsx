@@ -219,26 +219,26 @@ export default function BeneficiariesView() {
   const gotoValidators = () => {
     navigate("/dashboard/validators")
   }
-  const viewBeneficiary = (id:  string) => {
+  const viewBeneficiary = (id: string) => {
     alert("showing user data")
     dispatch(findBeneficiary({ id: id }))
-    .unwrap()
-    .then((res) => {
-      setModalAction("view")
-      setModalControl(res?.data?.data)
-      setModalVisibility("User-Info")
-    })
+      .unwrap()
+      .then((res) => {
+        setModalAction("view")
+        setModalControl(res?.data?.data)
+        setModalVisibility("User-Info")
+      })
   }
 
   return (
     <>
       <UserDetailsModal
-        openModal= {modalVisibility == "User-Info"}
-        closeModal= {closeModal}
-        closeModalOnOverlayClick= {false}
-        view= "beneficiary"
-        closeIconVisibility= {true}
-        modalControl= {modalControl}
+        openModal={modalVisibility == "User-Info"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        view="beneficiary"
+        closeIconVisibility={true}
+        modalControl={modalControl}
       />
       <StepOneModal
         openModal={modalVisibility == "Step-1"}
@@ -390,7 +390,15 @@ function Beneficiaries(_props: {
         <div className="rounded-xl shadow-md h-full overflow-y-scroll no-scrollbar">
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
-              <div className="h-6 w-6 bg-safe-white-shade rounded-md shadow-lg cursor-pointer"></div>
+              <div className="relative">
+                <input type="checkbox" id="checkbox" />
+                <label
+                  htmlFor="checkbox"
+                  className="checkbox-label ml-1 -top-1"
+                >
+                  <div className="check_mark"></div>
+                </label>
+              </div>
               <p className="text-sm">Name</p>
             </li>
             <li className="text-safe-text-gray-shade text-sm">Email</li>
@@ -443,7 +451,12 @@ function Beneficiary(_props: {
     <ul className="grid grid-cols-5 items-center py-3 px-7 text-safe-text-black-tint">
       <li className="flex items-center gap-4 text-black">
         <img src={userImg} alt="user image" className="rounded-full" />
-        <p className="font-semibold cursor-pointer" onClick={() => _props.viewBeneficiary(_props.id)}>{_props.userName}</p>
+        <p
+          className="font-semibold cursor-pointer"
+          onClick={() => _props.viewBeneficiary(_props.id)}
+        >
+          {_props.userName}
+        </p>
       </li>
       <li className="font-semibold text-sm max-w-48 justify-self-center pr-9">
         {_props.email}

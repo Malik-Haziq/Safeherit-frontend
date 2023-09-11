@@ -2,6 +2,9 @@ import { Modal } from "../../../../components"
 import facebook from "../../../../../assets/images/facebook.svg"
 import profilePic from "../../../../../assets/images/profile-pic.svg"
 import registerValidatorImg from "../../../../../assets/images/register-validator-img.svg"
+import stepOne from "../../../../../assets/images/step_1_of_3.svg"
+import stepTwo from "../../../../../assets/images/step_2_of_3.svg"
+import stepThree from "../../../../../assets/images/step_3_of_3.svg"
 import { useRef } from "react"
 
 export function StepZeroInformationModal(_props: {
@@ -32,21 +35,21 @@ export function StepZeroInformationModal(_props: {
           type: "textView",
           props: {
             text: "What is a Validator",
-            textStyles: "text=[#00192B] text-lg font-bold mb-4 mx-auto w-fit",
+            textStyles: "text-[#00192B] text-lg font-bold mb-4 mx-auto w-fit",
           },
         },
         {
           type: "textView",
           props: {
             text: "A validator is a trusted person you choose whose role is to confirm your status if SafeHerit cannot verify you are alive.",
-            textStyles: "text=[#868686]  leading-7 px-7 mb-7 text-center ",
+            textStyles: "text-[#868686]  leading-7 px-7 mb-7 text-center ",
           },
         },
         {
           type: "textView",
           props: {
             text: "If you are unresponsive and the validator confirms your passing, SafeHerit will then share your registered asset information with your chosen beneficiaries.",
-            textStyles: "text=[#868686]  leading-7 px-7 mb-8 text-center ",
+            textStyles: "text-[#868686]  leading-7 px-7 mb-8 text-center ",
           },
         },
         {
@@ -55,8 +58,8 @@ export function StepZeroInformationModal(_props: {
             title: "Register Validators",
             onclick: _props._submitModal,
             buttonStyle:
-              "bg-[#0971AA]  font-bold text-white px-8 py-4 w-[225px] rounded-2xl",
-            buttonContainer: "mx-48 mb-10",
+              "bg-[#0971AA]  font-bold text-white mx-auto px-8 py-4 w-[225px] rounded-2xl block",
+            buttonContainer: " mb-10",
           },
         },
 
@@ -71,7 +74,12 @@ export function StepZeroInformationModal(_props: {
                   customViewContainer: "",
                   CustomView: () => {
                     return (
-                      <div className="w-5 h-5 bg-[#EDEDED] rounded-md drop-shadow-lg ml-8"></div>
+                      <div className="relative">
+                        <input type="checkbox" id="checkbox" />
+                        <label htmlFor="checkbox" className="checkbox-label">
+                          <div className="check_mark"></div>
+                        </label>
+                      </div>
                     )
                   },
                 },
@@ -81,7 +89,7 @@ export function StepZeroInformationModal(_props: {
                 props: {
                   text: "Don’t display this next time",
                   onclick: () => {},
-                  textStyles: "text-[#00192B] text-lg font-light",
+                  textStyles: "text-[#00192B] text-lg font-light ml-6",
                 },
               },
             ],
@@ -121,7 +129,7 @@ export function StepOneModal(_props: {
         {
           type: "iconView",
           props: {
-            image: "../../../../../assets/images/step_1_of_3.svg",
+            image: stepOne,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -276,7 +284,7 @@ export function StepTwoModal(_props: {
         {
           type: "iconView",
           props: {
-            image: "../../../../../assets/images/step_2_of_3.svg",
+            image: stepTwo,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -412,7 +420,7 @@ export function StepThreeModal(_props: {
         {
           type: "iconView",
           props: {
-            image: "../../../../../assets/images/step_3_of_3.svg",
+            image: stepThree,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -475,7 +483,7 @@ export function StepFourSuccessModal(_props: {
         {
           type: "iconView",
           props: {
-            image: "../../../../../assets/images/step_3_of_3.svg",
+            image: stepThree,
             imageStyles: "mx-auto",
             imageContainerStyles: "mt-7 mb-24",
           },
@@ -498,7 +506,10 @@ export function StepFourSuccessModal(_props: {
                     <p className="w-[194px] text-center text-[#4F4F4F] leading-tight">
                       Click here if you want to register another validator.
                     </p>
-                    <button onClick={_props.registerAnother} className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl">
+                    <button
+                      onClick={_props.registerAnother}
+                      className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl"
+                    >
                       Register another Validator
                     </button>
                   </div>
@@ -507,7 +518,10 @@ export function StepFourSuccessModal(_props: {
                       Click here to move on to Pulse Check setting if you’re
                       done registering validators.{" "}
                     </p>
-                    <button onClick={_props.pulseCheck} className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl">
+                    <button
+                      onClick={_props.pulseCheck}
+                      className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl"
+                    >
                       Setup Pulse Check
                     </button>
                   </div>
