@@ -40,7 +40,7 @@ const initialState = {
   facebook_link: "",
   instagram_username: "",
   twitter_username: "",
-  message: "",
+  personalized_message: "",
   image: "",
 }
 
