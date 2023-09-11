@@ -1,11 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { login, signup } from "../actions/UserActions"
+import { login, logout, signup } from "../actions/UserActions"
 
 const initialState = {
   email: "",
   name: "",
   photo: "",
   phone: "",
+  access: "",
+  active: false,
+  token: ""
 }
 
 export const slice = createSlice({
@@ -15,6 +18,12 @@ export const slice = createSlice({
     updateName: (state, action) => {
       state.name = action.payload
     },
+    updateActive: (state, action) => {
+      state.active = action.payload
+    },
+    setToken: (state, action) => {
+      state.token = action.payload;
+    }
   },
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
@@ -22,17 +31,22 @@ export const slice = createSlice({
       state.name = action.payload.user.displayName || ""
       state.photo = action.payload.user.photoURL || ""
       state.phone = action.payload.user.phoneNumber || ""
+      state.active = true
     })
     builder.addCase(signup.fulfilled, (state, action) => {
       state.email = action.payload.user.email || ""
       state.name = action.payload.user.displayName || ""
       state.photo = action.payload.user.photoURL || ""
       state.phone = action.payload.user.phoneNumber || ""
+      state.active = true
+    })
+    builder.addCase(logout.fulfilled, (state, action) => {
+      return initialState
     })
   },
 })
 
-export const { updateName } = slice.actions
+export const { updateName, updateActive, setToken } = slice.actions
 
 export default slice.reducer
 

@@ -3,11 +3,11 @@ import logo from "../../../assets/images/safeherit_log_white.svg"
 import logoutIcon from "../../../assets/images/Logout.svg"
 import { CONSTANT } from "../../common"
 
-export const NavigationDrawer = (_props: {
+export default function NavigationDrawer (_props: {
   DRAWER_MENU: any[]
   DRAWER_SETTINGS: any[]
   _handleLogout: Function
-}) => {
+}) {
   return (
     <div className={styles.NavigationDrawer}>
       <div className="flex items-center justify-center mt-7">

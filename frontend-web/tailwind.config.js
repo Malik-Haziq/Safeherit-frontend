@@ -4,16 +4,22 @@ export default {
   theme: {
     extend: {
       backgroundColor: {
+        "safe-bg": "#DAE5EA",
         "safe-blue": "#0C8AC1",
         "safe-white": "#FFFFFF",
         "safe-white-shade": "#f2f2f2",
+        "safe-white-shade-1": "#EDEDED",
         "safe-gray": "#F5FAFD",
         "safe-gray-shade": "#D7D7D7",
+        "safe-gray-shade-1": "#E0E0E0",
         "safe-blue-shade": "#04477B",
         "safe-blue-tint": "#0971AA",
+        "safe-light-blue-tint-1": "#E7F4F9",
         "safe-blue-light": "#B4DBEC",
+        "safe-light-blue-tint": "#E7F4F9",
         "safe-black": "#000000",
         "safe-green-light": "##5CEAD2",
+        "safe-green-light-1": "#EEFAF8",
         "safe-green-shade": "rgba(82, 206, 183, .23)",
       },
       colors: {
@@ -24,8 +30,10 @@ export default {
         "safe-text-black": "#000000",
         "safe-text-black-tint": "#00192B",
         "safe-text-gray": "#858992",
+        "safe-text-gray-shade": "#74777E",
         "safe-text-dark-gray": "#4F4F4F",
         "safe-text-light-gray": "#B4B4B4",
+        "safe-text-light-gray-1": "#828282",
         "safe-text-white": "#FFFFFF",
         "safe-text-dark-blue": "#082A44",
         "safe-text-link-blue": "#2F80ED",
@@ -40,6 +48,8 @@ export default {
       },
       width: {
         "167px": "167px",
+        "570px": "570px",
+        "490px": "490px",
       },
     },
   },
