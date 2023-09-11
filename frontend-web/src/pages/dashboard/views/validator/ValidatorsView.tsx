@@ -392,6 +392,9 @@ function Validators(_props: {
                 email={validator.primary_email}
                 phoneNumber={validator.phone_number}
                 backupPhoneNumber={validator.backup_phone_number}
+                facebook_link={validator.facebook_link}
+                instagram_username={validator.instagram_username}
+                twitter_username={validator.twitter_username}
                 id={validator.id}
                 editValidator={_props.editValidator}
                 deleteValidator={_props.deleteValidator}
@@ -411,6 +414,9 @@ function Validator(_props: {
   email: string
   phoneNumber: string
   backupPhoneNumber: string
+  facebook_link: string
+  instagram_username: string
+  twitter_username: string
   id: string
   editValidator: Function
   deleteValidator: Function
@@ -438,21 +444,27 @@ function Validator(_props: {
       </li>
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
-          <img
-            src={facebook}
-            alt="facebook logo"
-            className="w-5 cursor-pointer "
-          />
-          <img
-            src={instagram}
-            alt="instagram logo"
-            className="w-5 cursor-pointer "
-          />
-          <img
-            src={twitter}
-            alt="twitter logo"
-            className="w-5 cursor-pointer "
-          />
+          <a href={_props.facebook_link} target="_blank" rel="noopener noreferrer">
+            <img
+              src={facebook}
+              alt="facebook logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
+          <a href={`https://www.instagram.com/${_props.instagram_username}/`} target="_blank" rel="noopener noreferrer">
+            <img
+              src={instagram}
+              alt="instagram logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
+          <a href={`https://twitter.com/${_props.twitter_username}/`} target="_blank" rel="noopener noreferrer">
+            <img
+              src={twitter}
+              alt="twitter logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
         </div>
         <div className="relative">
           <ValidatorDropDown

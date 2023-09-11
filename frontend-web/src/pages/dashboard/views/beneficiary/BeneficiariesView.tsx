@@ -429,6 +429,9 @@ function Beneficiaries(_props: {
                 email={beneficiary.primary_email}
                 phoneNumber={beneficiary.phone_number}
                 backupPhoneNumber={beneficiary.backup_phone_number}
+                facebook_link={beneficiary.facebook_link}
+                instagram_username={beneficiary.instagram_username}
+                twitter_username={beneficiary.twitter_username}
                 id={beneficiary.id}
                 editBeneficiary={_props.editBeneficiary}
                 deleteBeneficiary={_props.deleteBeneficiary}
@@ -448,6 +451,9 @@ function Beneficiary(_props: {
   email: string
   phoneNumber: string
   backupPhoneNumber: string
+  facebook_link: string
+  instagram_username: string
+  twitter_username: string
   id: string
   editBeneficiary: Function
   deleteBeneficiary: Function
@@ -475,21 +481,27 @@ function Beneficiary(_props: {
       </li>
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
-          <img
-            src={facebook}
-            alt="facebook logo"
-            className="w-5 cursor-pointer "
-          />
-          <img
-            src={instagram}
-            alt="instagram logo"
-            className="w-5 cursor-pointer "
-          />
-          <img
-            src={twitter}
-            alt="twitter logo"
-            className="w-5 cursor-pointer "
-          />
+          <a href={_props.facebook_link} target="_blank" rel="noopener noreferrer">
+            <img
+              src={facebook}
+              alt="facebook logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
+          <a href={`https://www.instagram.com/${_props.instagram_username}/`} target="_blank" rel="noopener noreferrer">
+            <img
+              src={instagram}
+              alt="instagram logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
+          <a href={`https://twitter.com/${_props.twitter_username}/`} target="_blank" rel="noopener noreferrer">
+            <img
+              src={twitter}
+              alt="twitter logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
         </div>
         <div className="relative">
           <ValidatorDropDown
