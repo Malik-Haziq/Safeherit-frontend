@@ -90,13 +90,13 @@ export default function BeneficiariesView() {
     if (!modalControl.name) {
       alert("please enter a valid name")
     } else if (
-      !isValidEmail(modalControl.primary_email) ||
-      !isValidEmail(modalControl.backup_email) ||
+      !isValidEmail(modalControl.primary_email) &&
+      !isValidEmail(modalControl.backup_email) &&
       !isValidEmail(modalControl.backup_email2)
     ) {
       alert("please enter a valid Email address")
     } else if (
-      !isValidPhone(modalControl.phone_number) ||
+      !isValidPhone(modalControl.phone_number) &&
       !isValidPhone(modalControl.backup_phone_number)
     ) {
       alert("please enter valid Phone number")
@@ -105,54 +105,54 @@ export default function BeneficiariesView() {
     }
   }
   const _submitStepTwoModal = () => {
-    if (!modalControl.facebook_link) {
-      alert("please enter valid facebook")
-    } else if (!modalControl.instagram_username) {
-      alert("please enter valid instagram username")
-    } else if (!modalControl.twitter_username) {
-      alert("please enter valid twitter username")
+    if (!modalControl.facebook_link && !modalControl.instagram_username && !modalControl.twitter_username) {
+      alert("Atleast 1 social media accounts is compulsory")
     } else {
       setModalVisibility("Step-3")
     }
   }
   const _submitStepThreeModal = () => {
-    if (modalAction == "edit") {
-      dispatch(updateBeneficiary(modalControl))
-        .unwrap()
-        .then((res) => {
-          dispatch(getAllBeneficiary({}))
-            .unwrap()
-            .then((res) => {
-              setModalVisibility("Step-pk")
-              updateBeneficiaryArrayCount(res)
-            })
-            .catch(() => {
-              // TODO: show fallback page
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-          // TODO: show fallback page
-        })
-    } else if (modalAction == "create") {
-      alert("creating beneficiary")
-      dispatch(createBeneficiary(modalControl))
-        .unwrap()
-        .then((res) => {
-          dispatch(getAllBeneficiary({}))
-            .unwrap()
-            .then((res) => {
-              setModalVisibility("Step-success")
-              updateBeneficiaryArrayCount(res)
-            })
-            .catch(() => {
-              // TODO: show fallback page
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-          // TODO: show fallback page
-        })
+    if (!modalControl.personalized_message) {
+      alert("Personalized message cannot be empty")
+    } else {
+      if (modalAction == "edit") {
+        dispatch(updateBeneficiary(modalControl))
+          .unwrap()
+          .then((res) => {
+            dispatch(getAllBeneficiary({}))
+              .unwrap()
+              .then((res) => {
+                setModalVisibility("Step-pk")
+                updateBeneficiaryArrayCount(res)
+              })
+              .catch(() => {
+                // TODO: show fallback page
+              })
+          })
+          .catch((err) => {
+            console.log(err)
+            // TODO: show fallback page
+          })
+      } else if (modalAction == "create") {
+        alert("creating beneficiary")
+        dispatch(createBeneficiary(modalControl))
+          .unwrap()
+          .then((res) => {
+            dispatch(getAllBeneficiary({}))
+              .unwrap()
+              .then((res) => {
+                setModalVisibility("Step-success")
+                updateBeneficiaryArrayCount(res)
+              })
+              .catch(() => {
+                // TODO: show fallback page
+              })
+          })
+          .catch((err) => {
+            console.log(err)
+            // TODO: show fallback page
+          })
+      }
     }
   }
   const _submitSuccessModal = () => {
