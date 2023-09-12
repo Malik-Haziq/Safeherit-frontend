@@ -39,13 +39,12 @@ const selectFieldStyles = (selectFieldWidth: number) => {
     control: (baseStyles: any) => ({
       ...baseStyles,
       borderWidth: "0px",
-      minWidth: selectFieldWidth || 400,
-      height: "50px",
-      backgroundColor: "#F5FAFD",
-      borderRadius: "16px",
+      height: "56px",
+      backgroundColor: "",
+      color: "#6F767B",
       fontFamily: "Montserrat",
-      fontWeight: 400,
-      fontSize: "16px",
+      fontWeight: 500,
+      fontSize: "14px",
     }),
     menuList: (baseStyles: any) => ({
       ...baseStyles,
@@ -103,6 +102,7 @@ export const SelectField = (_props: {
           ref={selectRef}
           options={_props.data}
           onChange={_props.setSelectedValue}
+          defaultValue={_props.setSelectedValue}
           value={_props.value}
           {..._props.selectProps}
           // overriding pre-defined styles

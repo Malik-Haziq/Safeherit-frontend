@@ -101,22 +101,25 @@ export function StepOneModal(_props: {
           },
         },
         {
-          type: "inputView",
+          type: "selectView",
           props: {
-            name: "bank_account",
-            type: "text",
-            placeholder: "Bank Account",
-            value: _props.modalControl.bankAccount,
-            _handleChange: _props._handleChange,
-            required: false,
+            data: [
+              { value: "chocolate", label: "Chocolate" },
+              { value: "strawberry", label: "Strawberry" },
+              { value: "vanilla", label: "Vanilla" },
+            ],
+            value: { value: "Bank Account", label: "Back Account" },
+            defaultValue: "Bacnk",
+            selectProps: {},
+            setSelectedValue: () => {},
             hasRightIcon: true,
-            icon: arrowDown,
-            iconAlt: "Arrow down icon",
-            iconPress: () => {},
-            rightIconStyles: "",
-            inputStyles:
-              "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold text-[#00192B]",
-            inputContainerStyles: "mx-7 mb-4 relative",
+            rightIcon: arrowDown,
+            rightIconAlt: "rightIcon",
+            selectFieldWidth: 490,
+            selectContainer: "mx-7 mb-4 relative",
+            selectFieldStyles:
+              "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]",
+            rightIconStyles: "absolute right-4 top-4 cursor-pointer",
           },
         },
         {
@@ -147,21 +150,25 @@ export function StepOneModal(_props: {
           },
         },
         {
-          type: "inputView",
+          type: "selectView",
           props: {
-            name: "country",
-            type: "text",
-            placeholder: "Country",
-            value: _props.modalControl.country,
-            _handleChange: _props._handleChange,
-            required: false,
+            data: [
+              { value: "chocolate", label: "Chocolate" },
+              { value: "strawberry", label: "Strawberry" },
+              { value: "vanilla", label: "Vanilla" },
+            ],
+            value: { value: "Country", label: "Country" },
+            defaultValue: "Bacnk",
+            selectProps: {},
+            setSelectedValue: () => {},
             hasRightIcon: true,
-            icon: arrowDown,
-            iconAlt: "Arrow down icon",
-            iconPress: () => {},
-            rightIconStyles: "",
-            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
-            inputContainerStyles: "mx-7 mb-4 relative",
+            rightIcon: arrowDown,
+            rightIconAlt: "rightIcon",
+            selectFieldWidth: 490,
+            selectContainer: "mx-7 mb-4 relative",
+            selectFieldStyles:
+              "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]",
+            rightIconStyles: "absolute right-4 top-4 cursor-pointer",
           },
         },
         {
@@ -178,42 +185,49 @@ export function StepOneModal(_props: {
           },
         },
         {
-          type: "customView",
+          type: "multiFields",
+          containerStyles: "flex gap-4 justify-center",
           props: {
-            customViewContainer: "mx-7 mb-3",
-            CustomView: () => {
-              return (
-                <div className="flex justify-between gap-4 w-full">
-                  <div className="relative flex-grow">
-                    <input
-                      type="text"
-                      name="currency"
-                      placeholder="Currency"
-                      value={_props.modalControl.currency}
-                      className="border-0 bg-safe-gray py-4 px-4  placeholder:text-[#6F767B] outline-none rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 w-full"
-                    />
-                    <img
-                      src={arrowDown}
-                      alt={"Arrow down icon"}
-                      onClick={() => {}}
-                      className={
-                        "absolute right-4 top-[20px] cursor-pointer h-6 text-[#eee]"
-                      }
-                    />
-                  </div>
-                  <input
-                    type="text"
-                    name="balance"
-                    placeholder="Balance"
-                    value={_props.modalControl.balance}
-                    className="border-0 bg-safe-gray py-4 px-4  placeholder:text-[#6F767B] outline-none rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 flex-grow"
-                  />
-                </div>
-              )
-            },
+            fields: [
+              {
+                type: "selectView",
+                props: {
+                  data: [
+                    { value: "chocolate", label: "Chocolate" },
+                    { value: "strawberry", label: "Strawberry" },
+                    { value: "vanilla", label: "Vanilla" },
+                  ],
+                  value: { value: "Bank Account", label: "Back Account" },
+                  defaultValue: "Bacnk",
+                  selectProps: {},
+                  setSelectedValue: () => {},
+                  hasRightIcon: true,
+                  rightIcon: arrowDown,
+                  rightIconAlt: "rightIcon",
+                  selectFieldWidth: 490,
+                  selectContainer: " mb-4 relative",
+                  selectFieldStyles:
+                    "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] min-w-[237px] ",
+                  rightIconStyles: "absolute right-4 top-4 cursor-pointer",
+                },
+              },
+              {
+                type: "inputView",
+                props: {
+                  name: "debit_card_pin",
+                  type: "text",
+                  placeholder: "Balance",
+                  value: _props.modalControl.dabitCardPin,
+                  _handleChange: _props._handleChange,
+                  required: false,
+                  inputStyles:
+                    "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 w-[237px]",
+                  inputContainerStyles: "mb-3",
+                },
+              },
+            ],
           },
         },
-
         {
           type: "inputView",
           props: {
@@ -335,21 +349,25 @@ export function StepTwoModal(_props: {
           },
         },
         {
-          type: "inputView",
+          type: "selectView",
           props: {
-            name: "beneficiary",
-            type: "text",
-            placeholder: "Beneficiary",
-            value: _props.modalControl.beneficiary,
-            _handleChange: _props._handleChange,
-            required: false,
+            data: [
+              { value: "chocolate", label: "Chocolate" },
+              { value: "strawberry", label: "Strawberry" },
+              { value: "vanilla", label: "Vanilla" },
+            ],
+            value: { value: "Beneficiary", label: "Beneficiary" },
+            defaultValue: "Bacnk",
+            selectProps: {},
+            setSelectedValue: () => {},
             hasRightIcon: true,
-            icon: arrowDown,
-            iconAlt: "Arrow down icon",
-            iconPress: () => {},
-            rightIconStyles: "",
-            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
-            inputContainerStyles: "mx-7 mb-4 relative",
+            rightIcon: arrowDown,
+            rightIconAlt: "rightIcon",
+            selectFieldWidth: 490,
+            selectContainer: "mx-7 mb-4 relative",
+            selectFieldStyles:
+              "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]",
+            rightIconStyles: "absolute right-4 top-4 cursor-pointer",
           },
         },
         {

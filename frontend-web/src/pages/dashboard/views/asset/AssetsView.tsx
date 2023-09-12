@@ -30,7 +30,7 @@ export default function AssetsView() {
 
   return (
     <div className={styles.AppView}>
-      <StepOneModal
+      <StepTwoModal
         openModal={true}
         closeModal={() => {}}
         closeModalOnOverlayClick={true}
@@ -38,7 +38,7 @@ export default function AssetsView() {
         action={""}
         _handleChange={() => {}}
         _submitModal={() => {}}
-        modalControl={initialState}
+        modalControl={initialStateOfBankingCredentials}
       />
       <p>Assets View</p>
     </div>
