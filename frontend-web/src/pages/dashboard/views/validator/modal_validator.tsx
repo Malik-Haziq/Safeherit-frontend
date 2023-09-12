@@ -150,7 +150,7 @@ export function StepOneModal(_props: {
             value: _props.modalControl.name,
             _handleChange: _props._handleChange,
             required: true,
-            inputStyles: "rounded-3xl w-full",
+            inputStyles: "rounded-3xl w-full error",
             inputContainerStyles: "mx-7 mb-4",
           },
         },
@@ -435,12 +435,14 @@ export function StepThreeModal(_props: {
         {
           type: "TextAreaField",
           props: {
-            textAreaContainerStyles: "mx-auto w-[514px] h-[334px] mb-10",
-            name:"personalized_message",
-            placeholder: "Dear {Name}, \n\nIf you receive this message it probably means I am gone. \n\nSince you’re one of the closest people to me, you probably know if am still alive or not. If I’m indeed dead, please confirm it as per the instructions of this platform (SafeHerit). \n\nThis will help me a lot in making sure that my family gets access to its inheritance as quickly as possible. \n\nThank you buddy, I’m counting on you! \n\n{your name}",
-            _handleChange:_props._handleChange,
-            value:_props.modalControl.personalized_message,
-            inputStyles:"bg-[#F5FAFD] text-[#6F767B] pl-5 py-6 font-base rounded-3xl w-full h-full resize-none focus:outline-none",
+            textAreaContainerStyles: "",
+            name: "personalized_message",
+            placeholder:
+              "Dear {Name}, \n\nIf you receive this message it probably means I am gone. \n\nSince you’re one of the closest people to me, you probably know if am still alive or not. If I’m indeed dead, please confirm it as per the instructions of this platform (SafeHerit). \n\nThis will help me a lot in making sure that my family gets access to its inheritance as quickly as possible. \n\nThank you buddy, I’m counting on you! \n\n{your name}",
+            _handleChange: _props._handleChange,
+            value: _props.modalControl.personalized_message,
+            inputStyles:
+              "bg-[#F5FAFD] text-[#6F767B] pl-5 py-6 font-base rounded-3xl mx-auto w-[514px] h-[334px]  mb-10 block leading-tight resize-none focus:outline-none",
           },
         },
         {
