@@ -1,4 +1,4 @@
-import { lazy } from "react"
+import { lazy, useState } from "react"
 import styles from "./Dashboard.module.css"
 import { Outlet, useNavigate } from "react-router-dom"
 import { CONSTANT } from "../../common"
@@ -18,6 +18,7 @@ const DashboardNavbar = lazy(() => import("./DashboardNavbar"))
 export default function Dashboard() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const [selectedOption, setSelectedOption] = useState(CONSTANT.DASHBOARD)
 
   const DRAWER_MENU = [
     {
@@ -25,6 +26,7 @@ export default function Dashboard() {
       option: CONSTANT.DASHBOARD,
       navigate: () => {
         navigate("/dashboard")
+        setSelectedOption(CONSTANT.DASHBOARD)
       },
     },
     {
@@ -32,6 +34,7 @@ export default function Dashboard() {
       option: CONSTANT.MY_ASSETS,
       navigate: () => {
         navigate("/dashboard/assets")
+        setSelectedOption(CONSTANT.MY_ASSETS)
       },
     },
     {
@@ -39,6 +42,7 @@ export default function Dashboard() {
       option: CONSTANT.BENEFICIARIES,
       navigate: () => {
         navigate("/dashboard/beneficiaries")
+        setSelectedOption(CONSTANT.BENEFICIARIES)
       },
     },
     {
@@ -46,6 +50,7 @@ export default function Dashboard() {
       option: CONSTANT.VALIDATORS,
       navigate: () => {
         navigate("/dashboard/validators")
+        setSelectedOption(CONSTANT.VALIDATORS)
       },
     },
     {
@@ -53,6 +58,7 @@ export default function Dashboard() {
       option: CONSTANT.PULSE_CHECK,
       navigate: () => {
         navigate("/dashboard/pulse")
+        setSelectedOption(CONSTANT.PULSE_CHECK)
       },
     },
   ]
@@ -62,6 +68,7 @@ export default function Dashboard() {
       option: CONSTANT.MY_ACCOUNT,
       navigate: () => {
         navigate("/dashboard")
+        setSelectedOption(CONSTANT.MY_ACCOUNT)
       },
     },
     {
@@ -69,6 +76,7 @@ export default function Dashboard() {
       option: CONSTANT.HELP,
       navigate: () => {
         navigate("/dashboard")
+        setSelectedOption(CONSTANT.HELP)
       },
     },
   ]
@@ -90,6 +98,7 @@ export default function Dashboard() {
         DRAWER_MENU={DRAWER_MENU}
         DRAWER_SETTINGS={DRAWER_SETTINGS}
         _handleLogout={_handleLogout}
+        selectedOption={selectedOption}
       />
       <section className={styles.DashboardBody}>
         <DashboardNavbar _handleLogout={_handleLogout} />
