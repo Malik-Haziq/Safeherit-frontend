@@ -19,6 +19,28 @@ import {
 import { DropDownButton } from "../../../../components/dropDownButton"
 import { ConfirmationModal } from "../../../../components/modal/ConfirmationModal"
 
+function AddAsset(_props: {
+  // openStepZeroModal: React.MouseEventHandler<HTMLButtonElement>
+}) {
+  return (
+    <div className="h-[calc(100vh-83px)] p-7">
+      <main className="flex flex-col items-center justify-center shadow-xl h-full rounded-2xl">
+        <img src={AddAssetImg} className="mb-10" alt="validator screen image" />
+        <h2 className="text-[#00192B] text-xl font-bold mb-2">No Assets</h2>
+        <p className="text-[#868686] mb-10">
+          There is no any assets in your Board please create assets.
+        </p>
+        <button
+          onClick={() => {}}
+          className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
+        >
+          Create Assets
+        </button>
+      </main>
+    </div>
+  )
+}
+
 export default function AssetsView() {
   const initialState = {
     bankAccount: "",
