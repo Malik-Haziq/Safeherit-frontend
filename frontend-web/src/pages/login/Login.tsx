@@ -6,7 +6,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { login, resetPassword } from "../../redux/actions/UserActions"
 import { useAppDispatch } from "../../redux/hooks"
-import ForgotPasswordModal from "../../components/modal/forgotPasswordModal"
+import ForgotPasswordModal from "../../components/modal/ForgotPasswordModal"
 
 export function Login() {
   const { t } = useTranslation()

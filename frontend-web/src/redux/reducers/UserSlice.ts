@@ -6,7 +6,9 @@ const initialState = {
   name: "",
   photo: "",
   phone: "",
-  active: false
+  access: "",
+  active: false,
+  token: ""
 }
 
 export const slice = createSlice({
@@ -19,6 +21,9 @@ export const slice = createSlice({
     updateActive: (state, action) => {
       state.active = action.payload
     },
+    setToken: (state, action) => {
+      state.token = action.payload;
+    }
   },
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
@@ -41,7 +46,7 @@ export const slice = createSlice({
   },
 })
 
-export const { updateName, updateActive } = slice.actions
+export const { updateName, updateActive, setToken } = slice.actions
 
 export default slice.reducer
 

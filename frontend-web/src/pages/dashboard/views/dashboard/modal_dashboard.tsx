@@ -52,7 +52,7 @@ export function DashboardModal() {
             title: "Get Started",
             onclick: () => {},
             buttonStyle: "",
-            buttonContainer: "mx-auto mb-10",
+            buttonContainer: "mx-48 mb-10",
           },
         },
       ]}
