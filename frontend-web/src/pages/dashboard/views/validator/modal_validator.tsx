@@ -152,7 +152,7 @@ export function StepOneModal(_props: {
             value: _props.modalControl.name,
             _handleChange: _props._handleChange,
             required: true,
-            inputStyles: "rounded-3xl w-full error",
+            inputStyles: "rounded-3xl w-full",
             inputContainerStyles: "mx-7 mb-4",
           },
         },
