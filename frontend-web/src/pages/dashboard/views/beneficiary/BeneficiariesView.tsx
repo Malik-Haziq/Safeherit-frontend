@@ -384,10 +384,11 @@ function Beneficiaries(_props: {
             </div>
           </div>
           <img
+            id="cy-add-beneficiary-button"
             onClick={_props.createBeneficiary}
             src={addIcon}
             alt="add icon"
-            className="cursor-pointer"
+            className="cursor-pointer cy-add-beneficiary-button"
           />
         </div>
       </section>

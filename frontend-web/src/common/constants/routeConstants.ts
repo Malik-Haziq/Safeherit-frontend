@@ -9,4 +9,5 @@ export const ROUTE_CONSTANTS = {
   DASHBOARD_BENEFICIARIES: "beneficiaries",
   DASHBOARD_VALIDATORS: "validators",
   DASHBOARD_PULSE: "pulse",
+  DASHBOARD_ACCOUNT: "account",
 }

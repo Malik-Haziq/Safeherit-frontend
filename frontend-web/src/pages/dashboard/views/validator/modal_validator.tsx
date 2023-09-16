@@ -1,5 +1,7 @@
 import { Modal } from "../../../../components"
 import facebook from "../../../../../assets/images/facebook.svg"
+import twitter from "../../../../../assets/images/twitter.svg"
+import instagram from "../../../../../assets/images/insta.svg"
 import profilePic from "../../../../../assets/images/profile-pic.svg"
 import registerValidatorImg from "../../../../../assets/images/register-validator-img.svg"
 import stepOne from "../../../../../assets/images/step_1_of_3.svg"
@@ -324,7 +326,7 @@ export function StepTwoModal(_props: {
             required: true,
             inputStyles: "rounded-3xl w-full",
             hasRightIcon: true,
-            icon: "../../../../../assets/images/insta.svg",
+            icon: instagram,
             iconAlt: "instagram icon",
             rightIconStyles: "absolute right-4 top-4 w-6",
             inputContainerStyles: "mx-7 mb-4 relative",
@@ -341,7 +343,7 @@ export function StepTwoModal(_props: {
             required: true,
             inputStyles: "rounded-3xl w-full",
             hasRightIcon: true,
-            icon: "../../../../../assets/images/twitter.svg",
+            icon: twitter,
             iconAlt: "Twitter icon",
             rightIconStyles: "absolute right-4 top-4 w-6",
             inputContainerStyles: "mx-7 mb-4 relative",
