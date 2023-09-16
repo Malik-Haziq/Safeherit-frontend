@@ -6,22 +6,29 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom"
-import {
-  Login,
-  SignUp,
-  RegisterKey,
-} from "./pages"
+import { Login, SignUp, RegisterKey } from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar } from "./components"
 import { lazy } from "react"
 
 const Pricing = lazy(() => import("./pages/pricing/Pricing"))
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"))
-const AssetsView = lazy(() => import("./pages/dashboard/views/asset/AssetsView"))
-const DashboardView = lazy(() => import("./pages/dashboard/views/dashboard/DashboardView"))
-const BeneficiariesView = lazy(() => import("./pages/dashboard/views/beneficiary/BeneficiariesView"))
+const AssetsView = lazy(
+  () => import("./pages/dashboard/views/asset/AssetsView"),
+)
+const DashboardView = lazy(
+  () => import("./pages/dashboard/views/dashboard/DashboardView"),
+)
+const BeneficiariesView = lazy(
+  () => import("./pages/dashboard/views/beneficiary/BeneficiariesView"),
+)
 const PulseView = lazy(() => import("./pages/dashboard/views/pulse/PulseView"))
-const ValidatorsView = lazy(() => import("./pages/dashboard/views/validator/ValidatorsView"))
+const ValidatorsView = lazy(
+  () => import("./pages/dashboard/views/validator/ValidatorsView"),
+)
+const AccountView = lazy(
+  () => import("./pages/dashboard/views/account/AccountView"),
+)
 
 function App() {
   return (
@@ -74,6 +81,10 @@ function AppRoutes() {
             <Route
               path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
               element={<PulseView />}
+            />
+            <Route
+              path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT}
+              element={<AccountView />}
             />
             <Route path="*" element={<Navigate to={""} replace />} />
           </Route>
