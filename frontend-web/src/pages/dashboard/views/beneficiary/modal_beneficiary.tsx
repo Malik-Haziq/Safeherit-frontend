@@ -536,17 +536,16 @@ export function StepThreeModal(_props: {
           },
         },
         {
-          type: "customView",
+          type: "TextAreaField",
           props: {
-            customViewContainer: "mx-auto w-[514px] h-[163px] mb-10",
-            CustomView: () => {
-              return (
-                <textarea
-                  name="personalized_message"
-                  className="bg-[#F5FAFD] text-[#6F767B] pl-5 py-6 font-base rounded-3xl w-full h-full resize-none focus:outline-none"
-                ></textarea>
-              )
-            },
+            textAreaContainerStyles: " ",
+            name: "personalized_message",
+            placeholder:
+              "Dear {Name} \n\nIf you receive this message it probably means I am gone. If so go to my closet and you will find a piece of paper in the pocket or my blue leather jacket. The paper contains the codes you will need to login to this platform (SafeHerit) and have access to the list of my assets.",
+            _handleChange: _props._handleChange,
+            value: _props.modalControl.personalized_message,
+            inputStyles:
+              "bg-[#F5FAFD] text-[#6F767B] pl-5 py-3 font-base rounded-3xl mx-auto block w-[514px] h-[163px] resize-none focus:outline-none scrollbar leading-tight mb-10",
           },
         },
         {
