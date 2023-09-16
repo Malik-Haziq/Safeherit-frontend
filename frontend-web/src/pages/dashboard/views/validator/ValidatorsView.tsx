@@ -167,7 +167,7 @@ export default function ValidatorsView() {
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     if ((name == "phone_number" || name == "backup_phone_number" )) {
-      if (isValidPhone(value)) {
+      if (isValidPhone(value) || value == "" || value == "+") {
         setModalControl({ ...modalControl, [name]: value })
       }
     } else {
