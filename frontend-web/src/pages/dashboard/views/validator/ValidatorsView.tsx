@@ -342,10 +342,11 @@ function Validators(_props: {
             </div>
           </div>
           <img
+            id="cy-add-validator-button"
             onClick={_props.createValidator}
             src={addIcon}
             alt="add icon"
-            className="cursor-pointer"
+            className="cursor-pointer cy-add-validator-button"
           />
         </div>
       </section>
