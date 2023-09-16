@@ -40,7 +40,7 @@ const initialState = {
   facebook_link: "",
   instagram_username: "",
   twitter_username: "",
-  message: "",
+  personalized_message: "",
   image: "",
 }
 
@@ -85,15 +85,15 @@ export default function ValidatorsView() {
 
   const _submitStepOneModal = () => {
     if (!modalControl.name) {
-      alert("please enter a valid input")
+      alert("please enter a valid name")
     } else if (
-      !isValidEmail(modalControl.primary_email) ||
-      !isValidEmail(modalControl.backup_email) ||
+      !isValidEmail(modalControl.primary_email) &&
+      !isValidEmail(modalControl.backup_email) &&
       !isValidEmail(modalControl.backup_email2)
     ) {
       alert("please enter a valid Email address")
     } else if (
-      !isValidPhone(modalControl.phone_number) ||
+      !isValidPhone(modalControl.phone_number) &&
       !isValidPhone(modalControl.backup_phone_number)
     ) {
       alert("please enter valid Phone number")
@@ -102,56 +102,55 @@ export default function ValidatorsView() {
     }
   }
   const _submitStepTwoModal = () => {
-    if (!modalControl.facebook_link) {
-      alert("please enter valid facebook")
-    } else if (!modalControl.instagram_username) {
-      alert("please enter valid instagram username")
-    } else if (!modalControl.twitter_username) {
-      alert("please enter valid twitter username")
+    if (!modalControl.facebook_link && !modalControl.twitter_username && !modalControl.instagram_username) {
+      alert("Atleast 1 social media accounts is compulsory")
     } else {
       setModalVisibility("Step-3")
     }
   }
   const _submitStepThreeModal = () => {
-    // validate input
-
-    if (modalAction == "edit") {
-      dispatch(updateValidator(modalControl))
-        .unwrap()
-        .then((res) => {
-          dispatch(getAllValidator({}))
-            .unwrap()
-            .then((res) => {
-              closeModal()
-              updateValidatorArrayCount(res)
-            })
-            .catch(() => {
-              // TODO: show fallback page
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-          // TODO: show fallback page
-        })
-    } else if (modalAction == "create") {
-      dispatch(createValidator(modalControl))
-        .unwrap()
-        .then((res) => {
-          dispatch(getAllValidator({}))
-            .unwrap()
-            .then((res) => {
-              setModalVisibility("Step-4")
-              updateValidatorArrayCount(res)
-            })
-            .catch(() => {
-              // TODO: show fallback page
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-          // TODO: show fallback page
-        })
+    if (!modalControl.personalized_message) {
+      alert("Personalized message cannot be empty")
+    } else {
+      if (modalAction == "edit") {
+        dispatch(updateValidator(modalControl))
+          .unwrap()
+          .then((res) => {
+            dispatch(getAllValidator({}))
+              .unwrap()
+              .then((res) => {
+                closeModal()
+                updateValidatorArrayCount(res)
+              })
+              .catch(() => {
+                // TODO: show fallback page
+              })
+          })
+          .catch((err) => {
+            console.log(err)
+            // TODO: show fallback page
+          })
+      } else if (modalAction == "create") {
+        dispatch(createValidator(modalControl))
+          .unwrap()
+          .then((res) => {
+            dispatch(getAllValidator({}))
+              .unwrap()
+              .then((res) => {
+                setModalVisibility("Step-4")
+                updateValidatorArrayCount(res)
+              })
+              .catch(() => {
+                // TODO: show fallback page
+              })
+          })
+          .catch((err) => {
+            console.log(err)
+            // TODO: show fallback page
+          })
+      }
     }
+
   }
   const _submitDeleteModal = () => {
     dispatch(deleteValidator({ id: modalControl.id }))
@@ -167,7 +166,13 @@ export default function ValidatorsView() {
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
-    setModalControl({ ...modalControl, [name]: value })
+    if ((name == "phone_number" || name == "backup_phone_number" )) {
+      if (isValidPhone(value) || value == "" || value == "+") {
+        setModalControl({ ...modalControl, [name]: value })
+      }
+    } else {
+      setModalControl({ ...modalControl, [name]: value })
+    }
   }
   const newValidator = () => {
     setModalAction("create")
@@ -388,6 +393,9 @@ function Validators(_props: {
                 email={validator.primary_email}
                 phoneNumber={validator.phone_number}
                 backupPhoneNumber={validator.backup_phone_number}
+                facebook_link={validator.facebook_link}
+                instagram_username={validator.instagram_username}
+                twitter_username={validator.twitter_username}
                 id={validator.id}
                 editValidator={_props.editValidator}
                 deleteValidator={_props.deleteValidator}
@@ -407,6 +415,9 @@ function Validator(_props: {
   email: string
   phoneNumber: string
   backupPhoneNumber: string
+  facebook_link: string
+  instagram_username: string
+  twitter_username: string
   id: string
   editValidator: Function
   deleteValidator: Function
@@ -434,21 +445,27 @@ function Validator(_props: {
       </li>
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
-          <img
-            src={facebook}
-            alt="facebook logo"
-            className="w-5 cursor-pointer "
-          />
-          <img
-            src={instagram}
-            alt="instagram logo"
-            className="w-5 cursor-pointer "
-          />
-          <img
-            src={twitter}
-            alt="twitter logo"
-            className="w-5 cursor-pointer "
-          />
+          <a href={_props.facebook_link} target="_blank" rel="noopener noreferrer">
+            <img
+              src={facebook}
+              alt="facebook logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
+          <a href={`https://www.instagram.com/${_props.instagram_username}/`} target="_blank" rel="noopener noreferrer">
+            <img
+              src={instagram}
+              alt="instagram logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
+          <a href={`https://twitter.com/${_props.twitter_username}/`} target="_blank" rel="noopener noreferrer">
+            <img
+              src={twitter}
+              alt="twitter logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
         </div>
         <div className="relative">
           <ValidatorDropDown

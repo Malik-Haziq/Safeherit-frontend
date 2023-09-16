@@ -87,6 +87,19 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
         <CustomView />
       </div>
     )
+  } else if (element?.type === "TextAreaField") {
+    return (
+      <TextAreaField
+        key={_props.index}
+        name={element?.props?.name}
+        placeholder={element?.props?.placeholder}
+        value={element?.props?.value}
+        _handleChange={element?.props?._handleChange}
+        required={element?.props?.required}
+        inputStyles={element?.props?.inputStyles}
+        textAreaContainerStyles={element?.props?.inputContainerStyles}
+      />
+    )
   }
 }
 
@@ -270,6 +283,29 @@ function InputField(_props: {
           }
         />
       )}
+    </div>
+  )
+}
+
+function TextAreaField(_props: {
+  name: string
+  placeholder: string
+  value: string
+  _handleChange: any
+  required: boolean
+  inputStyles: string
+  textAreaContainerStyles: string
+}) {
+  return (
+    <div className={_props.textAreaContainerStyles}>
+      <textarea
+        name={_props.name || ""}
+        placeholder={_props.placeholder || "Text Area"}
+        value={_props.value}
+        onChange={_props._handleChange}
+        required={_props.required || false}
+        className={_props.inputStyles}
+      />
     </div>
   )
 }
