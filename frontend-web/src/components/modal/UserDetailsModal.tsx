@@ -14,7 +14,7 @@ export const UserDetailsModal = (_props: {
   view: string
   closeIconVisibility: boolean
   modalControl: {
-    id?: string,
+    id?: string
     name: string
     primary_email: string
     backup_email: string
@@ -33,14 +33,16 @@ export const UserDetailsModal = (_props: {
   return (
     <>
       {_props.openModal && (
-        <div
-          className={styles.backDrop}
-        >
+        <div className={styles.backDrop}>
           <div className={styles.modalContainer}>
             <div className="w-[1070px] bg-white rounded-2xl border border-[#04477B]">
               <ModalHeader
                 closeModal={_props.closeModal}
-                title={_props.view == 'validator' ? "View Validator Details" : "View Beneficiary Details"}
+                title={
+                  _props.view == "validator"
+                    ? "View Validator Details"
+                    : "View Beneficiary Details"
+                }
                 closeIconVisibility={_props.closeIconVisibility}
               />
               <main className="flex flex-col pl-11 pr-7 py-7">
@@ -160,10 +162,10 @@ export const UserDetailsModal = (_props: {
                           name={"facebook_link"}
                           type={"text"}
                           inputStyles={""}
-                          inputContainerStyles={""}
-                          icon="../../../assets/images/facebook.svg"
+                          inputContainerStyles={"relative"}
+                          icon={facebookIcon}
                           iconAlt="facebook icon"
-                          rightIconStyles="absolute right-4 top-4"
+                          rightIconStyles="absolute right-4 top-2 w-6"
                         />
                       </div>
                       <div>
@@ -174,8 +176,11 @@ export const UserDetailsModal = (_props: {
                           name={"instagram_username"}
                           type={"text"}
                           inputStyles={""}
-                          inputContainerStyles={""}
-                        />{" "}
+                          inputContainerStyles={"relative"}
+                          icon={instagramIcon}
+                          iconAlt="facebook icon"
+                          rightIconStyles="absolute right-4 top-2 w-6"
+                        />
                       </div>
                       <div>
                         <InputField
@@ -185,19 +190,22 @@ export const UserDetailsModal = (_props: {
                           name={"twitter_username"}
                           type={"text"}
                           inputStyles={""}
-                          inputContainerStyles={""}
-                        />{" "}
+                          inputContainerStyles={"relative"}
+                          icon={twitterIcon}
+                          iconAlt="facebook icon"
+                          rightIconStyles="absolute right-4 top-3 w-5"
+                        />
                       </div>
                     </div>
                   </aside>
-                  {_props.view == 'validator' ? (
+                  {_props.view == "validator" ? (
                     <aside className="flex flex-col gap-5 items-end">
                       <TextView
                         text="Personalized Message"
                         textStyles="text-[#00192B] font-bold"
                       />
                       <div className="w-[446px] h-[510px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-7 px-5 overflow-auto border-[rgba(6, 90, 147, 0.30)] border-2">
-                        {_props.modalControl.message}
+                        {_props.modalControl.personalized_message}
                       </div>
                     </aside>
                   ) : (
@@ -217,7 +225,10 @@ export const UserDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-bold"
                         />
                         <img
-                          src={_props.modalControl.personalized_video_link || testimentVideo}
+                          src={
+                            _props.modalControl.personalized_video_link ||
+                            testimentVideo
+                          }
                           alt="testment video"
                           className="h-[186px]"
                         />
