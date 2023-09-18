@@ -34,6 +34,10 @@ export default function DashboardNavbar(_props: { _handleLogout: Function }) {
       screen: "Pulse check",
       title: "Check your pulse",
     },
+    "/dashboard/account": {
+      screen: "My Account",
+      title: "Manage you information",
+    },
   }
 
   return (

@@ -179,6 +179,7 @@ html {
     transform: translate(0);
     opacity: 1;
   }
+
   .scrollbar::-webkit-scrollbar {
     width: 4px;
   }
@@ -196,5 +197,9 @@ html {
     color: #04477b;
     border-bottom: 2px solid #04477b;
     font-weight: 600;
+  }
+  .error {
+    border: 1px solid rgb(255, 84, 84);
+    color: rgb(255, 84, 84);
   }
 }

@@ -67,7 +67,7 @@ export default function Dashboard() {
       icon: profile,
       option: CONSTANT.MY_ACCOUNT,
       navigate: () => {
-        navigate("/dashboard")
+        navigate("/dashboard/account")
         setSelectedOption(CONSTANT.MY_ACCOUNT)
       },
     },

@@ -189,7 +189,7 @@ export default function BeneficiariesView() {
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     if ((name == "phone_number" || name == "backup_phone_number" )) {
-      if (isValidPhone(value)) {
+      if (isValidPhone(value) || value == "" || value == "+") {
         setModalControl({ ...modalControl, [name]: value })
       }
     } else {
@@ -384,10 +384,11 @@ function Beneficiaries(_props: {
             </div>
           </div>
           <img
+            id="cy-add-beneficiary-button"
             onClick={_props.createBeneficiary}
             src={addIcon}
             alt="add icon"
-            className="cursor-pointer"
+            className="cursor-pointer cy-add-beneficiary-button"
           />
         </div>
       </section>
