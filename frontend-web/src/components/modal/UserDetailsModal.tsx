@@ -25,7 +25,6 @@ export const UserDetailsModal = (_props: {
     instagram_username: string
     twitter_username: string
     personalized_message?: string
-    message?: string
     personalized_video_link?: string
     image: string
   }
@@ -197,7 +196,7 @@ export const UserDetailsModal = (_props: {
                         textStyles="text-[#00192B] font-bold"
                       />
                       <div className="w-[446px] h-[510px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-7 px-5 overflow-auto border-[rgba(6, 90, 147, 0.30)] border-2">
-                        {_props.modalControl.message}
+                        {_props.modalControl.personalized_message}
                       </div>
                     </aside>
                   ) : (
