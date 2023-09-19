@@ -41,7 +41,8 @@ const initialState = {
   instagram_username: "",
   twitter_username: "",
   personalized_message: "",
-  image: "",
+  profile_image_link: "",
+  profile_image: "",
 }
 
 export default function ValidatorsView() {
@@ -50,6 +51,7 @@ export default function ValidatorsView() {
 
   const [hasValidators, setHasValidators] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
+  const [imageUpload, setImageUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
 
@@ -77,6 +79,7 @@ export default function ValidatorsView() {
   const closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
+    setImageUpload("")
   }, [])
 
   const addValidator = useCallback(() => {
@@ -156,8 +159,15 @@ export default function ValidatorsView() {
     dispatch(deleteValidator({ id: modalControl.id }))
       .unwrap()
       .then((res) => {
-        closeModal()
-        updateValidatorArrayCount(res)
+        dispatch(getAllValidator({}))
+        .unwrap()
+        .then((res) => {
+          closeModal()
+          updateValidatorArrayCount(res)
+        })
+        .catch(() => {
+          // TODO: show fallback page
+        })
       })
   }
   const _submitStepZeroModal = () => {
@@ -268,6 +278,8 @@ export default function ValidatorsView() {
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
+        imageUpload={imageUpload}
+        setImageUpload={setImageUpload}
       />
       <StepThreeModal
         openModal={modalVisibility == "Step-3"}
@@ -387,8 +399,7 @@ function Validators(_props: {
             return (
               <Validator
                 key={index}
-                // userImg={validator.userImg} TODO
-                userImg={"../../../../../assets/images/user.svg"}
+                userImg={validator.profile_image_link || userImg}
                 userName={validator.name}
                 email={validator.primary_email}
                 phoneNumber={validator.phone_number}
@@ -426,7 +437,7 @@ function Validator(_props: {
   return (
     <ul className="grid grid-cols-5 items-center py-3 px-7 ">
       <li className=" flex items-center gap-4">
-        <img src={userImg} alt="user image" className="rounded-full" />
+        <img src={_props.userImg} alt="user image" className="rounded-full" />
         <p
           className="font-semibold cursor-pointer"
           onClick={() => _props.viewValidator(_props.id)}

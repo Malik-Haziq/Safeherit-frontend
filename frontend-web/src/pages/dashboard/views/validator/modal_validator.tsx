@@ -7,7 +7,6 @@ import registerValidatorImg from "../../../../../assets/images/register-validato
 import stepOne from "../../../../../assets/images/step_1_of_3.svg"
 import stepTwo from "../../../../../assets/images/step_2_of_3.svg"
 import stepThree from "../../../../../assets/images/step_3_of_3.svg"
-import { useRef } from "react"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
@@ -259,6 +258,13 @@ export function StepOneModal(_props: {
   )
 }
 
+interface CustomChangeEvent {
+  target: {
+    name: string;
+    value: string | ArrayBuffer | null | undefined;
+  };
+}
+
 export function StepTwoModal(_props: {
   openModal: boolean
   closeModal: Function
@@ -270,11 +276,30 @@ export function StepTwoModal(_props: {
     facebook_link: string
     instagram_username: string
     twitter_username: string
-    image: string
+    profile_image_link: string
   }
   _submitModal: Function
-  //   elements: object
+  imageUpload: string
+  setImageUpload: Function
 }) {
+  const handleImageInputChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataURL = e.target?.result;
+        _props.setImageUpload(dataURL)
+        const customEvent: CustomChangeEvent = {
+          target: {
+            name: "profile_image",
+            value: file,
+          },
+        };
+        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   return (
     <Modal
       openModal={_props.openModal}
@@ -366,8 +391,8 @@ export function StepTwoModal(_props: {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={_props._handleChange}
-                    name="image"
+                    onChange={handleImageInputChange}
+                    name="profile_image"
                     className="opacity-0 absolute top-0 left-44 h-20 w-[220px]"
                   />
                   <div className="flex items-center justify-center gap-2 mb-8">
@@ -375,7 +400,7 @@ export function StepTwoModal(_props: {
                       Click to upload <br /> a profile picture →
                     </span>
                     <img
-                      src={profilePic}
+                      src={_props.imageUpload || _props.modalControl.profile_image_link || profilePic}
                       alt="user image"
                       className="w-20 h-20"
                     />

@@ -25,9 +25,8 @@ export const UserDetailsModal = (_props: {
     instagram_username: string
     twitter_username: string
     personalized_message?: string
-    message?: string
     personalized_video_link?: string
-    image: string
+    profile_image_link?: string
   }
 }) => {
   return (
@@ -45,7 +44,7 @@ export const UserDetailsModal = (_props: {
               />
               <main className="flex flex-col pl-11 pr-7 py-7">
                 <img
-                  src={_props.modalControl.image || userImage}
+                  src={_props.modalControl.profile_image_link || userImage}
                   alt="validator image"
                   className="w-[88px] h-[88px] rounded-full mx-auto"
                 />
@@ -197,7 +196,7 @@ export const UserDetailsModal = (_props: {
                         textStyles="text-[#00192B] font-bold"
                       />
                       <div className="w-[446px] h-[510px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-7 px-5 overflow-auto border-[rgba(6, 90, 147, 0.30)] border-2">
-                        {_props.modalControl.message}
+                        {_props.modalControl.personalized_message}
                       </div>
                     </aside>
                   ) : (
@@ -216,11 +215,10 @@ export const UserDetailsModal = (_props: {
                           text="Testament Video"
                           textStyles="text-[#00192B] font-bold"
                         />
-                        <img
-                          src={_props.modalControl.personalized_video_link || testimentVideo}
-                          alt="testment video"
-                          className="h-[186px]"
-                        />
+                        <video controls className="h-[186px]">
+                          <source src={_props.modalControl.personalized_video_link} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
                       </div>
                       <div className="flex flex-col gap-1">
                         <div className="flex justify-between">

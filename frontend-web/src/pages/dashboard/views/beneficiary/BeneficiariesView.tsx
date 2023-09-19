@@ -43,8 +43,10 @@ const initialState = {
   instagram_username: "",
   twitter_username: "",
   personalized_message: "",
+  personalized_video: "",
   personalized_video_link: "",
-  image: "",
+  profile_image: "",
+  profile_image_link: "",
 }
 
 export default function BeneficiariesView() {
@@ -53,6 +55,7 @@ export default function BeneficiariesView() {
 
   const [hasBeneficiaries, setHasBeneficiaries] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
+  const [imageUpload, setImageUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
 
@@ -80,6 +83,7 @@ export default function BeneficiariesView() {
   const closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
+    setImageUpload("")
   }, [])
 
   const addBeneficiary = useCallback(() => {
@@ -265,6 +269,8 @@ export default function BeneficiariesView() {
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
+        setImageUpload={setImageUpload}
+        imageUpload={imageUpload}
       />
       <StepThreeModal
         openModal={modalVisibility == "Step-3"}
@@ -424,8 +430,7 @@ function Beneficiaries(_props: {
             return (
               <Beneficiary
                 key={index}
-                // userImg={beneficiary.userImg} TODO
-                userImg={"../../../../../assets/images/user.svg"}
+                userImg={beneficiary.profile_image_link}
                 userName={beneficiary.name}
                 email={beneficiary.primary_email}
                 phoneNumber={beneficiary.phone_number}
@@ -463,7 +468,7 @@ function Beneficiary(_props: {
   return (
     <ul className="grid grid-cols-5 items-center py-3 px-7 text-safe-text-black-tint">
       <li className="flex items-center gap-4 text-black">
-        <img src={userImg} alt="user image" className="rounded-full" />
+        <img src={_props.userImg || userImg} alt="user image" className="rounded-full" />
         <p
           className="font-semibold cursor-pointer"
           onClick={() => _props.viewBeneficiary(_props.id)}

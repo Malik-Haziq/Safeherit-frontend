@@ -5,7 +5,7 @@ export const API = axios.create({
   // timeout: 1000,
   headers: {
     Accept: "application/json",
-    "Content-Type": "application/json",
+    "Content-Type": "multipart/form-data"
   },
 })
 

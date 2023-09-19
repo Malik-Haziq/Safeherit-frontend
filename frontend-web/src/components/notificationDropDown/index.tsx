@@ -62,9 +62,10 @@ export function Notifications() {
               </Menu.Item>
               <Menu.Item>
                 <div className=" h-[210px] overflow-y-auto scrollbar">
-                  {notificationsArr.map((notification) => {
+                  {notificationsArr.map((notification, index) => {
                     return (
                       <Notification
+                        key={index}
                         title={notification.title}
                         msg={notification.message}
                       />
