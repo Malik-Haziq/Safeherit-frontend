@@ -13,6 +13,8 @@ export const UserDetailsModal = (_props: {
   closeModalOnOverlayClick: boolean
   view: string
   closeIconVisibility: boolean
+  imageUpload?: string
+  videoUpload?: string
   modalControl: {
     id?: string
     name: string
@@ -25,8 +27,8 @@ export const UserDetailsModal = (_props: {
     instagram_username: string
     twitter_username: string
     personalized_message?: string
-    personalized_video_link?: string
-    image: string
+    personalized_video?: string
+    profile_image?: string
   }
 }) => {
   return (
@@ -45,11 +47,20 @@ export const UserDetailsModal = (_props: {
                 closeIconVisibility={_props.closeIconVisibility}
               />
               <main className="flex flex-col pl-11 pr-7 py-7">
-                <img
-                  src={_props.modalControl.image || userImage}
-                  alt="validator image"
-                  className="w-[88px] h-[88px] rounded-full mx-auto"
-                />
+               {
+                _props.imageUpload ?
+                  <img
+                    src={_props.imageUpload || userImage}
+                    alt="validator image"
+                    className="w-[88px] h-[88px] rounded-full mx-auto"
+                  />
+                :
+                  <img
+                    src={userImage}
+                    alt="validator image"
+                    className="w-[88px] h-[88px] rounded-full mx-auto"
+                  />
+              }
                 <section className="flex justify-between gap-[45px]">
                   <aside>
                     <div className="flex flex-col gap-2 mb-10 ">
@@ -223,14 +234,19 @@ export const UserDetailsModal = (_props: {
                           text="Testament Video"
                           textStyles="text-[#00192B] font-bold"
                         />
-                        <img
-                          src={
-                            _props.modalControl.personalized_video_link ||
-                            testimentVideo
-                          }
-                          alt="testment video"
-                          className="h-[186px]"
-                        />
+                        {
+                          _props.videoUpload ?
+                          <video controls className="h-[186px]">
+                            <source src={_props.videoUpload} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                          :
+                          <img
+                            src={testimentVideo}
+                            alt="validator video"
+                            className="w-[88px] h-[88px] rounded-full mx-auto"
+                          />
+                        }
                       </div>
                       <div className="flex flex-col gap-1">
                         <div className="flex justify-between">

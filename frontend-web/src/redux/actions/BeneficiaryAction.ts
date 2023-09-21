@@ -1,4 +1,4 @@
-import { DELETE, GET, POST, PUT } from "../../common"
+import { DELETE, GET, POST, PUT, jsonToFormData } from "../../common"
 import { ALL_BENEFICIARIES, BENEFICIARIES } from "../../common/api/routes"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
@@ -20,7 +20,8 @@ export const createBeneficiary = createAsyncThunk(
   "createBeneficiary",
   async (Data: {}, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: {token: ""} };
-    const params = { ROUTE: BENEFICIARIES, Body: JSON.stringify({ ...Data }), token: user.token }
+    const formData = jsonToFormData(Data)
+    const params = { ROUTE: BENEFICIARIES, Body: formData, token: user.token }
     try {
       let response = await POST(params)
       return response
@@ -48,7 +49,8 @@ export const updateBeneficiary = createAsyncThunk(
   "updateBeneficiary",
   async (Data: {}, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: {token: ""} };
-    const params = { ROUTE: BENEFICIARIES, Body: JSON.stringify({ ...Data }), token: user.token }
+    const formData = jsonToFormData(Data)
+    const params = { ROUTE: BENEFICIARIES, Body: formData, token: user.token }
     try {
       let response = await PUT(params)
       return response

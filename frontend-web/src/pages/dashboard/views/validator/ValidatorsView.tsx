@@ -28,6 +28,7 @@ import { ConfirmationModal } from "../../../../components/modal/ConfirmationModa
 import { useNavigate } from "react-router-dom"
 import { isValidEmail, isValidFacebook, isValidPhone } from "../../../../common"
 import { UserDetailsModal } from "../../../../components/modal/UserDetailsModal"
+import { getFileFromFirebase } from "../../../../common/utils/firebase"
 
 const initialState = {
   id: "",
@@ -41,7 +42,7 @@ const initialState = {
   instagram_username: "",
   twitter_username: "",
   personalized_message: "",
-  image: "",
+  profile_image: "",
 }
 
 export default function ValidatorsView() {
@@ -50,6 +51,7 @@ export default function ValidatorsView() {
 
   const [hasValidators, setHasValidators] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
+  const [imageUpload, setImageUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
 
@@ -77,6 +79,7 @@ export default function ValidatorsView() {
   const closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
+    setImageUpload("")
   }, [])
 
   const addValidator = useCallback(() => {
@@ -156,8 +159,15 @@ export default function ValidatorsView() {
     dispatch(deleteValidator({ id: modalControl.id }))
       .unwrap()
       .then((res) => {
-        closeModal()
-        updateValidatorArrayCount(res)
+        dispatch(getAllValidator({}))
+        .unwrap()
+        .then((res) => {
+          closeModal()
+          updateValidatorArrayCount(res)
+        })
+        .catch(() => {
+          // TODO: show fallback page
+        })
       })
   }
   const _submitStepZeroModal = () => {
@@ -177,6 +187,7 @@ export default function ValidatorsView() {
   const newValidator = () => {
     setModalAction("create")
     setModalControl(initialState)
+    setImageUpload("")
     setModalVisibility("Step-1")
   }
   const editValidator = (id: string) => {
@@ -185,6 +196,12 @@ export default function ValidatorsView() {
       .then((res) => {
         setModalAction("edit")
         setModalControl(res?.data?.data)
+        getFileFromFirebase(res?.data?.data?.profile_image).then((res) => {
+          setImageUpload(res)
+        })
+        .catch(() => {
+          setImageUpload("")
+        })
         setModalVisibility("Step-1")
       })
   }
@@ -210,6 +227,10 @@ export default function ValidatorsView() {
       .then((res) => {
         setModalAction("view")
         setModalControl(res?.data?.data)
+        getFileFromFirebase(res?.data?.data?.profile_image).then((res) => {
+          setImageUpload(res)
+        }).catch(() => {setImageUpload("")})
+        
         setModalVisibility("User-Info")
       })
   }
@@ -223,6 +244,7 @@ export default function ValidatorsView() {
         view="validator"
         closeIconVisibility={true}
         modalControl={modalControl}
+        imageUpload={imageUpload}
       />
       <StepZeroInformationModal
         openModal={modalVisibility == "Step-0"}
@@ -268,6 +290,8 @@ export default function ValidatorsView() {
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
+        imageUpload={imageUpload}
+        setImageUpload={setImageUpload}
       />
       <StepThreeModal
         openModal={modalVisibility == "Step-3"}
@@ -387,8 +411,7 @@ function Validators(_props: {
             return (
               <Validator
                 key={index}
-                // userImg={validator.userImg} TODO
-                userImg={"../../../../../assets/images/user.svg"}
+                userImg={validator.profile_image}
                 userName={validator.name}
                 email={validator.primary_email}
                 phoneNumber={validator.phone_number}
@@ -423,10 +446,25 @@ function Validator(_props: {
   deleteValidator: Function
   viewValidator: Function
 }) {
+  const [image, setImage] = useState<string>("")
+  useEffect(() => {
+    getFileFromFirebase(_props.userImg).then((res) => {
+      setImage(res)
+    })
+    .catch(() => {
+      setImage("")
+    })
+  }, [_props.userImg])
   return (
     <ul className="grid grid-cols-5 items-center py-3 px-7 ">
       <li className=" flex items-center gap-4">
-        <img src={userImg} alt="user image" className="rounded-full" />
+        {
+          image ?
+            <img src={image || userImg} alt="user image" className="rounded-full" />
+            :
+            <img src={userImg} alt="user image" className="rounded-full" />
+          // TODO add loading view
+        }
         <p
           className="font-semibold cursor-pointer"
           onClick={() => _props.viewValidator(_props.id)}

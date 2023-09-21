@@ -352,6 +352,13 @@ export function StepOneModal(_props: {
   )
 }
 
+interface CustomChangeEvent {
+  target: {
+    name: string;
+    value: string | ArrayBuffer | null | undefined;
+  };
+}
+
 export function StepTwoModal(_props: {
   openModal: boolean
   closeModal: any
@@ -363,10 +370,30 @@ export function StepTwoModal(_props: {
     facebook_link: string
     instagram_username: string
     twitter_username: string
-    image: string
+    profile_image: string
   }
   _submitModal: Function
+  imageUpload: string
+  setImageUpload: Function
 }) {
+  const handleImageInputChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataURL = e.target?.result;
+        _props.setImageUpload(dataURL)
+        const customEvent: CustomChangeEvent = {
+          target: {
+            name: "profile_image",
+            value: file,
+          },
+        };
+        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   return (
     <Modal
       openModal={_props.openModal}
@@ -462,19 +489,27 @@ export function StepTwoModal(_props: {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={_props._handleChange}
-                    name="image"
+                    onChange={handleImageInputChange}
+                    name="profile_image"
                     className="opacity-0 absolute top-0 left-44 h-20 w-[220px]"
                   />
                   <div className="flex items-center justify-center gap-2 mb-8">
                     <span className="text-[#858992] font-medium">
                       Click to upload <br /> a profile picture →
                     </span>
-                    <img
-                      src={profilePic}
-                      alt="user image"
-                      className="w-20 h-20 rounded-full"
-                    />
+                    {
+                    _props.imageUpload ? 
+                      <img
+                        src={_props.imageUpload || profilePic}
+                        alt="user image"
+                        className="w-20 h-20 rounded-full"
+                      /> :
+                      <img
+                        src={profilePic}
+                        alt="user image"
+                        className="w-20 h-20 rounded-full"
+                      />
+                    }
                   </div>
                 </div>
               )
@@ -501,13 +536,33 @@ export function StepThreeModal(_props: {
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   action: string
+  videoUpload: string
+  setVideoUpload: Function
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   modalControl: {
     personalized_message: string
-    personalized_video_link: string
+    personalized_video: string
   }
   _submitModal: Function
 }) {
+  const handleImageInputChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataURL = e.target?.result;
+        _props.setVideoUpload(dataURL)
+        const customEvent: CustomChangeEvent = {
+          target: {
+            name: "personalized_video",
+            value: file,
+          },
+        };
+        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   return (
     <Modal
       openModal={_props.openModal}
@@ -564,20 +619,27 @@ export function StepThreeModal(_props: {
                 <div className="relative">
                   <input
                     type="file"
-                    accept="image/*"
-                    name="personalized_video_link"
-                    onChange={_props._handleChange}
+                    accept="video/*"
+                    name="personalized_video"
+                    onChange={handleImageInputChange}
                     className="opacity-0 absolute top-0 left-44 h-20 w-[220px]"
                   />
                   <div className="flex items-center justify-center gap-2 mb-8">
                     <span className="text-[#858992] font-medium">
                       Click to upload <br /> a video →
                     </span>
-                    <img
-                      src={uploadVideoIcon}
-                      alt="user image"
-                      className="w-20 h-20 rounded-full"
-                    />
+                    {
+                      _props.videoUpload ?
+                      <video controls className="w-20 h-20 rounded-full">
+                        <source src={_props.videoUpload} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video> :
+                      <img
+                        src={uploadVideoIcon}
+                        alt="user image"
+                        className="w-20 h-20 rounded-full"
+                      />
+                    }
                   </div>
                 </div>
               )
