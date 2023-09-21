@@ -92,7 +92,7 @@ function Cards(_props: { title: string }) {
 function Row(_props: { img: any; title: string; subTitle: string }) {
   return (
     <div className="p-4 flex gap-4 border-b-[.5px] ">
-      <img src={_props.img} alt="" className="w-11 rounded-full" />
+      <img src={_props.img} alt="" className="w-11 h-11 rounded-full" />
       <div>
         <h4 className="font-semibold">{_props.title}</h4>
         <small className="text-safe-text-light-gray-1 text-sm">
