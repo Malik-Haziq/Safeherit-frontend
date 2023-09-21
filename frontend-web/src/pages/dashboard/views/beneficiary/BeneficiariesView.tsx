@@ -30,6 +30,7 @@ import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import { ConfirmationModal } from "../../../../components/modal/ConfirmationModal"
 import { useNavigate } from "react-router-dom"
 import { isValidEmail, isValidFacebook, isValidPhone } from "../../../../common"
+import { getFileFromFirebase } from "../../../../common/utils/firebase"
 
 const initialState = {
   id: "",
@@ -44,9 +45,7 @@ const initialState = {
   twitter_username: "",
   personalized_message: "",
   personalized_video: "",
-  personalized_video_link: "",
   profile_image: "",
-  profile_image_link: "",
 }
 
 export default function BeneficiariesView() {
@@ -56,6 +55,7 @@ export default function BeneficiariesView() {
   const [hasBeneficiaries, setHasBeneficiaries] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
   const [imageUpload, setImageUpload] = useState("")
+  const [videoUpload, setVideoUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
 
@@ -84,6 +84,7 @@ export default function BeneficiariesView() {
     setModalControl(initialState)
     setModalVisibility("none")
     setImageUpload("")
+    setVideoUpload("")
   }, [])
 
   const addBeneficiary = useCallback(() => {
@@ -160,8 +161,7 @@ export default function BeneficiariesView() {
     }
   }
   const _submitSuccessModal = () => {
-    setModalControl(initialState)
-    setModalVisibility("none")
+    closeModal()
   }
   const _submitRegisterPKModal = () => {
     if (modalAction == "create") {
@@ -203,6 +203,8 @@ export default function BeneficiariesView() {
   const newBeneficiary = () => {
     setModalAction("create")
     setModalControl(initialState)
+    setImageUpload("")
+    setVideoUpload("")
     setModalVisibility("Step-pk")
   }
   const editBeneficiary = (id: string) => {
@@ -211,6 +213,13 @@ export default function BeneficiariesView() {
       .then((res) => {
         setModalAction("edit")
         setModalControl(res?.data?.data)
+        getFileFromFirebase(res?.data?.data?.profile_image).then((res) => {
+          setImageUpload(res)
+        }).catch(() => {setImageUpload("")})
+        getFileFromFirebase(res?.data?.data?.personalized_video).then((res) => {
+          setVideoUpload(res)
+        }).catch(() => {setVideoUpload("")})
+
         setModalVisibility("Step-1")
       })
   }
@@ -236,6 +245,13 @@ export default function BeneficiariesView() {
       .then((res) => {
         setModalAction("view")
         setModalControl(res?.data?.data)
+        getFileFromFirebase(res?.data?.data?.profile_image).then((res) => {
+          setImageUpload(res)
+        }).catch(() => {setImageUpload("")})
+        getFileFromFirebase(res?.data?.data?.personalized_video).then((res) => {
+          setVideoUpload(res)
+        }).catch(() => {setVideoUpload("")})
+        
         setModalVisibility("User-Info")
       })
   }
@@ -249,6 +265,8 @@ export default function BeneficiariesView() {
         view="beneficiary"
         closeIconVisibility={true}
         modalControl={modalControl}
+        imageUpload={imageUpload}
+        videoUpload={videoUpload}
       />
       <StepOneModal
         openModal={modalVisibility == "Step-1"}
@@ -279,6 +297,8 @@ export default function BeneficiariesView() {
         closeIconVisibility={true}
         action={modalAction}
         _handleChange={_handleChange}
+        videoUpload={videoUpload}
+        setVideoUpload={setVideoUpload}
         modalControl={modalControl}
         _submitModal={_submitStepThreeModal}
       />
@@ -430,7 +450,7 @@ function Beneficiaries(_props: {
             return (
               <Beneficiary
                 key={index}
-                userImg={beneficiary.profile_image_link}
+                userImg={beneficiary.profile_image}
                 userName={beneficiary.name}
                 email={beneficiary.primary_email}
                 phoneNumber={beneficiary.phone_number}
@@ -465,10 +485,26 @@ function Beneficiary(_props: {
   deleteBeneficiary: Function
   viewBeneficiary: Function
 }) {
+  const [image, setImage] = useState<string>("")
+  useEffect(() => {
+    getFileFromFirebase(_props.userImg).then((res) => {
+      setImage(res)
+    })
+    .catch(() => {
+      setImage("")
+    })
+  }, [_props.userImg])
+
   return (
     <ul className="grid grid-cols-5 items-center py-3 px-7 text-safe-text-black-tint">
       <li className="flex items-center gap-4 text-black">
-        <img src={_props.userImg || userImg} alt="user image" className="rounded-full" />
+        {
+          image ?
+            <img src={image || userImg} alt="user image" className="rounded-full" />
+            :
+            <img src={userImg} alt="user image" className="rounded-full" />
+          // TODO add loading view
+        }
         <p
           className="font-semibold cursor-pointer"
           onClick={() => _props.viewBeneficiary(_props.id)}
