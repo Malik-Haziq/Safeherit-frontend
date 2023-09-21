@@ -13,8 +13,10 @@ export const UserDetailsModal = (_props: {
   closeModalOnOverlayClick: boolean
   view: string
   closeIconVisibility: boolean
+  imageUpload?: string
+  videoUpload?: string
   modalControl: {
-    id?: string,
+    id?: string
     name: string
     primary_email: string
     backup_email: string
@@ -25,30 +27,40 @@ export const UserDetailsModal = (_props: {
     instagram_username: string
     twitter_username: string
     personalized_message?: string
-    message?: string
-    personalized_video_link?: string
-    image: string
+    personalized_video?: string
+    profile_image?: string
   }
 }) => {
   return (
     <>
       {_props.openModal && (
-        <div
-          className={styles.backDrop}
-        >
+        <div className={styles.backDrop}>
           <div className={styles.modalContainer}>
             <div className="w-[1070px] bg-white rounded-2xl border border-[#04477B]">
               <ModalHeader
                 closeModal={_props.closeModal}
-                title={_props.view == 'validator' ? "View Validator Details" : "View Beneficiary Details"}
+                title={
+                  _props.view == "validator"
+                    ? "View Validator Details"
+                    : "View Beneficiary Details"
+                }
                 closeIconVisibility={_props.closeIconVisibility}
               />
               <main className="flex flex-col pl-11 pr-7 py-7">
-                <img
-                  src={_props.modalControl.image || userImage}
-                  alt="validator image"
-                  className="w-[88px] h-[88px] rounded-full mx-auto"
-                />
+               {
+                _props.imageUpload ?
+                  <img
+                    src={_props.imageUpload || userImage}
+                    alt="validator image"
+                    className="w-[88px] h-[88px] rounded-full mx-auto"
+                  />
+                :
+                  <img
+                    src={userImage}
+                    alt="validator image"
+                    className="w-[88px] h-[88px] rounded-full mx-auto"
+                  />
+              }
                 <section className="flex justify-between gap-[45px]">
                   <aside>
                     <div className="flex flex-col gap-2 mb-10 ">
@@ -160,10 +172,10 @@ export const UserDetailsModal = (_props: {
                           name={"facebook_link"}
                           type={"text"}
                           inputStyles={""}
-                          inputContainerStyles={""}
-                          icon="../../../assets/images/facebook.svg"
+                          inputContainerStyles={"relative"}
+                          icon={facebookIcon}
                           iconAlt="facebook icon"
-                          rightIconStyles="absolute right-4 top-4"
+                          rightIconStyles="absolute right-4 top-2 w-6"
                         />
                       </div>
                       <div>
@@ -174,8 +186,11 @@ export const UserDetailsModal = (_props: {
                           name={"instagram_username"}
                           type={"text"}
                           inputStyles={""}
-                          inputContainerStyles={""}
-                        />{" "}
+                          inputContainerStyles={"relative"}
+                          icon={instagramIcon}
+                          iconAlt="facebook icon"
+                          rightIconStyles="absolute right-4 top-2 w-6"
+                        />
                       </div>
                       <div>
                         <InputField
@@ -185,19 +200,22 @@ export const UserDetailsModal = (_props: {
                           name={"twitter_username"}
                           type={"text"}
                           inputStyles={""}
-                          inputContainerStyles={""}
-                        />{" "}
+                          inputContainerStyles={"relative"}
+                          icon={twitterIcon}
+                          iconAlt="facebook icon"
+                          rightIconStyles="absolute right-4 top-3 w-5"
+                        />
                       </div>
                     </div>
                   </aside>
-                  {_props.view == 'validator' ? (
+                  {_props.view == "validator" ? (
                     <aside className="flex flex-col gap-5 items-end">
                       <TextView
                         text="Personalized Message"
                         textStyles="text-[#00192B] font-bold"
                       />
                       <div className="w-[446px] h-[510px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-7 px-5 overflow-auto border-[rgba(6, 90, 147, 0.30)] border-2">
-                        {_props.modalControl.message}
+                        {_props.modalControl.personalized_message}
                       </div>
                     </aside>
                   ) : (
@@ -216,11 +234,19 @@ export const UserDetailsModal = (_props: {
                           text="Testament Video"
                           textStyles="text-[#00192B] font-bold"
                         />
-                        <img
-                          src={_props.modalControl.personalized_video_link || testimentVideo}
-                          alt="testment video"
-                          className="h-[186px]"
-                        />
+                        {
+                          _props.videoUpload ?
+                          <video controls className="h-[186px]">
+                            <source src={_props.videoUpload} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                          :
+                          <img
+                            src={testimentVideo}
+                            alt="validator video"
+                            className="w-[88px] h-[88px] rounded-full mx-auto"
+                          />
+                        }
                       </div>
                       <div className="flex flex-col gap-1">
                         <div className="flex justify-between">

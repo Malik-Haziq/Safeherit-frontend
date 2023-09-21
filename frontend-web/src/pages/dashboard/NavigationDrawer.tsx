@@ -3,10 +3,11 @@ import logo from "../../../assets/images/safeherit_log_white.svg"
 import logoutIcon from "../../../assets/images/Logout.svg"
 import { CONSTANT } from "../../common"
 
-export default function NavigationDrawer (_props: {
+export default function NavigationDrawer(_props: {
   DRAWER_MENU: any[]
   DRAWER_SETTINGS: any[]
   _handleLogout: Function
+  selectedOption: string
 }) {
   return (
     <div className={styles.NavigationDrawer}>
@@ -21,6 +22,7 @@ export default function NavigationDrawer (_props: {
               icon={item.icon}
               option={item.option}
               navigate={item.navigate}
+              selectedOption={_props.selectedOption}
             />
           )
         })}
@@ -33,6 +35,7 @@ export default function NavigationDrawer (_props: {
               icon={item.icon}
               option={item.option}
               navigate={item.navigate}
+              selectedOption={_props.selectedOption}
             />
           )
         })}
@@ -42,6 +45,7 @@ export default function NavigationDrawer (_props: {
           icon={logoutIcon}
           option={CONSTANT.LOGOUT}
           navigate={_props._handleLogout}
+          selectedOption={_props.selectedOption}
         />
       </div>
     </div>
@@ -52,10 +56,15 @@ function IconView(_props: {
   icon: string
   option: string
   navigate: Function
+  selectedOption: string
 }) {
   return (
     <div
-      className="flex items-center gap-5 w-full mb-5 py-2 px-3 sm:px-5 cursor-pointer"
+      className={
+        _props.selectedOption === _props.option
+          ? "flex items-center gap-5 w-full mb-5 py-2 px-3 sm:px-5 cursor-pointer selected"
+          : "flex items-center gap-5 w-full mb-5 py-2 px-3 sm:px-5 cursor-pointer "
+      }
       onClick={() => _props.navigate()}
     >
       <img

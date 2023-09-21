@@ -13,6 +13,7 @@ const initialState = {
   instagram_username: "",
   twitter_username: "",
   personalized_message: "",
+  profile_image: "",
   validator_array: [{}],
 }
 
