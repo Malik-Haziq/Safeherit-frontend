@@ -5,34 +5,86 @@ import shield from "../../../../../assets/images/Shield-done.svg"
 import heart from "../../../../../assets/images/heart.svg"
 import users from "../../../../../assets/images/users.svg"
 import privateKeysIcon from "../../../../../assets/images/key-icon.svg"
+import { useAppDispatch } from "../../../../redux/hooks"
+import { getData } from "../../../../redux/actions/DashboardAction"
+import { useEffect, useState } from "react"
+import { useAppSelector } from "../../../../redux/hooks"
+import { getFileFromFirebase } from "../../../../common/utils/firebase"
+import { ROUTE_CONSTANTS } from "../../../../common"
 
 export default function DashboardView() {
-  const cardDettails = [
-    { img: diamond, numberOfItems: "58", title: "Total Assets" },
-    { img: shield, numberOfItems: "6", title: "Beneficiaries" },
-    { img: users, numberOfItems: "5", title: "Validators" },
+  const dispatch = useAppDispatch()
+  const dashboardData = useAppSelector((state) => state.dashboard)
+
+  const cardDetails = [
+    {
+      img: diamond,
+      numberOfItems: dashboardData.assetCount,
+      title: "Total Assets",
+    },
+    {
+      img: shield,
+      numberOfItems: dashboardData.beneficiaryCount,
+      title: "Beneficiaries",
+    },
+    {
+      img: users,
+      numberOfItems: dashboardData.validatorCount,
+      title: "Validators",
+    },
     { img: heart, numberOfItems: "22 Days", title: "Total Assets" },
-    { img: privateKeysIcon, numberOfItems: "Low", title: "Security Score" },
+    { img: privateKeysIcon, numberOfItems: "3", title: "Private keys" },
+  ]
+  const assets = [
+    {
+      title: "Assets",
+      data: dashboardData.assets,
+      navigationPath: `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`,
+    },
+    {
+      title: "Beneficiaries",
+      data: dashboardData.beneficiaries,
+      navigationPath: `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}`,
+    },
+    {
+      title: "Validators",
+      data: dashboardData.validators,
+      navigationPath: `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}`,
+    },
   ]
 
-  const cardTitles = ["Assets", "Beneficiaries", "Validators"]
+  useEffect(() => {
+    dispatch(getData({}))
+      .unwrap()
+      .catch(() => {
+        // TODO: show fallback page
+      })
+  }, [])
 
   return (
     <div className="flex flex-col px-8 gap-8 mt-8 max-w-[1200px] mx-auto">
       <section className="flex gap-5 h-[240px] justify-between">
-        {cardDettails.map((det) => {
+        {cardDetails.map((detail, index) => {
           return (
             <DetailsCard
-              img={det.img}
-              numberOfItems={det.numberOfItems}
-              title={det.title}
+              key={index}
+              img={detail.img}
+              numberOfItems={detail.numberOfItems}
+              title={detail.title}
             />
           )
         })}
       </section>
       <section className=" flex gap-4 px-auto mx-auto">
-        {cardTitles.map((title) => {
-          return <Cards title={title} />
+        {assets.map((asset, index) => {
+          return (
+            <Cards
+              key={index}
+              assetsInfo={asset.data}
+              navigationPath={asset.navigationPath}
+              title={asset.title}
+            />
+          )
         })}
       </section>
     </div>
@@ -41,7 +93,7 @@ export default function DashboardView() {
 
 function DetailsCard(_props: {
   img: any
-  numberOfItems: string
+  numberOfItems: string | number
   title: string
 }) {
   return (
@@ -59,37 +111,56 @@ function DetailsCard(_props: {
   )
 }
 
-function Cards(_props: { title: string }) {
-  const assetsInfo = [
-    { img: users, title: "Real estate nation bank", subtitle: "Bank account" },
-    { img: users, title: "Commercial real estate", subtitle: "Bank account" },
-    { img: users, title: "DPSC limited", subtitle: "Bank account" },
-    { img: users, title: "Commercial real estate", subtitle: "Bank account" },
-  ]
-
+function Cards(_props: {
+  title: string
+  assetsInfo: any
+  navigationPath: any
+}) {
   return (
     <div className="h-[500px] min-w-[350px] rounded-lg shadow-lg">
       <div className="flex justify-between items-center h-14 bg-safe-green-light-1 p-4 rounded-t-lg">
         <h3 className="text-safe-text-black-tint text-lg font-bold">
           {_props.title}
         </h3>
-        <a className="text-safe-text-blue-shade text-sm font-semibold">
+        <a
+          href={_props.navigationPath}
+          className="text-safe-text-blue-shade text-sm font-semibold hover:opacity-75 cursor-pointer"
+        >
           View All
         </a>
       </div>
 
       <div className="h-[444px] overflow-y-auto">
-        {assetsInfo.map((info) => {
-          return (
-            <Row img={info.img} title={info.title} subTitle={info.subtitle} />
-          )
-        })}
+        {_props.assetsInfo.length ? (
+          _props.assetsInfo.map((info: any, index: string) => {
+            return (
+              <Row
+                key={index}
+                img={info.img}
+                title={info.title}
+                subTitle={info.subTitle}
+              />
+            )
+          })
+        ) : (
+          <>{_props.title} preview not available</>
+        )}
       </div>
     </div>
   )
 }
 
 function Row(_props: { img: any; title: string; subTitle: string }) {
+  const [image, setImage] = useState<string>("")
+  useEffect(() => {
+    getFileFromFirebase(_props.img)
+      .then((res) => {
+        setImage(res)
+      })
+      .catch(() => {
+        setImage("")
+      })
+  }, [_props.img])
   return (
     <div className="p-4 flex gap-4 border-b-[.5px] ">
       <img src={_props.img} alt="" className="w-11 h-11 rounded-full" />
