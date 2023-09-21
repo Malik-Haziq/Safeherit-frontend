@@ -47,20 +47,19 @@ export const UserDetailsModal = (_props: {
                 closeIconVisibility={_props.closeIconVisibility}
               />
               <main className="flex flex-col pl-11 pr-7 py-7">
-               {
-                _props.imageUpload ?
+                {_props.imageUpload ? (
                   <img
                     src={_props.imageUpload || userImage}
                     alt="validator image"
                     className="w-[88px] h-[88px] rounded-full mx-auto"
                   />
-                :
+                ) : (
                   <img
                     src={userImage}
                     alt="validator image"
                     className="w-[88px] h-[88px] rounded-full mx-auto"
                   />
-              }
+                )}
                 <section className="flex justify-between gap-[45px]">
                   <aside>
                     <div className="flex flex-col gap-2 mb-10 ">
@@ -234,19 +233,21 @@ export const UserDetailsModal = (_props: {
                           text="Testament Video"
                           textStyles="text-[#00192B] font-bold"
                         />
-                        {
-                          _props.videoUpload ?
-                          <video controls className="h-[186px]">
+                        {_props.videoUpload ? (
+                          <video
+                            controls
+                            className="max-h-[186px] max-w-[446px]"
+                          >
                             <source src={_props.videoUpload} type="video/mp4" />
                             Your browser does not support the video tag.
                           </video>
-                          :
+                        ) : (
                           <img
                             src={testimentVideo}
                             alt="validator video"
-                            className="w-[88px] h-[88px] rounded-full mx-auto"
+                            className="h-[186px] w-[446px] mx-auto"
                           />
-                        }
+                        )}
                       </div>
                       <div className="flex flex-col gap-1">
                         <div className="flex justify-between">
