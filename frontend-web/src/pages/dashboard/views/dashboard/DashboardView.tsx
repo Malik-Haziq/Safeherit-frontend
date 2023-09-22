@@ -13,14 +13,25 @@ import { getFileFromFirebase } from "../../../../common/utils/firebase"
 import { ROUTE_CONSTANTS } from "../../../../common"
 
 export default function DashboardView() {
-
   const dispatch = useAppDispatch()
-  const dashboardData = useAppSelector(state => state.dashboard)
+  const dashboardData = useAppSelector((state) => state.dashboard)
 
   const cardDetails = [
-    { img: diamond, numberOfItems: dashboardData.assetCount, title: "Total Assets" },
-    { img: shield, numberOfItems: dashboardData.beneficiaryCount, title: "Beneficiaries" },
-    { img: users, numberOfItems: dashboardData.validatorCount, title: "Validators" },
+    {
+      img: diamond,
+      numberOfItems: dashboardData.assetCount,
+      title: "Total Assets",
+    },
+    {
+      img: shield,
+      numberOfItems: dashboardData.beneficiaryCount,
+      title: "Beneficiaries",
+    },
+    {
+      img: users,
+      numberOfItems: dashboardData.validatorCount,
+      title: "Validators",
+    },
     { img: heart, numberOfItems: "22 Days", title: "Total Assets" },
     { img: privateKeysIcon, numberOfItems: "3", title: "Private keys" },
   ]
@@ -28,26 +39,26 @@ export default function DashboardView() {
     {
       title: "Assets",
       data: dashboardData.assets,
-      navigationPath: `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`
+      navigationPath: `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`,
     },
     {
       title: "Beneficiaries",
       data: dashboardData.beneficiaries,
-      navigationPath: `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}`
+      navigationPath: `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}`,
     },
     {
       title: "Validators",
       data: dashboardData.validators,
-      navigationPath: `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}`
-    }
+      navigationPath: `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}`,
+    },
   ]
-  
+
   useEffect(() => {
     dispatch(getData({}))
-    .unwrap()
-    .catch(() => {
-      // TODO: show fallback page
-    })
+      .unwrap()
+      .catch(() => {
+        // TODO: show fallback page
+      })
   }, [])
 
   return (
@@ -100,59 +111,59 @@ function DetailsCard(_props: {
   )
 }
 
-function Cards(_props: { title: string, assetsInfo: any, navigationPath: any}) {
-
+function Cards(_props: {
+  title: string
+  assetsInfo: any
+  navigationPath: any
+}) {
   return (
     <div className="h-[500px] min-w-[350px] rounded-lg shadow-lg">
       <div className="flex justify-between items-center h-14 bg-safe-green-light-1 p-4 rounded-t-lg">
         <h3 className="text-safe-text-black-tint text-lg font-bold">
           {_props.title}
         </h3>
-        <a href={_props.navigationPath} className="text-safe-text-blue-shade text-sm font-semibold hover:opacity-75 cursor-pointer">
+        <a
+          href={_props.navigationPath}
+          className="text-safe-text-blue-shade text-sm font-semibold hover:opacity-75 cursor-pointer"
+        >
           View All
         </a>
       </div>
 
       <div className="h-[444px] overflow-y-auto">
-        {
-          _props.assetsInfo.length ?
-            _props.assetsInfo.map((info: any, index: string) => {
-              return (
-                <Row
-                  key={index}
-                  img={info.img}
-                  title={info.title}
-                  subTitle={info.subTitle}
-                />
-              )
-            })
-          :
-            <>
-              {_props.title} preview not available
-            </>
-        }
+        {_props.assetsInfo.length ? (
+          _props.assetsInfo.map((info: any, index: string) => {
+            return (
+              <Row
+                key={index}
+                img={info.img}
+                title={info.title}
+                subTitle={info.subTitle}
+              />
+            )
+          })
+        ) : (
+          <>{_props.title} preview not available</>
+        )}
       </div>
     </div>
   )
 }
 
-function Row(_props: {
-  img: any;
-  title: string;
-  subTitle: string
-}) {
+function Row(_props: { img: any; title: string; subTitle: string }) {
   const [image, setImage] = useState<string>("")
   useEffect(() => {
-    getFileFromFirebase(_props.img).then((res) => {
-      setImage(res)
-    })
-    .catch(() => {
-      setImage("")
-    })
+    getFileFromFirebase(_props.img)
+      .then((res) => {
+        setImage(res)
+      })
+      .catch(() => {
+        setImage("")
+      })
   }, [_props.img])
   return (
     <div className="p-4 flex gap-4 border-b-[.5px] ">
-      <img src={image || users} alt="" className="w-11 rounded-full" />
+      <img src={_props.img} alt="" className="w-11 h-11 rounded-full" />
       <div>
         <h4 className="font-semibold">{_props.title}</h4>
         <small className="text-safe-text-light-gray-1 text-sm">
