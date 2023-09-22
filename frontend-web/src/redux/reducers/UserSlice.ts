@@ -31,7 +31,7 @@ export const slice = createSlice({
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
       state.email = action.payload.user.email || ""
-      state.name = action.payload.user.displayName || ""
+      state.displayName = action.payload.user.displayName || ""
       state.photo = action.payload.user.photoURL || ""
       state.phone = action.payload.user.phoneNumber || ""
       state.active = true
