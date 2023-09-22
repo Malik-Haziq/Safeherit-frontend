@@ -9,6 +9,7 @@ import deleteIcon from "../../../../../assets/images/delete.svg"
 import arrowDown from "../../../../../assets/images/arrow-down.svg"
 import AddAssetImg from "../../../../../assets/images/beneficiaryScreen.svg"
 import user from "../../../../../assets/images/UserIcon.png"
+import addIcon from "../../../../../assets/images/add-icon.svg"
 
 import { useEffect, useCallback, useState, useRef } from "react"
 import {
@@ -20,7 +21,13 @@ import {
 } from "./modal_assets"
 import { ASSET_TYPES, ROUTE_CONSTANTS } from "../../../../common"
 
-import { findAsset, getAllAsset, deleteAsset, updateAsset, createAsset } from "../../../../redux/actions/AssetAction"
+import {
+  findAsset,
+  getAllAsset,
+  deleteAsset,
+  updateAsset,
+  createAsset,
+} from "../../../../redux/actions/AssetAction"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import { useNavigate } from "react-router-dom"
 import { DropDownButton } from "../../../../components/dropDownButton"
@@ -28,7 +35,7 @@ import { ConfirmationModal } from "../../../../components/modal/ConfirmationModa
 import { assetData } from "./data"
 
 interface ModalControl {
-  [key: string]: any; // This index signature allows string keys with any value
+  [key: string]: any // This index signature allows string keys with any value
 }
 
 const initialState: ModalControl = {}
@@ -36,7 +43,7 @@ const initialState: ModalControl = {}
 export default function AssetsView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const asset = useAppSelector(state => state.asset)
+  const asset = useAppSelector((state) => state.asset)
 
   const [hasAssets, setHasAssets] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
@@ -48,13 +55,15 @@ export default function AssetsView() {
   const [assetDetails, setAssetDetails] = useState([{}])
   const [selectedAsset, setSelectedAsset] = useState("")
 
-  useEffect(() => { // reset values incase of creating an asset
+  useEffect(() => {
+    // reset values incase of creating an asset
     if (!isEditingAsset.current) {
       setModalControl({ category: modalControl.category })
     }
   }, [modalControl.category])
 
-  useEffect(() => { // listen to asset_array changes
+  useEffect(() => {
+    // listen to asset_array changes
     updateAssetsArrayCount()
     setAssetDetails(asset.Asset_array)
   }, [asset.Asset_array])
@@ -66,7 +75,8 @@ export default function AssetsView() {
       setHasAssets(0)
     }
   }
-  useEffect(() => {  // Get All assets on initial load
+  useEffect(() => {
+    // Get All assets on initial load
     dispatch(getAllAsset({}))
       .unwrap()
       .catch(() => {
@@ -74,7 +84,8 @@ export default function AssetsView() {
       })
   }, [])
 
-  const closeModal = useCallback(() => { // close modal
+  const closeModal = useCallback(() => {
+    // close modal
     setModalControl(initialState)
     setModalVisibility("none")
     setImageUpload("")
@@ -82,7 +93,7 @@ export default function AssetsView() {
     isEditingAsset.current = false
   }, [])
 
-  const assetCatagories = [  
+  const assetCatagories = [
     "All",
     "Bank",
     "Stock",
@@ -91,25 +102,43 @@ export default function AssetsView() {
     "Cryptocurrency",
   ]
   const assetTypes = [
-    {value: ASSET_TYPES.BANK_ACCOUNT, label: ASSET_TYPES.BANK_ACCOUNT},
-    {value: ASSET_TYPES.LIFE_INSURANCE, label: ASSET_TYPES.LIFE_INSURANCE},
-    {value: ASSET_TYPES.REAL_ESTATE, label: ASSET_TYPES.REAL_ESTATE},
-    {value: ASSET_TYPES.RETIREMENT_ACCOUNT, label: ASSET_TYPES.RETIREMENT_ACCOUNT},
-    {value: ASSET_TYPES.STOCKS, label:ASSET_TYPES.STOCKS},
-    {value: ASSET_TYPES.BONDS, label:ASSET_TYPES.BONDS},
-    {value: ASSET_TYPES.COMPANY_SHARES, label:ASSET_TYPES.COMPANY_SHARES},
-    {value: ASSET_TYPES.INVESTMENT_FUNDS, label:ASSET_TYPES.INVESTMENT_FUNDS},
-    {value: ASSET_TYPES.BROKERAGE_ACCOUNT, label:ASSET_TYPES.BROKERAGE_ACCOUNT},
-    {value: ASSET_TYPES.CRYPTOCURRENCY_SELF_CUSTODY, label:ASSET_TYPES.CRYPTOCURRENCY_SELF_CUSTODY},
-    {value: ASSET_TYPES.CRYPTOCURRENCY_ONLINE_EXCHANGE, label:ASSET_TYPES.CRYPTOCURRENCY_ONLINE_EXCHANGE},
-    {value: ASSET_TYPES.SAFETY_BOX, label:ASSET_TYPES.SAFETY_BOX},
-    {value: ASSET_TYPES.PHYSICAL_GOODS, label:ASSET_TYPES.PHYSICAL_GOODS},
-    {value: ASSET_TYPES.ACCOUNT_PASSWORDS, label:ASSET_TYPES.ACCOUNT_PASSWORDS},
-    {value: ASSET_TYPES.OTHERS_CUSTOM, label:ASSET_TYPES.OTHERS_CUSTOM},
+    { value: ASSET_TYPES.BANK_ACCOUNT, label: ASSET_TYPES.BANK_ACCOUNT },
+    { value: ASSET_TYPES.LIFE_INSURANCE, label: ASSET_TYPES.LIFE_INSURANCE },
+    { value: ASSET_TYPES.REAL_ESTATE, label: ASSET_TYPES.REAL_ESTATE },
+    {
+      value: ASSET_TYPES.RETIREMENT_ACCOUNT,
+      label: ASSET_TYPES.RETIREMENT_ACCOUNT,
+    },
+    { value: ASSET_TYPES.STOCKS, label: ASSET_TYPES.STOCKS },
+    { value: ASSET_TYPES.BONDS, label: ASSET_TYPES.BONDS },
+    { value: ASSET_TYPES.COMPANY_SHARES, label: ASSET_TYPES.COMPANY_SHARES },
+    {
+      value: ASSET_TYPES.INVESTMENT_FUNDS,
+      label: ASSET_TYPES.INVESTMENT_FUNDS,
+    },
+    {
+      value: ASSET_TYPES.BROKERAGE_ACCOUNT,
+      label: ASSET_TYPES.BROKERAGE_ACCOUNT,
+    },
+    {
+      value: ASSET_TYPES.CRYPTOCURRENCY_SELF_CUSTODY,
+      label: ASSET_TYPES.CRYPTOCURRENCY_SELF_CUSTODY,
+    },
+    {
+      value: ASSET_TYPES.CRYPTOCURRENCY_ONLINE_EXCHANGE,
+      label: ASSET_TYPES.CRYPTOCURRENCY_ONLINE_EXCHANGE,
+    },
+    { value: ASSET_TYPES.SAFETY_BOX, label: ASSET_TYPES.SAFETY_BOX },
+    { value: ASSET_TYPES.PHYSICAL_GOODS, label: ASSET_TYPES.PHYSICAL_GOODS },
+    {
+      value: ASSET_TYPES.ACCOUNT_PASSWORDS,
+      label: ASSET_TYPES.ACCOUNT_PASSWORDS,
+    },
+    { value: ASSET_TYPES.OTHERS_CUSTOM, label: ASSET_TYPES.OTHERS_CUSTOM },
   ]
   const AssetDetailsCardArr = [
     {
-      img: "../../../../../assets/images/dollar.svg",
+      img: dollar,
       title: "USD 126,000",
       subTitle: "Total Balance",
       element: (
@@ -130,18 +159,20 @@ export default function AssetsView() {
       ),
     },
     {
-      img: "../../../../../assets/images/bank-icon.svg",
+      img: bank,
       title: asset.Asset_array.length,
       subTitle: "Assets registered",
       element: (
         <img
-          src="../../../../../assets/images/add-icon.svg"
+          src={addIcon}
           className="cy-add-asset-button cursor-pointer"
           id="cy-add-asset-button"
-          onClick={() => {newAsset()}}
+          onClick={() => {
+            newAsset()
+          }}
         />
-        ),
-      },
+      ),
+    },
   ]
 
   const _submitStepZeroInformationModal = () => {
@@ -158,10 +189,10 @@ export default function AssetsView() {
   const _submitStepTwoModal = () => {
     // TODO validate fields
     const Data: {
-      id?:string,
-      category:string,
-      assignedBeneficiaryId:string,
-      data:string
+      id?: string
+      category: string
+      assignedBeneficiaryId: string
+      data: string
     } = {
       category: modalControl.category,
       assignedBeneficiaryId: modalControl.Beneficiary,
@@ -170,41 +201,43 @@ export default function AssetsView() {
     if (modalAction == "edit") {
       alert("Updating Asset")
       Data.id = selectedAsset
-      dispatch(updateAsset(Data)).unwrap()
-      .then((res) => {
-        dispatch(getAllAsset({})).then(() => {
-          closeModal()
+      dispatch(updateAsset(Data))
+        .unwrap()
+        .then((res) => {
+          dispatch(getAllAsset({})).then(() => {
+            closeModal()
+          })
         })
-      })
-      .catch(() => {})
-    }
-    else if (modalAction == "create") {
+        .catch(() => {})
+    } else if (modalAction == "create") {
       alert("Creating Asset")
-      dispatch(createAsset(Data)).unwrap()
-      .then((res) => {
-        dispatch(getAllAsset({})).then(() => {
-          setModalVisibility("Step-Success")
+      dispatch(createAsset(Data))
+        .unwrap()
+        .then((res) => {
+          dispatch(getAllAsset({})).then(() => {
+            setModalVisibility("Step-Success")
+          })
         })
-      })
-      .catch(() => {})
+        .catch(() => {})
     }
   }
-  const _submitSuccessModal = () => { // goto Dashboard
+  const _submitSuccessModal = () => {
+    // goto Dashboard
     setModalVisibility("none")
     navigate(ROUTE_CONSTANTS.DASHBOARD)
   }
   const _submitDeleteModal = () => {
-    dispatch(deleteAsset({id: selectedAsset}))
+    dispatch(deleteAsset({ id: selectedAsset }))
       .unwrap()
       .then((res) => {
         dispatch(getAllAsset({}))
-        .unwrap()
-        .then((res) => {
-          closeModal()
-        })
-        .catch(() => {
-          // TODO: show fallback page
-        })
+          .unwrap()
+          .then((res) => {
+            closeModal()
+          })
+          .catch(() => {
+            // TODO: show fallback page
+          })
       })
   }
 
@@ -222,14 +255,14 @@ export default function AssetsView() {
   }
   const editAsset = (assetId: string) => {
     dispatch(findAsset({ id: assetId }))
-    .unwrap()
-    .then((res) => {
-      isEditingAsset.current = true
-      setSelectedAsset(assetId)
-      setModalControl(JSON.parse(res.data.data.data))
-      setModalAction("edit")
-      setModalVisibility("Step-1")
-    })
+      .unwrap()
+      .then((res) => {
+        isEditingAsset.current = true
+        setSelectedAsset(assetId)
+        setModalControl(JSON.parse(res.data.data.data))
+        setModalAction("edit")
+        setModalVisibility("Step-1")
+      })
   }
   const destroyAsset = (assetId: string) => {
     setSelectedAsset(assetId)
@@ -238,94 +271,92 @@ export default function AssetsView() {
   }
   const viewAsset = (assetId: string) => {
     dispatch(findAsset({ id: assetId }))
-    .unwrap()
-    .then((res) => {
-      isEditingAsset.current = true
-      setSelectedAsset(assetId)
-      setModalControl(JSON.parse(res.data.data.data))
-      setModalAction("view")
-      setModalVisibility("Asset-Info")
-    })
+      .unwrap()
+      .then((res) => {
+        isEditingAsset.current = true
+        setSelectedAsset(assetId)
+        setModalControl(JSON.parse(res.data.data.data))
+        setModalAction("view")
+        setModalVisibility("Asset-Info")
+      })
   }
 
-    return (
-      <> 
-        <StepZeroInformationModal
-          openModal= {modalVisibility == "Step-0"}
-          closeModal= {closeModal}
-          closeModalOnOverlayClick= {false}
-          closeIconVisibility= {true}
-          _submitModal= {_submitStepZeroInformationModal}
-          action= {"string"}
+  return (
+    <>
+      <StepZeroInformationModal
+        openModal={modalVisibility == "Step-0"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        _submitModal={_submitStepZeroInformationModal}
+        action={"string"}
+      />
+      <StepOneModal
+        openModal={modalVisibility == "Step-1"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        action={modalAction}
+        _handleChange={_handleChange}
+        modalControl={modalControl}
+        assetTypes={assetTypes}
+        _submitModal={_submitStepOneModal}
+        disableAssetSelection={isEditingAsset.current}
+      />
+      <StepTwoModal
+        openModal={modalVisibility == "Step-2"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        action={modalAction}
+        _handleChange={_handleChange}
+        modalControl={modalControl}
+        _submitModal={_submitStepTwoModal}
+      />
+      <SuccessModal
+        openModal={modalVisibility == "Step-Success"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        registerAnotherAsset={newAsset}
+        gotoDashboard={_submitSuccessModal}
+      />
+      <ConfirmationModal
+        openModal={modalVisibility == "Step-delete"}
+        closeModalOnOverlayClick={false}
+        closeModal={closeModal}
+        _submitModal={_submitDeleteModal}
+        heading="Are you sure you want to delete this asset?"
+        body="This action cannot be undone."
+      />
+      <AssetDetail
+        openModal={modalVisibility == "Asset-Info"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        action={modalAction}
+        modalControl={modalControl}
+        delete={destroyAsset}
+        edit={editAsset}
+        assetId={selectedAsset}
+      />
+      {hasAssets == -1 ? (
+        <div>Loading Assets</div>
+      ) : hasAssets == 0 ? (
+        <AddAsset openStepZeroModal={addAsset} />
+      ) : (
+        <Assets
+          AssetDetailsCardArr={AssetDetailsCardArr}
+          assetCatagories={assetCatagories}
+          selected={selected}
+          setSelected={setSelected}
+          assetDetailsArr={assetDetails}
+          destroyAsset={destroyAsset}
+          editAsset={editAsset}
+          viewAsset={viewAsset}
         />
-        <StepOneModal
-          openModal= {modalVisibility == "Step-1"}
-          closeModal= {closeModal}
-          closeModalOnOverlayClick= {false}
-          closeIconVisibility= {true}
-          action= {modalAction}
-          _handleChange= {_handleChange}
-          modalControl= {modalControl}
-          assetTypes={assetTypes}
-          _submitModal= {_submitStepOneModal}
-          disableAssetSelection= {isEditingAsset.current}
-        />
-        <StepTwoModal
-          openModal= {modalVisibility == "Step-2"}
-          closeModal= {closeModal}
-          closeModalOnOverlayClick= {false}
-          closeIconVisibility= {true}
-          action= {modalAction}
-          _handleChange= {_handleChange}
-          modalControl= {modalControl}
-          _submitModal= {_submitStepTwoModal}
-        />
-        <SuccessModal
-          openModal= {modalVisibility == "Step-Success"}
-          closeModal= {closeModal}
-          closeModalOnOverlayClick= {false}
-          closeIconVisibility= {true}
-          registerAnotherAsset= {newAsset}
-          gotoDashboard= {_submitSuccessModal}
-        />
-        <ConfirmationModal
-          openModal={modalVisibility == "Step-delete"}
-          closeModalOnOverlayClick={false}
-          closeModal={closeModal}
-          _submitModal={_submitDeleteModal}
-          heading="Are you sure you want to delete this asset?"
-          body="This action cannot be undone."
-        />
-        <AssetDetail
-          openModal= {modalVisibility == "Asset-Info"}
-          closeModal= {closeModal}
-          closeModalOnOverlayClick= {false}
-          closeIconVisibility= {true}
-          action= {modalAction}
-          modalControl={modalControl}
-          delete= {destroyAsset}
-          edit= {editAsset}
-          assetId= {selectedAsset}
-        />
-        {hasAssets == -1 ? (
-          <div>Loading Assets</div>
-        ) : hasAssets == 0 ? (
-          <AddAsset
-            openStepZeroModal={addAsset}
-          />
-        ) : (
-          <Assets
-            AssetDetailsCardArr= {AssetDetailsCardArr}
-            assetCatagories= {assetCatagories}
-            selected= {selected} 
-            setSelected= {setSelected}
-            assetDetailsArr= {assetDetails}
-            destroyAsset={destroyAsset}
-            editAsset={editAsset}
-            viewAsset={viewAsset}
-          />
-        )}
-      </>
+      )}
+    </>
   )
 }
 
@@ -352,12 +383,22 @@ function AddAsset(_props: {
 }
 
 function Assets(_props: {
-  AssetDetailsCardArr: {img: string, title: string | number, subTitle: string, element: any}[]
+  AssetDetailsCardArr: {
+    img: string
+    title: string | number
+    subTitle: string
+    element: any
+  }[]
   assetCatagories: string[]
   selected: string
   setSelected: Function
   assetDetailsArr: {
-    data?: {category?: string, Beneficiary?: string, value?: string, id: string}
+    data?: {
+      category?: string
+      Beneficiary?: string
+      value?: string
+      id: string
+    }
     id?: string
     category?: string
   }[]
@@ -518,21 +559,27 @@ function AssetDetails(_props: {
             alt="view icon"
             className="cy-view-asset-btn cursor-pointer"
             id="cy-view-asset-btn"
-            onClick={() => {_props.viewAsset(_props.assetId)}}
+            onClick={() => {
+              _props.viewAsset(_props.assetId)
+            }}
           />
           <img
             src={edit}
             alt="edit icon"
             className="cy-edit-asset-btn cursor-pointer"
             id="cy-edit-asset-btn"
-            onClick={() => {_props.editAsset(_props.assetId)}}
+            onClick={() => {
+              _props.editAsset(_props.assetId)
+            }}
           />
           <img
             src={deleteIcon}
             alt="delete icon"
             className="cy-del-asset-btn cursor-pointer"
             id="cy-del-asset-btn"
-            onClick={() => {_props.destroyAsset(_props.assetId)}}
+            onClick={() => {
+              _props.destroyAsset(_props.assetId)
+            }}
           />
         </div>
       </div>

@@ -33,7 +33,7 @@ export default function DashboardView() {
       title: "Validators",
     },
     { img: heart, numberOfItems: "22 Days", title: "Total Assets" },
-    { img: privateKeysIcon, numberOfItems: "3", title: "Private keys" },
+    { img: privateKeysIcon, numberOfItems: "Medium", title: "Security Score" },
   ]
   const assets = [
     {
