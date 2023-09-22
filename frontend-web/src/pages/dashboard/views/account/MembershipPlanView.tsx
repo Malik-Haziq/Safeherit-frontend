@@ -3,7 +3,9 @@ import tick from "../../../../../assets/images/tick.svg"
 import creditCardImg from "../../../../../assets/images/credit-card.svg"
 import cancelIcon from "../../../../../assets/images/cancel.svg"
 
-export default function MembershipPlanView() {
+export default function MembershipPlanView(_props:{
+  hidePlanView: React.MouseEventHandler<HTMLButtonElement>
+}) {
   const pricingInfoArr = [
     { duration: "Monthly", price: "20", time: "month", currentPlan: true },
     { duration: "Yearly", price: "200", time: "month", currentPlan: false },
@@ -44,13 +46,15 @@ export default function MembershipPlanView() {
   ]
   return (
     <div className={styles.AppView}>
+      <button onClick={_props.hidePlanView} className=" mb-4 mt-2 p-2 hover:opacity-75 rounded-lg shadow-md my-[5px] w-[200px] mx-2">← Back to My Account</button>
       <main className=" p-6 rounded-lg shadow-md my-[22px] w-[1080px] mx-auto">
         <section className="mb-7">
           <h1 className="text-xl font-semibold mb-5">Your Membership Plan</h1>
           <div className="flex itmes-center justify-between gap-5">
-            {pricingInfoArr.map((info) => {
+            {pricingInfoArr.map((info, index) => {
               return (
                 <PricingPlan
+                  key={index}
                   duration={info.duration}
                   price={info.price}
                   time={info.time}
@@ -66,9 +70,9 @@ export default function MembershipPlanView() {
             Registered Payment Methods
           </h1>
           <div className="flex itmes-center gap-3">
-            {creditCardArr.map((card) => {
+            {creditCardArr.map((card, index) => {
               return (
-                <CreditCard cardImg={card.cardImg} cardNum={card.cardNum} />
+                <CreditCard key={index} cardImg={card.cardImg} cardNum={card.cardNum} />
               )
             })}
           </div>
@@ -82,9 +86,10 @@ export default function MembershipPlanView() {
               <h3>Amount</h3>
               <h3>Download</h3>
             </div>
-            {billingHistoryArr.map((bill) => {
+            {billingHistoryArr.map((bill, index) => {
               return (
                 <BillingHistory
+                  key={index}
                   date={bill.date}
                   details={bill.details}
                   amount={bill.amount}
