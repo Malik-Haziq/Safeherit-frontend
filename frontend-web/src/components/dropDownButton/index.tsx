@@ -39,9 +39,9 @@ export function DropDownButton(_props: any) {
         >
           <Menu.Items className="absolute right-0 mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="px-1 py-1">
-              {_props.options?.map((option: any) => {
+              {_props.options?.map((option: any, index: string) => {
                 return (
-                  <Menu.Item>
+                  <Menu.Item key={index}>
                     {({ active }) => (
                       <button
                         className={`${

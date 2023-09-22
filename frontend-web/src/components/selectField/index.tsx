@@ -18,6 +18,7 @@ import { useRef, useState } from "react"
  *
  * @property
  * @param _props.selectProps
+ * @param _props.selectProps.placeholder
  * @param _props.selectProps.isClearable
  * @param _props.selectProps.isMulti
  * @param _props.selectProps.isSearchable
@@ -72,7 +73,7 @@ const selectFieldTheme = (theme: any) => {
 export const SelectField = (_props: {
   selectContainer?: any
   data: any
-  value: any
+  value?: any
   selectProps?: any
   setSelectedValue: any
   hasRightIcon: boolean
@@ -89,7 +90,9 @@ export const SelectField = (_props: {
     if (!openMenu) {
       selectRef?.current?.focus()
     }
-    setOpenMenu((val) => !val)
+    if (!_props.selectProps.isDisabled) {
+      setOpenMenu((val) => !val)
+    }
   }
 
   return (

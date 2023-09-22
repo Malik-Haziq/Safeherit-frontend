@@ -9,91 +9,80 @@ import deleteIcon from "../../../../../assets/images/delete.svg"
 import arrowDown from "../../../../../assets/images/arrow-down.svg"
 import AddAssetImg from "../../../../../assets/images/beneficiaryScreen.svg"
 import user from "../../../../../assets/images/UserIcon.png"
-import { MouseEvent, useCallback, useState } from "react"
+
+import { useEffect, useCallback, useState, useRef } from "react"
 import {
   StepZeroInformationModal,
   SuccessModal,
   StepOneModal,
   StepTwoModal,
+  AssetDetail,
 } from "./modal_assets"
+import { ASSET_TYPES, ROUTE_CONSTANTS } from "../../../../common"
+
+import { findAsset, getAllAsset, deleteAsset, updateAsset, createAsset } from "../../../../redux/actions/AssetAction"
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
+import { useNavigate } from "react-router-dom"
 import { DropDownButton } from "../../../../components/dropDownButton"
 import { ConfirmationModal } from "../../../../components/modal/ConfirmationModal"
+import { assetData } from "./data"
 
-function AddAsset(_props: {
-  // openStepZeroModal: React.MouseEventHandler<HTMLButtonElement>
-}) {
-  return (
-    <div className="h-[calc(100vh-83px)] p-7">
-      <main className="flex flex-col items-center justify-center shadow-xl h-full rounded-2xl">
-        <img src={AddAssetImg} className="mb-10" alt="validator screen image" />
-        <h2 className="text-[#00192B] text-xl font-bold mb-2">No Assets</h2>
-        <p className="text-[#868686] mb-10">
-          There is no any assets in your Board please create assets.
-        </p>
-        <button
-          onClick={() => {}}
-          className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
-        >
-          Create Assets
-        </button>
-      </main>
-    </div>
-  )
+interface ModalControl {
+  [key: string]: any; // This index signature allows string keys with any value
 }
 
+const initialState: ModalControl = {}
+
 export default function AssetsView() {
-  const initialState = {
-    bankAccount: "",
-    label: "",
-    bankName: "",
-    country: "",
-    accountNumber: "",
-    currency: "",
-    balance: "",
-    dabitCardPin: "",
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const asset = useAppSelector(state => state.asset)
+
+  const [hasAssets, setHasAssets] = useState(-1)
+  const [modalControl, setModalControl] = useState(initialState)
+  const [modalVisibility, setModalVisibility] = useState("none")
+  const isEditingAsset = useRef(false)
+  const [imageUpload, setImageUpload] = useState("")
+  const [modalAction, setModalAction] = useState("")
+  const [selected, setSelected] = useState("")
+  const [assetDetails, setAssetDetails] = useState([{}])
+  const [selectedAsset, setSelectedAsset] = useState("")
+
+  useEffect(() => { // reset values incase of creating an asset
+    if (!isEditingAsset.current) {
+      setModalControl({ category: modalControl.category })
+    }
+  }, [modalControl.category])
+
+  useEffect(() => { // listen to asset_array changes
+    updateAssetsArrayCount()
+    setAssetDetails(asset.Asset_array)
+  }, [asset.Asset_array])
+
+  const updateAssetsArrayCount = () => {
+    if (asset.Asset_array && asset.Asset_array.length > 0) {
+      setHasAssets(1)
+    } else {
+      setHasAssets(0)
+    }
   }
+  useEffect(() => {  // Get All assets on initial load
+    dispatch(getAllAsset({}))
+      .unwrap()
+      .catch(() => {
+        // TODO: show fallback page
+      })
+  }, [])
 
-  const initialStateOfBankingCredentials = {
-    website: "",
-    login: "",
-    password: "",
-    otp: "",
-    beneficiary: "",
-    notes: "",
-  }
+  const closeModal = useCallback(() => { // close modal
+    setModalControl(initialState)
+    setModalVisibility("none")
+    setImageUpload("")
+    setSelectedAsset("")
+    isEditingAsset.current = false
+  }, [])
 
-  const assetDetailsArr = [
-    {
-      img: "../../../../../assets/images/real-estate.svg",
-      name: "Commercial real estate",
-      value: "42,000",
-      beneficiaryImg: "../../../../../assets/images/real-estate.svg",
-      beneficiaryName: "John Docker",
-    },
-    {
-      img: "../../../../../assets/images/real-estate.svg",
-      name: "real estate",
-      value: "39,000",
-      beneficiaryImg: "../../../../../assets/images/real-estate.svg",
-      beneficiaryName: "Jane Cooper",
-    },
-    {
-      img: "../../../../../assets/images/real-estate.svg",
-      name: "Mobile",
-      value: "67,000",
-      beneficiaryImg: "../../../../../assets/images/real-estate.svg",
-      beneficiaryName: "Thomas Shelby",
-    },
-    {
-      img: "../../../../../assets/images/real-estate.svg",
-      name: "Cash",
-      value: "88,000",
-      beneficiaryImg: "../../../../../assets/images/real-estate.svg",
-      beneficiaryName: "Ben Decker",
-    },
-  ]
-
-  const assetCatagories = [
+  const assetCatagories = [  
     "All",
     "Bank",
     "Stock",
@@ -101,7 +90,23 @@ export default function AssetsView() {
     "Life Insurance",
     "Cryptocurrency",
   ]
-
+  const assetTypes = [
+    {value: ASSET_TYPES.BANK_ACCOUNT, label: ASSET_TYPES.BANK_ACCOUNT},
+    {value: ASSET_TYPES.LIFE_INSURANCE, label: ASSET_TYPES.LIFE_INSURANCE},
+    {value: ASSET_TYPES.REAL_ESTATE, label: ASSET_TYPES.REAL_ESTATE},
+    {value: ASSET_TYPES.RETIREMENT_ACCOUNT, label: ASSET_TYPES.RETIREMENT_ACCOUNT},
+    {value: ASSET_TYPES.STOCKS, label:ASSET_TYPES.STOCKS},
+    {value: ASSET_TYPES.BONDS, label:ASSET_TYPES.BONDS},
+    {value: ASSET_TYPES.COMPANY_SHARES, label:ASSET_TYPES.COMPANY_SHARES},
+    {value: ASSET_TYPES.INVESTMENT_FUNDS, label:ASSET_TYPES.INVESTMENT_FUNDS},
+    {value: ASSET_TYPES.BROKERAGE_ACCOUNT, label:ASSET_TYPES.BROKERAGE_ACCOUNT},
+    {value: ASSET_TYPES.CRYPTOCURRENCY_SELF_CUSTODY, label:ASSET_TYPES.CRYPTOCURRENCY_SELF_CUSTODY},
+    {value: ASSET_TYPES.CRYPTOCURRENCY_ONLINE_EXCHANGE, label:ASSET_TYPES.CRYPTOCURRENCY_ONLINE_EXCHANGE},
+    {value: ASSET_TYPES.SAFETY_BOX, label:ASSET_TYPES.SAFETY_BOX},
+    {value: ASSET_TYPES.PHYSICAL_GOODS, label:ASSET_TYPES.PHYSICAL_GOODS},
+    {value: ASSET_TYPES.ACCOUNT_PASSWORDS, label:ASSET_TYPES.ACCOUNT_PASSWORDS},
+    {value: ASSET_TYPES.OTHERS_CUSTOM, label:ASSET_TYPES.OTHERS_CUSTOM},
+  ]
   const AssetDetailsCardArr = [
     {
       img: "../../../../../assets/images/dollar.svg",
@@ -133,19 +138,241 @@ export default function AssetsView() {
           src="../../../../../assets/images/add-icon.svg"
           className="cy-add-asset-button cursor-pointer"
           id="cy-add-asset-button"
+          onClick={() => {newAsset()}}
         />
-      ),
-    },
+        ),
+      },
   ]
-  const [selected, setSelected] = useState(false)
 
+  const _submitStepZeroInformationModal = () => {
+    newAsset()
+  }
+  const _submitStepOneModal = () => {
+    // TODO validate fields
+    if (!modalControl.category) {
+      alert("Please select an Asset category")
+    } else {
+      setModalVisibility("Step-2")
+    }
+  }
+  const _submitStepTwoModal = () => {
+    // TODO validate fields
+    const Data: {
+      id?:string,
+      category:string,
+      assignedBeneficiaryId:string,
+      data:string
+    } = {
+      category: modalControl.category,
+      assignedBeneficiaryId: modalControl.Beneficiary,
+      data: JSON.stringify(modalControl),
+    }
+    if (modalAction == "edit") {
+      alert("Updating Asset")
+      Data.id = selectedAsset
+      dispatch(updateAsset(Data)).unwrap()
+      .then((res) => {
+        dispatch(getAllAsset({})).then(() => {
+          closeModal()
+        })
+      })
+      .catch(() => {})
+    }
+    else if (modalAction == "create") {
+      alert("Creating Asset")
+      dispatch(createAsset(Data)).unwrap()
+      .then((res) => {
+        dispatch(getAllAsset({})).then(() => {
+          setModalVisibility("Step-Success")
+        })
+      })
+      .catch(() => {})
+    }
+  }
+  const _submitSuccessModal = () => { // goto Dashboard
+    setModalVisibility("none")
+    navigate(ROUTE_CONSTANTS.DASHBOARD)
+  }
+  const _submitDeleteModal = () => {
+    dispatch(deleteAsset({id: selectedAsset}))
+      .unwrap()
+      .then((res) => {
+        dispatch(getAllAsset({}))
+        .unwrap()
+        .then((res) => {
+          closeModal()
+        })
+        .catch(() => {
+          // TODO: show fallback page
+        })
+      })
+  }
+
+  const _handleChange = (event: { target: { name: any; value: any } }) => {
+    const { name, value } = event.target
+    setModalControl({ ...modalControl, [name]: value })
+  }
+  const newAsset = () => {
+    setModalAction("create")
+    setModalControl(initialState)
+    setModalVisibility("Step-1")
+  }
+  const addAsset = () => {
+    setModalVisibility("Step-0")
+  }
+  const editAsset = (assetId: string) => {
+    dispatch(findAsset({ id: assetId }))
+    .unwrap()
+    .then((res) => {
+      isEditingAsset.current = true
+      setSelectedAsset(assetId)
+      setModalControl(JSON.parse(res.data.data.data))
+      setModalAction("edit")
+      setModalVisibility("Step-1")
+    })
+  }
+  const destroyAsset = (assetId: string) => {
+    setSelectedAsset(assetId)
+    setModalAction("delete")
+    setModalVisibility("Step-delete")
+  }
+  const viewAsset = (assetId: string) => {
+    dispatch(findAsset({ id: assetId }))
+    .unwrap()
+    .then((res) => {
+      isEditingAsset.current = true
+      setSelectedAsset(assetId)
+      setModalControl(JSON.parse(res.data.data.data))
+      setModalAction("view")
+      setModalVisibility("Asset-Info")
+    })
+  }
+
+    return (
+      <> 
+        <StepZeroInformationModal
+          openModal= {modalVisibility == "Step-0"}
+          closeModal= {closeModal}
+          closeModalOnOverlayClick= {false}
+          closeIconVisibility= {true}
+          _submitModal= {_submitStepZeroInformationModal}
+          action= {"string"}
+        />
+        <StepOneModal
+          openModal= {modalVisibility == "Step-1"}
+          closeModal= {closeModal}
+          closeModalOnOverlayClick= {false}
+          closeIconVisibility= {true}
+          action= {modalAction}
+          _handleChange= {_handleChange}
+          modalControl= {modalControl}
+          assetTypes={assetTypes}
+          _submitModal= {_submitStepOneModal}
+          disableAssetSelection= {isEditingAsset.current}
+        />
+        <StepTwoModal
+          openModal= {modalVisibility == "Step-2"}
+          closeModal= {closeModal}
+          closeModalOnOverlayClick= {false}
+          closeIconVisibility= {true}
+          action= {modalAction}
+          _handleChange= {_handleChange}
+          modalControl= {modalControl}
+          _submitModal= {_submitStepTwoModal}
+        />
+        <SuccessModal
+          openModal= {modalVisibility == "Step-Success"}
+          closeModal= {closeModal}
+          closeModalOnOverlayClick= {false}
+          closeIconVisibility= {true}
+          registerAnotherAsset= {newAsset}
+          gotoDashboard= {_submitSuccessModal}
+        />
+        <ConfirmationModal
+          openModal={modalVisibility == "Step-delete"}
+          closeModalOnOverlayClick={false}
+          closeModal={closeModal}
+          _submitModal={_submitDeleteModal}
+          heading="Are you sure you want to delete this asset?"
+          body="This action cannot be undone."
+        />
+        <AssetDetail
+          openModal= {modalVisibility == "Asset-Info"}
+          closeModal= {closeModal}
+          closeModalOnOverlayClick= {false}
+          closeIconVisibility= {true}
+          action= {modalAction}
+          modalControl={modalControl}
+          delete= {destroyAsset}
+          edit= {editAsset}
+          assetId= {selectedAsset}
+        />
+        {hasAssets == -1 ? (
+          <div>Loading Assets</div>
+        ) : hasAssets == 0 ? (
+          <AddAsset
+            openStepZeroModal={addAsset}
+          />
+        ) : (
+          <Assets
+            AssetDetailsCardArr= {AssetDetailsCardArr}
+            assetCatagories= {assetCatagories}
+            selected= {selected} 
+            setSelected= {setSelected}
+            assetDetailsArr= {assetDetails}
+            destroyAsset={destroyAsset}
+            editAsset={editAsset}
+            viewAsset={viewAsset}
+          />
+        )}
+      </>
+  )
+}
+
+function AddAsset(_props: {
+  openStepZeroModal: React.MouseEventHandler<HTMLButtonElement>
+}) {
+  return (
+    <div className="h-[calc(100vh-83px)] p-7">
+      <main className="flex flex-col items-center justify-center shadow-xl h-full rounded-2xl">
+        <img src={AddAssetImg} className="mb-10" alt="validator screen image" />
+        <h2 className="text-[#00192B] text-xl font-bold mb-2">No Assets</h2>
+        <p className="text-[#868686] mb-10">
+          There is no any assets in your Board please create assets.
+        </p>
+        <button
+          onClick={_props.openStepZeroModal}
+          className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
+        >
+          Create Assets
+        </button>
+      </main>
+    </div>
+  )
+}
+
+function Assets(_props: {
+  AssetDetailsCardArr: {img: string, title: string, subTitle: string, element: any}[]
+  assetCatagories: string[]
+  selected: string
+  setSelected: Function
+  assetDetailsArr: {
+    data?: {category?: string, Beneficiary?: string, value?: string, id: string}
+    id?: string
+    category?: string
+  }[]
+  destroyAsset: Function
+  editAsset: Function
+  viewAsset: Function
+}) {
   return (
     <div className={styles.AppView}>
       <section className="px-7 pt-4 mx-auto">
         <section className="flex items-center gap-4 mb-8">
-          {AssetDetailsCardArr.map((data) => {
+          {_props.AssetDetailsCardArr.map((data, index) => {
             return (
               <AssetDetailsCard
+                key={index}
                 img={data.img}
                 title={data.title}
                 subtitle={data.subTitle}
@@ -162,12 +389,13 @@ export default function AssetsView() {
                 <div className="check_mark"></div>
               </label>
             </div>
-            {assetCatagories.map((category) => (
+            {_props.assetCatagories.map((category, index) => (
               <AssetCategory
+                key={index}
                 category={category}
-                selected={selected}
-                setSelected={setSelected}
-                onClick={() => {}}
+                selected={_props.selected}
+                setSelected={_props.setSelected}
+                // onClick={() => {}}
               />
             ))}
           </div>
@@ -184,14 +412,19 @@ export default function AssetsView() {
                 <p className="font-medium text-sm uppercase">Action</p>
               </div>
             </div>
-            {assetDetailsArr.map((asset) => {
+            {_props.assetDetailsArr.map((asset, index) => {
               return (
                 <AssetDetails
-                  assetName={asset.name}
-                  assetImg={asset.img}
-                  assetValue={asset.value}
-                  beneficiaryImg={asset.beneficiaryImg}
-                  beneficiaryName={asset.beneficiaryName}
+                  key={index}
+                  assetId={asset?.id || ""}
+                  assetName={asset?.category || ""}
+                  assetImg={realEstate}
+                  assetValue={asset?.data?.value || "No value found"}
+                  beneficiaryImg={user}
+                  beneficiaryName={`id: ${asset?.data?.Beneficiary}`}
+                  destroyAsset={_props.destroyAsset}
+                  editAsset={_props.editAsset}
+                  viewAsset={_props.viewAsset}
                 />
               )
             })}
@@ -226,7 +459,7 @@ function AssetDetailsCard(_props: {
 
 function AssetCategory(_props: {
   category: string
-  onClick: Function
+  // onClick: Function
   selected: any
   setSelected: any
 }) {
@@ -248,10 +481,14 @@ function AssetCategory(_props: {
 
 function AssetDetails(_props: {
   assetName: string
+  assetId: string
   assetImg: any
   assetValue: any
   beneficiaryImg: any
   beneficiaryName: string
+  destroyAsset: Function
+  editAsset: Function
+  viewAsset: Function
 }) {
   return (
     <div className="flex justify-between gap-24 px-5 py-3">
@@ -279,20 +516,23 @@ function AssetDetails(_props: {
           <img
             src={eye}
             alt="view icon"
-            className="cy-view-asset-btn"
+            className="cy-view-asset-btn cursor-pointer"
             id="cy-view-asset-btn"
+            onClick={() => {_props.viewAsset(_props.assetId)}}
           />
           <img
             src={edit}
             alt="edit icon"
-            className="cy-edit-asset-btn"
+            className="cy-edit-asset-btn cursor-pointer"
             id="cy-edit-asset-btn"
+            onClick={() => {_props.editAsset(_props.assetId)}}
           />
           <img
             src={deleteIcon}
             alt="delete icon"
-            className="cy-del-asset-btn"
+            className="cy-del-asset-btn cursor-pointer"
             id="cy-del-asset-btn"
+            onClick={() => {_props.destroyAsset(_props.assetId)}}
           />
         </div>
       </div>

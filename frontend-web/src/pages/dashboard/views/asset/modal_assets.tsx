@@ -4,6 +4,12 @@ import stepOne from "../../../../../assets/images/step-1.svg"
 import stepTwo from "../../../../../assets/images/step-2.svg"
 import uploadVideoIcon from "../../../../../assets/images/upload-video.svg"
 import arrowDown from "../../../../../assets/images/arrow-down.svg"
+import { assetData } from "./data"
+import { useEffect, useState } from "react"
+
+const selectFieldStyles = "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]"
+const selectFieldRightIconStyles = "absolute right-4 top-4 cursor-pointer"
+const textInputFieldStyles = "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
@@ -64,6 +70,66 @@ export function StepZeroInformationModal(_props: {
     />
   )
 }
+interface ModalControl {
+  [key: string]: any; // This index signature allows string keys with any value
+}
+
+const generateSelectFieldProps = (
+  assetTypes: any,
+  placeholder: string,
+  value: any,
+  name: string,
+  _handleChange: Function
+) => {
+  return {
+    type: "selectView",
+    props: {
+      data: assetTypes,
+      value: value,
+      selectProps: {
+        placeholder: placeholder
+      },
+      setSelectedValue: (value: any) => {
+        const customEvent = {
+          target: {
+            name: name,
+            value: value.value,
+          },
+        };
+        _handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+      },
+      hasRightIcon: true,
+      rightIcon: arrowDown,
+      rightIconAlt: "rightIcon",
+      selectFieldWidth: 490,
+      selectContainer: "mx-7 mb-4 relative",
+      selectFieldStyles: selectFieldStyles,
+      rightIconStyles: selectFieldRightIconStyles,
+    },
+  }
+}
+
+const generateTextInputFieldProps = (
+  name: string,
+  placeholder: string,
+  value: any,
+  _handleChange: Function
+) => {
+  return {
+    type: "inputView",
+    props: {
+      name: name,
+      type: "text",
+      placeholder: placeholder,
+      value: value,
+      _handleChange: _handleChange,
+      required: false,
+      inputStyles: textInputFieldStyles,
+      inputContainerStyles: "mx-7 mb-4",
+      hasRightIcon: false,
+    },
+  }
+}
 
 export function StepOneModal(_props: {
   openModal: boolean
@@ -72,18 +138,23 @@ export function StepOneModal(_props: {
   closeIconVisibility: boolean
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
-  modalControl: {
-    bankAccount: string
-    label: string
-    bankName: string
-    country: string
-    accountNumber: any
-    currency: any
-    balance: any
-    dabitCardPin: any
-  }
+  modalControl: ModalControl
+  assetTypes: {value:string, label:string}[]
   _submitModal: Function
+  disableAssetSelection: boolean
 }) {
+  const factoryElements = assetData[_props.modalControl?.category]?.[0];
+  const conditionalElements = factoryElements
+  ? factoryElements.map((Asset) => {
+      if (Asset.type === "Text") {
+        return generateTextInputFieldProps(Asset.name, Asset.placeholder, _props.modalControl?.[Asset?.name] ? _props.modalControl?.[`${Asset?.name}`] : "", _props._handleChange);
+      } else if (Asset.type === "Select") {
+        return generateSelectFieldProps(Asset.value, Asset.placeholder, _props.modalControl?.[Asset?.name] ? {value: _props.modalControl?.[`${Asset?.name}`], label: _props.modalControl?.[`${Asset?.name}`]} : "", Asset.name, _props._handleChange)
+      }
+      return null; // Return null for other types or handle as needed
+    })
+  : [];
+  
   return (
     <Modal
       openModal={_props.openModal}
@@ -95,7 +166,7 @@ export function StepOneModal(_props: {
         {
           type: "iconView",
           props: {
-            image: _props.action == "create" ? stepTwo : stepOne,
+            image: _props.action == stepOne,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
@@ -103,142 +174,74 @@ export function StepOneModal(_props: {
         {
           type: "selectView",
           props: {
-            data: [
-              { value: "chocolate", label: "Chocolate" },
-              { value: "strawberry", label: "Strawberry" },
-              { value: "vanilla", label: "Vanilla" },
-            ],
-            value: { value: "Bank Account", label: "Back Account" },
-            defaultValue: "Bacnk",
-            selectProps: {},
-            setSelectedValue: () => {},
+            data: _props.assetTypes,
+            value: _props.modalControl.category? {value: _props.modalControl.category, label: _props.modalControl.category} : "",
+            selectProps: {
+              placeholder: "Select Asset Type",
+              isDisabled: _props.disableAssetSelection
+            },
+            setSelectedValue: (value: any) => {
+              const customEvent = {
+                target: {
+                  name: "category",
+                  value: value.value,
+                },
+              };
+              _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+            },
             hasRightIcon: true,
             rightIcon: arrowDown,
             rightIconAlt: "rightIcon",
             selectFieldWidth: 490,
             selectContainer: "mx-7 mb-4 relative",
-            selectFieldStyles:
-              "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]",
-            rightIconStyles: "absolute right-4 top-4 cursor-pointer",
+            selectFieldStyles: selectFieldStyles,
+            rightIconStyles: selectFieldRightIconStyles,
           },
         },
+        ...conditionalElements,
+        !_props?.modalControl?.category &&
         {
           type: "inputView",
           props: {
-            name: "label",
+            name: "dummy",
             type: "text",
             placeholder: "Label  (ex: My main bank)",
-            value: _props.modalControl.label,
-            _handleChange: _props._handleChange,
+            value: "",
+            _handleChange: () => {},
             required: false,
             inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
             inputContainerStyles: "mx-7 mb-4",
             hasRightIcon: false,
           },
         },
+        !_props?.modalControl?.category &&
         {
           type: "inputView",
           props: {
-            name: "bank_name",
+            name: "dummy",
             type: "text",
             placeholder: "Bank Name",
-            value: _props.modalControl.bankName,
-            _handleChange: _props._handleChange,
+            value: "",
+            _handleChange: () => {},
             required: false,
             inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
             inputContainerStyles: "mx-7 mb-4",
+            hasRightIcon: false,
           },
         },
-        {
-          type: "selectView",
-          props: {
-            data: [
-              { value: "chocolate", label: "Chocolate" },
-              { value: "strawberry", label: "Strawberry" },
-              { value: "vanilla", label: "Vanilla" },
-            ],
-            value: { value: "Country", label: "Country" },
-            defaultValue: "Bacnk",
-            selectProps: {},
-            setSelectedValue: () => {},
-            hasRightIcon: true,
-            rightIcon: arrowDown,
-            rightIconAlt: "rightIcon",
-            selectFieldWidth: 490,
-            selectContainer: "mx-7 mb-4 relative",
-            selectFieldStyles:
-              "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]",
-            rightIconStyles: "absolute right-4 top-4 cursor-pointer",
-          },
-        },
+        !_props?.modalControl?.category && 
         {
           type: "inputView",
           props: {
-            name: "account_number",
+            name: "dummy",
             type: "text",
             placeholder: "Account Number",
-            value: _props.modalControl.accountNumber,
-            _handleChange: _props._handleChange,
+            value: "",
+            _handleChange: () => {},
             required: false,
             inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
             inputContainerStyles: "mx-7 mb-4",
-          },
-        },
-        {
-          type: "multiFields",
-          containerStyles: "flex gap-4 justify-center",
-          props: {
-            fields: [
-              {
-                type: "selectView",
-                props: {
-                  data: [
-                    { value: "chocolate", label: "Chocolate" },
-                    { value: "strawberry", label: "Strawberry" },
-                    { value: "vanilla", label: "Vanilla" },
-                  ],
-                  value: { value: "Bank Account", label: "Back Account" },
-                  defaultValue: "Bacnk",
-                  selectProps: {},
-                  setSelectedValue: () => {},
-                  hasRightIcon: true,
-                  rightIcon: arrowDown,
-                  rightIconAlt: "rightIcon",
-                  selectFieldWidth: 490,
-                  selectContainer: " mb-4 relative",
-                  selectFieldStyles:
-                    "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] min-w-[237px] ",
-                  rightIconStyles: "absolute right-4 top-4 cursor-pointer",
-                },
-              },
-              {
-                type: "inputView",
-                props: {
-                  name: "debit_card_pin",
-                  type: "text",
-                  placeholder: "Balance",
-                  value: _props.modalControl.dabitCardPin,
-                  _handleChange: _props._handleChange,
-                  required: false,
-                  inputStyles:
-                    "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 w-[237px]",
-                  inputContainerStyles: "mb-3",
-                },
-              },
-            ],
-          },
-        },
-        {
-          type: "inputView",
-          props: {
-            name: "debit_card_pin",
-            type: "text",
-            placeholder: "Dabit Card PIN",
-            value: _props.modalControl.dabitCardPin,
-            _handleChange: _props._handleChange,
-            required: false,
-            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
-            inputContainerStyles: "mx-7 mb-10",
+            hasRightIcon: false,
           },
         },
         {
@@ -247,7 +250,7 @@ export function StepOneModal(_props: {
             title: _props.action == "create" ? "Next" : "Save & Next",
             onclick: _props._submitModal,
             buttonStyle: "",
-            buttonContainer: "mx-48 mb-10",
+            buttonContainer: "mx-48 mb-10 mt-10",
           },
         },
       ]}
@@ -262,16 +265,21 @@ export function StepTwoModal(_props: {
   closeIconVisibility: boolean
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
-  modalControl: {
-    website: string
-    login: string
-    password: string
-    otp: string
-    beneficiary: string
-    notes: string
-  }
+  modalControl: ModalControl
   _submitModal: Function
 }) {
+  const factoryElements = assetData[_props.modalControl?.category]?.[1];
+
+  const conditionalElements = factoryElements
+  ? factoryElements.map((Asset) => {
+      if (Asset.type === "Text") {
+        return generateTextInputFieldProps(Asset.name, Asset.placeholder, _props.modalControl?.[Asset?.name] ? _props.modalControl?.[`${Asset?.name}`] : "", _props._handleChange);
+      } else if (Asset.type === "Select") {
+        return generateSelectFieldProps(Asset.value, Asset.placeholder, _props.modalControl?.[Asset?.name] ? {value: _props.modalControl?.[`${Asset?.name}`], label: _props.modalControl?.[`${Asset?.name}`]} : "", Asset.name, _props._handleChange)
+      }
+      return null; // Return null for other types or handle as needed
+    })
+  : [];
   return (
     <Modal
       openModal={_props.openModal}
@@ -283,106 +291,19 @@ export function StepTwoModal(_props: {
         {
           type: "iconView",
           props: {
-            image: _props.action == "create" ? stepTwo : stepOne,
+            image: stepTwo,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
           },
         },
-        {
-          type: "textView",
-          props: {
-            text: "Online banking credentials",
-            textStyles: "text=[#00192B] font-semibold pl-7 mb-3",
-          },
-        },
-        {
-          type: "inputView",
-          props: {
-            name: "webstie",
-            type: "text",
-            placeholder: "Website",
-            value: _props.modalControl.website,
-            _handleChange: _props._handleChange,
-            required: false,
-            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
-            inputContainerStyles: "mx-7 mb-4",
-          },
-        },
-        {
-          type: "inputView",
-          props: {
-            name: "login",
-            type: "text",
-            placeholder: "Login",
-            value: _props.modalControl.login,
-            _handleChange: _props._handleChange,
-            required: false,
-            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
-            inputContainerStyles: "mx-7 mb-4",
-            hasRightIcon: false,
-          },
-        },
-        {
-          type: "inputView",
-          props: {
-            name: "password",
-            type: "password",
-            placeholder: "Password",
-            value: _props.modalControl.password,
-            _handleChange: _props._handleChange,
-            required: false,
-            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
-            inputContainerStyles: "mx-7 mb-4",
-          },
-        },
-        {
-          type: "inputView",
-          props: {
-            name: "otp",
-            type: "text",
-            placeholder: "OTP",
-            value: _props.modalControl.otp,
-            _handleChange: _props._handleChange,
-            required: false,
-            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
-            inputContainerStyles: "mx-7 mb-4",
-          },
-        },
-        {
-          type: "selectView",
-          props: {
-            data: [
-              { value: "chocolate", label: "Chocolate" },
-              { value: "strawberry", label: "Strawberry" },
-              { value: "vanilla", label: "Vanilla" },
-            ],
-            value: { value: "Beneficiary", label: "Beneficiary" },
-            defaultValue: "Bacnk",
-            selectProps: {},
-            setSelectedValue: () => {},
-            hasRightIcon: true,
-            rightIcon: arrowDown,
-            rightIconAlt: "rightIcon",
-            selectFieldWidth: 490,
-            selectContainer: "mx-7 mb-4 relative",
-            selectFieldStyles:
-              "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]",
-            rightIconStyles: "absolute right-4 top-4 cursor-pointer",
-          },
-        },
-        {
-          type: "inputView",
-          props: {
-            name: "notes",
-            type: "tel",
-            placeholder: "Notes",
-            value: _props.modalControl.notes,
-            _handleChange: _props._handleChange,
-            required: false,
-            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
-            inputContainerStyles: "mx-7 mb-4",
-          },
-        },
+        // {
+        //   type: "textView",
+        //   props: {
+        //     text: "Online banking credentials",
+        //     textStyles: "text=[#00192B] font-semibold pl-7 mb-3",
+        //   },
+        // },
+        ...conditionalElements,
         {
           type: "customView",
           props: {
@@ -429,10 +350,8 @@ export function SuccessModal(_props: {
   closeModal: any
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
-  action: string
   registerAnotherAsset: React.MouseEventHandler<HTMLButtonElement>
   gotoDashboard: React.MouseEventHandler<HTMLButtonElement>
-  _submitModal: React.MouseEventHandler<HTMLButtonElement>
 }) {
   return (
     <Modal
@@ -490,6 +409,68 @@ export function SuccessModal(_props: {
                     </button>
                   </div>
                 </div>
+              )
+            },
+          },
+        },
+      ]}
+    />
+  )
+}
+
+export function AssetDetail(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  closeIconVisibility: boolean
+  action: string
+  modalControl: ModalControl
+  delete: Function
+  edit: Function
+  assetId: string
+}) {
+  const headings = Object.keys(_props.modalControl)
+  const values = Object.values(_props.modalControl)
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={_props.action == "create" ? "Create Assets" : "Edit Assets"}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "customView",
+          props: {
+            customViewContainer: "",
+            CustomView: () => {
+              return (
+                <section>
+                  <div className="pt-6">
+                    {
+                      headings.map((heading, index) => {
+                        return (
+                          <div key={index} className="flex gap-6 items-center pb-6">
+                            <h2 className="text-[#292929] font-sm font-medium basis-2/5 text-right">
+                              {heading}
+                            </h2>
+                            <p className="text-[#585858] basis-3/5">
+                              {values[index]}
+                            </p>
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                  <div className="flex justify-end gap-2 w-full py-4 px-5 border-t-2 border-[#F0F0F0]">
+                    <button onClick={() => {_props.edit(_props.assetId)}} className="primary-btn rounded-lg font-sm font-medium text-[#414141] bg-white border-[1px] shadow-none border-[#DBDBDB]">
+                      Edit
+                    </button>
+                    <button onClick={() => {_props.delete(_props.assetId)}} className="primary-btn rounded-lg font-sm font-medium">
+                      Delete
+                    </button>
+                  </div>
+                </section>
               )
             },
           },
