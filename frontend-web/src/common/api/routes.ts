@@ -7,3 +7,4 @@ export const BENEFICIARIES = "/api-beneficiary"
 export const ASSETS = "/api-asset"
 
 export const GET_DATA = "/api-dashboard/data"
+export const GET_USER = "/api-auth"

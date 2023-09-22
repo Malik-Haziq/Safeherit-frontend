@@ -3,6 +3,7 @@ import userImg from "../../../assets/images/user.svg"
 import arrowDown from "../../../assets/images/chevron-down.svg"
 import { DropDownButton } from "../../components"
 import { Notifications } from "../../../src/components/notificationDropDown"
+import { useAppSelector } from "../../redux/hooks"
 
 type NavBarItem = {
   screen: string
@@ -14,7 +15,8 @@ export default function DashboardNavbar(_props: {
   navBarHeadings: Record<string, NavBarItem>
   currentPath: any
 }) {
-  const USER_NAME = window.localStorage.getItem("userName") || "Profile"
+  const user = useAppSelector(state => state.user)
+  const USER_NAME =  user.displayName || "Profile"
 
   return (
     <div className="h-[83px] p-2 sm:p-7 flex justify-between items-center shadow-sm min-w-[1200px] max-w-[100vw]">

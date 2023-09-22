@@ -7,52 +7,120 @@ import viewIcon from "../../../../../assets/images/view-icon.svg"
 import languageIcon from "../../../../../assets/images/language.svg"
 import warningIcon from "../../../../../assets/images/warning.svg"
 import MembershipPlanView from './MembershipPlanView'
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { EditUserModal } from "./modal_account"
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
+import { getUser, updateUser } from "../../../../redux/actions/UserActions"
+import { getFileFromFirebase } from "../../../../common/utils/firebase"
+
+const initialState = {
+  displayName: "",
+  language: "",
+  profile_image: "",
+}
 
 export default function AccountView() {
+
+  const user = useAppSelector(state => state.user)
+  const dispatch = useAppDispatch()
+  
   const [showMemberShipPlan, setShowMemberShipPlan] = useState(false)
   const showPlanView = () => {setShowMemberShipPlan(true)}
   const hidePlanView = () => {setShowMemberShipPlan(false)}
+  const [modalControl, setModalControl] = useState(initialState)
+  const [imageUpload, setImageUpload] = useState("")
+  const [modalVisibility, setModalVisibility] = useState("none")
+
+  useEffect(() => {
+    dispatch(getUser({}))
+      .unwrap()
+      .then((res) => {
+        setModalControl(res.data.data)
+        getFileFromFirebase(res.data.data.profile_image).then((res) => {
+          setImageUpload(res)
+        })
+        .catch(() => {
+          setImageUpload("")
+        })
+      })
+      .catch(() => {
+        // TODO: show fallback page
+      })
+  }, [])
+
+  const editUser = () => {
+    setModalVisibility("edit-user")
+  }
+  const closeModal = () => {
+    setModalVisibility("none")
+  }
+  const _submitEditUserModal = () => {
+    alert("updating user information")
+    dispatch(updateUser(modalControl)).unwrap().finally(() => {
+      closeModal()
+    })
+  }
+
+  const _handleChange = (event: { target: { name: any; value: any } }) => {
+    const { name, value } = event.target
+    setModalControl({ ...modalControl, [name]: value })
+  }
+
   return (
     showMemberShipPlan ?
       <MembershipPlanView
         hidePlanView={hidePlanView}
       />
     :
-    <div className={styles.AppView}>
-      <main className="p-6 w-full">
-        <UserProfile
-          userImg={userImg}
-          userName="James Roy"
-          userEmail="Jamesroy@gmail.com"
+      <>
+        <EditUserModal
+          openModal= {modalVisibility == "edit-user"}
+          closeModal= {closeModal}
+          closeModalOnOverlayClick= {false}
+          closeIconVisibility= {true}
+          _handleChange= {_handleChange}
+          modalControl= {modalControl}
+          _submitModal= {_submitEditUserModal}
+          imageUpload= {imageUpload}
+          setImageUpload= {setImageUpload}
+          email={user.email}
         />
-        <UserProfileDetails
-          userName="James Roy"
-          userEmail="Jamesroy@gmail.com"
-          userLanguage="English"
-          varified={false}
-        />
-        <MembershipPlan
-          plan={"Monthly"}
-          duration={"1 Month"}
-          date={"May 18, 2023"}
-          showPlanView={showPlanView}
-        />
-        <section className="rounded-2xl shadow-md mb-4 ">
-          <div className="p-5 flex justify-between items-center border-b-[1px]">
-            <p className="text-[#061334] text-lg font-semibold">
-              Delete Your Account
-            </p>
-            <button
-              className="primary-btn bg-[#D8D8D8] rounded-2xl text-[#686868] text-sm"
-              onClick={() => {}}
-            >
-              Delete Account
-            </button>
-          </div>
-        </section>
-      </main>
-    </div>
+        <div className={styles.AppView}>
+          <main className="p-6 w-full">
+            <UserProfile
+              userImg={imageUpload || userImg}
+              userName={user.displayName}
+              userEmail={user.email}
+              editUser={editUser}
+            />
+            <UserProfileDetails
+              userName={user.displayName}
+              userEmail={user.email}
+              userLanguage="English"
+              varified={false}
+            />
+            <MembershipPlan
+              plan={"Monthly"}
+              duration={"1 Month"}
+              date={"May 18, 2023"}
+              showPlanView={showPlanView}
+            />
+            <section className="rounded-2xl shadow-md mb-4 ">
+              <div className="p-5 flex justify-between items-center border-b-[1px]">
+                <p className="text-[#061334] text-lg font-semibold">
+                  Delete Your Account
+                </p>
+                <button
+                  className="primary-btn bg-[#D8D8D8] rounded-2xl text-[#686868] text-sm"
+                  onClick={() => {}}
+                >
+                  Delete Account
+                </button>
+              </div>
+            </section>
+          </main>
+        </div>
+      </>
   )
 }
 
@@ -60,6 +128,7 @@ function UserProfile(_props: {
   userImg: any
   userName: string
   userEmail: string
+  editUser: React.MouseEventHandler<HTMLButtonElement>
 }) {
   return (
     <section className="p-5 rounded-2xl shadow-md mb-4">
@@ -78,7 +147,7 @@ function UserProfile(_props: {
             <small className="text-[#707070]">{_props.userEmail}</small>
           </div>
         </div>
-        <button className="primary-btn rounded-[14px] bg-[#0971AA] cursor-pointer">
+        <button onClick={_props.editUser}className="primary-btn rounded-[14px] bg-[#0971AA] cursor-pointer">
           Edit Profile
         </button>
       </div>

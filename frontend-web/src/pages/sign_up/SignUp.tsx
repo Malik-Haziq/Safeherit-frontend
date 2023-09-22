@@ -9,6 +9,7 @@ import { updateProfile } from "firebase/auth"
 import { useNavigate } from "react-router-dom"
 import { signup } from "../../redux/actions/UserActions"
 import { useAppDispatch } from "../../redux/hooks"
+import { updateUser } from "../../redux/actions/UserActions"
 
 export function SignUp() {
   const { t } = useTranslation()
@@ -55,11 +56,18 @@ export function SignUp() {
         )
           .unwrap()
           .then((res) => {
-            updateProfile(res.user, {
-              displayName: formControl.name,
-            }).catch((err) => {
-              alert(err.code)
+            dispatch(updateUser({
+              displayName: formControl.name
+            }))
+            .unwrap()
+            .then((res) => {
             })
+            .catch(() => {})
+            // updateProfile(res.user, {
+            //   displayName: formControl.name,
+            // }).catch((err) => {
+            //   alert(err.code)
+            // })
             localStorage.setItem("userName", formControl.name)
             navigate("/pricing")
           })
