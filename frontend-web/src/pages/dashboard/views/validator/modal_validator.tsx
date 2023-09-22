@@ -276,7 +276,7 @@ export function StepTwoModal(_props: {
     facebook_link: string
     instagram_username: string
     twitter_username: string
-    profile_image_link: string
+    profile_image: string
   }
   _submitModal: Function
   imageUpload: string
@@ -399,11 +399,19 @@ export function StepTwoModal(_props: {
                     <span className="text-[#858992] font-medium">
                       Click to upload <br /> a profile picture →
                     </span>
-                    <img
-                      src={_props.imageUpload || _props.modalControl.profile_image_link || profilePic}
-                      alt="user image"
-                      className="w-20 h-20"
-                    />
+                    {
+                      _props.imageUpload ? 
+                      <img
+                        src={_props.imageUpload || profilePic}
+                        alt="user image"
+                        className="w-20 h-20"
+                      /> :
+                      <img
+                        src={profilePic}
+                        alt="user image"
+                        className="w-20 h-20"
+                      />
+                    }
                   </div>
                 </div>
               )

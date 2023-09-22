@@ -13,8 +13,10 @@ export const UserDetailsModal = (_props: {
   closeModalOnOverlayClick: boolean
   view: string
   closeIconVisibility: boolean
+  imageUpload?: string
+  videoUpload?: string
   modalControl: {
-    id?: string,
+    id?: string
     name: string
     primary_email: string
     backup_email: string
@@ -25,29 +27,39 @@ export const UserDetailsModal = (_props: {
     instagram_username: string
     twitter_username: string
     personalized_message?: string
-    personalized_video_link?: string
-    profile_image_link?: string
+    personalized_video?: string
+    profile_image?: string
   }
 }) => {
   return (
     <>
       {_props.openModal && (
-        <div
-          className={styles.backDrop}
-        >
+        <div className={styles.backDrop}>
           <div className={styles.modalContainer}>
             <div className="w-[1070px] bg-white rounded-2xl border border-[#04477B]">
               <ModalHeader
                 closeModal={_props.closeModal}
-                title={_props.view == 'validator' ? "View Validator Details" : "View Beneficiary Details"}
+                title={
+                  _props.view == "validator"
+                    ? "View Validator Details"
+                    : "View Beneficiary Details"
+                }
                 closeIconVisibility={_props.closeIconVisibility}
               />
               <main className="flex flex-col pl-11 pr-7 py-7">
-                <img
-                  src={_props.modalControl.profile_image_link || userImage}
-                  alt="validator image"
-                  className="w-[88px] h-[88px] rounded-full mx-auto"
-                />
+                {_props.imageUpload ? (
+                  <img
+                    src={_props.imageUpload || userImage}
+                    alt="validator image"
+                    className="w-[88px] h-[88px] rounded-full mx-auto"
+                  />
+                ) : (
+                  <img
+                    src={userImage}
+                    alt="validator image"
+                    className="w-[88px] h-[88px] rounded-full mx-auto"
+                  />
+                )}
                 <section className="flex justify-between gap-[45px]">
                   <aside>
                     <div className="flex flex-col gap-2 mb-10 ">
@@ -159,10 +171,10 @@ export const UserDetailsModal = (_props: {
                           name={"facebook_link"}
                           type={"text"}
                           inputStyles={""}
-                          inputContainerStyles={""}
-                          icon="../../../assets/images/facebook.svg"
+                          inputContainerStyles={"relative"}
+                          icon={facebookIcon}
                           iconAlt="facebook icon"
-                          rightIconStyles="absolute right-4 top-4"
+                          rightIconStyles="absolute right-4 top-2 w-6"
                         />
                       </div>
                       <div>
@@ -173,8 +185,11 @@ export const UserDetailsModal = (_props: {
                           name={"instagram_username"}
                           type={"text"}
                           inputStyles={""}
-                          inputContainerStyles={""}
-                        />{" "}
+                          inputContainerStyles={"relative"}
+                          icon={instagramIcon}
+                          iconAlt="facebook icon"
+                          rightIconStyles="absolute right-4 top-2 w-6"
+                        />
                       </div>
                       <div>
                         <InputField
@@ -184,12 +199,15 @@ export const UserDetailsModal = (_props: {
                           name={"twitter_username"}
                           type={"text"}
                           inputStyles={""}
-                          inputContainerStyles={""}
-                        />{" "}
+                          inputContainerStyles={"relative"}
+                          icon={twitterIcon}
+                          iconAlt="facebook icon"
+                          rightIconStyles="absolute right-4 top-3 w-5"
+                        />
                       </div>
                     </div>
                   </aside>
-                  {_props.view == 'validator' ? (
+                  {_props.view == "validator" ? (
                     <aside className="flex flex-col gap-5 items-end">
                       <TextView
                         text="Personalized Message"
@@ -215,10 +233,21 @@ export const UserDetailsModal = (_props: {
                           text="Testament Video"
                           textStyles="text-[#00192B] font-bold"
                         />
-                        <video controls className="h-[186px]">
-                          <source src={_props.modalControl.personalized_video_link} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
+                        {_props.videoUpload ? (
+                          <video
+                            controls
+                            className="max-h-[186px] max-w-[446px]"
+                          >
+                            <source src={_props.videoUpload} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : (
+                          <img
+                            src={testimentVideo}
+                            alt="validator video"
+                            className="h-[186px] w-[446px] mx-auto"
+                          />
+                        )}
                       </div>
                       <div className="flex flex-col gap-1">
                         <div className="flex justify-between">

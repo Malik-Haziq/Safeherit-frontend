@@ -13,7 +13,8 @@ const initialState = {
   instagram_username: "",
   twitter_username: "",
   personalized_message: "",
-  personalized_video_link: "",
+  personalized_video: "",
+  profile_image: "",
   beneficiary_array: [{}],
 }
 

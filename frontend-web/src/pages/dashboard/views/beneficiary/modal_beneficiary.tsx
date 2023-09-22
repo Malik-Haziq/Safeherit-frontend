@@ -370,7 +370,7 @@ export function StepTwoModal(_props: {
     facebook_link: string
     instagram_username: string
     twitter_username: string
-    profile_image_link: string
+    profile_image: string
   }
   _submitModal: Function
   imageUpload: string
@@ -497,11 +497,19 @@ export function StepTwoModal(_props: {
                     <span className="text-[#858992] font-medium">
                       Click to upload <br /> a profile picture →
                     </span>
-                    <img
-                      src={_props.imageUpload || _props.modalControl.profile_image_link || profilePic}
-                      alt="user image"
-                      className="w-20 h-20 rounded-full"
-                    />
+                    {
+                    _props.imageUpload ? 
+                      <img
+                        src={_props.imageUpload || profilePic}
+                        alt="user image"
+                        className="w-20 h-20 rounded-full"
+                      /> :
+                      <img
+                        src={profilePic}
+                        alt="user image"
+                        className="w-20 h-20 rounded-full"
+                      />
+                    }
                   </div>
                 </div>
               )
@@ -528,24 +536,31 @@ export function StepThreeModal(_props: {
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   action: string
+  videoUpload: string
+  setVideoUpload: Function
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   modalControl: {
     personalized_message: string
     personalized_video: string
-    personalized_video_link: string
   }
   _submitModal: Function
 }) {
   const handleImageInputChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
-      const customEvent: CustomChangeEvent = {
-        target: {
-          name: "personalized_video",
-          value: file,
-        },
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataURL = e.target?.result;
+        _props.setVideoUpload(dataURL)
+        const customEvent: CustomChangeEvent = {
+          target: {
+            name: "personalized_video",
+            value: file,
+          },
+        };
+        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
       };
-      _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+      reader.readAsDataURL(file);
     }
   };
   return (
@@ -613,10 +628,18 @@ export function StepThreeModal(_props: {
                     <span className="text-[#858992] font-medium">
                       Click to upload <br /> a video →
                     </span>
-                    <video controls className="w-20 h-20 rounded-full">
-                      <source src={_props.modalControl.personalized_video_link || _props.modalControl.personalized_video} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
+                    {
+                      _props.videoUpload ?
+                      <video controls className="w-20 h-20 rounded-full">
+                        <source src={_props.videoUpload} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video> :
+                      <img
+                        src={uploadVideoIcon}
+                        alt="user image"
+                        className="w-20 h-20 rounded-full"
+                      />
+                    }
                   </div>
                 </div>
               )

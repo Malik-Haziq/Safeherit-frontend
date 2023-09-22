@@ -28,6 +28,7 @@ import { ConfirmationModal } from "../../../../components/modal/ConfirmationModa
 import { useNavigate } from "react-router-dom"
 import { isValidEmail, isValidFacebook, isValidPhone } from "../../../../common"
 import { UserDetailsModal } from "../../../../components/modal/UserDetailsModal"
+import { getFileFromFirebase } from "../../../../common/utils/firebase"
 
 const initialState = {
   id: "",
@@ -41,7 +42,6 @@ const initialState = {
   instagram_username: "",
   twitter_username: "",
   personalized_message: "",
-  profile_image_link: "",
   profile_image: "",
 }
 
@@ -105,7 +105,11 @@ export default function ValidatorsView() {
     }
   }
   const _submitStepTwoModal = () => {
-    if (!modalControl.facebook_link && !modalControl.twitter_username && !modalControl.instagram_username) {
+    if (
+      !modalControl.facebook_link &&
+      !modalControl.twitter_username &&
+      !modalControl.instagram_username
+    ) {
       alert("Atleast 1 social media accounts is compulsory")
     } else {
       setModalVisibility("Step-3")
@@ -153,21 +157,20 @@ export default function ValidatorsView() {
           })
       }
     }
-
   }
   const _submitDeleteModal = () => {
     dispatch(deleteValidator({ id: modalControl.id }))
       .unwrap()
       .then((res) => {
         dispatch(getAllValidator({}))
-        .unwrap()
-        .then((res) => {
-          closeModal()
-          updateValidatorArrayCount(res)
-        })
-        .catch(() => {
-          // TODO: show fallback page
-        })
+          .unwrap()
+          .then((res) => {
+            closeModal()
+            updateValidatorArrayCount(res)
+          })
+          .catch(() => {
+            // TODO: show fallback page
+          })
       })
   }
   const _submitStepZeroModal = () => {
@@ -176,7 +179,7 @@ export default function ValidatorsView() {
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
-    if ((name == "phone_number" || name == "backup_phone_number" )) {
+    if (name == "phone_number" || name == "backup_phone_number") {
       if (isValidPhone(value) || value == "" || value == "+") {
         setModalControl({ ...modalControl, [name]: value })
       }
@@ -187,6 +190,7 @@ export default function ValidatorsView() {
   const newValidator = () => {
     setModalAction("create")
     setModalControl(initialState)
+    setImageUpload("")
     setModalVisibility("Step-1")
   }
   const editValidator = (id: string) => {
@@ -195,6 +199,13 @@ export default function ValidatorsView() {
       .then((res) => {
         setModalAction("edit")
         setModalControl(res?.data?.data)
+        getFileFromFirebase(res?.data?.data?.profile_image)
+          .then((res) => {
+            setImageUpload(res)
+          })
+          .catch(() => {
+            setImageUpload("")
+          })
         setModalVisibility("Step-1")
       })
   }
@@ -220,6 +231,14 @@ export default function ValidatorsView() {
       .then((res) => {
         setModalAction("view")
         setModalControl(res?.data?.data)
+        getFileFromFirebase(res?.data?.data?.profile_image)
+          .then((res) => {
+            setImageUpload(res)
+          })
+          .catch(() => {
+            setImageUpload("")
+          })
+
         setModalVisibility("User-Info")
       })
   }
@@ -233,6 +252,7 @@ export default function ValidatorsView() {
         view="validator"
         closeIconVisibility={true}
         modalControl={modalControl}
+        imageUpload={imageUpload}
       />
       <StepZeroInformationModal
         openModal={modalVisibility == "Step-0"}
@@ -316,7 +336,7 @@ function AddValidators(_props: {
       <main className="flex flex-col items-center justify-center shadow-xl h-full rounded-2xl">
         <img
           src={validatorImage}
-          className="mb-10"
+          className="mb-10 "
           alt="validator screen image"
         />
         <h2 className="text-[#00192B] text-xl font-bold mb-2">No Validators</h2>
@@ -399,7 +419,7 @@ function Validators(_props: {
             return (
               <Validator
                 key={index}
-                userImg={validator.profile_image_link || userImg}
+                userImg={validator.profile_image}
                 userName={validator.name}
                 email={validator.primary_email}
                 phoneNumber={validator.phone_number}
@@ -434,10 +454,35 @@ function Validator(_props: {
   deleteValidator: Function
   viewValidator: Function
 }) {
+  const [image, setImage] = useState<string>("")
+  useEffect(() => {
+    getFileFromFirebase(_props.userImg)
+      .then((res) => {
+        setImage(res)
+      })
+      .catch(() => {
+        setImage("")
+      })
+  }, [_props.userImg])
   return (
     <ul className="grid grid-cols-5 items-center py-3 px-7 ">
       <li className=" flex items-center gap-4">
-        <img src={_props.userImg} alt="user image" className="rounded-full" />
+        {
+          image ? (
+            <img
+              src={image || userImg}
+              alt="user image"
+              className="rounded-full h-11 w-11"
+            />
+          ) : (
+            <img
+              src={userImg}
+              alt="user image"
+              className="rounded-full h-11 w-11"
+            />
+          )
+          // TODO add loading view
+        }
         <p
           className="font-semibold cursor-pointer"
           onClick={() => _props.viewValidator(_props.id)}
@@ -456,21 +501,33 @@ function Validator(_props: {
       </li>
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
-          <a href={_props.facebook_link} target="_blank" rel="noopener noreferrer">
+          <a
+            href={_props.facebook_link}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img
               src={facebook}
               alt="facebook logo"
               className="w-5 cursor-pointer"
             />
           </a>
-          <a href={`https://www.instagram.com/${_props.instagram_username}/`} target="_blank" rel="noopener noreferrer">
+          <a
+            href={`https://www.instagram.com/${_props.instagram_username}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img
               src={instagram}
               alt="instagram logo"
               className="w-5 cursor-pointer"
             />
           </a>
-          <a href={`https://twitter.com/${_props.twitter_username}/`} target="_blank" rel="noopener noreferrer">
+          <a
+            href={`https://twitter.com/${_props.twitter_username}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img
               src={twitter}
               alt="twitter logo"
