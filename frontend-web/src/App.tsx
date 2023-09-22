@@ -86,7 +86,6 @@ function AppRoutes() {
               path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT}
               element={<AccountView />}
             />
-            <Route path="*" element={<Navigate to={""} replace />} />
           </Route>
         </Route>
       </Routes>

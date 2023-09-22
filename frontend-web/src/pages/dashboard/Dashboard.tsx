@@ -30,7 +30,7 @@ export default function Dashboard() {
   
   useEffect(() => {
     setSelectedOption(navBarHeadings[currentPath.pathname].id)
-  }, [])
+  }, [currentPath])
 
   const navBarHeadings: Record<string, NavBarItem> = {
     "/dashboard": {

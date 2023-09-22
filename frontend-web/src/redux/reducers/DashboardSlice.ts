@@ -22,7 +22,14 @@ export const slice = createSlice({
       state.beneficiaryCount = action.payload?.data?.data?.beneficiaryCount
       state.validatorCount = action.payload?.data?.data?.validatorCount
 
-      state.assets = [] 
+      state.assets = action.payload?.data?.data?.assets?.map((asset: any) => {
+        let data = JSON.parse(asset.data)
+        return {
+          // img: asset?.profile_image,
+          title: asset?.category,
+          subTitle: data?.Notes
+        }
+      })
       state.beneficiaries = action.payload?.data?.data?.beneficiaries?.map((beneficiary: any) => {
         return {
           img: beneficiary?.profile_image,

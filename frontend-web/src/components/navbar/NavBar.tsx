@@ -78,6 +78,7 @@ export function NavBar() {
             userIcon={userImg}
             userIconClassName={""}
             optionText={"Logout"}
+            options={["Logout"]}
           />
         )}
       </nav>

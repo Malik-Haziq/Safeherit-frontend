@@ -6,9 +6,19 @@ import editIcon from "../../../../../assets/images/edit.svg"
 import viewIcon from "../../../../../assets/images/view-icon.svg"
 import languageIcon from "../../../../../assets/images/language.svg"
 import warningIcon from "../../../../../assets/images/warning.svg"
-import { an } from "vitest/dist/types-e3c9754d.js"
+import MembershipPlanView from './MembershipPlanView'
+import { useState } from "react"
+
 export default function AccountView() {
+  const [showMemberShipPlan, setShowMemberShipPlan] = useState(false)
+  const showPlanView = () => {setShowMemberShipPlan(true)}
+  const hidePlanView = () => {setShowMemberShipPlan(false)}
   return (
+    showMemberShipPlan ?
+      <MembershipPlanView
+        hidePlanView={hidePlanView}
+      />
+    :
     <div className={styles.AppView}>
       <main className="p-6 w-full">
         <UserProfile
@@ -26,6 +36,7 @@ export default function AccountView() {
           plan={"Monthly"}
           duration={"1 Month"}
           date={"May 18, 2023"}
+          showPlanView={showPlanView}
         />
         <section className="rounded-2xl shadow-md mb-4 ">
           <div className="p-5 flex justify-between items-center border-b-[1px]">
@@ -142,6 +153,7 @@ function MembershipPlan(_props: {
   plan: string
   duration: string
   date: string
+  showPlanView: React.MouseEventHandler<HTMLButtonElement>
 }) {
   return (
     <section className="rounded-2xl shadow-md mb-4 ">
@@ -167,7 +179,7 @@ function MembershipPlan(_props: {
             <span className="text-[#00192B] font-bold">{_props.date}</span>
           </p>
         </div>
-        <button className="primary-btn bg-[#0971AA] rounded-2xl">
+        <button onClick={_props.showPlanView} className="primary-btn bg-[#0971AA] rounded-2xl">
           See more details
         </button>
       </div>

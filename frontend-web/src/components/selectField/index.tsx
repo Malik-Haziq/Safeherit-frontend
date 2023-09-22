@@ -18,6 +18,7 @@ import { useRef, useState } from "react"
  *
  * @property
  * @param _props.selectProps
+ * @param _props.selectProps.placeholder
  * @param _props.selectProps.isClearable
  * @param _props.selectProps.isMulti
  * @param _props.selectProps.isSearchable
@@ -39,13 +40,12 @@ const selectFieldStyles = (selectFieldWidth: number) => {
     control: (baseStyles: any) => ({
       ...baseStyles,
       borderWidth: "0px",
-      minWidth: selectFieldWidth || 400,
-      height: "50px",
-      backgroundColor: "#F5FAFD",
-      borderRadius: "16px",
+      height: "56px",
+      backgroundColor: "",
+      color: "#6F767B",
       fontFamily: "Montserrat",
-      fontWeight: 400,
-      fontSize: "16px",
+      fontWeight: 500,
+      fontSize: "14px",
     }),
     menuList: (baseStyles: any) => ({
       ...baseStyles,
@@ -73,7 +73,7 @@ const selectFieldTheme = (theme: any) => {
 export const SelectField = (_props: {
   selectContainer?: any
   data: any
-  value: any
+  value?: any
   selectProps?: any
   setSelectedValue: any
   hasRightIcon: boolean
@@ -90,7 +90,9 @@ export const SelectField = (_props: {
     if (!openMenu) {
       selectRef?.current?.focus()
     }
-    setOpenMenu((val) => !val)
+    if (!_props.selectProps.isDisabled) {
+      setOpenMenu((val) => !val)
+    }
   }
 
   return (
@@ -103,6 +105,7 @@ export const SelectField = (_props: {
           ref={selectRef}
           options={_props.data}
           onChange={_props.setSelectedValue}
+          defaultValue={_props.setSelectedValue}
           value={_props.value}
           {..._props.selectProps}
           // overriding pre-defined styles

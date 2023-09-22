@@ -19,3 +19,21 @@ export const CONSTANT = {
   HELP: "Help",
   LOGOUT: "Logout",
 }
+
+export const ASSET_TYPES = {
+  BANK_ACCOUNT: "Bank Account",
+  LIFE_INSURANCE: "Life insurance",
+  REAL_ESTATE: "Real Estate",
+  RETIREMENT_ACCOUNT: "Retirement Account",
+  STOCKS: "Stocks",
+  BONDS: "Bonds",
+  COMPANY_SHARES: "Company Shares",
+  INVESTMENT_FUNDS: "Investment Funds",
+  BROKERAGE_ACCOUNT: "Brokerage Account",
+  CRYPTOCURRENCY_SELF_CUSTODY: "Cryptocurrency (Self-custody)",
+  CRYPTOCURRENCY_ONLINE_EXCHANGE: "Cryptocurrency (Online Exchange)",
+  SAFETY_BOX: "Safety box",
+  PHYSICAL_GOODS: "Physical goods",
+  ACCOUNT_PASSWORDS: "Account passwords",
+  OTHERS_CUSTOM: "Others (Custom)",
+}
