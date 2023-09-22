@@ -62,7 +62,7 @@ export default function AssetsView() {
   const updateAssetsArrayCount = () => {
     if (asset.Asset_array && asset.Asset_array.length > 0) {
       setHasAssets(1)
-    } else {
+    } else if (asset.Asset_array && asset.Asset_array.length == 0) {
       setHasAssets(0)
     }
   }
@@ -131,7 +131,7 @@ export default function AssetsView() {
     },
     {
       img: "../../../../../assets/images/bank-icon.svg",
-      title: "58",
+      title: asset.Asset_array.length,
       subTitle: "Assets registered",
       element: (
         <img
@@ -352,7 +352,7 @@ function AddAsset(_props: {
 }
 
 function Assets(_props: {
-  AssetDetailsCardArr: {img: string, title: string, subTitle: string, element: any}[]
+  AssetDetailsCardArr: {img: string, title: string | number, subTitle: string, element: any}[]
   assetCatagories: string[]
   selected: string
   setSelected: Function
@@ -437,7 +437,7 @@ function Assets(_props: {
 
 function AssetDetailsCard(_props: {
   img: any
-  title: string
+  title: string | number
   subtitle: string
   elemennt: any
 }) {
