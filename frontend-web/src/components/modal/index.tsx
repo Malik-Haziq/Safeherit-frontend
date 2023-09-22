@@ -44,6 +44,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
         value={element?.props?.value}
         _handleChange={element?.props?._handleChange}
         required={element?.props?.required}
+        disabled={element?.props?.disabled}
         inputStyles={element?.props?.inputStyles}
         inputContainerStyles={element?.props?.inputContainerStyles}
         hasRightIcon={element?.props?.hasRightIcon}
@@ -258,6 +259,7 @@ function InputField(_props: {
   iconPress?: React.MouseEventHandler<HTMLImageElement>
   rightIconStyles?: string
   inputContainerStyles: string
+  disabled?: boolean
 }) {
   return (
     <div className={_props.inputContainerStyles}>
@@ -268,6 +270,7 @@ function InputField(_props: {
         value={_props.value}
         onChange={_props._handleChange}
         required={_props.required || false}
+        disabled={_props.disabled || false}
         className={
           _props.inputStyles +
           " border-0 bg-safe-gray py-4 px-4 w-490px placeholder:text-[#6F767B] outline-none rounded-[22px]"
