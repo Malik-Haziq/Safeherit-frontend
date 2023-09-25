@@ -10,7 +10,7 @@ import arrowDown from "../../../../../assets/images/arrow-down.svg"
 import AddAssetImg from "../../../../../assets/images/beneficiaryScreen.svg"
 import user from "../../../../../assets/images/UserIcon.png"
 import addIcon from "../../../../../assets/images/add-icon.svg"
-
+import { Spinner } from "../../../../components/spinner/Spinner"
 import { useEffect, useCallback, useState, useRef } from "react"
 import {
   StepZeroInformationModal,
@@ -341,7 +341,11 @@ export default function AssetsView() {
         assetId={selectedAsset}
       />
       {hasAssets == -1 ? (
-        <div>Loading Assets</div>
+        <div className={styles.AppView}>
+          <div className="relative h-[80vh]">
+            <Spinner/>
+          </div>
+        </div>
       ) : hasAssets == 0 ? (
         <AddAsset openStepZeroModal={addAsset} />
       ) : (

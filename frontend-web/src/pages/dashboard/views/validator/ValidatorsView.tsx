@@ -7,6 +7,7 @@ import twitter from "../../../../../assets/images/twitter.svg"
 import userImg from "../../../../../assets/images/user.svg"
 import validatorImage from "../../../../../assets/images/validator-screen.svg"
 import { ValidatorDropDown } from "../../../../components"
+import { Spinner } from "../../../../components/spinner/Spinner"
 
 import {
   StepZeroInformationModal,
@@ -312,7 +313,11 @@ export default function ValidatorsView() {
         _submitModal={_submitStepThreeModal}
       />
       {hasValidators == -1 ? (
-        <div>Loading Validators</div>
+        <div className={styles.AppView}>
+        <div className="relative h-[80vh]">
+      <Spinner/>
+        </div>
+      </div>
       ) : hasValidators == 0 ? (
         <AddValidators openStepZeroModal={addValidator} />
       ) : (
