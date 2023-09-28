@@ -3,7 +3,9 @@ export interface AssetData {
         name: string;
         type: any;
         placeholder: string;
-        value?: {}[]
+        value?: {}[];
+        required: boolean;
+        allFields: "";
     }[][]
 }
 export const countryList = [
@@ -1002,267 +1004,378 @@ export const currencyList = [
         "label": "JPY"
     }, 
 ]
+export const TypeOfSelfCustodyInCryptocurrency = [
+    {
+        value: "Hardware Wallet",
+        label: "Hardware Wallet",
+    },
+    {
+        value: "Paper Wallet",
+        label: "Paper Wallet",
+    },
+    {
+        value: "Desktop Wallet",
+        label: "Desktop Wallet",
+    },
+    {
+        value: "Mobile Wallet",
+        label: "Mobile Wallet",
+    },
+    {
+        value: "Multi-Signature",
+        label: "Multi-Signature",
+    },
+    {
+        value: "Other",
+        label: "Other",
+    },
+]
+export const TypeOfAccountInRetirementAccount = [
+    {
+        value: "Traditional Retirement Account (IRA)",
+        label: "Traditional Retirement Account (IRA)",
+    },
+    {
+        value: "Roth IRA",
+        label: "Roth IRA",
+    },
+    {
+        value: "401k",
+        label: "401k",
+    },
+    {
+        value: "Defined Benefit Plan",
+        label: "Defined Benefit Plan",
+    },
+    {
+        value: "Annuities",
+        label: "Annuities",
+    },
+    {
+        value: "Other",
+        label: "Other",
+    },
+]
+export const TypeOfInvestmentInInvestmentFunds = [
+    {
+        value:"Mutual Funds",
+        label:"Mutual Funds",
+    },
+    {
+        value:"Exchange Traded Funds (ETF)",
+        label:"Exchange Traded Funds (ETF)",
+    },
+    {
+        value:"Hedge Funds",
+        label:"Hedge Funds",
+    },
+    {
+        value:"Private Equity Funds",
+        label:"Private Equity Funds",
+    },
+    {
+        value:"REIT",
+        label:"REIT",
+    },
+    {
+        value:"Index Funds",
+        label:"Index Funds",
+    },
+    {
+        value:"Money Market Funds",
+        label:"Money Market Funds",
+    },
+    {
+        value:"Fixed Income Funds",
+        label:"Fixed Income Funds",
+    },
+    {
+        value:"Other",
+        label:"Other",
+    },
+]
 
 export const assetData: AssetData = {
     "Bank Account": [
         [
             { 
                 name: "Bank name",
-                placeholder: "Select Bank name",
+                placeholder: "Bank name",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Branch name",
-                placeholder: "Select Branch name",
+                placeholder: "Branch name",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Country",
                 placeholder: "Select Country",
                 type: "Select",
-                value: countryList
+                value: countryList,
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Account Number",
-                placeholder: "Select Account Number",
+                placeholder: "Account Number",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             {
                 name: "Currency",
                 placeholder: "Select Currency",
                 type: "Select",
-                value: currencyList
+                value: currencyList,
+                required: false,
+                allFields: "",
             },
             {
                 name: "Balance",
-                placeholder: "Select Balance",
+                placeholder: "Balance",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Debit Card PIN",
-                placeholder: "Select Debit Card PIN",
+                placeholder: "Debit Card PIN",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Online banking credentials",
-                placeholder: "Select Online banking credentials",
+                placeholder: "Online banking credentials",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             }
         ],
         [
             {
                 name: "Website",
-                placeholder: "Select Website",
+                placeholder: "Website",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Login",
-                placeholder: "Select Login",
+                placeholder: "Login",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Password",
-                placeholder: "Select Password",
+                placeholder: "Password",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Others (OTP, 2FA etc)",
-                placeholder: "Select Others (OTP, 2FA etc)",
+                placeholder: "Others (OTP, 2FA etc)",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text"
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             {
                 name: "Notes",
-                placeholder: "Select Notes",
+                placeholder: "Notes",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
-            {
-                name: "Related files (Option to Attach)",
-                placeholder: "Select Related files (Option to Attach)",
-                type: "Text",
-                
-            }
         ],
     ],
     "Life insurance": [
         [
             { 
                 name: "Insurance company name",
-                placeholder: "Select Insurance company name",
+                placeholder: "Insurance company name",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Policy / Reference number",
-                placeholder: "Select Policy / Reference number",
+                placeholder: "Policy / Reference number",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             {
                 name: "Country",
                 placeholder: "Select Country",
                 type: "Select",
-                value: countryList
-            },
-            { 
-                name: "Beneficiary name",
-                placeholder: "Select Beneficiary name",
-                type: "Text",
-                
+                value: countryList,
+                required: true,
+                allFields: "",
             },
             {
                 name: "Beneficiary contact details",
-                placeholder: "Select Beneficiary contact details",
+                placeholder: "Beneficiary contact details",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Policy currency",
                 placeholder: "Select Policy currency",
                 type: "Select",
-                value: currencyList
+                value: currencyList,
+                required: false,
+                allFields: "",
             },
             {
                 name: "Benefit",
-                placeholder: "Select Benefit",
+                placeholder: "Benefit",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
         ],
         [
             {
                 name: "Benefit - Death",
-                placeholder: "Select Benefit - Death",
+                placeholder: "Benefit - Death",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Benefit - Total disability",
-                placeholder: "Select Benefit - Total disability",
+                placeholder: "Benefit - Total disability",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Benefit - Partial disability",
-                placeholder: "Select Benefit - Partial disability",
+                placeholder: "Benefit - Partial disability",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Benefit - Others",
-                placeholder: "Select Benefit - Others",
+                placeholder: "Benefit - Others",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text"
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             {
                 name: "Notes",
-                placeholder: "Select Notes",
+                placeholder: "Notes",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
-            {
-                name: "Related files (Option to Attach)",
-                placeholder: "Select Related files (Option to Attach)",
-                type: "Text",
-                
-            }
         ],
     ],
     "Real Estate": [
         [
             { 
                 name: "Type of Real Estate",
-                placeholder: "Select Type of Real Estate",
+                placeholder: "Type of Real Estate",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Address",
-                placeholder: "Select Address",
+                placeholder: "Address",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             {
                 name: "Country",
                 placeholder: "Select Country",
                 type: "Select",
-                value: countryList
+                value: countryList,
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Size (Sqft / m²)",
-                placeholder: "Select Size (Sqft / m²)",
+                placeholder: "Size (Sqft / m²)",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Acquisition cost",
-                placeholder: "Select Acquisition cost",
+                placeholder: "Acquisition cost",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Outstanding mortgage",
-                placeholder: "Select Outstanding mortgage",
+                placeholder: "Outstanding mortgage",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Property taxes due",
-                placeholder: "Select Property taxes due",
+                placeholder: "Property taxes due",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
         ],
         [
             {
                 name: "Insurance",
-                placeholder: "Select Insurance",
+                placeholder: "Insurance",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Location of the title and deed",
-                placeholder: "Select Location of the title and deed",
+                placeholder: "Location of the title and deed",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text"
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             {
                 name: "Notes",
-                placeholder: "Select Notes",
+                placeholder: "Notes",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
-            {
-                name: "Related files (Option to Attach)",
-                placeholder: "Select Related files (Option to Attach)",
-                type: "Text",
-                
-            }
         ],
     ],
     "Retirement Account": [
@@ -1270,475 +1383,532 @@ export const assetData: AssetData = {
             { 
                 name: "Type of account",
                 placeholder: "Select Type of account",
-                type: "Text",
-                
+                type: "Select",
+                value: TypeOfAccountInRetirementAccount,
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Account Custodian",
-                placeholder: "Select Account Custodian",
+                placeholder: "Account Custodian",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Country",
                 placeholder: "Select Country",
                 type: "Select",
-                value: countryList
+                value: countryList,
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Account Number",
-                placeholder: "Select Account Number",
+                placeholder: "Account Number",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Custodian Contact Information",
-                placeholder: "Select Custodian Contact Information",
+                placeholder: "Custodian Contact Information",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Online Account Information",
-                placeholder: "Select Online Account Information",
+                placeholder: "Online Account Information",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
         ],
         [
             {
                 name: "Website",
-                placeholder: "Select Website",
+                placeholder: "Website",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Login",
-                placeholder: "Select Login",
+                placeholder: "Login",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Password",
-                placeholder: "Select Password",
+                placeholder: "Password",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Others (OTP, 2FA etc)",
-                placeholder: "Select Others (OTP, 2FA etc)",
+                placeholder: "Others (OTP, 2FA etc)",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text"
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             {
                 name: "Notes",
-                placeholder: "Select Notes",
+                placeholder: "Notes",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
-            {
-                name: "Related files (Option to Attach)",
-                placeholder: "Select Related files (Option to Attach)",
-                type: "Text",
-                
-            }
         ],
     ],
     "Brokerage Account": [
         [
             { 
                 name: "Brokerage Firm",
-                placeholder: "Select Brokerage Firm",
+                placeholder: "Brokerage Firm",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Account Number",
-                placeholder: "Select Account Number",
+                placeholder: "Account Number",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             {
                 name: "Country",
                 placeholder: "Select Country",
                 type: "Select",
-                value: countryList
+                value: countryList,
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Contact information",
-                placeholder: "Select Contact information",
+                placeholder: "Contact information",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Currency",
                 placeholder: "Select Currency",
                 type: "Select",
-                value: currencyList
+                value: currencyList,
+                required: false,
+                allFields: "",
             },
             {
                 name: "Acquisition cost of assets in the account",
-                placeholder: "Select Acquisition cost of assets in the account",
+                placeholder: "Acquisition cost of assets in the account",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Value of assets in the account",
-                placeholder: "Select Value of assets in the account",
+                placeholder: "Value of assets in the account",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Online Account credentials",
-                placeholder: "Select Online Account credentials",
+                placeholder: "Online Account credentials",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
         ],
         [
             {
                 name: "Website",
-                placeholder: "Select Website",
+                placeholder: "Website",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Login",
-                placeholder: "Select Login",
+                placeholder: "Login",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Password",
-                placeholder: "Select Password",
+                placeholder: "Password",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Others (OTP, 2FA etc)",
-                placeholder: "Select Others (OTP, 2FA etc)",
+                placeholder: "Others (OTP, 2FA etc)",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text"
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             {
                 name: "Notes",
-                placeholder: "Select Notes",
+                placeholder: "Notes",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
-            {
-                name: "Related files (Option to Attach)",
-                placeholder: "Select Related files (Option to Attach)",
-                type: "Text",
-                
-            }
         ],
     ],
     "Safety box": [
         [
             { 
                 name: "Safety Box Custodian",
-                placeholder: "Select Safety Box Custodian",
+                placeholder: "Safety Box Custodian",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Location of safety box",
-                placeholder: "Select Location of safety box",
+                placeholder: "Location of safety box",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             {
                 name: "Country",
                 placeholder: "Select Country",
                 type: "Select",
-                value: countryList
+                value: countryList,
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Combination",
-                placeholder: "Select Combination",
+                placeholder: "Combination",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Location of safety box key (if applicable)",
-                placeholder: "Select Location of safety box key (if applicable)",
+                placeholder: "Location of safety box key (if applicable)",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
         ],
         [
             {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text"
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             {
                 name: "Notes",
-                placeholder: "Select Notes",
+                placeholder: "Notes",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
-            {
-                name: "Related files (Option to Attach)",
-                placeholder: "Select Related files (Option to Attach)",
-                type: "Text",
-                
-            }
         ],
     ],
     "Stocks": [
         [
             { 
                 name: "Company name",
-                placeholder: "Select Company name",
+                placeholder: "Company name",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Ticker Symbol",
-                placeholder: "Select Ticker Symbol",
+                placeholder: "Ticker Symbol",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
+            },
+            {
+                name: "Country",
+                placeholder: "Select Country",
+                type: "Select",
+                value: countryList,
+                required: true,
+                allFields: "",
             },
             {
                 name: "Number of shares",
-                placeholder: "Select Number of shares",
+                placeholder: "Number of shares",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Acquisition cost",
-                placeholder: "Select Acquisition cost",
+                placeholder: "Acquisition cost",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Account Custodian",
-                placeholder: "Select Account Custodian",
+                placeholder: "Account Custodian",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Account Number",
-                placeholder: "Select Account Number",
+                placeholder: "Account Number",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Custodian Contact Information",
-                placeholder: "Select Custodian Contact Information",
+                placeholder: "Custodian Contact Information",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Brokerage Account Information",
-                placeholder: "Select Brokerage Account Information",
+                placeholder: "Brokerage Account Information",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
         ],
         [
             {
                 name: "Website",
-                placeholder: "Select Website",
+                placeholder: "Website",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Login",
-                placeholder: "Select Login",
+                placeholder: "Login",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Password",
-                placeholder: "Select Password",
+                placeholder: "Password",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Others (OTP, 2FA etc)",
-                placeholder: "Select Others (OTP, 2FA etc)",
+                placeholder: "Others (OTP, 2FA etc)",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text"
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             {
                 name: "Notes",
-                placeholder: "Select Notes",
+                placeholder: "Notes",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
-            {
-                name: "Related files (Option to Attach)",
-                placeholder: "Select Related files (Option to Attach)",
-                type: "Text",
-                
-            }
         ],
     ],
     "Bonds": [
         [
             { 
                 name: "Bond type",
-                placeholder: "Select Bond type",
+                placeholder: "Bond type",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Bond Issuer",
-                placeholder: "Select Bond Issuer",
+                placeholder: "Bond Issuer",
                 type: "Text",
-                
+                required: true,
+                allFields: "",
             },
             {
                 name: "Par Value",
-                placeholder: "Select Par Value",
+                placeholder: "Par Value",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Coupon Rate",
-                placeholder: "Select Coupon Rate",
+                placeholder: "Coupon Rate",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Maturity Date",
-                placeholder: "Select Maturity Date",
+                placeholder: "Maturity Date",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Acquisition cost",
-                placeholder: "Select Acquisition cost",
+                placeholder: "Acquisition cost",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Brokerage Account Information",
-                placeholder: "Select Brokerage Account Information",
+                placeholder: "Brokerage Account Information",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
         ],
         [
             {
                 name: "Website",
-                placeholder: "Select Website",
+                placeholder: "Website",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Login",
-                placeholder: "Select Login",
+                placeholder: "Login",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Password",
-                placeholder: "Select Password",
+                placeholder: "Password",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Others (OTP, 2FA etc)",
-                placeholder: "Select Others (OTP, 2FA etc)",
+                placeholder: "Others (OTP, 2FA etc)",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
             {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text"
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             {
                 name: "Notes",
-                placeholder: "Select Notes",
+                placeholder: "Notes",
                 type: "Text",
-                
+                required: false,
+                allFields: "",
             },
-            {
-                name: "Related files (Option to Attach)",
-                placeholder: "Select Related files (Option to Attach)",
-                type: "Text",
-                
-            }
         ],
     ],
-    
     "Company Shares": [
         [
             { 
                 name: "Company name",
-                placeholder: "Select Company name",
+                placeholder: "Company name",
                 type: "Text",
-                 
+                required: true,
+                allFields: "",
+            },
+            {
+                name: "Country",
+                placeholder: "Select Country",
+                type: "Select",
+                value: countryList,
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Ticker Symbol",
-                placeholder: "Select Ticker Symbol",
+                placeholder: "Ticker Symbol",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Number of shares",
-                placeholder: "Select Number of shares",
+                placeholder: "Number of shares",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Acquisition cost",
-                placeholder: "Select Acquisition cost",
+                placeholder: "Acquisition cost",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Contact Information",
-                placeholder: "Select Contact Information",
+                placeholder: "Contact Information",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Location of the physical share certificates (if applicable)",
-                placeholder: "Select Location of the physical share certificates (if applicable)",
+                placeholder: "Location of the physical share certificates (if applicable)",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             }
         ],
         [
             { 
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text",
-                 
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Notes",
-                placeholder: "Select Notes",
+                placeholder: "Notes",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
-            { 
-                name: "Related files (Option to Attach)",
-                placeholder: "Select Related files (Option to Attach)",
-                type: "Text",
-                 
-            }
         ]
     ],
     "Investment Funds": [
@@ -1746,95 +1916,104 @@ export const assetData: AssetData = {
             { 
                 name: "Type of investment fund",
                 placeholder: "Select Type of investment fund",
-                type: "Text",
-                 
+                type: "Select",
+                value: TypeOfInvestmentInInvestmentFunds,
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Fund name",
-                placeholder: "Select Fund name",
+                placeholder: "Fund name",
                 type: "Text",
-                 
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Ticker symbol",
-                placeholder: "Select Ticker symbol",
+                placeholder: "Ticker symbol",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Number of shares",
-                placeholder: "Select Number of shares",
+                placeholder: "Number of shares",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Acquisition cost",
-                placeholder: "Select Acquisition cost",
+                placeholder: "Acquisition cost",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Custodian",
-                placeholder: "Select Custodian",
+                placeholder: "Custodian",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Custodian Contact Information",
-                placeholder: "Select Custodian Contact Information",
+                placeholder: "Custodian Contact Information",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Brokerage Account Information",
-                placeholder: "Select Brokerage Account Information",
+                placeholder: "Brokerage Account Information",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             }
         ],
         [
             { 
                 name: "Website",
-                placeholder: "Select Website",
+                placeholder: "Website",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Login",
-                placeholder: "Select Login",
+                placeholder: "Login",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Password",
-                placeholder: "Select Password",
+                placeholder: "Password",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Others (OTP, 2FA etc)",
-                placeholder: "Select Others (OTP, 2FA etc)",
+                placeholder: "Others (OTP, 2FA etc)",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text",
-                 
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Notes",
-                placeholder: "Select Notes",
+                placeholder: "Notes",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
-            { 
-                name: "Related files (Option to Attach)",
-                placeholder: "Select Related files (Option to Attach)",
-                type: "Text",
-                 
-            }
         ]
     ],
     "Cryptocurrency (Self-custody)": [
@@ -1842,317 +2021,365 @@ export const assetData: AssetData = {
             { 
                 name: "Type of self custody",
                 placeholder: "Select Type of self custody",
-                type: "Text",
-                 
+                type: "Select",
+                value: TypeOfSelfCustodyInCryptocurrency,
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Stored cryptocurrencies",
-                placeholder: "Select Stored cryptocurrencies",
+                placeholder: "Stored cryptocurrencies",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Cryptocurrency name & Ticker",
-                placeholder: "Select Cryptocurrency name & Ticker",
+                placeholder: "Cryptocurrency name & Ticker",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Quantity",
-                placeholder: "Select Quantity",
+                placeholder: "Quantity",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Public address",
-                placeholder: "Select Public address",
+                placeholder: "Public address",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Acquisition cost",
-                placeholder: "Select Acquisition cost",
+                placeholder: "Acquisition cost",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Private key location",
-                placeholder: "Select Private key location",
+                placeholder: "Private key location",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             }
         ],
         [
             { 
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text",
-                 
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Notes",
-                placeholder: "Select Notes",
+                placeholder: "Notes",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
-            { 
-                name: "Related files (Option to Attach)",
-                placeholder: "Select Related files (Option to Attach)",
-                type: "Text",
-                 
-            }
         ]
     ],
     "Cryptocurrency (Online Exchange)": [
         [
             { 
                 name: "Online exchange name",
-                placeholder: "Select Online exchange name",
+                placeholder: "Online exchange name",
                 type: "Text",
-                 
+                required: true,
+                allFields: "",
             },
             { 
                 name: "Custodied cryptocurrencies",
-                placeholder: "Select Custodied cryptocurrencies",
+                placeholder: "Custodied cryptocurrencies",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
+            },
+            { 
+                name: "Cryptocurrency name & Ticker",
+                placeholder: "Cryptocurrency name & Ticker",
+                type: "Text",
+                required: false,
+                allFields: "",
+            },
+            { 
+                name: "Quantity",
+                placeholder: "Quantity",
+                type: "Text",
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Acquisition cost of assets in the account",
-                placeholder: "Select Acquisition cost of assets in the account",
+                placeholder: "Acquisition cost of assets in the account",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Online Account credentials",
-                placeholder: "Select Online Account credentials",
+                placeholder: "Online Account credentials",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             }
         ],
         [
             { 
                 name: "Website",
-                placeholder: "Select Website",
+                placeholder: "Website",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
-                name: "Login" ,
-                placeholder: "Select Login" ,
+                name: "Login",
+                placeholder: "Login",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Password",
-                placeholder: "Select Password",
+                placeholder: "Password",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
-                name: "Others (OTP, 2FA etc)" ,
-                placeholder: "Select Others (OTP, 2FA etc)" ,
+                name: "Others (OTP, 2FA etc)",
+                placeholder: "Others (OTP, 2FA etc)",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
-                type: "Text",
-                 
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             {  
-                name: "Notes" ,
-                placeholder: "Select Notes" ,
+                name: "Notes",
+                placeholder: "Notes",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
-            { 
-                name: "Related files (Option to Attach)" ,
-                placeholder: "Select Related files (Option to Attach)" ,
-                type: "Text",
-                 
-            }
         ]
     ],
     "Physical goods": [
         [
             { 
-                name: "Asset Name" ,
-                placeholder: "Select Asset Name" ,
+                name: "Asset Name",
+                placeholder: "Asset Name",
                 type: "Text",
-                 
+                required: true,
+                allFields: "",
             },
             { 
-                name: "Asset location" ,
-                placeholder: "Select Asset location" ,
+                name: "Asset location",
+                placeholder: "Asset location",
                 type: "Text",
-                 
+                required: true,
+                allFields: "",
             },
             { 
-                name: "Quantity" ,
-                placeholder: "Select Quantity" ,
+                name: "Quantity",
+                placeholder: "Quantity",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
                 name: "Acquisition cost",
-                placeholder: "Select Acquisition cost",
+                placeholder: "Acquisition cost",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
-                name: "Related contact information" ,
-                placeholder: "Select Related contact information" ,
+                name: "Related contact information",
+                placeholder: "Related contact information",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
-                name: "Information to locate the asset" ,
-                placeholder: "Select Information to locate the asset" ,
+                name: "Information to locate the asset",
+                placeholder: "Information to locate the asset",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             }
         ],
         [
             { 
-                name: "Beneficiary" ,
-                placeholder: "Select Beneficiary" ,
-                type: "Text",
-                 
+                name: "Beneficiary",
+                placeholder: "Select Beneficiary",
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             { 
-                name: "Notes" ,
-                placeholder: "Select Notes" ,
+                name: "Notes",
+                placeholder: "Notes",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
-            { 
-                name: "Related files (Option to Attach)" ,
-                placeholder: "Select Related files (Option to Attach)" ,
-                type: "Text",
-                 
-            }
         ]
     ],
     "Account passwords": [
         [
             { 
-                name: "Online platform name" ,
-                placeholder: "Select Online platform name" ,
+                name: "Online platform name",
+                placeholder: "Online platform name",
                 type: "Text",
-                 
+                required: true,
+                allFields: "",
             },
             { 
-                name: "Online Account credentials" ,
-                placeholder: "Select Online Account credentials" ,
+                name: "Online Account credentials",
+                placeholder: "Online Account credentials",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             }
         ],
         [
             { 
-                name: "Website" ,
-                placeholder: "Select Website" ,
+                name: "Website",
+                placeholder: "Website",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
-                name: "Login" ,
-                placeholder: "Select Login" ,
+                name: "Login",
+                placeholder: "Login",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
-                name: "Password" ,
-                placeholder: "Select Password" ,
+                name: "Password",
+                placeholder: "Password",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
-                name: "Others (OTP, 2FA etc)" ,
-                placeholder: "Select Others (OTP, 2FA etc)" ,
+                name: "Others (OTP, 2FA etc)",
+                placeholder: "Others (OTP, 2FA etc)",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
-                name: "Beneficiary" ,
-                placeholder: "Select Beneficiary" ,
-                type: "Text",
-                 
+                name: "Beneficiary",
+                placeholder: "Select Beneficiary",
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             { 
-                name: "Notes" ,
-                placeholder: "Select Notes" ,
+                name: "Notes",
+                placeholder: "Notes",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
-            { 
-                name: "Related files (Option to Attach)" ,
-                placeholder: "Select Related files (Option to Attach)" ,
-                type: "Text",
-                 
-            }
         ]
     ],
     "Others (Custom)":[
         [
             { 
-                name: "Asset Name" ,
-                placeholder: "Select Asset Name" ,
+                name: "Asset Name",
+                placeholder: "Asset Name",
                 type: "Text",
-                 
+                required: true,
+                allFields: "",
             },
             { 
-                name: "Asset location" ,
-                placeholder: "Select Asset location" ,
+                name: "Asset location",
+                placeholder: "Asset location",
                 type: "Text",
-                 
+                required: true,
+                allFields: "",
             },
             { 
-                name: "Quantity" ,
-                placeholder: "Select Quantity" ,
+                name: "Quantity",
+                placeholder: "Quantity",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
-                name: "Acquisition cost" ,
-                placeholder: "Select Acquisition cost" ,
+                name: "Acquisition cost",
+                placeholder: "Acquisition cost",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
-                name: "Related contact information" ,
-                placeholder: "Select Related contact information" ,
+                name: "Related contact information",
+                placeholder: "Related contact information",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
             { 
-                name: "Information to locate the asset" ,
-                placeholder: "Select Information to locate the asset" ,
+                name: "Information to locate the asset",
+                placeholder: "Information to locate the asset",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             }
         ],
         [
             { 
-                name: "Beneficiary" ,
-                placeholder: "Select Beneficiary" ,
-                type: "Text",
-                 
+                name: "Beneficiary",
+                placeholder: "Select Beneficiary",
+                type: "Select",
+                required: true,
+                allFields: "",
             },
             { 
-                name: "Notes" ,
-                placeholder: "Select Notes" ,
+                name: "Notes",
+                placeholder: "Notes",
                 type: "Text",
-                 
+                required: false,
+                allFields: "",
             },
-            { 
-                name: "Related files (Option to Attach)" ,
-                placeholder: "Select Related files (Option to Attach)" ,
-                type: "Text",
-                 
-            }
         ]
+    ]
+}
+
+export const getRequiredFields = (assetType: string, modal: number) => {
+    let requiredFields: string[] = [];
+    let optionalFields: string[]  = [];
+    let allFields: string[]  = [];
+    let fields = assetData[assetType];
+    fields[modal].map((f, i) => {
+        if(f.required) {
+            requiredFields.push(f.name);
+        } else {
+            optionalFields.push(f.name);
+        }
+        allFields.push(f.name);
+    })
+    return [
+        requiredFields,
+        optionalFields,
+        allFields
     ]
 }
