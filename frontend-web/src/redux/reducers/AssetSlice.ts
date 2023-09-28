@@ -18,13 +18,15 @@ export const slice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(getAllAsset.fulfilled, (state, action) => {
-      let array: { data: any, id: string, category: string }[] = []
-      action?.payload?.data?.data.map((data: { data: string, id: string, category: string }) => {
+      let array: { data: any, id: string, category: string, assignedBeneficiaryId: string, asset_file: string }[] = []
+      action?.payload?.data?.data.map((data: { data: string, id: string, category: string, assignedBeneficiaryId: string, asset_file: string }) => {
         array.push(
           {
+            assignedBeneficiaryId: data.assignedBeneficiaryId,
             data: JSON.parse(data.data),
             id: data.id,
-            category: data.category
+            category: data.category,
+            asset_file: data.asset_file
           }
         )
       })

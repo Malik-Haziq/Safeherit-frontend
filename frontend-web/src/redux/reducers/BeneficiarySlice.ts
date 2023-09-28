@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { getAllBeneficiary, createBeneficiary, findBeneficiary } from "../actions/BeneficiaryAction"
+import { SelectOption } from "../../types/components"
 
 const initialState = {
   id: "",
@@ -16,6 +17,7 @@ const initialState = {
   personalized_video: "",
   profile_image: "",
   beneficiary_array: [{}],
+  beneficiary_list: [] as SelectOption[],
 }
 
 export const slice = createSlice({
@@ -29,6 +31,14 @@ export const slice = createSlice({
   extraReducers(builder) {
     builder.addCase(getAllBeneficiary.fulfilled, (state, action) => {
       state.beneficiary_array = action?.payload?.data?.data || []
+      let beneficiary_list: SelectOption[] = []
+      action.payload.data.data.map ((item: any) => {
+        beneficiary_list.push({
+          label: item.name,
+          value: item.id,
+        })
+      }) 
+      state.beneficiary_list = beneficiary_list
     })
     builder.addCase(createBeneficiary.fulfilled, (state, action) => {
 
