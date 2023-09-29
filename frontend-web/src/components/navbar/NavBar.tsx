@@ -2,12 +2,14 @@ import logo from "../../../assets/images/safeherit_logo.svg"
 import userImg from "../../../assets/images/user.svg"
 import arrowDown from "../../../assets/images/chevron-down.svg"
 import { useNavigate, useLocation } from "react-router-dom"
-import { useAppDispatch } from "../../redux/hooks"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { logout } from "../../redux/actions/UserActions"
 import { DropDownButton } from ".."
 
 export function NavBar() {
-  const USER_NAME = window.localStorage.getItem("userName") || "Profile"
+
+  const user = useAppSelector(state => state.user)
+  const USER_NAME = user.displayName || "Profile"
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const currentPath = useLocation()
@@ -78,6 +80,7 @@ export function NavBar() {
             userIcon={userImg}
             userIconClassName={""}
             optionText={"Logout"}
+            options={["Logout"]}
           />
         )}
       </nav>

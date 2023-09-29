@@ -30,6 +30,7 @@ import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import { ConfirmationModal } from "../../../../components/modal/ConfirmationModal"
 import { useNavigate } from "react-router-dom"
 import { isValidEmail, isValidFacebook, isValidPhone } from "../../../../common"
+import { getFileFromFirebase } from "../../../../common/utils/firebase"
 
 const initialState = {
   id: "",
@@ -43,8 +44,8 @@ const initialState = {
   instagram_username: "",
   twitter_username: "",
   personalized_message: "",
-  personalized_video_link: "",
-  image: "",
+  personalized_video: "",
+  profile_image: "",
 }
 
 export default function BeneficiariesView() {
@@ -53,6 +54,8 @@ export default function BeneficiariesView() {
 
   const [hasBeneficiaries, setHasBeneficiaries] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
+  const [imageUpload, setImageUpload] = useState("")
+  const [videoUpload, setVideoUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
 
@@ -80,6 +83,8 @@ export default function BeneficiariesView() {
   const closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
+    setImageUpload("")
+    setVideoUpload("")
   }, [])
 
   const addBeneficiary = useCallback(() => {
@@ -90,13 +95,13 @@ export default function BeneficiariesView() {
     if (!modalControl.name) {
       alert("please enter a valid name")
     } else if (
-      !isValidEmail(modalControl.primary_email) ||
-      !isValidEmail(modalControl.backup_email) ||
+      !isValidEmail(modalControl.primary_email) &&
+      !isValidEmail(modalControl.backup_email) &&
       !isValidEmail(modalControl.backup_email2)
     ) {
       alert("please enter a valid Email address")
     } else if (
-      !isValidPhone(modalControl.phone_number) ||
+      !isValidPhone(modalControl.phone_number) &&
       !isValidPhone(modalControl.backup_phone_number)
     ) {
       alert("please enter valid Phone number")
@@ -105,59 +110,62 @@ export default function BeneficiariesView() {
     }
   }
   const _submitStepTwoModal = () => {
-    if (!modalControl.facebook_link) {
-      alert("please enter valid facebook")
-    } else if (!modalControl.instagram_username) {
-      alert("please enter valid instagram username")
-    } else if (!modalControl.twitter_username) {
-      alert("please enter valid twitter username")
+    if (
+      !modalControl.facebook_link &&
+      !modalControl.instagram_username &&
+      !modalControl.twitter_username
+    ) {
+      alert("Atleast 1 social media accounts is compulsory")
     } else {
       setModalVisibility("Step-3")
     }
   }
   const _submitStepThreeModal = () => {
-    if (modalAction == "edit") {
-      dispatch(updateBeneficiary(modalControl))
-        .unwrap()
-        .then((res) => {
-          dispatch(getAllBeneficiary({}))
-            .unwrap()
-            .then((res) => {
-              setModalVisibility("Step-pk")
-              updateBeneficiaryArrayCount(res)
-            })
-            .catch(() => {
-              // TODO: show fallback page
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-          // TODO: show fallback page
-        })
-    } else if (modalAction == "create") {
-      alert("creating beneficiary")
-      dispatch(createBeneficiary(modalControl))
-        .unwrap()
-        .then((res) => {
-          dispatch(getAllBeneficiary({}))
-            .unwrap()
-            .then((res) => {
-              setModalVisibility("Step-success")
-              updateBeneficiaryArrayCount(res)
-            })
-            .catch(() => {
-              // TODO: show fallback page
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-          // TODO: show fallback page
-        })
+    if (!modalControl.personalized_message) {
+      alert("Personalized message cannot be empty")
+    } else {
+      if (modalAction == "edit") {
+        dispatch(updateBeneficiary(modalControl))
+          .unwrap()
+          .then((res) => {
+            dispatch(getAllBeneficiary({}))
+              .unwrap()
+              .then((res) => {
+                setModalVisibility("Step-pk")
+                updateBeneficiaryArrayCount(res)
+              })
+              .catch(() => {
+                // TODO: show fallback page
+              })
+          })
+          .catch((err) => {
+            console.log(err)
+            // TODO: show fallback page
+          })
+      } else if (modalAction == "create") {
+        alert("creating beneficiary")
+        dispatch(createBeneficiary(modalControl))
+          .unwrap()
+          .then((res) => {
+            dispatch(getAllBeneficiary({}))
+              .unwrap()
+              .then((res) => {
+                setModalVisibility("Step-success")
+                updateBeneficiaryArrayCount(res)
+              })
+              .catch(() => {
+                // TODO: show fallback page
+              })
+          })
+          .catch((err) => {
+            console.log(err)
+            // TODO: show fallback page
+          })
+      }
     }
   }
   const _submitSuccessModal = () => {
-    setModalControl(initialState)
-    setModalVisibility("none")
+    closeModal()
   }
   const _submitRegisterPKModal = () => {
     if (modalAction == "create") {
@@ -188,11 +196,19 @@ export default function BeneficiariesView() {
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
-    setModalControl({ ...modalControl, [name]: value })
+    if (name == "phone_number" || name == "backup_phone_number") {
+      if (isValidPhone(value) || value == "" || value == "+") {
+        setModalControl({ ...modalControl, [name]: value })
+      }
+    } else {
+      setModalControl({ ...modalControl, [name]: value })
+    }
   }
   const newBeneficiary = () => {
     setModalAction("create")
     setModalControl(initialState)
+    setImageUpload("")
+    setVideoUpload("")
     setModalVisibility("Step-pk")
   }
   const editBeneficiary = (id: string) => {
@@ -201,6 +217,21 @@ export default function BeneficiariesView() {
       .then((res) => {
         setModalAction("edit")
         setModalControl(res?.data?.data)
+        getFileFromFirebase(res?.data?.data?.profile_image)
+          .then((res) => {
+            setImageUpload(res)
+          })
+          .catch(() => {
+            setImageUpload("")
+          })
+        getFileFromFirebase(res?.data?.data?.personalized_video)
+          .then((res) => {
+            setVideoUpload(res)
+          })
+          .catch(() => {
+            setVideoUpload("")
+          })
+
         setModalVisibility("Step-1")
       })
   }
@@ -226,6 +257,21 @@ export default function BeneficiariesView() {
       .then((res) => {
         setModalAction("view")
         setModalControl(res?.data?.data)
+        getFileFromFirebase(res?.data?.data?.profile_image)
+          .then((res) => {
+            setImageUpload(res)
+          })
+          .catch(() => {
+            setImageUpload("")
+          })
+        getFileFromFirebase(res?.data?.data?.personalized_video)
+          .then((res) => {
+            setVideoUpload(res)
+          })
+          .catch(() => {
+            setVideoUpload("")
+          })
+
         setModalVisibility("User-Info")
       })
   }
@@ -239,6 +285,8 @@ export default function BeneficiariesView() {
         view="beneficiary"
         closeIconVisibility={true}
         modalControl={modalControl}
+        imageUpload={imageUpload}
+        videoUpload={videoUpload}
       />
       <StepOneModal
         openModal={modalVisibility == "Step-1"}
@@ -259,6 +307,8 @@ export default function BeneficiariesView() {
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
+        setImageUpload={setImageUpload}
+        imageUpload={imageUpload}
       />
       <StepThreeModal
         openModal={modalVisibility == "Step-3"}
@@ -267,6 +317,8 @@ export default function BeneficiariesView() {
         closeIconVisibility={true}
         action={modalAction}
         _handleChange={_handleChange}
+        videoUpload={videoUpload}
+        setVideoUpload={setVideoUpload}
         modalControl={modalControl}
         _submitModal={_submitStepThreeModal}
       />
@@ -418,12 +470,14 @@ function Beneficiaries(_props: {
             return (
               <Beneficiary
                 key={index}
-                // userImg={beneficiary.userImg} TODO
-                userImg={"../../../../../assets/images/user.svg"}
+                userImg={beneficiary.profile_image}
                 userName={beneficiary.name}
                 email={beneficiary.primary_email}
                 phoneNumber={beneficiary.phone_number}
                 backupPhoneNumber={beneficiary.backup_phone_number}
+                facebook_link={beneficiary.facebook_link}
+                instagram_username={beneficiary.instagram_username}
+                twitter_username={beneficiary.twitter_username}
                 id={beneficiary.id}
                 editBeneficiary={_props.editBeneficiary}
                 deleteBeneficiary={_props.deleteBeneficiary}
@@ -443,15 +497,44 @@ function Beneficiary(_props: {
   email: string
   phoneNumber: string
   backupPhoneNumber: string
+  facebook_link: string
+  instagram_username: string
+  twitter_username: string
   id: string
   editBeneficiary: Function
   deleteBeneficiary: Function
   viewBeneficiary: Function
 }) {
+  const [image, setImage] = useState<string>("")
+  useEffect(() => {
+    getFileFromFirebase(_props.userImg)
+      .then((res) => {
+        setImage(res)
+      })
+      .catch(() => {
+        setImage("")
+      })
+  }, [_props.userImg])
+
   return (
     <ul className="grid grid-cols-5 items-center py-3 px-7 text-safe-text-black-tint">
       <li className="flex items-center gap-4 text-black">
-        <img src={userImg} alt="user image" className="rounded-full" />
+        {
+          image ? (
+            <img
+              src={image || userImg}
+              alt="user image"
+              className="rounded-full h-11 w-11"
+            />
+          ) : (
+            <img
+              src={userImg}
+              alt="user image"
+              className="rounded-full h-11 w-11"
+            />
+          )
+          // TODO add loading view
+        }
         <p
           className="font-semibold cursor-pointer"
           onClick={() => _props.viewBeneficiary(_props.id)}
@@ -470,21 +553,39 @@ function Beneficiary(_props: {
       </li>
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
-          <img
-            src={facebook}
-            alt="facebook logo"
-            className="w-5 cursor-pointer "
-          />
-          <img
-            src={instagram}
-            alt="instagram logo"
-            className="w-5 cursor-pointer "
-          />
-          <img
-            src={twitter}
-            alt="twitter logo"
-            className="w-5 cursor-pointer "
-          />
+          <a
+            href={_props.facebook_link}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={facebook}
+              alt="facebook logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
+          <a
+            href={`https://www.instagram.com/${_props.instagram_username}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={instagram}
+              alt="instagram logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
+          <a
+            href={`https://twitter.com/${_props.twitter_username}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={twitter}
+              alt="twitter logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
         </div>
         <div className="relative">
           <ValidatorDropDown

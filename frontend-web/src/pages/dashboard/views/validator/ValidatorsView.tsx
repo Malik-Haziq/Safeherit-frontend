@@ -28,6 +28,7 @@ import { ConfirmationModal } from "../../../../components/modal/ConfirmationModa
 import { useNavigate } from "react-router-dom"
 import { isValidEmail, isValidFacebook, isValidPhone } from "../../../../common"
 import { UserDetailsModal } from "../../../../components/modal/UserDetailsModal"
+import { getFileFromFirebase } from "../../../../common/utils/firebase"
 
 const initialState = {
   id: "",
@@ -40,8 +41,8 @@ const initialState = {
   facebook_link: "",
   instagram_username: "",
   twitter_username: "",
-  message: "",
-  image: "",
+  personalized_message: "",
+  profile_image: "",
 }
 
 export default function ValidatorsView() {
@@ -50,6 +51,7 @@ export default function ValidatorsView() {
 
   const [hasValidators, setHasValidators] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
+  const [imageUpload, setImageUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
 
@@ -77,6 +79,7 @@ export default function ValidatorsView() {
   const closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
+    setImageUpload("")
   }, [])
 
   const addValidator = useCallback(() => {
@@ -85,15 +88,15 @@ export default function ValidatorsView() {
 
   const _submitStepOneModal = () => {
     if (!modalControl.name) {
-      alert("please enter a valid input")
+      alert("please enter a valid name")
     } else if (
-      !isValidEmail(modalControl.primary_email) ||
-      !isValidEmail(modalControl.backup_email) ||
+      !isValidEmail(modalControl.primary_email) &&
+      !isValidEmail(modalControl.backup_email) &&
       !isValidEmail(modalControl.backup_email2)
     ) {
       alert("please enter a valid Email address")
     } else if (
-      !isValidPhone(modalControl.phone_number) ||
+      !isValidPhone(modalControl.phone_number) &&
       !isValidPhone(modalControl.backup_phone_number)
     ) {
       alert("please enter valid Phone number")
@@ -102,63 +105,72 @@ export default function ValidatorsView() {
     }
   }
   const _submitStepTwoModal = () => {
-    if (!modalControl.facebook_link) {
-      alert("please enter valid facebook")
-    } else if (!modalControl.instagram_username) {
-      alert("please enter valid instagram username")
-    } else if (!modalControl.twitter_username) {
-      alert("please enter valid twitter username")
+    if (
+      !modalControl.facebook_link &&
+      !modalControl.twitter_username &&
+      !modalControl.instagram_username
+    ) {
+      alert("Atleast 1 social media accounts is compulsory")
     } else {
       setModalVisibility("Step-3")
     }
   }
   const _submitStepThreeModal = () => {
-    // validate input
-
-    if (modalAction == "edit") {
-      dispatch(updateValidator(modalControl))
-        .unwrap()
-        .then((res) => {
-          dispatch(getAllValidator({}))
-            .unwrap()
-            .then((res) => {
-              closeModal()
-              updateValidatorArrayCount(res)
-            })
-            .catch(() => {
-              // TODO: show fallback page
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-          // TODO: show fallback page
-        })
-    } else if (modalAction == "create") {
-      dispatch(createValidator(modalControl))
-        .unwrap()
-        .then((res) => {
-          dispatch(getAllValidator({}))
-            .unwrap()
-            .then((res) => {
-              setModalVisibility("Step-4")
-              updateValidatorArrayCount(res)
-            })
-            .catch(() => {
-              // TODO: show fallback page
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-          // TODO: show fallback page
-        })
+    if (!modalControl.personalized_message) {
+      alert("Personalized message cannot be empty")
+    } else {
+      if (modalAction == "edit") {
+        dispatch(updateValidator(modalControl))
+          .unwrap()
+          .then((res) => {
+            dispatch(getAllValidator({}))
+              .unwrap()
+              .then((res) => {
+                closeModal()
+                updateValidatorArrayCount(res)
+              })
+              .catch(() => {
+                // TODO: show fallback page
+              })
+          })
+          .catch((err) => {
+            console.log(err)
+            // TODO: show fallback page
+          })
+      } else if (modalAction == "create") {
+        dispatch(createValidator(modalControl))
+          .unwrap()
+          .then((res) => {
+            dispatch(getAllValidator({}))
+              .unwrap()
+              .then((res) => {
+                setModalVisibility("Step-4")
+                updateValidatorArrayCount(res)
+              })
+              .catch(() => {
+                // TODO: show fallback page
+              })
+          })
+          .catch((err) => {
+            console.log(err)
+            // TODO: show fallback page
+          })
+      }
     }
   }
   const _submitDeleteModal = () => {
     dispatch(deleteValidator({ id: modalControl.id }))
       .unwrap()
       .then((res) => {
-        closeModal()
-        updateValidatorArrayCount(res)
+        dispatch(getAllValidator({}))
+          .unwrap()
+          .then((res) => {
+            closeModal()
+            updateValidatorArrayCount(res)
+          })
+          .catch(() => {
+            // TODO: show fallback page
+          })
       })
   }
   const _submitStepZeroModal = () => {
@@ -167,11 +179,18 @@ export default function ValidatorsView() {
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
-    setModalControl({ ...modalControl, [name]: value })
+    if (name == "phone_number" || name == "backup_phone_number") {
+      if (isValidPhone(value) || value == "" || value == "+") {
+        setModalControl({ ...modalControl, [name]: value })
+      }
+    } else {
+      setModalControl({ ...modalControl, [name]: value })
+    }
   }
   const newValidator = () => {
     setModalAction("create")
     setModalControl(initialState)
+    setImageUpload("")
     setModalVisibility("Step-1")
   }
   const editValidator = (id: string) => {
@@ -180,6 +199,13 @@ export default function ValidatorsView() {
       .then((res) => {
         setModalAction("edit")
         setModalControl(res?.data?.data)
+        getFileFromFirebase(res?.data?.data?.profile_image)
+          .then((res) => {
+            setImageUpload(res)
+          })
+          .catch(() => {
+            setImageUpload("")
+          })
         setModalVisibility("Step-1")
       })
   }
@@ -205,6 +231,14 @@ export default function ValidatorsView() {
       .then((res) => {
         setModalAction("view")
         setModalControl(res?.data?.data)
+        getFileFromFirebase(res?.data?.data?.profile_image)
+          .then((res) => {
+            setImageUpload(res)
+          })
+          .catch(() => {
+            setImageUpload("")
+          })
+
         setModalVisibility("User-Info")
       })
   }
@@ -218,6 +252,7 @@ export default function ValidatorsView() {
         view="validator"
         closeIconVisibility={true}
         modalControl={modalControl}
+        imageUpload={imageUpload}
       />
       <StepZeroInformationModal
         openModal={modalVisibility == "Step-0"}
@@ -263,6 +298,8 @@ export default function ValidatorsView() {
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
+        imageUpload={imageUpload}
+        setImageUpload={setImageUpload}
       />
       <StepThreeModal
         openModal={modalVisibility == "Step-3"}
@@ -299,7 +336,7 @@ function AddValidators(_props: {
       <main className="flex flex-col items-center justify-center shadow-xl h-full rounded-2xl">
         <img
           src={validatorImage}
-          className="mb-10"
+          className="mb-10 "
           alt="validator screen image"
         />
         <h2 className="text-[#00192B] text-xl font-bold mb-2">No Validators</h2>
@@ -382,12 +419,14 @@ function Validators(_props: {
             return (
               <Validator
                 key={index}
-                // userImg={validator.userImg} TODO
-                userImg={"../../../../../assets/images/user.svg"}
+                userImg={validator.profile_image}
                 userName={validator.name}
                 email={validator.primary_email}
                 phoneNumber={validator.phone_number}
                 backupPhoneNumber={validator.backup_phone_number}
+                facebook_link={validator.facebook_link}
+                instagram_username={validator.instagram_username}
+                twitter_username={validator.twitter_username}
                 id={validator.id}
                 editValidator={_props.editValidator}
                 deleteValidator={_props.deleteValidator}
@@ -407,15 +446,43 @@ function Validator(_props: {
   email: string
   phoneNumber: string
   backupPhoneNumber: string
+  facebook_link: string
+  instagram_username: string
+  twitter_username: string
   id: string
   editValidator: Function
   deleteValidator: Function
   viewValidator: Function
 }) {
+  const [image, setImage] = useState<string>("")
+  useEffect(() => {
+    getFileFromFirebase(_props.userImg)
+      .then((res) => {
+        setImage(res)
+      })
+      .catch(() => {
+        setImage("")
+      })
+  }, [_props.userImg])
   return (
     <ul className="grid grid-cols-5 items-center py-3 px-7 ">
       <li className=" flex items-center gap-4">
-        <img src={userImg} alt="user image" className="rounded-full" />
+        {
+          image ? (
+            <img
+              src={image || userImg}
+              alt="user image"
+              className="rounded-full h-11 w-11"
+            />
+          ) : (
+            <img
+              src={userImg}
+              alt="user image"
+              className="rounded-full h-11 w-11"
+            />
+          )
+          // TODO add loading view
+        }
         <p
           className="font-semibold cursor-pointer"
           onClick={() => _props.viewValidator(_props.id)}
@@ -434,21 +501,39 @@ function Validator(_props: {
       </li>
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
-          <img
-            src={facebook}
-            alt="facebook logo"
-            className="w-5 cursor-pointer "
-          />
-          <img
-            src={instagram}
-            alt="instagram logo"
-            className="w-5 cursor-pointer "
-          />
-          <img
-            src={twitter}
-            alt="twitter logo"
-            className="w-5 cursor-pointer "
-          />
+          <a
+            href={_props.facebook_link}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={facebook}
+              alt="facebook logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
+          <a
+            href={`https://www.instagram.com/${_props.instagram_username}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={instagram}
+              alt="instagram logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
+          <a
+            href={`https://twitter.com/${_props.twitter_username}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={twitter}
+              alt="twitter logo"
+              className="w-5 cursor-pointer"
+            />
+          </a>
         </div>
         <div className="relative">
           <ValidatorDropDown

@@ -1,4 +1,4 @@
-import { lazy, useState } from "react"
+import { lazy, useState, useEffect } from "react"
 import styles from "./Dashboard.module.css"
 import { Outlet, useNavigate } from "react-router-dom"
 import { CONSTANT } from "../../common"
@@ -11,15 +11,59 @@ import profile from "../../../assets/images/Profile.svg"
 import setting from "../../../assets/images/Setting.svg"
 import { useAppDispatch } from "../../redux/hooks"
 import { logout } from "../../redux/actions/UserActions"
+import { useLocation } from "react-router-dom"
 
 const NavigationDrawer = lazy(() => import("./NavigationDrawer"))
 const DashboardNavbar = lazy(() => import("./DashboardNavbar"))
 
+type NavBarItem = {
+  screen: string
+  title: string
+  id: string
+}
+
 export default function Dashboard() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const currentPath = useLocation()
   const [selectedOption, setSelectedOption] = useState(CONSTANT.DASHBOARD)
+  
+  useEffect(() => {
+    setSelectedOption(navBarHeadings[currentPath.pathname].id)
+  }, [currentPath])
 
+  const navBarHeadings: Record<string, NavBarItem> = {
+    "/dashboard": {
+      screen: CONSTANT.DASHBOARD,
+      title: CONSTANT.DASHBOARD_TITLE,
+      id: CONSTANT.DASHBOARD
+    },
+    "/dashboard/assets": {
+      screen: CONSTANT.MY_ASSETS,
+      title: CONSTANT.MY_ASSETS_TITLE,
+      id: CONSTANT.MY_ASSETS
+    },
+    "/dashboard/beneficiaries": {
+      screen: CONSTANT.BENEFICIARIES,
+      title: CONSTANT.BENEFICIARIES_TITLE,
+      id: CONSTANT.BENEFICIARIES
+    },
+    "/dashboard/validators": {
+      screen: CONSTANT.VALIDATORS,
+      title: CONSTANT.VALIDATORS_TITLE,
+      id: CONSTANT.VALIDATORS
+    },
+    "/dashboard/pulse": {
+      screen: CONSTANT.PULSE_CHECK,
+      title: CONSTANT.PULSE_CHECK_TITLE,
+      id: CONSTANT.PULSE_CHECK
+    },
+    "/dashboard/account": {
+      screen: CONSTANT.MY_ACCOUNT,
+      title: CONSTANT.MY_ACCOUNT_TITLE,
+      id: CONSTANT.MY_ACCOUNT
+    },
+  }
   const DRAWER_MENU = [
     {
       icon: dashboardIcon,
@@ -101,7 +145,11 @@ export default function Dashboard() {
         selectedOption={selectedOption}
       />
       <section className={styles.DashboardBody}>
-        <DashboardNavbar _handleLogout={_handleLogout} />
+        <DashboardNavbar
+          _handleLogout={_handleLogout}
+          navBarHeadings={navBarHeadings}
+          currentPath={currentPath}
+        />
         <Outlet />
       </section>
     </div>

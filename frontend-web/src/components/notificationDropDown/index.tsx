@@ -28,7 +28,7 @@ export function Notifications() {
   ]
   return (
     <div>
-      <Menu as="div" className="relative inline-block text-left">
+      <Menu as="div" className="relative inline-block text-left z-50">
         <div>
           <Menu.Button className="inline-flex w-full justify-center">
             <img src={notificationIcon} alt="notification icon" />
@@ -62,9 +62,10 @@ export function Notifications() {
               </Menu.Item>
               <Menu.Item>
                 <div className=" h-[210px] overflow-y-auto scrollbar">
-                  {notificationsArr.map((notification) => {
+                  {notificationsArr.map((notification, index) => {
                     return (
                       <Notification
+                        key={index}
                         title={notification.title}
                         msg={notification.message}
                       />

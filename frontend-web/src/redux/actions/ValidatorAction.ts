@@ -1,4 +1,4 @@
-import { DELETE, GET, POST, PUT } from "../../common"
+import { DELETE, GET, POST, PUT, jsonToFormData } from "../../common"
 import { ALL_VALIDATORS, VALIDATORS } from "../../common/api/routes"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
@@ -20,7 +20,8 @@ export const createValidator = createAsyncThunk(
   "createValidator",
   async (Data: {}, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: {token: any} };
-    const params = { ROUTE: VALIDATORS, Body: JSON.stringify({ ...Data }), token: user.token  }
+    let formData = jsonToFormData(Data)
+    const params = { ROUTE: VALIDATORS, Body: formData, token: user.token  }
     try {
       let response = await POST(params)
       return response
@@ -48,7 +49,8 @@ export const updateValidator = createAsyncThunk(
   "updateValidator",
   async (Data: {}, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: {token: any} };
-    const params = { ROUTE: VALIDATORS, Body: JSON.stringify({ ...Data }), token: user.token  }
+    let formData = jsonToFormData(Data)
+    const params = { ROUTE: VALIDATORS, Body: formData, token: user.token  }
     try {
       let response = await PUT(params)
       return response
