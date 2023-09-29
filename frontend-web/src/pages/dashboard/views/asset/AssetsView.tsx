@@ -449,7 +449,7 @@ function Assets(_props: {
                 img={data.img}
                 title={data.title}
                 subtitle={data.subTitle}
-                elemennt={data.element}
+                element={data.element}
               />
             )
           })}
@@ -512,7 +512,7 @@ function AssetDetailsCard(_props: {
   img: any
   title: string | number
   subtitle: string
-  elemennt: any
+  element: any
 }) {
   return (
     <div className="shadow-md flex-grow rounded-xl px-4 py-3 flex justify-between items-center max-w-[535px]">
@@ -525,7 +525,7 @@ function AssetDetailsCard(_props: {
           <p className="text-[#828282] text-xs">{_props.subtitle}</p>
         </div>
       </div>
-      <div className="cursor-pointer">{_props.elemennt}</div>
+      <div className="cursor-pointer">{_props.element}</div>
     </div>
   )
 }
