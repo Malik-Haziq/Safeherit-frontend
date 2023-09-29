@@ -1,5 +1,4 @@
-import { GET, } from "../../common"
-import { GET_DATA } from "../../common/api/routes"
+import { GET, GET_DATA } from "@/common"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
 export const getData = createAsyncThunk(

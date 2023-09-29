@@ -1,6 +1,7 @@
-import { Modal } from "../../../../components"
-import logo from "../../../../../assets/images/vertical_Logo.png"
-import video from "../../../../../assets/images/register_page_video.png"
+import logo from "@images/vertical_Logo.png"
+import video from "@images/register_page_video.png"
+
+import { Modal } from "@/components"
 
 export function DashboardModal() {
   return (

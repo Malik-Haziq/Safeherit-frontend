@@ -1,7 +1,7 @@
+import dots from "@images/dots.svg"
+
+import React, { Fragment } from "react"
 import { Menu, Transition } from "@headlessui/react"
-import { Fragment } from "react"
-import React from "react"
-import dots from "../../../assets/images/dots.svg"
 
 export function DropDownButton(_props: any) {
   return (

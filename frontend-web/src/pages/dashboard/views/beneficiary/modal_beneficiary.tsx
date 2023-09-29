@@ -1,15 +1,16 @@
-import { Modal } from "../../../../components"
-import facebook from "../../../../../assets/images/facebook.svg"
-import instagram from "../../../../../assets/images/insta.svg"
-import twitter from "../../../../../assets/images/twitter.svg"
-import uploadVideoIcon from "../../../../../assets/images/upload-video.svg"
-import video from "../../../../../assets/images/register_page_video.png"
-import profilePic from "../../../../../assets/images/profile-pic.svg"
-import registerBeneficiaryImg from "../../../../../assets/images/register-beneficiary.svg"
-import stepOne from "../../../../../assets/images/step_1_of_4.svg"
-import stepTwo from "../../../../../assets/images/step_2_of_4.svg"
-import stepThree from "../../../../../assets/images/step_3_of_4.svg"
-import stepFour from "../../../../../assets/images/step_4_of_4.svg"
+import facebook from "@images/facebook.svg"
+import instagram from "@images/insta.svg"
+import twitter from "@images/twitter.svg"
+import uploadVideoIcon from "@images/upload-video.svg"
+import video from "@images/register_page_video.png"
+import profilePic from "@images/profile-pic.svg"
+import registerBeneficiaryImg from "@images/register-beneficiary.svg"
+import stepOne from "@images/step_1_of_4.svg"
+import stepTwo from "@images/step_2_of_4.svg"
+import stepThree from "@images/step_3_of_4.svg"
+import stepFour from "@images/step_4_of_4.svg"
+
+import { Modal } from "@/components"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean

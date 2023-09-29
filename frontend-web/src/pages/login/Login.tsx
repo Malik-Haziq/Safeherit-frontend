@@ -1,12 +1,13 @@
-import { useTranslation } from "react-i18next"
-import logo from "../../../assets/images/safeherit_logo.svg"
-import loginImg from "../../../assets/images/login-img.png"
-import star from "../../../assets/images/star.svg"
+import logo from "@images/safeherit_logo.svg"
+import loginImg from "@images/login-img.png"
+import star from "@images/star.svg"
+
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { login, resetPassword } from "../../redux/actions/UserActions"
-import { useAppDispatch } from "../../redux/hooks"
-import ForgotPasswordModal from "../../components/modal/ForgotPasswordModal"
+import { login, resetPassword } from "@redux/actions"
+import { useAppDispatch } from "@redux/hooks"
+import { ForgotPasswordModal } from "@/components"
 
 export function Login() {
   const { t } = useTranslation()

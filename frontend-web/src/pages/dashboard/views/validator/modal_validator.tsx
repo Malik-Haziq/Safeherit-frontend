@@ -1,12 +1,13 @@
-import { Modal } from "../../../../components"
-import facebook from "../../../../../assets/images/facebook.svg"
-import twitter from "../../../../../assets/images/twitter.svg"
-import instagram from "../../../../../assets/images/insta.svg"
-import profilePic from "../../../../../assets/images/profile-pic.svg"
-import registerValidatorImg from "../../../../../assets/images/register-validator-img.svg"
-import stepOne from "../../../../../assets/images/step_1_of_3.svg"
-import stepTwo from "../../../../../assets/images/step_2_of_3.svg"
-import stepThree from "../../../../../assets/images/step_3_of_3.svg"
+import facebook from "@images/facebook.svg"
+import twitter from "@images/twitter.svg"
+import instagram from "@images/insta.svg"
+import profilePic from "@images/profile-pic.svg"
+import registerValidatorImg from "@images/register-validator-img.svg"
+import stepOne from "@images/step_1_of_3.svg"
+import stepTwo from "@images/step_2_of_3.svg"
+import stepThree from "@images/step_3_of_3.svg"
+
+import { Modal } from "@/components"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean

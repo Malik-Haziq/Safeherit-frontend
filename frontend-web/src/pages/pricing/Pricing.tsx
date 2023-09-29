@@ -1,5 +1,6 @@
+import tick from "@images/tick.svg"
+
 import { useState } from "react"
-import tick from "../../../assets/images/tick.svg"
 
 export default function Pricing() {
   const [selectedPlan, setSelectedPlan] = useState("Yearly")

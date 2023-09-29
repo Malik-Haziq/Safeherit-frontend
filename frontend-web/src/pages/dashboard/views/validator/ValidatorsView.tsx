@@ -1,13 +1,15 @@
-import styles from "../../Dashboard.module.css"
-import userIcon from "../../../../../assets/images/user-icon.svg"
-import addIcon from "../../../../../assets/images/add-icon.svg"
-import facebook from "../../../../../assets/images/facebook.svg"
-import instagram from "../../../../../assets/images/insta.svg"
-import twitter from "../../../../../assets/images/twitter.svg"
-import userImg from "../../../../../assets/images/user.svg"
-import validatorImage from "../../../../../assets/images/validator-screen.svg"
-import { ValidatorDropDown } from "../../../../components"
+import userIcon from "@images/user-icon.svg"
+import addIcon from "@images/add-icon.svg"
+import facebook from "@images/facebook.svg"
+import instagram from "@images/insta.svg"
+import twitter from "@images/twitter.svg"
+import userImg from "@images/user.svg"
+import validatorImage from "@images/validator-screen.svg"
 
+import { useCallback, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import styles from "../../Dashboard.module.css"
+import { ValidatorDropDown, ConfirmationModal, UserDetailsModal } from "@/components"
 import {
   StepZeroInformationModal,
   StepOneModal,
@@ -15,20 +17,15 @@ import {
   StepThreeModal,
   StepFourSuccessModal,
 } from "./modal_validator"
-import { useCallback, useEffect, useState } from "react"
 import {
   getAllValidator,
   createValidator,
   findValidator,
   updateValidator,
   deleteValidator,
-} from "../../../../redux/actions/ValidatorAction"
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
-import { ConfirmationModal } from "../../../../components/modal/ConfirmationModal"
-import { useNavigate } from "react-router-dom"
-import { isValidEmail, isValidFacebook, isValidPhone } from "../../../../common"
-import { UserDetailsModal } from "../../../../components/modal/UserDetailsModal"
-import { getFileFromFirebase } from "../../../../common/utils/firebase"
+} from "@redux/actions"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
+import { isValidEmail, getFileFromFirebase, isValidPhone } from "@/common"
 
 const initialState = {
   id: "",

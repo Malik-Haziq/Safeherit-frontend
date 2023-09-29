@@ -1,10 +1,11 @@
-import logo from "../../../assets/images/safeherit_logo.svg"
-import userImg from "../../../assets/images/user.svg"
-import arrowDown from "../../../assets/images/chevron-down.svg"
+import logo from "@images/safeherit_logo.svg";
+import userImg from "@images/user.svg"
+import arrowDown from "@images/chevron-down.svg"
+
 import { useNavigate, useLocation } from "react-router-dom"
-import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { logout } from "../../redux/actions/UserActions"
-import { DropDownButton } from ".."
+import { useAppDispatch, useAppSelector} from "@redux/hooks"
+import { logout } from "@redux/actions"
+import { DropDownButton } from "@/components"
 
 export function NavBar() {
 

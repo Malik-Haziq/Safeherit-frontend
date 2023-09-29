@@ -1,16 +1,13 @@
-import { DashboardModal } from "./modal_dashboard"
-import styles from "../../Dashboard.module.css"
-import diamond from "../../../../../assets/images/diamond.svg"
-import shield from "../../../../../assets/images/Shield-done.svg"
-import heart from "../../../../../assets/images/heart.svg"
-import users from "../../../../../assets/images/users.svg"
-import privateKeysIcon from "../../../../../assets/images/key-icon.svg"
-import { useAppDispatch } from "../../../../redux/hooks"
-import { getData } from "../../../../redux/actions/DashboardAction"
+import diamond from "@images/diamond.svg"
+import shield from "@images/Shield-done.svg"
+import heart from "@images/heart.svg"
+import users from "@images/users.svg"
+import privateKeysIcon from "@images/key-icon.svg"
+
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
+import { getData } from "@redux/actions"
 import { useEffect, useState } from "react"
-import { useAppSelector } from "../../../../redux/hooks"
-import { getFileFromFirebase } from "../../../../common/utils/firebase"
-import { ROUTE_CONSTANTS } from "../../../../common"
+import { getFileFromFirebase, ROUTE_CONSTANTS } from "@/common"
 
 export default function DashboardView() {
   const dispatch = useAppDispatch()

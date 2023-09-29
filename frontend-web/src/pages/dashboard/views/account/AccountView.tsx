@@ -1,17 +1,18 @@
-import styles from "../../Dashboard.module.css"
-import userImg from "../../../../../assets/images/user.svg"
-import userIcon from "../../../../../assets/images/UserIcon.png"
-import msgIcon from "../../../../../assets/images/message.svg"
-import editIcon from "../../../../../assets/images/edit.svg"
-import viewIcon from "../../../../../assets/images/view-icon.svg"
-import languageIcon from "../../../../../assets/images/language.svg"
-import warningIcon from "../../../../../assets/images/warning.svg"
-import MembershipPlanView from './MembershipPlanView'
+import userImg from "@images/user.svg"
+import userIcon from "@images/UserIcon.png"
+import msgIcon from "@images/message.svg"
+import editIcon from "@images/edit.svg"
+import viewIcon from "@images/view-icon.svg"
+import languageIcon from "@images/language.svg"
+import warningIcon from "@images/warning.svg"
+
 import { useState, useEffect } from "react"
+import styles from "../../Dashboard.module.css"
+import MembershipPlanView from './MembershipPlanView'
 import { EditUserModal } from "./modal_account"
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
-import { getUser, updateUser } from "../../../../redux/actions/UserActions"
-import { getFileFromFirebase } from "../../../../common/utils/firebase"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
+import { getUser, updateUser } from "@redux/actions"
+import { getFileFromFirebase } from "@/common"
 
 const initialState = {
   displayName: "",

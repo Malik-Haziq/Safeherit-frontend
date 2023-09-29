@@ -1,7 +1,8 @@
+import notificationIcon from "@images/Notification.svg"
+import notification from "@images/notification-icon.svg"
+
+import { Fragment } from "react"
 import { Menu, Transition } from "@headlessui/react"
-import { Fragment, useEffect, useRef, useState } from "react"
-import notificationIcon from "../../../assets/images/Notification.svg"
-import notification from "../../../assets/images/notification-icon.svg"
 
 export function Notifications() {
   const notificationsArr = [
