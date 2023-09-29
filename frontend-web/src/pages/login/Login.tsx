@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom"
 import { login, resetPassword } from "../../redux/actions/UserActions"
 import { useAppDispatch } from "../../redux/hooks"
 import ForgotPasswordModal from "../../components/modal/ForgotPasswordModal"
+import {UserRolesModal,PrivateKeyModal} from './modal_login'
 
 export function Login() {
   const { t } = useTranslation()
@@ -67,6 +68,7 @@ export function Login() {
 
   return (
     <main className="flex flex-row justify-center lg:justify-between font-safe-font-default w-screen h-screen">
+      <UserRolesModal openModal={true} closeModal={false} closeModalOnOverlayClick={false} closeIconVisibility={false} action={""} videoUpload={""}/>
       {showForgotPasswordModal && (
         <ForgotPasswordModal
           resetEmail={resetEmail}

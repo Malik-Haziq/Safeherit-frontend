@@ -1,5 +1,8 @@
 import { Modal } from "../../components"
 import uploadImg from "../../../assets/images/upload.png"
+import logo from "../../../assets/images/safeherit_logo.svg"
+import userImg from "../../../assets/images/user.svg"
+
 export function PrivateKeyModal(_props: {
   openModal: boolean
   closeModal: any
@@ -115,5 +118,124 @@ export function PrivateKeyModal(_props: {
         },
       ]}
     />
+  )
+}
+
+export function UserRolesModal(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  closeIconVisibility: boolean
+  action: string
+  videoUpload: string
+  // setVideoUpload: Function
+  // _handleChange: React.ChangeEventHandler<HTMLInputElement>
+}) {
+  const dataArr = [
+    {
+      userImg: userImg,
+      userName: "Malik Haziq",
+      userRole: "Owner",
+      ownerImg: userImg,
+      ownerName: "hello hello",
+    },
+    {
+      userImg: userImg,
+      userName: "James Smith",
+      userRole: "Beneficiary",
+      ownerImg: userImg,
+      ownerName: "hello hello",
+    },
+    {
+      userImg: userImg,
+      userName: "Thomas Fin",
+      userRole: "Validator",
+      ownerImg: userImg,
+      ownerName: "hello hello",
+    },
+    {
+      userImg: userImg,
+      userName: "Jr. Hawking",
+      userRole: "Beneficiary",
+      ownerImg: userImg,
+      ownerName: "hello hello",
+    },
+  ]
+
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={"User Roles "}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "iconView",
+          props: {
+            image: logo,
+            imageStyles: "mx-auto",
+            imageContainerStyles: "mt-7 mb-14",
+          },
+        },
+        {
+          type: "customView",
+          props: {
+            customViewContainer: "mx-auto mb-7",
+            CustomView: () => {
+              return (
+                <div>
+                  {dataArr.map((data) => {
+                    return (
+                      <LoggedUser
+                        userImg={data.userImg}
+                        userName={data.userName}
+                        userRole={data.userRole}
+                        ownerImg={data.ownerImg}
+                        ownerName={data.ownerName}
+                      />
+                    )
+                  })}
+                </div>
+              )
+            },
+          },
+        },
+      ]}
+    />
+  )
+}
+
+function LoggedUser(_props: {
+  userImg: any
+  userName: string
+  userRole: string
+  ownerImg: any
+  ownerName: string
+}) {
+  return (
+    <div className="flex items-center justify-between py-1 mx-14 my-4 border-b-[1px] ">
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-center items-center gap-4 font-semibold">
+          <img
+            src={_props.userImg}
+            alt="user image"
+            className="w-8 h-w rounded-full"
+          />
+          <h2>{_props.userName}</h2>
+        </div>
+        {_props.userRole.toLowerCase() !== 'owner' ? <div className="flex items-center text-[#333] ">
+          <small className="flex items-center justify-center gap-1">
+            Owner: <img src={_props.ownerImg} alt="owner Image" className="ml-2 w-5"/>{" "}
+            <span>{_props.ownerName}</span>
+          </small>
+        </div>: <div></div> }
+        
+      </div>
+      <p className="font-medium text-sm">{_props.userRole}</p>
+      <a href="#" className="text-sm font-medium text-[#0C8AC1]">
+        Login
+      </a>
+    </div>
   )
 }
