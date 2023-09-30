@@ -59,10 +59,8 @@ export function SignUp() {
               displayName: formControl.name
             }))
             .unwrap()
-            .then((res) => {
-              navigate("/pricing")
-            })
             .catch(() => {})
+            navigate("/pricing")
           })
           .catch((err) => {
             alert(err.code)
