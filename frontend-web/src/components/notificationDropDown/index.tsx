@@ -28,7 +28,7 @@ export function Notifications() {
   ]
   return (
     <div>
-      <Menu as="div" className="relative inline-block text-left">
+      <Menu as="div" className="relative inline-block text-left z-50">
         <div>
           <Menu.Button className="inline-flex w-full justify-center">
             <img src={notificationIcon} alt="notification icon" />
