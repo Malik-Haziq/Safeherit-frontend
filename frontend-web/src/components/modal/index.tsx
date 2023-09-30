@@ -1,6 +1,7 @@
+import defaultIcon from "@images/safeherit_logo.svg"
+import closeIcon from "@images/close-icon.svg"
+
 import styles from "./Modal.module.css"
-import defaultIcon from "../../../assets/images/safeherit_logo.svg"
-import closeIcon from "../../../assets/images/close-icon.svg"
 import { SelectField, InputField } from ".."
 
 const DisplayFieldComponent = (_props: { element: any; index: number }) => {

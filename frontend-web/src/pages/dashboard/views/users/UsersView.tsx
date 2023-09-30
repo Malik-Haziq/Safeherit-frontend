@@ -1,9 +1,9 @@
 import styles from "../../Dashboard.module.css"
-import eye from "../../../../../assets/images/eye.svg"
-import edit from "../../../../../assets/images/edit.svg"
-import leftArrow from "../../../../../assets/images/left-arrow.svg"
-import rightArrow from "../../../../../assets/images/right-arrow.svg"
-import deleteIcon from "../../../../../assets/images/delete.svg"
+import eye from "@images/eye.svg"
+import edit from "@images/edit.svg"
+import leftArrow from "@images/left-arrow.svg"
+import rightArrow from "@images/right-arrow.svg"
+import deleteIcon from "@images/delete.svg"
 
 export default function UsersView() {
   const users = [

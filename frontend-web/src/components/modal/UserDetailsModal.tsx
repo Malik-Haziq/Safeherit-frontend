@@ -1,11 +1,12 @@
+import userImage from "@images/user.svg"
+import closeIcon from "@images/close-icon.svg"
+import facebookIcon from "@images/facebook.svg"
+import instagramIcon from "@images/insta.svg"
+import twitterIcon from "@images/twitter.svg"
+import copy from "@images/copy-icon.svg"
+import testimentVideo from "@images/register_page_video.png"
+
 import styles from "./Modal.module.css"
-import userImage from "../../../assets/images/user.svg"
-import closeIcon from "../../../assets/images/close-icon.svg"
-import facebookIcon from "../../../assets/images/facebook.svg"
-import instagramIcon from "../../../assets/images/insta.svg"
-import twitterIcon from "../../../assets/images/twitter.svg"
-import copy from "../../../assets/images/copy-icon.svg"
-import testimentVideo from "../../../assets/images/register_page_video.png"
 
 export const UserDetailsModal = (_props: {
   openModal: boolean

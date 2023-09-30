@@ -1,5 +1,6 @@
-import { Modal } from "../../components"
-import uploadImg from "../../../assets/images/upload.png"
+import uploadImg from "@images/upload.png"
+import { Modal } from "@/components"
+
 export function PrivateKeyModal(_props: {
   openModal: boolean
   closeModal: any

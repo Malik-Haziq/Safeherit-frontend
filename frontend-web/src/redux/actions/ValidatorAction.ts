@@ -1,5 +1,4 @@
-import { DELETE, GET, POST, PUT, jsonToFormData } from "../../common"
-import { ALL_VALIDATORS, VALIDATORS } from "../../common/api/routes"
+import { DELETE, GET, POST, PUT, jsonToFormData, ALL_VALIDATORS, VALIDATORS } from "@/common"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
 export const getAllValidator = createAsyncThunk(

@@ -7,8 +7,7 @@ import {
 import { auth } from "../../firebase"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { setToken } from "../reducers/UserSlice";
-import { GET, PUT, jsonToFormData } from "../../common"
-import { GET_USER } from "../../common/api/routes"
+import { GET, PUT, jsonToFormData, GET_USER } from "@/common"
 
 export const login = createAsyncThunk(
   "login",

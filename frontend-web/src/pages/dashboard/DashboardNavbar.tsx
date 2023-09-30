@@ -1,9 +1,8 @@
-import notification from "../../../assets/images/Notification.svg"
-import userImg from "../../../assets/images/user.svg"
-import arrowDown from "../../../assets/images/chevron-down.svg"
-import { DropDownButton } from "../../components"
-import { Notifications } from "../../../src/components/notificationDropDown"
-import { useAppSelector } from "../../redux/hooks"
+import userImg from "@images/user.svg"
+import arrowDown from "@images/chevron-down.svg"
+
+import { DropDownButton, Notifications } from "@/components"
+import { useAppSelector } from "@redux/hooks"
 
 type NavBarItem = {
   screen: string

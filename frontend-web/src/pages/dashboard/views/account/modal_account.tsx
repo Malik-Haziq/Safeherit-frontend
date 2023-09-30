@@ -1,7 +1,8 @@
-import userImg from "../../../../../assets/images/user.svg"
-import uploadIcon from "../../../../../assets/images/upload-icon.svg"
-import { Modal } from "../../../../components";
-import arrowDown from "../../../../../assets/images/arrow-down.svg"
+import userImg from "@images/user.svg"
+import uploadIcon from "@images/upload-icon.svg"
+import arrowDown from "@images/arrow-down.svg"
+
+import { Modal } from "@/components";
 
 interface CustomChangeEvent {
   target: {
