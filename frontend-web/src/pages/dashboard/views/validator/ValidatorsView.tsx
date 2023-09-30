@@ -315,7 +315,7 @@ export default function ValidatorsView() {
       {hasValidators == -1 ? (
         <div className={styles.AppView}>
         <div className="relative h-[80vh]">
-      <Spinner/>
+          <Spinner/>
         </div>
       </div>
       ) : hasValidators == 0 ? (

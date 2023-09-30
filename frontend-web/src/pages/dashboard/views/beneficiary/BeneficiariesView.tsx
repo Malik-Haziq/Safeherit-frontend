@@ -363,7 +363,7 @@ export default function BeneficiariesView() {
       {hasBeneficiaries == -1 ? (
         <div className={styles.AppView}>
           <div className="relative h-[80vh]">
-        <Spinner/>
+            <Spinner/>
           </div>
         </div>
       ) : hasBeneficiaries == 0 ? (
