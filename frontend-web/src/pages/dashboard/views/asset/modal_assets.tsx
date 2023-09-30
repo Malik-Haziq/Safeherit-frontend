@@ -6,6 +6,8 @@ import arrowDown from "@images/arrow-down.svg"
 
 import { Modal } from "@/components"
 import { assetData } from "./data"
+import { useAppSelector } from "@redux/hooks"
+import { getValueOfObjectFromArray } from "@/common"
 
 const selectFieldStyles = "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]"
 const selectFieldRightIconStyles = "absolute right-4 top-4 cursor-pointer"
@@ -199,54 +201,6 @@ export function StepOneModal(_props: {
           },
         },
         ...conditionalElements,
-        !_props?.modalControl?.category &&
-        {
-          type: "inputView",
-          props: {
-            name: "dummy",
-            type: "text",
-            placeholder: "Label  (ex: My main bank)",
-            value: "",
-            _handleChange: () => {},
-            required: false,
-            disabled: true,
-            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
-            inputContainerStyles: "mx-7 mb-4",
-            hasRightIcon: false,
-          },
-        },
-        !_props?.modalControl?.category &&
-        {
-          type: "inputView",
-          props: {
-            name: "dummy",
-            type: "text",
-            placeholder: "Bank Name",
-            value: "",
-            _handleChange: () => {},
-            required: false,
-            disabled: true,
-            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
-            inputContainerStyles: "mx-7 mb-4",
-            hasRightIcon: false,
-          },
-        },
-        !_props?.modalControl?.category && 
-        {
-          type: "inputView",
-          props: {
-            name: "dummy",
-            type: "text",
-            placeholder: "Account Number",
-            value: "",
-            _handleChange: () => {},
-            required: false,
-            disabled: true,
-            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
-            inputContainerStyles: "mx-7 mb-4",
-            hasRightIcon: false,
-          },
-        },
         {
           type: "buttonView",
           props: {
@@ -270,19 +224,42 @@ export function StepTwoModal(_props: {
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   modalControl: ModalControl
   _submitModal: Function
+  assetFile: any
+  setAssetFile: Function
 }) {
   const factoryElements = assetData[_props.modalControl?.category]?.[1];
+  const beneficiary = useAppSelector((state) => state.beneficiary);
 
   const conditionalElements = factoryElements
   ? factoryElements.map((Asset) => {
       if (Asset.type === "Text") {
         return generateTextInputFieldProps(Asset.name, Asset.placeholder, _props.modalControl?.[Asset?.name] ? _props.modalControl?.[`${Asset?.name}`] : "", _props._handleChange);
       } else if (Asset.type === "Select") {
-        return generateSelectFieldProps(Asset.value, Asset.placeholder, _props.modalControl?.[Asset?.name] ? {value: _props.modalControl?.[`${Asset?.name}`], label: _props.modalControl?.[`${Asset?.name}`]} : "", Asset.name, _props._handleChange)
+        if (Asset.name == "Beneficiary") {
+          return generateSelectFieldProps(
+            beneficiary.beneficiary_list,//send beneficiary list here
+            Asset.placeholder,
+            _props.modalControl?.[Asset?.name] ?
+              {
+                value: _props.modalControl?.[`${Asset?.name}`], label: getValueOfObjectFromArray(beneficiary.beneficiary_list, _props.modalControl?.[`${Asset?.name}`])
+              } :
+              "",
+            Asset.name, _props._handleChange)
+        }
+        else {
+          return generateSelectFieldProps(Asset.value, Asset.placeholder, _props.modalControl?.[Asset?.name] ? {value: _props.modalControl?.[`${Asset?.name}`], label: _props.modalControl?.[`${Asset?.name}`]} : "", Asset.name, _props._handleChange)
+        }
       }
       return null; // Return null for other types or handle as needed
     })
   : [];
+
+  const handleFileInputChange = (event: any) => {
+    const file = event.target.files[0]
+    if (file) {
+      _props.setAssetFile(file);
+    }
+  };
   return (
     <Modal
       openModal={_props.openModal}
@@ -299,13 +276,6 @@ export function StepTwoModal(_props: {
             imageContainerStyles: "my-7",
           },
         },
-        // {
-        //   type: "textView",
-        //   props: {
-        //     text: "Online banking credentials",
-        //     textStyles: "text=[#00192B] font-semibold pl-7 mb-3",
-        //   },
-        // },
         ...conditionalElements,
         {
           type: "customView",
@@ -316,16 +286,17 @@ export function StepTwoModal(_props: {
                 <div className="relative">
                   <input
                     type="file"
-                    accept="image/*"
-                    name="personalized_video_link"
-                    onChange={_props._handleChange}
+                    name="asset_file"
+                    onChange={handleFileInputChange}
                     className="opacity-0 absolute top-0 right-0 h-20 w-20"
+                    multiple={false}
                   />
                   <div className="flex items-center justify-between gap-2 mb-8">
                     <span className="text-black font-medium">Upload files</span>
+                    <p>{_props.assetFile?.name || _props.assetFile}</p>
                     <img
                       src={uploadVideoIcon}
-                      alt="Asset Image"
+                      alt="Asset files"
                       className="w-20 h-20"
                     />
                   </div>

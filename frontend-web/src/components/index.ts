@@ -1,6 +1,7 @@
 export * from "./dropDownButton/index"
 export * from "./navbar/NavBar"
 export * from "./selectField/index"
+export * from "./inputField/index"
 export * from "./notificationDropDown/index"
 
 export * from "./modal/index"

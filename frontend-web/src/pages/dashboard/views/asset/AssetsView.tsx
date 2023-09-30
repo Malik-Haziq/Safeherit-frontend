@@ -28,9 +28,11 @@ import {
   deleteAsset,
   updateAsset,
   createAsset,
+  getAllBeneficiary,
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal } from "@/components"
+import { assetData, getRequiredFields } from "./data" 
 
 interface ModalControl {
   [key: string]: any // This index signature allows string keys with any value
@@ -47,11 +49,11 @@ export default function AssetsView() {
   const [modalControl, setModalControl] = useState(initialState)
   const [modalVisibility, setModalVisibility] = useState("none")
   const isEditingAsset = useRef(false)
-  const [imageUpload, setImageUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [selected, setSelected] = useState("")
   const [assetDetails, setAssetDetails] = useState([{}])
   const [selectedAsset, setSelectedAsset] = useState("")
+  const [assetFile, setAssetFile] = useState("")
 
   useEffect(() => {
     // reset values incase of creating an asset
@@ -61,32 +63,34 @@ export default function AssetsView() {
   }, [modalControl.category])
 
   useEffect(() => {
-    // listen to asset_array changes
-    updateAssetsArrayCount()
+    if (modalVisibility != "none") {
+      updateAssetArrayCount()
+    }
     setAssetDetails(asset.Asset_array)
   }, [asset.Asset_array])
 
-  const updateAssetsArrayCount = () => {
-    if (asset.Asset_array && asset.Asset_array.length > 0) {
-      setHasAssets(1)
-    } else if (asset.Asset_array && asset.Asset_array.length == 0) {
-      setHasAssets(0)
-    }
-  }
-  useEffect(() => {
-    // Get All assets on initial load
-    dispatch(getAllAsset({}))
+  useEffect(() => { //Get Beneficiaries
+    dispatch(getAllBeneficiary({}))
+    .unwrap()
+    .catch(() => {// TODO: show fallback page
+    })
+    .finally(() => {
+      dispatch(getAllAsset({}))
       .unwrap()
+      .then((res) => {
+        updateAssetArrayCount()
+      })
       .catch(() => {
         // TODO: show fallback page
       })
+    })
   }, [])
 
   const closeModal = useCallback(() => {
     // close modal
     setModalControl(initialState)
     setModalVisibility("none")
-    setImageUpload("")
+    setAssetFile("")
     setSelectedAsset("")
     isEditingAsset.current = false
   }, [])
@@ -173,6 +177,26 @@ export default function AssetsView() {
     },
   ]
 
+  const updateAssetArrayCount = () => {
+    if (asset.Asset_array && asset.Asset_array.length > 0) {
+      setHasAssets(1)
+    } else if (asset.Asset_array && asset.Asset_array.length == 0) {
+      setHasAssets(0)
+    }
+  }
+  const validateRequiredFields = (modalControl: ModalControl, modal: number) => {
+    let isValid = true
+    const [requiredFields] = getRequiredFields(modalControl.category, modal)
+    const enteredFields = Object.keys(modalControl)
+    requiredFields.forEach((field: string) => {
+      if (!enteredFields.includes(field)) {
+        isValid = false
+        alert(`Please enter ${field}`)
+      }
+    })
+    return isValid
+  }
+
   const _submitStepZeroInformationModal = () => {
     newAsset()
   }
@@ -181,7 +205,9 @@ export default function AssetsView() {
     if (!modalControl.category) {
       alert("Please select an Asset category")
     } else {
-      setModalVisibility("Step-2")
+      if (validateRequiredFields(modalControl, 0)) {
+        setModalVisibility("Step-2")
+      }
     }
   }
   const _submitStepTwoModal = () => {
@@ -191,32 +217,36 @@ export default function AssetsView() {
       category: string
       assignedBeneficiaryId: string
       data: string
+      asset_file: any
     } = {
       category: modalControl.category,
       assignedBeneficiaryId: modalControl.Beneficiary,
       data: JSON.stringify(modalControl),
+      asset_file: assetFile
     }
-    if (modalAction == "edit") {
-      alert("Updating Asset")
-      Data.id = selectedAsset
-      dispatch(updateAsset(Data))
-        .unwrap()
-        .then((res) => {
-          dispatch(getAllAsset({})).then(() => {
-            closeModal()
+    if (validateRequiredFields(modalControl, 1)) {
+      if (modalAction == "edit") {
+        alert("Updating Asset")
+        Data.id = selectedAsset
+        dispatch(updateAsset(Data))
+          .unwrap()
+          .then((res) => {
+            dispatch(getAllAsset({})).then(() => {
+              closeModal()
+            })
           })
-        })
-        .catch(() => {})
-    } else if (modalAction == "create") {
-      alert("Creating Asset")
-      dispatch(createAsset(Data))
-        .unwrap()
-        .then((res) => {
-          dispatch(getAllAsset({})).then(() => {
-            setModalVisibility("Step-Success")
+          .catch(() => {})
+      } else if (modalAction == "create") {
+        alert("Creating Asset")
+        dispatch(createAsset(Data))
+          .unwrap()
+          .then((res) => {
+            dispatch(getAllAsset({})).then((res) => {
+              setModalVisibility("Step-Success")
+            })
           })
-        })
-        .catch(() => {})
+          .catch(() => {})
+      }
     }
   }
   const _submitSuccessModal = () => {
@@ -258,6 +288,7 @@ export default function AssetsView() {
         isEditingAsset.current = true
         setSelectedAsset(assetId)
         setModalControl(JSON.parse(res.data.data.data))
+        setAssetFile(res.data.data.asset_file)
         setModalAction("edit")
         setModalVisibility("Step-1")
       })
@@ -310,6 +341,8 @@ export default function AssetsView() {
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
+        setAssetFile={setAssetFile}
+        assetFile={assetFile}
       />
       <SuccessModal
         openModal={modalVisibility == "Step-Success"}
@@ -338,21 +371,21 @@ export default function AssetsView() {
         edit={editAsset}
         assetId={selectedAsset}
       />
-      {hasAssets == -1 ? (
-        <div>Loading Assets</div>
+      { hasAssets > 0 ? (
+        <Assets
+        AssetDetailsCardArr={AssetDetailsCardArr}
+        assetCatagories={assetCatagories}
+        selected={selected}
+        setSelected={setSelected}
+        assetDetailsArr={assetDetails}
+        destroyAsset={destroyAsset}
+        editAsset={editAsset}
+        viewAsset={viewAsset}
+      />
       ) : hasAssets == 0 ? (
         <AddAsset openStepZeroModal={addAsset} />
       ) : (
-        <Assets
-          AssetDetailsCardArr={AssetDetailsCardArr}
-          assetCatagories={assetCatagories}
-          selected={selected}
-          setSelected={setSelected}
-          assetDetailsArr={assetDetails}
-          destroyAsset={destroyAsset}
-          editAsset={editAsset}
-          viewAsset={viewAsset}
-        />
+        <div>Loading Assets</div>
       )}
     </>
   )
@@ -415,7 +448,7 @@ function Assets(_props: {
                 img={data.img}
                 title={data.title}
                 subtitle={data.subTitle}
-                elemennt={data.element}
+                element={data.element}
               />
             )
           })}
@@ -460,7 +493,7 @@ function Assets(_props: {
                   assetImg={realEstate}
                   assetValue={asset?.data?.value || "No value found"}
                   beneficiaryImg={user}
-                  beneficiaryName={`id: ${asset?.data?.Beneficiary}`}
+                  beneficiaryName={`${asset?.data?.Beneficiary}`}
                   destroyAsset={_props.destroyAsset}
                   editAsset={_props.editAsset}
                   viewAsset={_props.viewAsset}
@@ -478,7 +511,7 @@ function AssetDetailsCard(_props: {
   img: any
   title: string | number
   subtitle: string
-  elemennt: any
+  element: any
 }) {
   return (
     <div className="shadow-md flex-grow rounded-xl px-4 py-3 flex justify-between items-center max-w-[535px]">
@@ -491,7 +524,7 @@ function AssetDetailsCard(_props: {
           <p className="text-[#828282] text-xs">{_props.subtitle}</p>
         </div>
       </div>
-      <div className="cursor-pointer">{_props.elemennt}</div>
+      <div className="cursor-pointer">{_props.element}</div>
     </div>
   )
 }
