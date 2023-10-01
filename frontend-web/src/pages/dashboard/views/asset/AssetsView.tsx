@@ -385,7 +385,11 @@ export default function AssetsView() {
       ) : hasAssets == 0 ? (
         <AddAsset openStepZeroModal={addAsset} />
       ) : (
-        <Spinner/>
+        <div className={styles.AppView}>
+          <div className="relative h-[80vh]">
+            <Spinner/>
+          </div>
+        </div>
       )}
     </>
   )

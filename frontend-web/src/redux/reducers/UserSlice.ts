@@ -12,6 +12,7 @@ const initialState = {
   displayName: "",
   language: "",
   profile_image: "",
+  loading: false,
 }
 
 export const slice = createSlice({
@@ -46,7 +47,11 @@ export const slice = createSlice({
     builder.addCase(logout.fulfilled, (state, action) => {
       return initialState
     })
+    builder.addCase(getUser.pending, (state, action) => {
+      state.loading = true
+    })
     builder.addCase(getUser.fulfilled, (state, action) => {
+      state.loading = false
       state.displayName = action.payload.data.data.displayName
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image

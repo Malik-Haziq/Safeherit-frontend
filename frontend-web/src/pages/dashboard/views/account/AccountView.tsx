@@ -13,6 +13,7 @@ import { EditUserModal } from "./modal_account"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { getUser, updateUser } from "@redux/actions"
 import { getFileFromFirebase } from "@/common"
+import { Spinner } from "@/components"
 
 const initialState = {
   displayName: "",
@@ -68,60 +69,72 @@ export default function AccountView() {
   }
 
   return (
-    showMemberShipPlan ?
-      <MembershipPlanView
-        hidePlanView={hidePlanView}
-      />
-    :
-      <>
-        <EditUserModal
-          openModal= {modalVisibility == "edit-user"}
-          closeModal= {closeModal}
-          closeModalOnOverlayClick= {false}
-          closeIconVisibility= {true}
-          _handleChange= {_handleChange}
-          modalControl= {modalControl}
-          _submitModal= {_submitEditUserModal}
-          imageUpload= {imageUpload}
-          setImageUpload= {setImageUpload}
-          email={user.email}
-        />
-        <div className={styles.AppView}>
-          <main className="p-6 w-full">
-            <UserProfile
-              userImg={imageUpload || userImg}
-              userName={user.displayName}
-              userEmail={user.email}
-              editUser={editUser}
-            />
-            <UserProfileDetails
-              userName={user.displayName}
-              userEmail={user.email}
-              userLanguage="English"
-              varified={false}
-            />
-            <MembershipPlan
-              plan={"Monthly"}
-              duration={"1 Month"}
-              date={"May 18, 2023"}
-              showPlanView={showPlanView}
-            />
-            <section className="rounded-2xl shadow-md mb-4 ">
-              <div className="p-5 flex justify-between items-center border-b-[1px]">
-                <p className="text-[#061334] text-lg font-semibold">
-                  Delete Your Account
-                </p>
-                <button
-                  className="primary-btn bg-[#D8D8D8] rounded-2xl text-[#686868] text-sm"
-                  onClick={() => {}}
-                >
-                  Delete Account
-                </button>
+    <>
+      {
+        showMemberShipPlan ?
+          <MembershipPlanView
+            hidePlanView={hidePlanView}
+          />
+        :
+        <>
+          <EditUserModal
+            openModal= {modalVisibility == "edit-user"}
+            closeModal= {closeModal}
+            closeModalOnOverlayClick= {false}
+            closeIconVisibility= {true}
+            _handleChange= {_handleChange}
+            modalControl= {modalControl}
+            _submitModal= {_submitEditUserModal}
+            imageUpload= {imageUpload}
+            setImageUpload= {setImageUpload}
+            email={user.email}
+          />
+          {
+            user.loading ?
+            <div className={styles.AppView}>
+              <div className="relative h-[80vh]">
+                <Spinner/>
               </div>
-            </section>
-          </main>
-        </div>
-      </>
+            </div> :
+            <div className={styles.AppView}>
+              <main className="p-6 w-full">
+                <UserProfile
+                  userImg={imageUpload || userImg}
+                  userName={user.displayName}
+                  userEmail={user.email}
+                  editUser={editUser}
+                />
+                <UserProfileDetails
+                  userName={user.displayName}
+                  userEmail={user.email}
+                  userLanguage="English"
+                  varified={false}
+                />
+                <MembershipPlan
+                  plan={"Monthly"}
+                  duration={"1 Month"}
+                  date={"May 18, 2023"}
+                  showPlanView={showPlanView}
+                />
+                <section className="rounded-2xl shadow-md mb-4 ">
+                  <div className="p-5 flex justify-between items-center border-b-[1px]">
+                    <p className="text-[#061334] text-lg font-semibold">
+                      Delete Your Account
+                    </p>
+                    <button
+                      className="primary-btn bg-[#D8D8D8] rounded-2xl text-[#686868] text-sm"
+                      onClick={() => {}}
+                    >
+                      Delete Account
+                    </button>
+                  </div>
+                </section>
+              </main>
+            </div>
+          }
+        </>
+      }
+    </>
   )
 }
 
