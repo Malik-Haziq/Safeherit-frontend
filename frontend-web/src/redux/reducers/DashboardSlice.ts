@@ -8,6 +8,7 @@ const initialState = {
   assets: [],
   beneficiaries: [],
   validators: [],
+  loading: false,
 }
 
 export const slice = createSlice({
@@ -16,8 +17,11 @@ export const slice = createSlice({
   reducers: {
   },
   extraReducers(builder) {
+    builder.addCase(getData.pending, (state, action) => {
+      state.loading = true
+    })
     builder.addCase(getData.fulfilled, (state, action) => {
-      
+      state.loading = false
       state.assetCount = action.payload?.data?.data?.assetCount
       state.beneficiaryCount = action.payload?.data?.data?.beneficiaryCount
       state.validatorCount = action.payload?.data?.data?.validatorCount
