@@ -1,7 +1,8 @@
+import tick from "@images/tick.svg"
+import creditCardImg from "@images/credit-card.svg"
+import cancelIcon from "@images/cancel.svg"
+
 import styles from "../../Dashboard.module.css"
-import tick from "../../../../../assets/images/tick.svg"
-import creditCardImg from "../../../../../assets/images/credit-card.svg"
-import cancelIcon from "../../../../../assets/images/cancel.svg"
 
 export default function MembershipPlanView(_props:{
   hidePlanView: React.MouseEventHandler<HTMLButtonElement>

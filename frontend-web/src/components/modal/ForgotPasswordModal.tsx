@@ -1,7 +1,7 @@
-import { Dialog, Transition } from "@headlessui/react"
 import { Fragment } from "react"
+import { Dialog, Transition } from "@headlessui/react"
 
-export default function ForgotPasswordModal(_props: {
+export function ForgotPasswordModal(_props: {
   resetEmail: string
   setResetEmail: any
   closeModalOnOverlayClick: boolean

@@ -1,6 +1,7 @@
-import arrowRight from "../../../assets/images/Arrow - Right.svg"
-import registerPageVideo from "../../../assets/images/register_page_video.png"
-import safepal from "../../../assets/images/Safepal.svg"
+import arrowRight from "@images/Arrow - Right.svg"
+import registerPageVideo from "@images/register_page_video.png"
+import safepal from "@images/Safepal.svg"
+
 import { useNavigate } from "react-router-dom"
 
 export function RegisterKey() {

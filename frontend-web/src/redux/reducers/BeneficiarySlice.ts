@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { getAllBeneficiary, createBeneficiary, findBeneficiary } from "../actions/BeneficiaryAction"
-import { SelectOption } from "../../types/components"
+import { SelectOption } from "@/types"
 
 const initialState = {
   id: "",

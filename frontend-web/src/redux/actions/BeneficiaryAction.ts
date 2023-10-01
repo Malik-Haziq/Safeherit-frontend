@@ -1,5 +1,4 @@
-import { DELETE, GET, POST, PUT, jsonToFormData } from "../../common"
-import { ALL_BENEFICIARIES, BENEFICIARIES } from "../../common/api/routes"
+import { DELETE, GET, POST, PUT, jsonToFormData, ALL_BENEFICIARIES, BENEFICIARIES } from "@/common"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
 export const getAllBeneficiary = createAsyncThunk(

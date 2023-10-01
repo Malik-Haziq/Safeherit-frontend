@@ -1,15 +1,15 @@
-import styles from "../../Dashboard.module.css"
-import userIcon from "../../../../../assets/images/user-icon.svg"
-import addIcon from "../../../../../assets/images/add-icon.svg"
-import dots from "../../../../../assets/images/dots.svg"
-import facebook from "../../../../../assets/images/facebook.svg"
-import instagram from "../../../../../assets/images/insta.svg"
-import twitter from "../../../../../assets/images/twitter.svg"
-import userImg from "../../../../../assets/images/user.svg"
-import beneficiaryImg from "../../../../../assets/images/beneficiaryScreen.svg"
-import { ValidatorDropDown } from "../../../../components"
-import { UserDetailsModal } from "../../../../components/modal/UserDetailsModal"
+import userIcon from "@images/user-icon.svg"
+import addIcon from "@images/add-icon.svg"
+import facebook from "@images/facebook.svg"
+import instagram from "@images/insta.svg"
+import twitter from "@images/twitter.svg"
+import userImg from "@images/user.svg"
+import beneficiaryImg from "@images/beneficiaryScreen.svg"
 
+import { useCallback, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import styles from "../../Dashboard.module.css"
+import { ValidatorDropDown, UserDetailsModal, Spinner } from "@/components"
 import {
   StepZeroInformationModal,
   SuccessModal,
@@ -18,19 +18,16 @@ import {
   StepThreeModal,
   RegisterPKModal,
 } from "./modal_beneficiary"
-import { useCallback, useEffect, useState } from "react"
 import {
   getAllBeneficiary,
   createBeneficiary,
   findBeneficiary,
   updateBeneficiary,
   deleteBeneficiary,
-} from "../../../../redux/actions/BeneficiaryAction"
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
-import { ConfirmationModal } from "../../../../components/modal/ConfirmationModal"
-import { useNavigate } from "react-router-dom"
-import { isValidEmail, isValidFacebook, isValidPhone } from "../../../../common"
-import { getFileFromFirebase } from "../../../../common/utils/firebase"
+} from "@redux/actions"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
+import { ConfirmationModal } from "@/components"
+import { isValidEmail, getFileFromFirebase, isValidPhone } from "@/common"
 
 const initialState = {
   id: "",
@@ -360,7 +357,11 @@ export default function BeneficiariesView() {
         _submitModal={_submitStepZeroModal}
       />
       {hasBeneficiaries == -1 ? (
-        <div>Loading Beneficiary</div>
+        <div className={styles.AppView}>
+          <div className="relative h-[80vh]">
+            <Spinner/>
+          </div>
+        </div>
       ) : hasBeneficiaries == 0 ? (
         <AddBeneficiary openStepZeroModal={addBeneficiary} />
       ) : (
@@ -414,7 +415,7 @@ function Beneficiaries(_props: {
 }) {
   return (
     <div className={styles.AppView}>
-      <section className="px-8 py-4">
+      <section className="px-8 py-4 ">
         <div className="flex justify-between items-center shadow-md p-4 rounded-xl">
           <div className="flex">
             <div className="w-14 h-14 bg-safe-light-blue-tint flex justify-center items-center rounded-xl">
@@ -440,7 +441,7 @@ function Beneficiaries(_props: {
       </section>
 
       <section className={styles.beneficiaries}>
-        <div className="rounded-xl shadow-md h-full overflow-y-scroll no-scrollbar">
+        <div className="rounded-xl shadow-md h-full overflow-y-scroll no-scrollbar relative">
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
               <div className="relative">

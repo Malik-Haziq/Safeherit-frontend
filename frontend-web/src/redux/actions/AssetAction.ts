@@ -1,5 +1,4 @@
-import { DELETE, GET, POST, PUT, jsonToFormData } from "../../common"
-import { ALL_ASSETS, ASSETS } from "../../common/api/routes"
+import { ALL_ASSETS, ASSETS, DELETE, GET, POST, PUT, jsonToFormData } from "@/common"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
 export const getAllAsset = createAsyncThunk(

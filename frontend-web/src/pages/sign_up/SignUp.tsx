@@ -1,15 +1,14 @@
+import logo from "@images/safeherit_logo.svg"
+import userIcon from "@images/UserIcon.png"
+import emailIcon from "@images/EmailIcon.png"
+import passwordVisibilityIcon from "@images/PasswordVisibilityIcon.png"
+import signUpImg from "@images/sign-up-img.jpg"
+
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import logo from "../../../assets/images/safeherit_logo.svg"
-import userIcon from "../../../assets/images/UserIcon.png"
-import emailIcon from "../../../assets/images/EmailIcon.png"
-import passwordVisibilityIcon from "../../../assets/images/PasswordVisibilityIcon.png"
-import signUpImg from "../../../assets/images/sign-up-img.jpg"
-import { updateProfile } from "firebase/auth"
 import { useNavigate } from "react-router-dom"
-import { signup } from "../../redux/actions/UserActions"
-import { useAppDispatch } from "../../redux/hooks"
-import { updateUser } from "../../redux/actions/UserActions"
+import { signup, updateUser } from "@redux/actions"
+import { useAppDispatch } from "@redux/hooks"
 
 export function SignUp() {
   const { t } = useTranslation()
@@ -60,15 +59,7 @@ export function SignUp() {
               displayName: formControl.name
             }))
             .unwrap()
-            .then((res) => {
-            })
             .catch(() => {})
-            // updateProfile(res.user, {
-            //   displayName: formControl.name,
-            // }).catch((err) => {
-            //   alert(err.code)
-            // })
-            localStorage.setItem("userName", formControl.name)
             navigate("/pricing")
           })
           .catch((err) => {

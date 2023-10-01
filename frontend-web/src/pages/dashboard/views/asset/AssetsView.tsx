@@ -1,17 +1,18 @@
+import dollar from "@images/dollar.svg"
+import realEstate from "@images/real-estate.svg"
+import bank from "@images/bank.svg"
+import eye from "@images/eye.svg"
+import edit from "@images/edit.svg"
+import deleteIcon from "@images/delete.svg"
+import arrowDown from "@images/arrow-down.svg"
+import AddAssetImg from "@images/beneficiaryScreen.svg"
+import user from "@images/UserIcon.png"
+import addIcon from "@images/add-icon.svg"
+
 import styles from "../../Dashboard.module.css"
-import dollar from "../../../../../assets/images/dollar.svg"
-import realEstate from "../../../../../assets/images/real-estate.svg"
-import stock from "../../../../../assets/images/stock.svg"
-import bank from "../../../../../assets/images/bank.svg"
-import eye from "../../../../../assets/images/eye.svg"
-import edit from "../../../../../assets/images/edit.svg"
-import deleteIcon from "../../../../../assets/images/delete.svg"
-import arrowDown from "../../../../../assets/images/arrow-down.svg"
-import AddAssetImg from "../../../../../assets/images/beneficiaryScreen.svg"
-import user from "../../../../../assets/images/UserIcon.png"
-import addIcon from "../../../../../assets/images/add-icon.svg"
 
 import { useEffect, useCallback, useState, useRef } from "react"
+import { useNavigate } from "react-router-dom"
 import {
   StepZeroInformationModal,
   SuccessModal,
@@ -19,7 +20,7 @@ import {
   StepTwoModal,
   AssetDetail,
 } from "./modal_assets"
-import { ASSET_TYPES, ROUTE_CONSTANTS } from "../../../../common"
+import { ASSET_TYPES, ROUTE_CONSTANTS } from "@/common"
 
 import {
   findAsset,
@@ -27,13 +28,11 @@ import {
   deleteAsset,
   updateAsset,
   createAsset,
-} from "../../../../redux/actions/AssetAction"
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
-import { useNavigate } from "react-router-dom"
-import { DropDownButton } from "../../../../components/dropDownButton"
-import { ConfirmationModal } from "../../../../components/modal/ConfirmationModal"
-import { assetData, getRequiredFields } from "./data"
-import { getAllBeneficiary } from "../../../../redux/actions/BeneficiaryAction"
+  getAllBeneficiary,
+} from "@redux/actions"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
+import { DropDownButton, ConfirmationModal, Spinner } from "@/components"
+import { assetData, getRequiredFields } from "./data" 
 
 interface ModalControl {
   [key: string]: any // This index signature allows string keys with any value
@@ -386,7 +385,11 @@ export default function AssetsView() {
       ) : hasAssets == 0 ? (
         <AddAsset openStepZeroModal={addAsset} />
       ) : (
-        <div>Loading Assets</div>
+        <div className={styles.AppView}>
+          <div className="relative h-[80vh]">
+            <Spinner/>
+          </div>
+        </div>
       )}
     </>
   )

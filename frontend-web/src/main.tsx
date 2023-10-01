@@ -8,10 +8,17 @@ import "./i18n"
 import "./firebase"
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor } from "./redux"
+import { Spinner } from "./components/spinner/Spinner"
+import styles from './pages/dashboard/Dashboard.module.css'
+
 // TODO create a custom loading screen for suspense
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Suspense fallback={<div>Loading...</div>}> 
+    <Suspense fallback={<div className={styles.AppView}>
+        <div className="relative h-[80vh]">
+      <Spinner/>
+        </div>
+      </div>}> 
       <Provider store={store}>
         <PersistGate loading={<div>loading</div>} persistor={persistor}>
           <App />

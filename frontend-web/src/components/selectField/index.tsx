@@ -1,6 +1,6 @@
+import { useRef, useState } from "react"
 import Select, { components } from "react-select"
 import styles from "./SelectField.module.css"
-import { useRef, useState } from "react"
 /**
  * Component that displays user information.
  * @component
