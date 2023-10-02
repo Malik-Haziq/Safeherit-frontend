@@ -108,7 +108,7 @@ export default function AccountView() {
                   userName={user.displayName}
                   userEmail={user.email}
                   userLanguage="English"
-                  varified={false}
+                  verified={false}
                 />
                 <MembershipPlan
                   plan={"Monthly"}
@@ -173,7 +173,7 @@ function UserProfileDetails(_props: {
   userName: string
   userEmail: string
   userLanguage: string
-  varified: boolean
+  verified: boolean
 }) {
   return (
     <section className="rounded-2xl shadow-md mb-4">
@@ -206,19 +206,19 @@ function UserProfileDetails(_props: {
               <img src={warningIcon} alt="Warning Icon" />
             </div>
             <small className="text-[#707070]">
-              {_props.varified
+              {_props.verified
                 ? "2 Factor Authentication is activated, you will be asked a 2FA code every time you log into SafeHerit."
                 : "You still didn't set up 2FA, we highly recommend that you do so in order to keep your account secure and private."}
             </small>
           </div>
           <button
             className={
-              _props.varified
+              _props.verified
                 ? "primary-btn bg-[#0AB64E] cursor-pointer rounded-full py-2 px-6 text-sm"
                 : "primary-btn rounded-[14px] bg-[#0971AA] cursor-pointer text-sm"
             }
           >
-            {_props.varified ? "Active" : "Varify"}
+            {_props.verified ? "Active" : "Verify"}
           </button>
         </div>
       </div>
