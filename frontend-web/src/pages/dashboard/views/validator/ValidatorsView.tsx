@@ -26,6 +26,7 @@ import {
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { isValidEmail, getFileFromFirebase, isValidPhone } from "@/common"
+import { showToast } from "@/redux/reducers/ToastSlice"
 
 const initialState = {
   id: "",
@@ -85,18 +86,18 @@ export default function ValidatorsView() {
 
   const _submitStepOneModal = () => {
     if (!modalControl.name) {
-      alert("please enter a valid name")
+      dispatch(showToast({ message: "please enter a valid name", variant: "error" }))
     } else if (
       !isValidEmail(modalControl.primary_email) &&
       !isValidEmail(modalControl.backup_email) &&
       !isValidEmail(modalControl.backup_email2)
     ) {
-      alert("please enter a valid Email address")
+      dispatch(showToast({ message: "please enter a valid Email address", variant: "error" }))
     } else if (
       !isValidPhone(modalControl.phone_number) &&
       !isValidPhone(modalControl.backup_phone_number)
     ) {
-      alert("please enter valid Phone number")
+      dispatch(showToast({ message: "please enter valid Phone number", variant: "error" }))
     } else {
       setModalVisibility("Step-2")
     }
@@ -107,14 +108,14 @@ export default function ValidatorsView() {
       !modalControl.twitter_username &&
       !modalControl.instagram_username
     ) {
-      alert("Atleast 1 social media accounts is compulsory")
+      dispatch(showToast({ message: "Atleast 1 social media accounts is compulsory", variant: "error" }))
     } else {
       setModalVisibility("Step-3")
     }
   }
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
-      alert("Personalized message cannot be empty")
+      dispatch(showToast({ message: "Personalized message cannot be empty", variant: "error" }))
     } else {
       if (modalAction == "edit") {
         dispatch(updateValidator(modalControl))
@@ -222,7 +223,7 @@ export default function ValidatorsView() {
     navigate("/dashboard/pulse")
   }
   const viewValidator = (id: string) => {
-    alert("showing user data")
+    dispatch(showToast({ message: "showing user data", variant: "info" }))
     dispatch(findValidator({ id: id }))
       .unwrap()
       .then((res) => {

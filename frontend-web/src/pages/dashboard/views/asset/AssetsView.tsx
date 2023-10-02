@@ -33,6 +33,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner } from "@/components"
 import { assetData, getRequiredFields } from "./data" 
+import { showToast } from "@/redux/reducers/ToastSlice"
 
 interface ModalControl {
   [key: string]: any // This index signature allows string keys with any value
@@ -191,7 +192,7 @@ export default function AssetsView() {
     requiredFields.forEach((field: string) => {
       if (!enteredFields.includes(field)) {
         isValid = false
-        alert(`Please enter ${field}`)
+        dispatch(showToast({ message: `Please enter ${field}`, variant: "error" }))
       }
     })
     return isValid
@@ -203,7 +204,7 @@ export default function AssetsView() {
   const _submitStepOneModal = () => {
     // TODO validate fields
     if (!modalControl.category) {
-      alert("Please select an Asset category")
+      dispatch(showToast({ message: "Please select an Asset category", variant: "error" }))
     } else {
       if (validateRequiredFields(modalControl, 0)) {
         setModalVisibility("Step-2")
@@ -226,7 +227,7 @@ export default function AssetsView() {
     }
     if (validateRequiredFields(modalControl, 1)) {
       if (modalAction == "edit") {
-        alert("Updating Asset")
+        dispatch(showToast({ message: "Updating Asset", variant: "info" }))
         Data.id = selectedAsset
         dispatch(updateAsset(Data))
           .unwrap()
@@ -237,7 +238,7 @@ export default function AssetsView() {
           })
           .catch(() => {})
       } else if (modalAction == "create") {
-        alert("Creating Asset")
+        dispatch(showToast({ message: "Creating Asset", variant: "info" }))
         dispatch(createAsset(Data))
           .unwrap()
           .then((res) => {

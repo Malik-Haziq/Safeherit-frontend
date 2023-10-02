@@ -6,6 +6,7 @@ import validator from "./reducers/ValidatorSlice"
 import beneficiary from "./reducers/BeneficiarySlice"
 import asset from "./reducers/AssetSlice"
 import dashboard from "./reducers/DashboardSlice"
+import toast from "./reducers/ToastSlice"
 import sessionStorage from "redux-persist/es/storage/session"
 
 const rootPersistConfig = {
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   beneficiary: persistReducer(rootPersistConfig, beneficiary),
   asset: persistReducer(rootPersistConfig, asset),
   dashboard: persistReducer(rootPersistConfig, dashboard),
+  toast: persistReducer(rootPersistConfig, toast),
 })
 // const persistedReducer = persistReducer(rootPersistConfig, rootReducer)
 

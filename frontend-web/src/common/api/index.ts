@@ -1,4 +1,6 @@
 import axios from "axios"
+import { store } from "@/redux";
+import { showToast } from "@/redux/reducers/ToastSlice";
 
 export const API = axios.create({
   baseURL: import.meta.env.VITE_REACT_APP_SERVER,
@@ -69,20 +71,15 @@ const _handleErrors = (error: any) => {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
-    alert(error?.response?.data?.message)
-    console.log(error.response.data.message)
-    console.log(error.response.status)
-    console.log(error.response.headers)
+    store.dispatch(showToast({ message: error?.response?.data?.message, variant: "error" }))
   } else if (error.request) {
     // The request was made but no response was received
     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
     // http.ClientRequest in node.js
-    alert(error?.request)
-    console.log(error.request)
+    store.dispatch(showToast({ message: error.request, variant: "error" }))
   } else {
     // Something happened in setting up the request that triggered an Error
-    alert(error?.message)
-    console.log("Error", error.message)
+    store.dispatch(showToast({ message: error.message, variant: "error" }))
   }
 }
 

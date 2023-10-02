@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"
 import { login, resetPassword } from "@redux/actions"
 import { useAppDispatch } from "@redux/hooks"
 import { ForgotPasswordModal } from "@/components"
+import { showToast } from "@/redux/reducers/ToastSlice"
 
 export function Login() {
   const { t } = useTranslation()
@@ -34,7 +35,7 @@ export function Login() {
   }
 
   const _handleSubmit = () => {
-    alert("logging in")
+    dispatch(showToast({ message: "logging in", variant: "info" }))
     if (formControl.email && formControl.password) {
       dispatch(
         login({ email: formControl.email, password: formControl.password }),
@@ -44,7 +45,7 @@ export function Login() {
           navigate("/register")
         })
         .catch((err) => {
-          alert(err.code)
+          dispatch(showToast({ message: err?.code, variant: "error" }))
         })
     }
   }
@@ -54,12 +55,12 @@ export function Login() {
       dispatch(resetPassword({ email: resetEmail }))
         .unwrap()
         .then((res) => {
-          alert("Email Sent")
+          dispatch(showToast({ message: "Email Sent", variant: "info" }))
           closeForgotEmailModal()
           setResetEmail("")
         })
         .catch((err) => {
-          alert(err.code)
+          dispatch(showToast({ message: err?.code, variant: "error" }))
           closeForgotEmailModal()
           setResetEmail("")
         })

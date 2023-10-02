@@ -12,6 +12,7 @@ import styles from "./Dashboard.module.css"
 import { CONSTANT } from "@/common"
 import { useAppDispatch } from "@redux/hooks"
 import { logout } from "@redux/actions"
+import { showToast } from "@/redux/reducers/ToastSlice"
 
 const NavigationDrawer = lazy(() => import("./NavigationDrawer"))
 const DashboardNavbar = lazy(() => import("./DashboardNavbar"))
@@ -129,7 +130,7 @@ export default function Dashboard() {
     dispatch(logout({}))
       .unwrap()
       .catch((err) => {
-        alert(err?.code)
+        dispatch(showToast({ message: err?.code, variant: "error" }))
       })
       .finally(() => {
         navigate("/login")

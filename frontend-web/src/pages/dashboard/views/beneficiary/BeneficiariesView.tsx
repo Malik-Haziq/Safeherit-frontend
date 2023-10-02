@@ -28,6 +28,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ConfirmationModal } from "@/components"
 import { isValidEmail, getFileFromFirebase, isValidPhone } from "@/common"
+import { showToast } from "@/redux/reducers/ToastSlice"
 
 const initialState = {
   id: "",
@@ -90,18 +91,18 @@ export default function BeneficiariesView() {
 
   const _submitStepOneModal = () => {
     if (!modalControl.name) {
-      alert("please enter a valid name")
+      dispatch(showToast({ message: "please enter a valid name", variant: "error" }))
     } else if (
       !isValidEmail(modalControl.primary_email) &&
       !isValidEmail(modalControl.backup_email) &&
       !isValidEmail(modalControl.backup_email2)
     ) {
-      alert("please enter a valid Email address")
+      dispatch(showToast({ message: "please enter a valid Email address", variant: "error" }))
     } else if (
       !isValidPhone(modalControl.phone_number) &&
       !isValidPhone(modalControl.backup_phone_number)
     ) {
-      alert("please enter valid Phone number")
+      dispatch(showToast({ message: "please enter valid Phone number", variant: "error" }))
     } else {
       setModalVisibility("Step-2")
     }
@@ -112,14 +113,14 @@ export default function BeneficiariesView() {
       !modalControl.instagram_username &&
       !modalControl.twitter_username
     ) {
-      alert("Atleast 1 social media accounts is compulsory")
+      dispatch(showToast({ message: "Atleast 1 social media accounts is compulsory", variant: "error" }))
     } else {
       setModalVisibility("Step-3")
     }
   }
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
-      alert("Personalized message cannot be empty")
+      dispatch(showToast({ message: "Personalized message cannot be empty", variant: "error" }))
     } else {
       if (modalAction == "edit") {
         dispatch(updateBeneficiary(modalControl))
@@ -140,7 +141,7 @@ export default function BeneficiariesView() {
             // TODO: show fallback page
           })
       } else if (modalAction == "create") {
-        alert("creating beneficiary")
+        dispatch(showToast({ message: "creating beneficiary", variant: "info" }))
         dispatch(createBeneficiary(modalControl))
           .unwrap()
           .then((res) => {
@@ -172,7 +173,7 @@ export default function BeneficiariesView() {
     }
   }
   const _submitDeleteModal = () => {
-    alert("deleting Beneficiary " + modalControl.name)
+    dispatch(showToast({ message: "deleting Beneficiary " + modalControl.name, variant: "info" }))
     dispatch(deleteBeneficiary({ id: modalControl.id }))
       .unwrap()
       .then((res) => {
@@ -248,7 +249,7 @@ export default function BeneficiariesView() {
     navigate("/dashboard/validators")
   }
   const viewBeneficiary = (id: string) => {
-    alert("showing user data")
+    dispatch(showToast({ message: "showing user data", variant: "info" }))
     dispatch(findBeneficiary({ id: id }))
       .unwrap()
       .then((res) => {
@@ -337,7 +338,7 @@ export default function BeneficiariesView() {
         action={modalAction}
         _submitModal={_submitRegisterPKModal}
         _handleKeyGeneration={() => {
-          alert("generate key pair")
+          dispatch(showToast({ message: "generate key pair", variant: "info" }))
         }}
       />
       <ConfirmationModal
