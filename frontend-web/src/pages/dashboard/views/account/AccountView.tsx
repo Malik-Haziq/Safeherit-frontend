@@ -240,7 +240,7 @@ function MembershipPlan(_props: {
 }) {
   return (
     <section className="rounded-2xl shadow-md mb-4 ">
-      <div className="rouneded-t-2xl bg-[#ECF6FA] py-4 px-5">
+      <div className="rounded-t-2xl bg-[#ECF6FA] py-4 px-5">
         <h3 className="font-bold text-[#0C8AC1]">Membership plan</h3>
       </div>
       <div className="flex items-center gap-5 pt-5 mb-7">
@@ -254,12 +254,12 @@ function MembershipPlan(_props: {
       <div className="flex justify-between px-5 pb-5">
         <div>
           <p className="text-[#707070] text-sm font-medium">
-            Membership Duration
-            <span className="text-[#00192B] font-bold">{_props.duration}</span>
+            Membership Duration:
+            <span className="text-[#00192B] font-bold"> {_props.duration}</span>
           </p>
           <p className="text-[#707070] text-sm font-medium">
             Next Renewal Date:
-            <span className="text-[#00192B] font-bold">{_props.date}</span>
+            <span className="text-[#00192B] font-bold"> {_props.date}</span>
           </p>
         </div>
         <button onClick={_props.showPlanView} className="primary-btn bg-[#0971AA] rounded-2xl">
