@@ -4,8 +4,8 @@ import styles from "./SelectField.module.css"
 /**
  * Component that displays user information.
  * @component
- * @param {object} _props - The _props required for component functioning.
- * @param {string} _props.selectContainer - select field container styles.
+ * @param {object} _props - The _props required for component functioning. select field container styles.
+ * @param {string} _props.selectContainer -
  * @param {Array} _props.data - array of values
  * @param {number} _props.value - selected value
  * @param {function} _props.setSelectedValue - set selected value to this method
@@ -86,7 +86,7 @@ export const SelectField = (_props: {
   const [openMenu, setOpenMenu] = useState(false)
   const selectRef = useRef<HTMLDivElement | null>(null)
 
-  const _hanelSelect = () => {
+  const _handleSelect = () => {
     if (!openMenu) {
       selectRef?.current?.focus()
     }
@@ -99,7 +99,7 @@ export const SelectField = (_props: {
     <div className={_props.selectContainer || styles.selectContainer}>
       <div
         className={_props.selectFieldStyles || styles.selectFieldStyles}
-        onClick={_hanelSelect}
+        onClick={_handleSelect}
       >
         <Select
           ref={selectRef}
