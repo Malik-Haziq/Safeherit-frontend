@@ -5,8 +5,8 @@ export function PhoneNumField() {
   return (
     <div className="flex">
         <SelectField
-          data={['92', '93', '94']}
-          value={'+1'}
+          data={[{value: '92', label: '92'},{value: '92', label: '92'}]}
+          value={''}
           setSelectedValue={() => {}}
           hasRightIcon={true}
           rightIcon={iconDown}
@@ -16,13 +16,14 @@ export function PhoneNumField() {
         />
       <InputField
         name={""}
-        type={"number"}
+        type={"text"}
         placeholder={"Phone Number"}
         value={""}
         _handleChange={() => {}}
         required={true}
         inputStyles={"w-full rounded-tl-none rounded-bl-none"}
         inputContainerStyles={"w-[400px]"}
+        mask="tel"
       />
     </div>
   )

@@ -90,7 +90,7 @@ export const SelectField = (_props: {
     if (!openMenu) {
       selectRef?.current?.focus()
     }
-    if (!_props.selectProps.isDisabled) {
+    if (!_props.selectProps?.isDisabled) {
       setOpenMenu((val) => !val)
     }
   }

@@ -53,6 +53,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
         iconAlt={element?.props?.iconAlt}
         iconPress={element?.props?.iconPress}
         rightIconStyles={element?.props?.rightIconStyles}
+        mask={element?.props?.mask}
       />
     )
   } else if (element?.type === "selectView") {
