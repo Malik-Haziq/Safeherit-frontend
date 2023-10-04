@@ -126,42 +126,12 @@ export function UserRolesModal(_props: {
   closeModal: any
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
-  action: string
-  videoUpload: string
-  // setVideoUpload: Function
-  // _handleChange: React.ChangeEventHandler<HTMLInputElement>
+  isBeneficiary: boolean
+  isOwner: boolean
+  isValidator: boolean
+  userName: string
+  _handleUserRolesSubmit: Function
 }) {
-  const dataArr = [
-    {
-      userImg: userImg,
-      userName: "Malik Haziq",
-      userRole: "Owner",
-      ownerImg: userImg,
-      ownerName: "hello hello",
-    },
-    {
-      userImg: userImg,
-      userName: "James Smith",
-      userRole: "Beneficiary",
-      ownerImg: userImg,
-      ownerName: "hello hello",
-    },
-    {
-      userImg: userImg,
-      userName: "Thomas Fin",
-      userRole: "Validator",
-      ownerImg: userImg,
-      ownerName: "hello hello",
-    },
-    {
-      userImg: userImg,
-      userName: "Jr. Hawking",
-      userRole: "Beneficiary",
-      ownerImg: userImg,
-      ownerName: "hello hello",
-    },
-  ]
-
   return (
     <Modal
       openModal={_props.openModal}
@@ -175,27 +145,40 @@ export function UserRolesModal(_props: {
           props: {
             image: logo,
             imageStyles: "mx-auto",
-            imageContainerStyles: "mt-7 mb-14",
+            imageContainerStyles: "mt-7 mb-10",
           },
         },
         {
           type: "customView",
           props: {
-            customViewContainer: "mx-auto mb-7",
+            customViewContainer: "mx-auto mb-10",
             CustomView: () => {
               return (
                 <div>
-                  {dataArr.map((data) => {
-                    return (
-                      <LoggedUser
-                        userImg={data.userImg}
-                        userName={data.userName}
-                        userRole={data.userRole}
-                        ownerImg={data.ownerImg}
-                        ownerName={data.ownerName}
-                      />
-                    )
-                  })}
+                  {_props.isOwner && <LoggedUser
+                    userImg={userImg}
+                    userName={_props.userName}
+                    userRole={"owner"}
+                    // ownerImg={userImg}
+                    // ownerName={"sa"}
+                    _handleUserRolesSubmit={_props._handleUserRolesSubmit}
+                  /> }
+                  {_props.isBeneficiary && <LoggedUser
+                    userImg={userImg}
+                    userName={_props.userName}
+                    userRole={"beneficiary"}
+                    // ownerImg={userImg}
+                    // ownerName={"sa"}
+                    _handleUserRolesSubmit={_props._handleUserRolesSubmit}
+                  /> }
+                  {_props.isValidator && <LoggedUser
+                    userImg={userImg}
+                    userName={_props.userName}
+                    userRole={"validator"}
+                    // ownerImg={userImg}
+                    // ownerName={"sa"}
+                    _handleUserRolesSubmit={_props._handleUserRolesSubmit}
+                  /> }
                 </div>
               )
             },
@@ -210,8 +193,9 @@ function LoggedUser(_props: {
   userImg: any
   userName: string
   userRole: string
-  ownerImg: any
-  ownerName: string
+  ownerImg?: any
+  ownerName?: string
+  _handleUserRolesSubmit: Function
 }) {
   return (
     <div className="flex items-center justify-between py-1 mx-14 my-4 border-b-[1px] ">
@@ -224,18 +208,22 @@ function LoggedUser(_props: {
           />
           <h2>{_props.userName}</h2>
         </div>
-        {_props.userRole.toLowerCase() !== 'owner' ? <div className="flex items-center text-[#333] ">
-          <small className="flex items-center justify-center gap-1">
-            Owner: <img src={_props.ownerImg} alt="owner Image" className="ml-2 w-5"/>{" "}
-            <span>{_props.ownerName}</span>
-          </small>
-        </div>: <div></div> }
+        {
+          _props.userRole.toLowerCase() !== 'owner' ?
+            <div className="flex items-center text-[#333] ">
+              <small className="flex items-center justify-center gap-1">
+                Owner: <img src={_props.ownerImg} alt="owner Image" className="ml-2 w-5"/>{" "}
+                <span>{_props.ownerName}</span>
+              </small>
+            </div> : 
+            <div></div>
+        }
         
       </div>
-      <p className="font-medium text-sm">{_props.userRole}</p>
-      <a href="#" className="text-sm font-medium text-[#0C8AC1]">
+      <p className="font-medium text-sm">{_props.userRole?.toUpperCase()}</p>
+      <p onClick={() => {_props._handleUserRolesSubmit(_props.userRole)}} className="text-sm font-medium text-[#0C8AC1] cursor-pointer hover:opacity-75">
         Login
-      </a>
+      </p>
     </div>
   )
 }

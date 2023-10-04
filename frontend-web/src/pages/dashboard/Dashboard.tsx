@@ -10,7 +10,7 @@ import { lazy, useState, useEffect } from "react"
 import { useLocation, Outlet, useNavigate } from "react-router-dom"
 import styles from "./Dashboard.module.css"
 import { CONSTANT } from "@/common"
-import { useAppDispatch } from "@redux/hooks"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { logout } from "@redux/actions"
 
 const NavigationDrawer = lazy(() => import("./NavigationDrawer"))
@@ -25,14 +25,19 @@ type NavBarItem = {
 export default function Dashboard() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const user = useAppSelector((state) => state.user)
   const currentPath = useLocation()
   const [selectedOption, setSelectedOption] = useState(CONSTANT.DASHBOARD)
+  const [selectedPath, setSelectedPath] = useState('/dashboard')
   
   useEffect(() => {
-    setSelectedOption(navBarHeadings[currentPath.pathname].id)
+    // Remove trailing slash
+    const trimmedPath = currentPath.pathname.replace(/\/$/, '')
+    setSelectedPath(trimmedPath)
+    setSelectedOption(navBarHeadings[trimmedPath]?.id)
   }, [currentPath])
 
-  const navBarHeadings: Record<string, NavBarItem> = {
+  const ownerNavBarHeadings: Record<string, NavBarItem> = {
     "/dashboard": {
       screen: CONSTANT.DASHBOARD,
       title: CONSTANT.DASHBOARD_TITLE,
@@ -63,8 +68,44 @@ export default function Dashboard() {
       title: CONSTANT.MY_ACCOUNT_TITLE,
       id: CONSTANT.MY_ACCOUNT
     },
+    "/dashboard/help": {
+      screen: CONSTANT.HELP,
+      title: CONSTANT.HELP_TITLE,
+      id: CONSTANT.HELP
+    },
   }
-  const DRAWER_MENU = [
+  const beneficiaryNavBarHeadings: Record<string, NavBarItem> = {
+    "/dashboard": {
+      screen: CONSTANT.TESTAMENT,
+      title: CONSTANT.TESTAMENT_TITLE,
+      id: CONSTANT.TESTAMENT
+    },
+    "/dashboard/assets": {
+      screen: CONSTANT.MY_ASSETS,
+      title: CONSTANT.MY_ASSETS_TITLE,
+      id: CONSTANT.MY_ASSETS
+    },
+    "/dashboard/help": {
+      screen: CONSTANT.HELP,
+      title: CONSTANT.HELP_TITLE,
+      id: CONSTANT.HELP
+    },
+  }
+  const validatorNavBarHeadings: Record<string, NavBarItem> = {
+    "/dashboard": {
+      screen: CONSTANT.VALIDATION,
+      title: CONSTANT.VALIDATION_TITLE,
+      id: CONSTANT.VALIDATION
+    },
+    "/dashboard/help": {
+      screen: CONSTANT.HELP,
+      title: CONSTANT.HELP_TITLE,
+      id: CONSTANT.HELP
+    },
+  }
+  const navBarHeadings: Record<string, NavBarItem> = user.role === "owner" ? ownerNavBarHeadings : user.role === "beneficiary" ? beneficiaryNavBarHeadings : validatorNavBarHeadings
+
+  const OwnerDrawerMenu = [
     {
       icon: dashboardIcon,
       option: CONSTANT.DASHBOARD,
@@ -106,7 +147,53 @@ export default function Dashboard() {
       },
     },
   ]
-  const DRAWER_SETTINGS = [
+  const beneficiaryDrawerMenu = [
+    {
+      icon: dashboardIcon,
+      option: CONSTANT.TESTAMENT,
+      navigate: () => {
+        navigate("/dashboard")
+        setSelectedOption(CONSTANT.TESTAMENT)
+      },
+    },
+    {
+      icon: assets,
+      option: CONSTANT.MY_ASSETS,
+      navigate: () => {
+        navigate("/dashboard/assets")
+        setSelectedOption(CONSTANT.MY_ASSETS)
+      },
+    },
+    {
+      icon: setting,
+      option: CONSTANT.HELP,
+      navigate: () => {
+        navigate("/dashboard/help")
+        setSelectedOption(CONSTANT.HELP)
+      },
+    },
+  ]
+  const validatorDrawerMenu = [
+    {
+      icon: dashboardIcon,
+      option: CONSTANT.VALIDATION,
+      navigate: () => {
+        navigate("/dashboard")
+        setSelectedOption(CONSTANT.VALIDATION_TITLE)
+      },
+    },
+    {
+      icon: setting,
+      option: CONSTANT.HELP,
+      navigate: () => {
+        navigate("/dashboard/help")
+        setSelectedOption(CONSTANT.HELP)
+      },
+    },
+  ]
+  const DRAWER_MENU = user.role === "owner" ? OwnerDrawerMenu : user.role === "beneficiary" ? beneficiaryDrawerMenu : validatorDrawerMenu
+
+  const DRAWER_SETTINGS = user.role === "owner" ? [
     {
       icon: profile,
       option: CONSTANT.MY_ACCOUNT,
@@ -119,11 +206,11 @@ export default function Dashboard() {
       icon: setting,
       option: CONSTANT.HELP,
       navigate: () => {
-        navigate("/dashboard")
+        navigate("/dashboard/help")
         setSelectedOption(CONSTANT.HELP)
       },
     },
-  ]
+  ] : []
   // TODO manually terminate the session on catch
   const _handleLogout = () => {
     dispatch(logout({}))
@@ -148,7 +235,7 @@ export default function Dashboard() {
         <DashboardNavbar
           _handleLogout={_handleLogout}
           navBarHeadings={navBarHeadings}
-          currentPath={currentPath}
+          currentPath={selectedPath}
         />
         <Outlet />
       </section>

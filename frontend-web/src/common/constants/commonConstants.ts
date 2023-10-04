@@ -16,7 +16,12 @@ export const CONSTANT = {
   PULSE_CHECK_TITLE: "Check your pulse",
   MY_ACCOUNT: "My Account",
   MY_ACCOUNT_TITLE: "Manage your information",
+  TESTAMENT: "Testament",
+  TESTAMENT_TITLE: "Manage your information",
+  VALIDATION: "Validation",
+  VALIDATION_TITLE: "View the messages left for you",
   HELP: "Help",
+  HELP_TITLE: "Get the help",
   LOGOUT: "Logout",
 }
 

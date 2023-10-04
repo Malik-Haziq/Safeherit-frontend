@@ -2,28 +2,33 @@ import logo from "@images/safeherit_logo.svg"
 import loginImg from "@images/login-img.png"
 import star from "@images/star.svg"
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { login, resetPassword } from "@redux/actions"
-import { useAppDispatch } from "@redux/hooks"
+import { getUser, login, resetPassword } from "@redux/actions"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ForgotPasswordModal } from "@/components"
-import {UserRolesModal, PrivateKeyModal} from './modal_login'
+import { UserRolesModal, PrivateKeyModal } from './modal_login'
+import { updateActive, updateRole } from "@/redux/reducers/UserSlice"
 
 export function Login() {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const user = useAppSelector((state) => state.user)
 
   const [formControl, setFormControl] = useState({
     email: "",
     password: "",
   })
   const [rememberMe, setRememberMe] = useState(false)
-  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false)
-  const [resetEmail, setResetEmail] = useState("")
-  const closeForgotEmailModal = () => setShowForgotPasswordModal(false)
-  const showForgotEmailModal = () => setShowForgotPasswordModal(true)
+  const [modalVisibility, setModalVisibility] = useState("none")
+  const [resetEmail, setResetEmail] = useState("") 
+
+  const closeModal = useCallback(() => {
+    setModalVisibility("none")
+    setResetEmail("")
+  }, [])
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
@@ -41,13 +46,22 @@ export function Login() {
         login({ email: formControl.email, password: formControl.password }),
       )
         .unwrap()
-        .then(() => {
-          navigate("/register")
+        .then((res) => {
+          dispatch(getUser({})).unwrap().then((res) => {
+            setModalVisibility("user-roles")
+          })
         })
         .catch((err) => {
           alert(err.code)
         })
     }
+  }
+
+  const _handleUserRolesSubmit = (selectRole: string) => {
+    setModalVisibility("none")
+    dispatch(updateActive(true))
+    dispatch(updateRole(selectRole))
+    navigate("/dashboard")
   }
 
   const _handleForgotPassword = () => {
@@ -56,13 +70,12 @@ export function Login() {
         .unwrap()
         .then((res) => {
           alert("Email Sent")
-          closeForgotEmailModal()
-          setResetEmail("")
         })
         .catch((err) => {
           alert(err.code)
-          closeForgotEmailModal()
-          setResetEmail("")
+        })
+        .finally(() => {
+          closeModal()
         })
     }
   }
@@ -70,23 +83,24 @@ export function Login() {
   return (
     <main className="flex flex-row justify-center lg:justify-between font-safe-font-default w-screen h-screen">
       <UserRolesModal
-        openModal={true}
-        closeModal={false}
+        openModal={modalVisibility == "user-roles"}
+        closeModal={closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={false}
-        action={""}
-        videoUpload={""}
+        isBeneficiary = {user.isBeneficiary}
+        isOwner = {user.isOwner}
+        isValidator = {user.isValidator}
+        userName = {user.displayName}
+        _handleUserRolesSubmit={_handleUserRolesSubmit}
       />
-      {showForgotPasswordModal && (
-        <ForgotPasswordModal
-          resetEmail={resetEmail}
-          setResetEmail={setResetEmail}
-          closeModalOnOverlayClick={true}
-          openModal={showForgotPasswordModal}
-          closeModal={closeForgotEmailModal}
-          sendEmail={_handleForgotPassword}
-        />
-      )}
+      <ForgotPasswordModal
+        openModal={modalVisibility == "forgot-password"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={true}
+        resetEmail={resetEmail}
+        setResetEmail={setResetEmail}
+        sendEmail={_handleForgotPassword}
+      />
       <section className="pt-10 px-10 basis-2/5 flex flex-col gap-48">
         <img src={logo} alt="safeherit logo" className="h-8 w-40" />
         <div className="mx-auto">
@@ -134,7 +148,7 @@ export function Login() {
               </div>
               <p
                 className="text-safe-text-blue-shade font-medium cursor-pointer"
-                onClick={showForgotEmailModal}
+                onClick={() => {setModalVisibility("forgot-password")}}
               >
                 Forgot Password?
               </p>
