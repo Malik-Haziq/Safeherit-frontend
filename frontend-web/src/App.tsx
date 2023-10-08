@@ -1,4 +1,4 @@
-import { ProtectedRegisterationRoute, ProtectedRoute } from "./common"
+import { ProtectedRegisterationRoute, ProtectedRoute, ProtectedOwnerRoutes, ProtectedOwnerAndBeneficiaryRoutes } from "./common"
 import {
   BrowserRouter,
   Route,
@@ -16,8 +16,8 @@ const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"))
 const AssetsView = lazy(
   () => import("./pages/dashboard/views/asset/AssetsView"),
 )
-const DashboardView = lazy(
-  () => import("./pages/dashboard/views/dashboard/DashboardView"),
+const DashboardControl = lazy(
+  () => import("./pages/dashboard/views/dashboardControl/DashboardControl"),
 )
 const BeneficiariesView = lazy(
   () => import("./pages/dashboard/views/beneficiary/BeneficiariesView"),
@@ -29,6 +29,7 @@ const ValidatorsView = lazy(
 const AccountView = lazy(
   () => import("./pages/dashboard/views/account/AccountView"),
 )
+const HelpView = lazy(() => import("./pages/dashboard/views/help/HelpView"))
 
 function App() {
   return (
@@ -65,27 +66,35 @@ function AppRoutes() {
 
         <Route element={<ProtectedRoute />}>
           <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<Dashboard />}>
-            <Route path="" element={<DashboardView />} />
+            <Route path="" element={<DashboardControl />} />
             <Route
-              path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
-              element={<AssetsView />}
+              path={ROUTE_CONSTANTS.DASHBOARD_HELP}
+              element={<HelpView />}
             />
-            <Route
-              path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}
-              element={<BeneficiariesView />}
-            />
-            <Route
-              path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}
-              element={<ValidatorsView />}
-            />
-            <Route
-              path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
-              element={<PulseView />}
-            />
-            <Route
-              path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT}
-              element={<AccountView />}
-            />
+            <Route element={<ProtectedOwnerRoutes />}>
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}
+                element={<BeneficiariesView />}
+              />
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}
+                element={<ValidatorsView />}
+              />
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
+                element={<PulseView />}
+              />
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT}
+                element={<AccountView />}
+              />
+            </Route>
+            <Route element={<ProtectedOwnerAndBeneficiaryRoutes />}>
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
+                element={<AssetsView />}
+              />
+            </Route>
           </Route>
         </Route>
       </Routes>

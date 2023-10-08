@@ -1,12 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getAllAsset, createAsset, findAsset } from "../actions/AssetAction"
+import { getAllAsset, getAllBeneficiaryAsset, findAsset } from "../actions/AssetAction"
 
-const initialState = {
+interface AssetState {
+  id: string,
+  category: string,
+  assignedBeneficiaryId: string,
+  data: any,
+  Asset_array: { data: any, id: string, category: string, assignedBeneficiaryId: string, asset_file: string }[]
+}
+const initialState: AssetState = {
   id: "",
   category: "",
   assignedBeneficiaryId: "",
   data: {},
-  Asset_array: [{}],
+  Asset_array: [],
 }
 
 export const slice = createSlice({
@@ -32,8 +39,20 @@ export const slice = createSlice({
       })
       state.Asset_array = array
     })
-    builder.addCase(createAsset.fulfilled, (state, action) => {
-
+    builder.addCase(getAllBeneficiaryAsset.fulfilled, (state, action) => {
+      let array: { data: any, id: string, category: string, assignedBeneficiaryId: string, asset_file: string }[] = []
+      action?.payload?.data?.data.map((data: { data: string, id: string, category: string, assignedBeneficiaryId: string, asset_file: string }) => {
+        array.push(
+          {
+            assignedBeneficiaryId: data.assignedBeneficiaryId,
+            data: JSON.parse(data.data),
+            id: data.id,
+            category: data.category,
+            asset_file: data.asset_file
+          }
+        )
+      })
+      state.Asset_array = array
     })
     builder.addCase(findAsset.fulfilled, (state, action) => {
 

@@ -7,7 +7,9 @@ export const CONSTANT = {
   DASHBOARD: "Dashboard",
   DASHBOARD_TITLE: "View all your assets status",
   MY_ASSETS: "My Assets",
+  ASSETS: "Assets",
   MY_ASSETS_TITLE: "Add and remove assets",
+  ASSETS_TITLE: "Information about assets intended for you ",
   BENEFICIARIES: "Beneficiaries",
   BENEFICIARIES_TITLE: "Add and remove beneficiaries",
   VALIDATORS: "Validators",
@@ -16,7 +18,12 @@ export const CONSTANT = {
   PULSE_CHECK_TITLE: "Check your pulse",
   MY_ACCOUNT: "My Account",
   MY_ACCOUNT_TITLE: "Manage your information",
+  TESTAMENT: "Testament",
+  TESTAMENT_TITLE: "Manage your information",
+  VALIDATION: "Validation",
+  VALIDATION_TITLE: "View the messages left for you",
   HELP: "Help",
+  HELP_TITLE: "Get the help",
   LOGOUT: "Logout",
 }
 
