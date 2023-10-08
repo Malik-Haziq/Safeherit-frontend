@@ -1,7 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { login, logout, signup, getUser, updateUser } from "../actions/UserActions"
+import { SelectOption } from "@/types"
 
-const initialState = {
+interface UserState {
+  email: string
+  name: string
+  photo: string
+  phone: string
+  access: string
+  active: boolean
+  token: string
+  displayName: string
+  language: string
+  profile_image: string
+  loading: boolean
+  _beneficiaryOf: SelectOption[]
+  _validatorOf: SelectOption[]
+  isBeneficiary: boolean
+  isOwner: boolean
+  isValidator: boolean
+  role: string
+  selectedRoleUser: {[key: string]: any}
+  userMap: {[key: string]: any}
+}
+const initialState: UserState = {
   email: "",
   name: "",
   photo: "",
@@ -14,10 +36,13 @@ const initialState = {
   profile_image: "",
   loading: false,
   _beneficiaryOf: [],
+  _validatorOf: [],
   isBeneficiary: false,
   isOwner: true,
   isValidator: false,
-  role: "none"
+  role: "none",
+  selectedRoleUser: {},
+  userMap: {},
 }
 
 export const slice = createSlice({
@@ -32,6 +57,18 @@ export const slice = createSlice({
     },
     updateRole: (state, action) => {
       state.role = action.payload
+    },
+    updateRoleUser: (state, action) => {
+      state.selectedRoleUser = action.payload
+    },
+    resetMapper: (state) => {
+      state.userMap = {}
+    },
+    resetBeneficiaryOf: (state) => {
+      state._beneficiaryOf = []
+    },
+    resetValidatorOf: (state) => {
+      state._validatorOf = []
     },
     setToken: (state, action) => {
       state.token = action.payload;
@@ -62,10 +99,48 @@ export const slice = createSlice({
       state.displayName = action.payload.data.data.displayName
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image
-      state._beneficiaryOf = action.payload.data.data._beneficiaryOf
       state.isBeneficiary = action.payload.data.data.isBeneficiary
       state.isOwner = action.payload.data.data.isOwner
       state.isValidator = action.payload.data.data.isValidator
+      state._beneficiaryOf = action.payload.data.data._beneficiaryOf
+
+      let beneficiaryOfArray: SelectOption[] = []
+      const beneficiaryMapper: {[key: string]: any} = {};
+
+      if (action.payload.data.data._beneficiaryOf) {
+        action.payload.data.data._beneficiaryOf.forEach((element: any) => {
+          beneficiaryOfArray.push({
+            label: element.ownerEmail + " - " + element.ownerName,
+            value: element.beneficiaryId,
+          })
+          beneficiaryMapper[element.beneficiaryId] = {
+            ownerEmail: element.ownerEmail,
+            beneficiaryId: element.beneficiaryId,
+            ownerName: element.ownerName,
+          }
+        })
+        state.userMap = beneficiaryMapper
+        state._beneficiaryOf = beneficiaryOfArray
+      }
+
+      let validatorOfArray: SelectOption[] = []
+      const validatorMapper: {[key: string]: any} = {};
+
+      if (action.payload.data.data._validatorOf) {
+        action.payload.data.data._validatorOf.forEach((element: any) => {
+          validatorOfArray.push({
+            label: element.ownerEmail + " - " + element.ownerName,
+            value: element.validatorId,
+          })
+          validatorMapper[element.validatorId] = {
+            ownerEmail: element.ownerEmail,
+            validatorId: element.validatorId,
+            ownerName: element.ownerName,
+          }
+        })
+        state.userMap = validatorMapper
+        state._validatorOf = validatorOfArray
+      }
     })
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.displayName = action.payload.data.data.displayName
@@ -75,6 +150,6 @@ export const slice = createSlice({
   },
 })
 
-export const { updateName, updateActive, setToken, updateRole } = slice.actions
+export const { updateName, updateActive, setToken, updateRole, updateRoleUser, resetMapper, resetBeneficiaryOf, resetValidatorOf } = slice.actions
 
 export default slice.reducer

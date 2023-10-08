@@ -1,4 +1,4 @@
-import { ALL_ASSETS, ASSETS, DELETE, GET, POST, PUT, jsonToFormData } from "@/common"
+import { ALL_ASSETS, ASSETS, BENEFICIARY_ASSETS, DELETE, GET, POST, PUT, jsonToFormData } from "@/common"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
 export const getAllAsset = createAsyncThunk(
@@ -6,6 +6,22 @@ export const getAllAsset = createAsyncThunk(
   async (Data: {}, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: {token: ""} };
     const params = { ROUTE: ALL_ASSETS, Body: {}, token: user.token }
+    try {
+      let response = await GET(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const getAllBeneficiaryAsset = createAsyncThunk(
+  "getAllBeneficiaryAsset",
+  async (Data: {}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: {token: "", selectedRoleUser: {ownerEmail: "",beneficiaryId: "", ownerName: ""}} };
+    const owner_email = user.selectedRoleUser?.ownerEmail
+    const beneficiary_id = user.selectedRoleUser?.beneficiaryId
+    const params = { ROUTE: `${BENEFICIARY_ASSETS}?owner_email=${owner_email}&beneficiary_id=${beneficiary_id}`, Body: {}, token: user.token }
     try {
       let response = await GET(params)
       return response

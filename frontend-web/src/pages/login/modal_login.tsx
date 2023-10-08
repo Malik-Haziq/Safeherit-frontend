@@ -1,7 +1,8 @@
 import uploadImg from "@images/upload.png"
 import logo from "@images/safeherit_logo.svg"
 import userImg from "@images/user.svg"
-import { Modal } from "@/components"
+import { InputField, Modal, SelectField } from "@/components"
+import { SelectOption } from "@/types"
 
 export function PrivateKeyModal(_props: {
   openModal: boolean
@@ -130,6 +131,12 @@ export function UserRolesModal(_props: {
   isOwner: boolean
   isValidator: boolean
   userName: string
+  _beneficiaryOf: SelectOption[]
+  _validatorOf: SelectOption[]
+  selectedBeneficiary: SelectOption | undefined
+  setSelectedBeneficiary: Function
+  selectedValidator: SelectOption | undefined
+  setSelectedValidator: Function
   _handleUserRolesSubmit: Function
 }) {
   return (
@@ -155,30 +162,33 @@ export function UserRolesModal(_props: {
             CustomView: () => {
               return (
                 <div>
-                  {_props.isOwner && <LoggedUser
+                  {
+                    _props.isOwner && <LoggedUser
                     userImg={userImg}
                     userName={_props.userName}
                     userRole={"owner"}
-                    // ownerImg={userImg}
-                    // ownerName={"sa"}
-                    _handleUserRolesSubmit={_props._handleUserRolesSubmit}
-                  /> }
-                  {_props.isBeneficiary && <LoggedUser
+                    _handleUserRolesSubmit={_props._handleUserRolesSubmit} /> 
+                  }
+                  {
+                    _props.isBeneficiary && <LoggedUser
                     userImg={userImg}
                     userName={_props.userName}
+                    _beneficiaryOf={_props._beneficiaryOf}
                     userRole={"beneficiary"}
-                    // ownerImg={userImg}
-                    // ownerName={"sa"}
-                    _handleUserRolesSubmit={_props._handleUserRolesSubmit}
-                  /> }
-                  {_props.isValidator && <LoggedUser
+                    setSelectedBeneficiary={_props.setSelectedBeneficiary}
+                    selectedBeneficiary={_props.selectedBeneficiary}
+                    _handleUserRolesSubmit={_props._handleUserRolesSubmit} />
+                  }
+                  {
+                    _props.isValidator && <LoggedUser
                     userImg={userImg}
                     userName={_props.userName}
+                    _validatorOf={_props._validatorOf}
                     userRole={"validator"}
-                    // ownerImg={userImg}
-                    // ownerName={"sa"}
-                    _handleUserRolesSubmit={_props._handleUserRolesSubmit}
-                  /> }
+                    setSelectedValidator={_props.setSelectedValidator}
+                    selectedValidator={_props.selectedValidator}
+                    _handleUserRolesSubmit={_props._handleUserRolesSubmit} />
+                  }
                 </div>
               )
             },
@@ -195,35 +205,60 @@ function LoggedUser(_props: {
   userRole: string
   ownerImg?: any
   ownerName?: string
+  _beneficiaryOf?: SelectOption[]
+  _validatorOf?: SelectOption[]
+  setSelectedBeneficiary?: Function
+  selectedBeneficiary?: SelectOption | undefined
+  setSelectedValidator?: Function
+  selectedValidator?: SelectOption | undefined
   _handleUserRolesSubmit: Function
 }) {
   return (
-    <div className="flex items-center justify-between py-1 mx-14 my-4 border-b-[1px] ">
+    <div className="flex items-center justify-between items-end py-1 mx-14 my-4 border-b-[1px] ">
       <div className="flex flex-col gap-2">
-        <div className="flex justify-center items-center gap-4 font-semibold">
-          <img
-            src={_props.userImg}
-            alt="user image"
-            className="w-8 h-w rounded-full"
-          />
-          <h2>{_props.userName}</h2>
+        <div className="flex flex-row justify-between">
+          <p className="font-medium text-sm">{_props.userRole?.toUpperCase()}</p>
+          <p onClick={() => {_props._handleUserRolesSubmit(_props.userRole)}} className="text-sm font-medium text-[#0C8AC1] cursor-pointer hover:opacity-75">
+            Login
+          </p>
         </div>
-        {
-          _props.userRole.toLowerCase() !== 'owner' ?
-            <div className="flex items-center text-[#333] ">
-              <small className="flex items-center justify-center gap-1">
-                Owner: <img src={_props.ownerImg} alt="owner Image" className="ml-2 w-5"/>{" "}
-                <span>{_props.ownerName}</span>
-              </small>
-            </div> : 
-            <div></div>
-        }
-        
+        <div className="flex flex-col gap-2">
+          {
+            _props.userRole.toLowerCase() == 'beneficiary' ?
+              <SelectField
+                data={_props._beneficiaryOf}
+                value={_props.selectedBeneficiary}
+                selectProps={{placeholder: "Select Owner", isSearchable: false}}
+                setSelectedValue={_props.setSelectedBeneficiary}
+                selectFieldStyles={"rounded-3xl font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] w-[430px]"}
+                hasRightIcon= {false}
+              /> :
+            _props.userRole.toLowerCase() == 'validator' ?
+              <SelectField
+                data={_props._validatorOf}
+                value={_props.selectedValidator}
+                selectProps={{placeholder: "Select Owner", isSearchable: false}}
+                setSelectedValue={_props.setSelectedValidator}
+                selectFieldStyles={"rounded-3xl font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] w-[430px]"}
+                hasRightIcon= {false}
+              /> :
+            <div className="flex justify-center items-center w-[200] font-semibold">
+              <InputField
+                name={""}
+                type={""}
+                placeholder={""}
+                value={_props.userName}
+                _handleChange={()=>{}}
+                required={false}
+                hasRightIcon={false}
+                inputContainerStyles={"rounded-3xl w-[430px]"}
+                inputStyles={"w-[430px] bg-white"}
+                disabled={true}
+              />
+            </div>
+          }
+        </div>
       </div>
-      <p className="font-medium text-sm">{_props.userRole?.toUpperCase()}</p>
-      <p onClick={() => {_props._handleUserRolesSubmit(_props.userRole)}} className="text-sm font-medium text-[#0C8AC1] cursor-pointer hover:opacity-75">
-        Login
-      </p>
     </div>
   )
 }

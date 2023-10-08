@@ -81,9 +81,9 @@ export default function Dashboard() {
       id: CONSTANT.TESTAMENT
     },
     "/dashboard/assets": {
-      screen: CONSTANT.MY_ASSETS,
-      title: CONSTANT.MY_ASSETS_TITLE,
-      id: CONSTANT.MY_ASSETS
+      screen: CONSTANT.ASSETS,
+      title: CONSTANT.ASSETS_TITLE,
+      id: CONSTANT.ASSETS
     },
     "/dashboard/help": {
       screen: CONSTANT.HELP,
@@ -158,10 +158,10 @@ export default function Dashboard() {
     },
     {
       icon: assets,
-      option: CONSTANT.MY_ASSETS,
+      option: CONSTANT.ASSETS,
       navigate: () => {
         navigate("/dashboard/assets")
-        setSelectedOption(CONSTANT.MY_ASSETS)
+        setSelectedOption(CONSTANT.ASSETS)
       },
     },
     {

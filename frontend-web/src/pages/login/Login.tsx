@@ -9,7 +9,8 @@ import { getUser, login, resetPassword } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ForgotPasswordModal } from "@/components"
 import { UserRolesModal, PrivateKeyModal } from './modal_login'
-import { updateActive, updateRole } from "@/redux/reducers/UserSlice"
+import { resetBeneficiaryOf, resetMapper, resetValidatorOf, updateActive, updateRole, updateRoleUser } from "@/redux/reducers/UserSlice"
+import { SelectOption } from "@/types"
 
 export function Login() {
   const { t } = useTranslation()
@@ -23,6 +24,8 @@ export function Login() {
   })
   const [rememberMe, setRememberMe] = useState(false)
   const [modalVisibility, setModalVisibility] = useState("none")
+  const [selectedBeneficiary, setSelectedBeneficiary] = useState<SelectOption>()
+  const [selectedValidator, setSelectedValidator] = useState<SelectOption>()
   const [resetEmail, setResetEmail] = useState("") 
 
   const closeModal = useCallback(() => {
@@ -57,11 +60,27 @@ export function Login() {
     }
   }
 
-  const _handleUserRolesSubmit = (selectRole: string) => {
-    setModalVisibility("none")
-    dispatch(updateActive(true))
-    dispatch(updateRole(selectRole))
-    navigate("/dashboard")
+  const _handleUserRolesSubmit = (selectedRole: string) => {
+    if (
+      selectedRole == "owner" ||
+      selectedRole == "beneficiary" && selectedBeneficiary ||
+      selectedRole == "validator" && selectedValidator
+    ) {
+      if (selectedRole == "beneficiary") {
+        dispatch(updateRoleUser(user.userMap[selectedBeneficiary?.value || 0]))
+        dispatch(resetMapper())
+        dispatch(resetBeneficiaryOf())
+      }
+      else if (selectedRole == "validator") {
+        dispatch(updateRoleUser(user.userMap[selectedValidator?.value || 0]))
+        dispatch(resetMapper())
+        dispatch(resetValidatorOf())
+      }
+      setModalVisibility("none")
+      dispatch(updateActive(true))
+      dispatch(updateRole(selectedRole))
+      navigate("/dashboard")
+    }
   }
 
   const _handleForgotPassword = () => {
@@ -91,6 +110,12 @@ export function Login() {
         isOwner = {user.isOwner}
         isValidator = {user.isValidator}
         userName = {user.displayName}
+        _beneficiaryOf = {user._beneficiaryOf}
+        _validatorOf = {user._validatorOf}
+        selectedBeneficiary={selectedBeneficiary}
+        setSelectedBeneficiary={setSelectedBeneficiary}
+        selectedValidator={selectedValidator}
+        setSelectedValidator={setSelectedValidator}
         _handleUserRolesSubmit={_handleUserRolesSubmit}
       />
       <ForgotPasswordModal

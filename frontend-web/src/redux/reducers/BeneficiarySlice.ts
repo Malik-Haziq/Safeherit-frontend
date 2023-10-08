@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getAllBeneficiary, createBeneficiary, findBeneficiary } from "../actions/BeneficiaryAction"
+import { getAllBeneficiary, findTestment, findBeneficiary } from "../actions/BeneficiaryAction"
 import { SelectOption } from "@/types"
 
 const initialState = {
@@ -40,11 +40,19 @@ export const slice = createSlice({
       }) 
       state.beneficiary_list = beneficiary_list
     })
-    builder.addCase(createBeneficiary.fulfilled, (state, action) => {
-
-    })
-    builder.addCase(findBeneficiary.fulfilled, (state, action) => {
-
+    builder.addCase(findTestment.fulfilled, (state, action) => {
+      state.personalized_video = action.payload.data.data.personalized_video
+      state.backup_email = action.payload.data.data.backup_email
+      state.personalized_message = action.payload.data.data.personalized_message
+      state.facebook_link = action.payload.data.data.facebook_link
+      state.name = action.payload.data.data.name
+      state.twitter_username = action.payload.data.data.twitter_username
+      state.phone_number = action.payload.data.data.phone_number
+      state.primary_email = action.payload.data.data.primary_email
+      state.id = action.payload.data.data.id
+      state.instagram_username = action.payload.data.data.instagram_username
+      state.backup_email2 = action.payload.data.data.backup_email2
+      state.backup_phone_number = action.payload.data.data.backup_phone_number
     })
   },
 })

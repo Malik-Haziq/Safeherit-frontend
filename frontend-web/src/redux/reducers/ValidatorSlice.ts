@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getAllValidator, createValidator, findValidator } from "../actions/ValidatorAction"
+import { getAllValidator, createValidator, findValidator, getOwnerValidation } from "../actions/ValidatorAction"
 
 const initialState = {
   name: "",
@@ -53,6 +53,9 @@ export const slice = createSlice({
       state.facebook_link= action?.payload?.data?.data?.facebook_link || ""
       state.instagram_username= action?.payload?.data?.data?.instagram_username || ""
       state.twitter_username= action?.payload?.data?.data?.twitter_username || ""
+      state.personalized_message= action?.payload?.data?.data?.personalized_message || ""
+    })
+    builder.addCase(getOwnerValidation.fulfilled, (state, action) => {
       state.personalized_message= action?.payload?.data?.data?.personalized_message || ""
     })
   },
