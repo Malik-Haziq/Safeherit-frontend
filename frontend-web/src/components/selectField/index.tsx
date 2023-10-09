@@ -87,12 +87,12 @@ export const SelectField = (_props: {
   selectProps?: any
   setSelectedValue: any
   hasRightIcon: boolean
-  rightIcon: string
-  rightIconAlt: string
+  rightIcon?: string
+  rightIconAlt?: string
   rightIconStyles?: string
   selectFieldWidth?: number
   selectFieldMenuWidth?: number
-  selectFieldStyles: any
+  selectFieldStyles?: any
 }) => {
   const [openMenu, setOpenMenu] = useState(false)
   const selectRef = useRef<HTMLDivElement | null>(null)
@@ -113,6 +113,7 @@ export const SelectField = (_props: {
         onClick={_handleSelect}
       >
         <Select
+          onBlur={() => setOpenMenu(false)}
           ref={selectRef}
           options={_props.data}
           onChange={_props.setSelectedValue}

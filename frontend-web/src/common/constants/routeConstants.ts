@@ -10,4 +10,5 @@ export const ROUTE_CONSTANTS = {
   DASHBOARD_VALIDATORS: "validators",
   DASHBOARD_PULSE: "pulse",
   DASHBOARD_ACCOUNT: "account",
+  DASHBOARD_HELP: "help",
 }
