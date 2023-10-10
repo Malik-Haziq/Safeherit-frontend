@@ -2,27 +2,36 @@ import logo from "@images/safeherit_logo.svg"
 import loginImg from "@images/login-img.png"
 import star from "@images/star.svg"
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { login, resetPassword } from "@redux/actions"
-import { useAppDispatch } from "@redux/hooks"
+import { getUser, login, resetPassword } from "@redux/actions"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ForgotPasswordModal } from "@/components"
+import { UserRolesModal, PrivateKeyModal } from './modal_login'
+import { resetBeneficiaryOf, resetMapper, resetValidatorOf, updateActive, updateRole, updateRoleUser } from "@/redux/reducers/UserSlice"
+import { SelectOption } from "@/types"
 
 export function Login() {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const user = useAppSelector((state) => state.user)
 
   const [formControl, setFormControl] = useState({
     email: "",
     password: "",
   })
   const [rememberMe, setRememberMe] = useState(false)
-  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false)
-  const [resetEmail, setResetEmail] = useState("")
-  const closeForgotEmailModal = () => setShowForgotPasswordModal(false)
-  const showForgotEmailModal = () => setShowForgotPasswordModal(true)
+  const [modalVisibility, setModalVisibility] = useState("none")
+  const [selectedBeneficiary, setSelectedBeneficiary] = useState<SelectOption>()
+  const [selectedValidator, setSelectedValidator] = useState<SelectOption>()
+  const [resetEmail, setResetEmail] = useState("") 
+
+  const closeModal = useCallback(() => {
+    setModalVisibility("none")
+    setResetEmail("")
+  }, [])
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
@@ -40,12 +49,37 @@ export function Login() {
         login({ email: formControl.email, password: formControl.password }),
       )
         .unwrap()
-        .then(() => {
-          navigate("/register")
+        .then((res) => {
+          dispatch(getUser({})).unwrap().then((res) => {
+            setModalVisibility("user-roles")
+          })
         })
         .catch((err) => {
           alert(err.code)
         })
+    }
+  }
+
+  const _handleUserRolesSubmit = (selectedRole: string) => {
+    if (
+      selectedRole == "owner" ||
+      selectedRole == "beneficiary" && selectedBeneficiary ||
+      selectedRole == "validator" && selectedValidator
+    ) {
+      if (selectedRole == "beneficiary") {
+        dispatch(updateRoleUser(user.userMap[selectedBeneficiary?.value || 0]))
+        dispatch(resetMapper())
+        dispatch(resetBeneficiaryOf())
+      }
+      else if (selectedRole == "validator") {
+        dispatch(updateRoleUser(user.userMap[selectedValidator?.value || 0]))
+        dispatch(resetMapper())
+        dispatch(resetValidatorOf())
+      }
+      setModalVisibility("none")
+      dispatch(updateActive(true))
+      dispatch(updateRole(selectedRole))
+      navigate("/dashboard")
     }
   }
 
@@ -55,29 +89,43 @@ export function Login() {
         .unwrap()
         .then((res) => {
           alert("Email Sent")
-          closeForgotEmailModal()
-          setResetEmail("")
         })
         .catch((err) => {
           alert(err.code)
-          closeForgotEmailModal()
-          setResetEmail("")
+        })
+        .finally(() => {
+          closeModal()
         })
     }
   }
 
   return (
     <main className="flex flex-row justify-center lg:justify-between font-safe-font-default w-screen h-screen">
-      {showForgotPasswordModal && (
-        <ForgotPasswordModal
-          resetEmail={resetEmail}
-          setResetEmail={setResetEmail}
-          closeModalOnOverlayClick={true}
-          openModal={showForgotPasswordModal}
-          closeModal={closeForgotEmailModal}
-          sendEmail={_handleForgotPassword}
-        />
-      )}
+      <UserRolesModal
+        openModal={modalVisibility == "user-roles"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={false}
+        isBeneficiary = {user.isBeneficiary}
+        isOwner = {user.isOwner}
+        isValidator = {user.isValidator}
+        userName = {user.displayName}
+        _beneficiaryOf = {user._beneficiaryOf}
+        _validatorOf = {user._validatorOf}
+        selectedBeneficiary={selectedBeneficiary}
+        setSelectedBeneficiary={setSelectedBeneficiary}
+        selectedValidator={selectedValidator}
+        setSelectedValidator={setSelectedValidator}
+        _handleUserRolesSubmit={_handleUserRolesSubmit}
+      />
+      <ForgotPasswordModal
+        openModal={modalVisibility == "forgot-password"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={true}
+        resetEmail={resetEmail}
+        setResetEmail={setResetEmail}
+        sendEmail={_handleForgotPassword}
+      />
       <section className="pt-10 px-10 basis-2/5 flex flex-col gap-48">
         <img src={logo} alt="safeherit logo" className="h-8 w-40" />
         <div className="mx-auto">
@@ -125,7 +173,7 @@ export function Login() {
               </div>
               <p
                 className="text-safe-text-blue-shade font-medium cursor-pointer"
-                onClick={showForgotEmailModal}
+                onClick={() => {setModalVisibility("forgot-password")}}
               >
                 Forgot Password?
               </p>

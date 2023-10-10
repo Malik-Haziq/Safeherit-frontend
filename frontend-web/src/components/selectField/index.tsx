@@ -35,7 +35,7 @@ const IndicatorsContainer = (props?: any) => {
     </components.IndicatorsContainer>
   )
 }
-const selectFieldStyles = (selectFieldWidth: number) => {
+const selectFieldStyles = (selectFieldWidth?: number) => {
   return {
     control: (baseStyles: any) => ({
       ...baseStyles,
@@ -77,11 +77,11 @@ export const SelectField = (_props: {
   selectProps?: any
   setSelectedValue: any
   hasRightIcon: boolean
-  rightIcon: string
-  rightIconAlt: string
+  rightIcon?: string
+  rightIconAlt?: string
   rightIconStyles?: string
-  selectFieldWidth: number
-  selectFieldStyles: any
+  selectFieldWidth?: number
+  selectFieldStyles?: any
 }) => {
   const [openMenu, setOpenMenu] = useState(false)
   const selectRef = useRef<HTMLDivElement | null>(null)
@@ -102,6 +102,7 @@ export const SelectField = (_props: {
         onClick={_hanelSelect}
       >
         <Select
+          onBlur={() => setOpenMenu(false)}
           ref={selectRef}
           options={_props.data}
           onChange={_props.setSelectedValue}
@@ -110,7 +111,7 @@ export const SelectField = (_props: {
           {..._props.selectProps}
           // overriding pre-defined styles
           components={{ IndicatorsContainer }}
-          styles={{ ...selectFieldStyles(_props.selectFieldWidth) }}
+          styles={{ ...selectFieldStyles(_props?.selectFieldWidth) }}
           theme={(theme) => selectFieldTheme(theme)}
           menuIsOpen={openMenu}
         />

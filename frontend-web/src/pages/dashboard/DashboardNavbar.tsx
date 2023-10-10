@@ -21,10 +21,10 @@ export default function DashboardNavbar(_props: {
     <div className="h-[83px] p-2 sm:p-7 flex justify-between items-center shadow-sm min-w-[1200px] max-w-[100vw]">
       <div>
         <h2 className="text-safe-text-black-tint sm:text-xl font-bold">
-          {_props.navBarHeadings[_props.currentPath.pathname].screen}
+          {_props.navBarHeadings[_props.currentPath]?.screen}
         </h2>
         <p className="text-safe-text-dark-gray text-sm sm:text-base ">
-          {_props.navBarHeadings[_props.currentPath.pathname].title}
+          {_props.navBarHeadings[_props.currentPath]?.title}
         </p>
       </div>
       <div className="flex items-center gap-3 md:gap-10">
