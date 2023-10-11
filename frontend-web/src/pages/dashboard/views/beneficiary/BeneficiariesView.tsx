@@ -128,7 +128,7 @@ export default function BeneficiariesView() {
             dispatch(getAllBeneficiary({}))
               .unwrap()
               .then((res) => {
-                setModalVisibility("Step-pk")
+                setModalVisibility("Step-success")
                 updateBeneficiaryArrayCount(res)
               })
               .catch(() => {
@@ -359,7 +359,7 @@ export default function BeneficiariesView() {
       {hasBeneficiaries == -1 ? (
         <div className={styles.AppView}>
           <div className="relative h-[80vh]">
-            <Spinner/>
+            <Spinner />
           </div>
         </div>
       ) : hasBeneficiaries == 0 ? (
