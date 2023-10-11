@@ -36,7 +36,10 @@ const IndicatorsContainer = (props?: any) => {
     </components.IndicatorsContainer>
   )
 }
-const selectFieldStyles = (selectFieldWidth?: number, selectFieldMenuWidth?: number) => {
+const selectFieldStyles = (
+  selectFieldWidth?: number,
+  selectFieldMenuWidth?: number,
+) => {
   return {
     control: (baseStyles: any) => ({
       ...baseStyles,
@@ -47,7 +50,7 @@ const selectFieldStyles = (selectFieldWidth?: number, selectFieldMenuWidth?: num
       fontFamily: "Montserrat",
       fontWeight: 500,
       fontSize: "14px",
-      width: selectFieldWidth
+      width: selectFieldWidth,
     }),
     menuList: (baseStyles: any) => ({
       ...baseStyles,
@@ -57,15 +60,15 @@ const selectFieldStyles = (selectFieldWidth?: number, selectFieldMenuWidth?: num
       fontFamily: "Montserrat",
       fontWeight: 400,
       fontSize: "14px",
-      width: selectFieldMenuWidth
+      width: selectFieldMenuWidth,
     }),
     menu: (baseStyles: any) => ({
       ...baseStyles,
       borderRadius: 5,
       borderColor: "white",
       backgroundColor: "white",
-      width: selectFieldMenuWidth
-    })
+      width: selectFieldMenuWidth,
+    }),
   }
 }
 const selectFieldTheme = (theme: any) => {
@@ -122,7 +125,12 @@ export const SelectField = (_props: {
           {..._props.selectProps}
           // overriding pre-defined styles
           components={{ IndicatorsContainer }}
-          styles={{ ...selectFieldStyles(_props.selectFieldWidth, _props.selectFieldMenuWidth) }}
+          styles={{
+            ...selectFieldStyles(
+              _props.selectFieldWidth,
+              _props.selectFieldMenuWidth,
+            ),
+          }}
           theme={(theme) => selectFieldTheme(theme)}
           menuIsOpen={openMenu}
         />
