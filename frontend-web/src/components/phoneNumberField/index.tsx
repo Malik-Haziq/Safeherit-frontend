@@ -8,24 +8,27 @@ export function PhoneNumField(_props: {
   name: string
   value: string
   code: string
+  placeholder: string
   selectFieldMenuWidth?: number
   selectFieldStyles?: string
   inputStyles?: string
   inputContainerStyles?: string
   _handleChange: (event: { target: { name: any; value: any } }) => void
 }) {
-  const [countryCode, setCountryCode] = useState<SelectOption>()
+  const [countryCode, setCountryCode] = useState<SelectOption>({value: '+1', label: '+1'})
   const [phoneNumber, setPhoneNumber] = useState('')
 
   const _handleChange = (code:string | undefined, value:string, name:string) => {
     setPhoneNumber(value)
-    if (!code && _props.code) {
-      setCountryCode({value: _props.code, label: _props.code})
+    if (!code) {
+      _props.code ?
+      setCountryCode({value: _props.code, label: _props.code}) :
+      setCountryCode({value: '+1', label: '+1'})
     }
     const customEvent = {
       target: {
         name: name,
-        value: code + ' ' + value,
+        value: value ? code + ' ' + value : '',
       },
     }
     _props._handleChange(
@@ -37,7 +40,7 @@ export function PhoneNumField(_props: {
     <div className="flex">
       <SelectField
         data={countryCodes}
-        value={countryCode ? countryCode : _props.code ? {value: _props.code, label: _props.code} : undefined}
+        value={countryCode ? countryCode : _props.code ? {value: _props.code, label: _props.code} : {value: '+1', label: '+1',}}
         setSelectedValue={setCountryCode}
         hasRightIcon={true}
         rightIcon={iconDown}
@@ -49,7 +52,7 @@ export function PhoneNumField(_props: {
       <InputField
         name={_props.name}
         type={"text"}
-        placeholder={"Phone Number"}
+        placeholder={_props.placeholder}
         value={phoneNumber ? phoneNumber : _props.value ? _props.value : ""}
         _handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           _handleChange(countryCode?.value, e.target.value, e.target.name)

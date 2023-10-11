@@ -27,7 +27,7 @@ import {
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ConfirmationModal } from "@/components"
-import { isValidEmail, getFileFromFirebase, isValidPhone } from "@/common"
+import { isValidEmail, getFileFromFirebase, isValidPhone, isValidPhoneWithRegion } from "@/common"
 
 const initialState = {
   id: "",
@@ -92,14 +92,16 @@ export default function BeneficiariesView() {
     if (!modalControl.name) {
       alert("please enter a valid name")
     } else if (
-      !isValidEmail(modalControl.primary_email) &&
-      !isValidEmail(modalControl.backup_email) &&
-      !isValidEmail(modalControl.backup_email2)
+      !isValidEmail(modalControl.primary_email) && !isValidEmail(modalControl.backup_email2) && !isValidEmail(modalControl.backup_email) ||
+      modalControl.primary_email && !isValidEmail(modalControl.primary_email) ||
+      modalControl.backup_email && !isValidEmail(modalControl.backup_email) ||
+      modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2)
     ) {
       alert("please enter a valid Email address")
     } else if (
-      !isValidPhone(modalControl.phone_number) &&
-      !isValidPhone(modalControl.backup_phone_number)
+      !isValidPhoneWithRegion(modalControl.phone_number) && !isValidPhoneWithRegion(modalControl.backup_phone_number) ||
+      modalControl.phone_number && !isValidPhoneWithRegion(modalControl.phone_number) ||
+      modalControl.backup_phone_number && !isValidPhoneWithRegion(modalControl.backup_phone_number)
     ) {
       alert("please enter valid Phone number")
     } else {
@@ -192,14 +194,9 @@ export default function BeneficiariesView() {
   }
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
+    // debugger
     const { name, value } = event.target
-    if (name == "phone_number" || name == "backup_phone_number") {
-      if (isValidPhone(value) || value == "" || value == "+") {
-        setModalControl({ ...modalControl, [name]: value })
-      }
-    } else {
-      setModalControl({ ...modalControl, [name]: value })
-    }
+    setModalControl({ ...modalControl, [name]: value })
   }
   const newBeneficiary = () => {
     setModalAction("create")
