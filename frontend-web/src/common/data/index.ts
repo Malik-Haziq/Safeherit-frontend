@@ -1,6 +1,10 @@
 
 export const countryCodes = [
     {
+        "value": "Select Code",
+        "label": "Select Code"
+    },
+    {
         "value": "+93",
         "label": "+93"
     },

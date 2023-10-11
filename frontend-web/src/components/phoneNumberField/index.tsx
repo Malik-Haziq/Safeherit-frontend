@@ -2,7 +2,6 @@ import { InputField, SelectField } from ".."
 import { countryCodes } from "@/common/data"
 import { SelectOption } from "@/types";
 import iconDown from '@images/Arrow-Down-Circle.svg'
-import { useState } from "react";
 
 export function PhoneNumField(_props: { 
   name: string
@@ -15,21 +14,25 @@ export function PhoneNumField(_props: {
   inputContainerStyles?: string
   _handleChange: (event: { target: { name: any; value: any } }) => void
 }) {
-  const [countryCode, setCountryCode] = useState<SelectOption>({value: '+1', label: '+1'})
-  const [phoneNumber, setPhoneNumber] = useState('')
 
-  const _handleChange = (code:string | undefined, value:string, name:string) => {
-    setPhoneNumber(value)
-    if (!code) {
-      _props.code ?
-      setCountryCode({value: _props.code, label: _props.code}) :
-      setCountryCode({value: '+1', label: '+1'})
+  const _handleChange = (name:string, value: string, code?: SelectOption) => {
+    
+    let customEvent = {}
+    if (name === "code") {
+      customEvent = {
+        target: {
+          name: _props.name,
+          value: code?.value != "Select Code" ? `${code?.value} ${_props.value ? _props.value : ""}` : "",
+        },
+      }
     }
-    const customEvent = {
-      target: {
-        name: name,
-        value: value ? code + ' ' + value : '',
-      },
+    else {
+      customEvent = {
+        target: {
+          name: _props.name,
+          value: `${_props.code? _props.code: ''} ${value}`,
+        },
+      }
     }
     _props._handleChange(
       customEvent as React.ChangeEvent<HTMLInputElement>,
@@ -40,8 +43,8 @@ export function PhoneNumField(_props: {
     <div className="flex">
       <SelectField
         data={countryCodes}
-        value={countryCode ? countryCode : _props.code ? {value: _props.code, label: _props.code} : {value: '+1', label: '+1',}}
-        setSelectedValue={setCountryCode}
+        value={_props.code ? {value: _props.code, label: _props.code} : {value: "Select Code", label: "Select Code"}}
+        setSelectedValue={(code :SelectOption) => {_handleChange("code", "", code)}}
         hasRightIcon={true}
         rightIcon={iconDown}
         rightIconAlt={"v"}
@@ -50,12 +53,12 @@ export function PhoneNumField(_props: {
         selectFieldStyles={_props.selectFieldStyles ? _props.selectFieldStyles : 'w-[100px] justify-between bg-[#F5FAFD] rounded-tl-[18px] rounded-bl-[18px] flex'}
       />
       <InputField
-        name={_props.name}
+        name={"phone_number"}
         type={"text"}
         placeholder={_props.placeholder}
-        value={phoneNumber ? phoneNumber : _props.value ? _props.value : ""}
+        value={_props.value ? _props.value : ""}
         _handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          _handleChange(countryCode?.value, e.target.value, e.target.name)
+          _handleChange(e.target.name, e.target.value)
         }}
         required={true}
         inputStyles={_props.inputStyles ? _props.inputStyles : "w-full rounded-tl-none rounded-bl-none"}
