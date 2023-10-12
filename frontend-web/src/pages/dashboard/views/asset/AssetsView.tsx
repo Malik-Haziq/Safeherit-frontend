@@ -447,6 +447,7 @@ function Assets(_props: {
       value?: string
       id: string
     }
+    assignedBeneficiaryName?: string
     id?: string
     category?: string
   }[]
@@ -511,7 +512,8 @@ function Assets(_props: {
                   assetImg={realEstate}
                   assetValue={asset?.data?.value || "No value found"}
                   beneficiaryImg={user}
-                  beneficiaryName={`${asset?.data?.Beneficiary}`}
+                  assignedBeneficiaryName={`${asset?.assignedBeneficiaryName}`}
+                  beneficiaryId={`${asset?.data?.Beneficiary}`}
                   destroyAsset={_props.destroyAsset}
                   editAsset={_props.editAsset}
                   viewAsset={_props.viewAsset}
@@ -576,7 +578,8 @@ function AssetDetails(_props: {
   assetImg: any
   assetValue: any
   beneficiaryImg: any
-  beneficiaryName: string
+  assignedBeneficiaryName: string
+  beneficiaryId: string
   destroyAsset: Function
   editAsset: Function
   viewAsset: Function
@@ -602,7 +605,7 @@ function AssetDetails(_props: {
             alt="beneficiary image"
             className="h-11 w-11"
           />
-          <p className="font-semibold">{_props.beneficiaryName}</p>
+          <p className="font-semibold">{_props.assignedBeneficiaryName}</p>
         </div>
         <div className="flex gap-1 ">
           <img
