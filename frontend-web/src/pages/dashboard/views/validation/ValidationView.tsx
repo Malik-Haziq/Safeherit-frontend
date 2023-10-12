@@ -1,90 +1,108 @@
+import { useEffect, useState } from "react"
 import styles from "../../Dashboard.module.css"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { useNavigate } from "react-router-dom"
+import { getOwnerValidation, logout, validateOwner } from "@/redux/actions"
 
 export default function ValidationView() {
-  const validationPageData = [
-    {
-      sectionName: "message",
-      title: "Message from James",
-      content: "Personilized Message",
-    },
-    {
-      sectionName: "validation",
-      title: "validation",
-      confirmed: false,
-    },
-  ]
+
+  const user = useAppSelector((state) => state.user)
+
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const [personalized_message, setPersonalized_message] = useState("")
+  const [dataLoaded, setLoadingData] = useState(false)
+  const [canMarkPassing, setCanMarkPassing] = useState()
+
+  useEffect(() => {
+    getOwnerValidationData()
+  }, [])
+  
+  const getOwnerValidationData = async () => {
+    dispatch(getOwnerValidation({})).unwrap()
+    .then((res) => {
+      setPersonalized_message(res.data.data.personalized_message)
+      setCanMarkPassing(res.data.data.canMarkPassing)
+      setLoadingData(true)
+    })
+    .catch()
+  }
+  const _handleLogout = () => {
+    dispatch(logout({}))
+      .unwrap()
+      .catch((err) => {
+        alert(err?.code)
+      })
+      .finally(() => {
+        navigate("/login")
+      })
+  }
+  
+  const _handlePassedAway = (confirmation: boolean) => {
+    dispatch(validateOwner({passedAway: confirmation})).unwrap()
+    .then((res) => {
+      getOwnerValidationData()
+    })
+    .catch()
+  }
+
 
   return (
     <div className={styles.AppView}>
       <main className="p-8 flex items-center gap-8 mx-auto">
-        {validationPageData.map((data) => {
-          return (
-            <Section
-              sectionName={data.sectionName}
-              title={data.title}
-              content={data.content}
-              confirmed={data.confirmed}
-            />
-          )
-        })}
+
+        <section className="w-[520px] shadow-md max-h-[749px] min-h-[480px] rounded-2xl">
+          <header className="py-3  bg-[#F6F6F6] text-center rounded-t-2xl text-[#00192B] font-bold text-lg">
+            {`Message from ${user.selectedRoleUser.ownerName}`}
+          </header>
+          {dataLoaded ? <div className="p-7 text-[#4F4F4F] ">{personalized_message}</div> : <p>Loading...</p>}
+        </section>
+
+        <section className="w-[520px] shadow-md rounded-2xl min-h-[480px] ">
+          <header className="py-3 bg-[#F6F6F6] text-center rounded-t-2xl text-[#00192B] font-bold text-lg">
+            {"Validation"}
+          </header>
+          {dataLoaded ?
+            <div>
+              <div className="p-7 scroll-auto text-[#00192B] text-lg text-center">
+                <h2 className="py-3 font-bold">
+                  {canMarkPassing == false
+                    ? "Thank you for your confirmation"
+                    : ` Do you confirm that ${user.selectedRoleUser.ownerName} passed away?`}
+                </h2>
+                <p className="mb-6">
+                  {canMarkPassing == false
+                    ? `Thank you for confirming whether ${user.selectedRoleUser.ownerName} is alive or not. We will proceed accordingly.`
+                    : `If you are not sure, you can logout and come back once you are sure using the link and credentials sent to you by e-mail.`}
+                </p>
+                <p>
+                  {canMarkPassing == false
+                    ? `Thank you for using SafeHerit.`
+                    : `However, don’t wait too long as it delays the sharing of ${user.selectedRoleUser.ownerName}’ testament and asset information to his beneficiaries.`}
+                </p>
+              </div>
+              <div className="flex items-center justify-between px-10 pb-12">
+                {canMarkPassing == false ? (
+                  <button onClick={_handleLogout} className="px-5 mt-12 mx-auto h-[80px] font-bold text-center w-[180px] bg-[#0971AA] text-white rounded-xl">
+                    CLICK HERE TO LOGOUT
+                  </button>
+                ) : (
+                  <>
+                    <button onClick={() => {_handlePassedAway(false)}} className="px-5 h-[80px] font-bold text-center w-[180px] bg-[#5CEAD2] text-[#04477B] rounded-xl">
+                      NO HE/SHE IS STILL ALIVE
+                    </button>
+                    <button onClick={() => {_handlePassedAway(true)}} className="px-5 h-[80px] font-bold text-center w-[180px] bg-[#0971AA] text-white rounded-xl">
+                      YES
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+            :
+            <p>Loading...</p>
+          }
+        </section>
       </main>
     </div>
   )
-}
-
-function Section(_props: {
-  title: string
-  content?: string
-  sectionName: string
-  confirmed?: boolean
-}) {
-  return {
-    ...(_props.sectionName === "message" ? (
-      <section className="w-[520px] shadow-md max-h-[749px] min-h-[480px] rounded-2xl">
-        <header className="py-3  bg-[#F6F6F6] text-center rounded-t-2xl text-[#00192B] font-bold text-lg">
-          {_props.title}
-        </header>
-        <div className="p-7 text-[#4F4F4F] ">{_props.content}</div>
-      </section>
-    ) : (
-      <section className="w-[520px] shadow-md rounded-2xl min-h-[480px] ">
-        <header className="py-3 bg-[#F6F6F6] text-center rounded-t-2xl text-[#00192B] font-bold text-lg">
-          {_props.title}
-        </header>
-        <div className="p-7 scroll-auto text-[#00192B] text-lg text-center">
-          <h2 className="py-3 font-bold">
-            {_props.confirmed
-              ? "Thank you for your confirmation"
-              : " Do you confirm that James passed away?"}
-          </h2>
-          <p className="mb-6">
-            {_props.confirmed
-              ? "Thank you for confirming whether James is alive or not. We will proceed accordingly."
-              : "If you are not sure, you can logout and come back once you are sure using the link and credentials sent to you by e-mail."}
-          </p>
-          <p>
-            {_props.confirmed
-              ? "Thank you for using SafeHerit."
-              : "However, don’t wait too long as it delays the sharing of James’ testament and asset information to his beneficiaries."}
-          </p>
-        </div>
-        <div className="flex items-center justify-between px-10 pb-12">
-          {_props.confirmed ? (
-            <button className="px-5 mt-12 mx-auto h-[80px] font-bold text-center w-[180px] bg-[#0971AA] text-white rounded-xl">
-              CLICK HERE TO LOGOUT
-            </button>
-          ) : (
-            <>
-              <button className="px-5 h-[80px] font-bold text-center w-[180px] bg-[#5CEAD2] text-[#04477B] rounded-xl">
-                NO HE/SHE ISSTILL ALIVE
-              </button>
-              <button className="px-5 h-[80px] font-bold text-center w-[180px] bg-[#0971AA] text-white rounded-xl">
-                YES
-              </button>
-            </>
-          )}
-        </div>
-      </section>
-    )),
-  }
 }

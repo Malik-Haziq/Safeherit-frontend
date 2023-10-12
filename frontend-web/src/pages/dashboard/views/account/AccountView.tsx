@@ -109,7 +109,7 @@ export default function AccountView() {
                   userName={user.displayName}
                   userEmail={user.email}
                   userLanguage="English"
-                  varified={false}
+                  verified={false}
                 />
                 <MembershipPlan
                   plan={"Monthly"}
@@ -174,7 +174,7 @@ function UserProfileDetails(_props: {
   userName: string
   userEmail: string
   userLanguage: string
-  varified: boolean
+  verified: boolean
 }) {
   return (
     <section className="rounded-2xl shadow-md mb-4">
@@ -207,19 +207,19 @@ function UserProfileDetails(_props: {
               <img src={warningIcon} alt="Warning Icon" />
             </div>
             <small className="text-[#707070]">
-              {_props.varified
+              {_props.verified
                 ? "2 Factor Authentication is activated, you will be asked a 2FA code every time you log into SafeHerit."
                 : "You still didn't set up 2FA, we highly recommend that you do so in order to keep your account secure and private."}
             </small>
           </div>
           <button
             className={
-              _props.varified
+              _props.verified
                 ? "primary-btn bg-[#0AB64E] cursor-pointer rounded-full py-2 px-6 text-sm"
                 : "primary-btn rounded-[14px] bg-[#0971AA] cursor-pointer text-sm"
             }
           >
-            {_props.varified ? "Active" : "Varify"}
+            {_props.verified ? "Active" : "Verify"}
           </button>
         </div>
       </div>
@@ -241,7 +241,7 @@ function MembershipPlan(_props: {
 }) {
   return (
     <section className="rounded-2xl shadow-md mb-4 ">
-      <div className="rouneded-t-2xl bg-[#ECF6FA] py-4 px-5">
+      <div className="rounded-t-2xl bg-[#ECF6FA] py-4 px-5">
         <h3 className="font-bold text-[#0C8AC1]">Membership plan</h3>
       </div>
       <div className="flex items-center gap-5 pt-5 mb-7">
@@ -255,12 +255,12 @@ function MembershipPlan(_props: {
       <div className="flex justify-between px-5 pb-5">
         <div>
           <p className="text-[#707070] text-sm font-medium">
-            Membership Duration
-            <span className="text-[#00192B] font-bold">{_props.duration}</span>
+            Membership Duration:
+            <span className="text-[#00192B] font-bold"> {_props.duration}</span>
           </p>
           <p className="text-[#707070] text-sm font-medium">
             Next Renewal Date:
-            <span className="text-[#00192B] font-bold">{_props.date}</span>
+            <span className="text-[#00192B] font-bold"> {_props.date}</span>
           </p>
         </div>
         <button onClick={_props.showPlanView} className="primary-btn bg-[#0971AA] rounded-2xl">

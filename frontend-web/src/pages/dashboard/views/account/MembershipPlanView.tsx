@@ -51,7 +51,7 @@ export default function MembershipPlanView(_props:{
       <main className=" p-6 rounded-lg shadow-md my-[22px] w-[1080px] mx-auto">
         <section className="mb-7">
           <h1 className="text-xl font-semibold mb-5">Your Membership Plan</h1>
-          <div className="flex itmes-center justify-between gap-5">
+          <div className="flex items-center justify-between gap-5">
             {pricingInfoArr.map((info, index) => {
               return (
                 <PricingPlan

@@ -1,4 +1,4 @@
-import { DELETE, GET, POST, PUT, jsonToFormData, ALL_VALIDATORS, VALIDATORS } from "@/common"
+import { DELETE, GET, POST, PUT, jsonToFormData, ALL_VALIDATORS, VALIDATORS, VALIDATION } from "@/common"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 
 export const getAllValidator = createAsyncThunk(
@@ -66,6 +66,44 @@ export const deleteValidator = createAsyncThunk(
     const params = { ROUTE: `${VALIDATORS}?id=${Data.id}`, Body: {}, token: user.token  }
     try {
       let response = await DELETE(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const getOwnerValidation = createAsyncThunk(
+  "getOwnerValidation",
+  async (Data: {}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: {token: any, selectedRoleUser: {ownerEmail: "",validatorId: "", ownerName: ""}} };
+    const owner_email = user.selectedRoleUser?.ownerEmail
+    const validator_id = user.selectedRoleUser?.validatorId
+    const params = { ROUTE: `${VALIDATION}?owner_email=${owner_email}&validator_id=${validator_id}`, Body: {}, token: user.token  }
+    try {
+      let response = await GET(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const validateOwner = createAsyncThunk(
+  "validateOwner",
+  async (Data: {}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: {token: any, selectedRoleUser: {ownerEmail: "",validatorId: "", ownerName: ""}} };
+    const owner_email = user.selectedRoleUser?.ownerEmail
+    const validator_id = user.selectedRoleUser?.validatorId
+    const data = {
+      ...Data,
+      owner_email,
+      validator_id
+    }
+    let formData = jsonToFormData(data)
+    const params = { ROUTE: VALIDATION, Body: formData, token: user.token  }
+    try {
+      let response = await PUT(params)
       return response
     } catch (error) {
       return rejectWithValue(error)

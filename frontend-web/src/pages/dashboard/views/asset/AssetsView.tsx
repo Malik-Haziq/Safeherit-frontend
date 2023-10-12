@@ -29,11 +29,13 @@ import {
   updateAsset,
   createAsset,
   getAllBeneficiary,
+  getAllBeneficiaryAsset,
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner } from "@/components"
 import { assetData, getRequiredFields } from "./data" 
 import { showToast } from "@/redux/reducers/ToastSlice"
+import { AxiosResponse } from "axios"
 
 interface ModalControl {
   [key: string]: any // This index signature allows string keys with any value
@@ -45,6 +47,7 @@ export default function AssetsView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const asset = useAppSelector((state) => state.asset)
+  const user = useAppSelector((state) => state.user)
 
   const [hasAssets, setHasAssets] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
@@ -52,7 +55,6 @@ export default function AssetsView() {
   const isEditingAsset = useRef(false)
   const [modalAction, setModalAction] = useState("")
   const [selected, setSelected] = useState("")
-  const [assetDetails, setAssetDetails] = useState([{}])
   const [selectedAsset, setSelectedAsset] = useState("")
   const [assetFile, setAssetFile] = useState("")
 
@@ -63,28 +65,31 @@ export default function AssetsView() {
     }
   }, [modalControl.category])
 
-  useEffect(() => {
-    if (modalVisibility != "none") {
-      updateAssetArrayCount()
-    }
-    setAssetDetails(asset.Asset_array)
-  }, [asset.Asset_array])
-
   useEffect(() => { //Get Beneficiaries
-    dispatch(getAllBeneficiary({}))
-    .unwrap()
-    .catch(() => {// TODO: show fallback page
-    })
-    .finally(() => {
-      dispatch(getAllAsset({}))
+    if (user.role == "owner") {
+      dispatch(getAllBeneficiary({}))
+      .unwrap()
+      .catch(() => {// TODO: show fallback page
+      })
+      .finally(() => {
+        dispatch(getAllAsset({}))
+        .unwrap()
+        .then((res) => {
+          updateAssetArrayCount(res)
+        })
+        .catch(() => {
+          // TODO: show fallback page
+        })
+      })
+    }
+    else if (user.role == "beneficiary") {
+      dispatch(getAllBeneficiaryAsset({}))
       .unwrap()
       .then((res) => {
-        updateAssetArrayCount()
+        updateAssetArrayCount(res)
       })
-      .catch(() => {
-        // TODO: show fallback page
-      })
-    })
+      .catch(() => {})
+    }
   }, [])
 
   const closeModal = useCallback(() => {
@@ -167,7 +172,7 @@ export default function AssetsView() {
       subTitle: "Assets registered",
       element: (
         <img
-          src={addIcon}
+          src={user.role == "owner" ? addIcon : ""}
           className="cy-add-asset-button cursor-pointer"
           id="cy-add-asset-button"
           onClick={() => {
@@ -178,10 +183,10 @@ export default function AssetsView() {
     },
   ]
 
-  const updateAssetArrayCount = () => {
-    if (asset.Asset_array && asset.Asset_array.length > 0) {
+  const updateAssetArrayCount = (res: AxiosResponse<any, any>) => {
+    if (res.data.data && res.data.data.length > 0) {
       setHasAssets(1)
-    } else if (asset.Asset_array && asset.Asset_array.length == 0) {
+    } else if (res.data.data && res.data.data.length == 0) {
       setHasAssets(0)
     }
   }
@@ -231,8 +236,11 @@ export default function AssetsView() {
         Data.id = selectedAsset
         dispatch(updateAsset(Data))
           .unwrap()
-          .then((res) => {
-            dispatch(getAllAsset({})).then(() => {
+          .then(() => {
+            dispatch(getAllAsset({}))
+            .unwrap()
+            .then((res) => {
+              updateAssetArrayCount(res)
               closeModal()
             })
           })
@@ -241,8 +249,11 @@ export default function AssetsView() {
         dispatch(showToast({ message: "Creating Asset", variant: "info" }))
         dispatch(createAsset(Data))
           .unwrap()
-          .then((res) => {
-            dispatch(getAllAsset({})).then((res) => {
+          .then(() => {
+            dispatch(getAllAsset({}))
+            .unwrap()
+            .then((res) => {
+              updateAssetArrayCount(res)
               setModalVisibility("Step-Success")
             })
           })
@@ -258,10 +269,11 @@ export default function AssetsView() {
   const _submitDeleteModal = () => {
     dispatch(deleteAsset({ id: selectedAsset }))
       .unwrap()
-      .then((res) => {
+      .then(() => {
         dispatch(getAllAsset({}))
           .unwrap()
           .then((res) => {
+            updateAssetArrayCount(res)
             closeModal()
           })
           .catch(() => {
@@ -378,10 +390,11 @@ export default function AssetsView() {
         assetCatagories={assetCatagories}
         selected={selected}
         setSelected={setSelected}
-        assetDetailsArr={assetDetails}
+        assetDetailsArr={asset.Asset_array}
         destroyAsset={destroyAsset}
         editAsset={editAsset}
         viewAsset={viewAsset}
+        userRole={user.role}
       />
       ) : hasAssets == 0 ? (
         <AddAsset openStepZeroModal={addAsset} />
@@ -441,6 +454,7 @@ function Assets(_props: {
   destroyAsset: Function
   editAsset: Function
   viewAsset: Function
+  userRole: string
 }) {
   return (
     <div className={styles.AppView}>
@@ -502,6 +516,7 @@ function Assets(_props: {
                   destroyAsset={_props.destroyAsset}
                   editAsset={_props.editAsset}
                   viewAsset={_props.viewAsset}
+                  userRole={_props.userRole}
                 />
               )
             })}
@@ -566,6 +581,7 @@ function AssetDetails(_props: {
   destroyAsset: Function
   editAsset: Function
   viewAsset: Function
+  userRole: string
 }) {
   return (
     <div className="flex justify-between gap-24 px-5 py-3">
@@ -599,24 +615,26 @@ function AssetDetails(_props: {
               _props.viewAsset(_props.assetId)
             }}
           />
-          <img
-            src={edit}
-            alt="edit icon"
-            className="cy-edit-asset-btn cursor-pointer"
-            id="cy-edit-asset-btn"
-            onClick={() => {
-              _props.editAsset(_props.assetId)
-            }}
-          />
-          <img
-            src={deleteIcon}
-            alt="delete icon"
-            className="cy-del-asset-btn cursor-pointer"
-            id="cy-del-asset-btn"
-            onClick={() => {
-              _props.destroyAsset(_props.assetId)
-            }}
-          />
+          {_props.userRole == "owner" && <>
+            <img
+              src={edit}
+              alt="edit icon"
+              className="cy-edit-asset-btn cursor-pointer"
+              id="cy-edit-asset-btn"
+              onClick={() => {
+                _props.editAsset(_props.assetId)
+              }}
+            />
+            <img
+              src={deleteIcon}
+              alt="delete icon"
+              className="cy-del-asset-btn cursor-pointer"
+              id="cy-del-asset-btn"
+              onClick={() => {
+                _props.destroyAsset(_props.assetId)
+              }}
+            />
+          </>}
         </div>
       </div>
     </div>
