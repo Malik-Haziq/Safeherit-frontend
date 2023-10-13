@@ -2,7 +2,7 @@ import defaultIcon from "@images/safeherit_logo.svg"
 import closeIcon from "@images/close-icon.svg"
 
 import styles from "./Modal.module.css"
-import { SelectField, InputField } from ".."
+import { SelectField, InputField, PhoneNumField } from ".."
 
 const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   const element = _props.element
@@ -53,6 +53,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
         iconAlt={element?.props?.iconAlt}
         iconPress={element?.props?.iconPress}
         rightIconStyles={element?.props?.rightIconStyles}
+        mask={element?.props?.mask}
       />
     )
   } else if (element?.type === "selectView") {
@@ -70,6 +71,21 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
         rightIconStyles={element?.props?.rightIconStyles}
         selectContainer={element?.props?.selectContainer}
         selectFieldStyles={element?.props?.selectFieldStyles}
+      />
+    )
+  } else if (element?.type === "phoneNumberView") {
+    return (
+      <PhoneNumField
+        key={_props.index}
+        name={element?.props?.name}
+        placeholder={element?.props?.placeholder}
+        value={element?.props?.value}
+        code={element?.props?.code}
+        selectFieldMenuWidth={element?.props?.selectFieldMenuWidth}
+        selectFieldStyles={element?.props?.selectFieldStyles}
+        inputStyles={element?.props?.inputStyles}
+        inputContainerStyles={element?.props?.inputContainerStyles}
+        _handleChange={element?.props?._handleChange}
       />
     )
   } else if (element?.type === "buttonView") {
