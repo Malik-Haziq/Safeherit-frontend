@@ -1190,7 +1190,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             {
@@ -1282,7 +1282,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             {
@@ -1366,7 +1366,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             {
@@ -1458,7 +1458,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             {
@@ -1564,7 +1564,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             {
@@ -1620,7 +1620,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             {
@@ -1732,7 +1732,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             {
@@ -1829,7 +1829,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             {
@@ -1899,7 +1899,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             { 
@@ -2004,7 +2004,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             { 
@@ -2074,7 +2074,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             { 
@@ -2164,7 +2164,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             {  
@@ -2226,7 +2226,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             { 
@@ -2288,7 +2288,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             { 
@@ -2350,7 +2350,7 @@ export const assetData: AssetData = {
                 name: "Beneficiary",
                 placeholder: "Select Beneficiary",
                 type: "Select",
-                required: true,
+                required: false,
                 allFields: "",
             },
             { 
