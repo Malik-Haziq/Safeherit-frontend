@@ -8,8 +8,8 @@ export function UserDetails(_props: {
   action: string
   modalControl: any
 }) {
-  const headings = Object.keys(_props.modalControl)
-  const values = Object.values(_props.modalControl)
+  const headings = [{}]
+  const values = [{}]
   return (
     <Modal
       openModal={_props.openModal}
@@ -30,7 +30,7 @@ export function UserDetails(_props: {
                       return (
                         <div key={4} className="flex gap-6 items-start pb-6">
                           <h2 className="text-[#292929] font-sm font-medium basis-1/2 text-right">
-                            {headings[index]}
+                            {/* {heading || ""} */}
                           </h2>
                           {headings[index] === "Pulse status" ? (
                             <div className="w-[170px] text-[#4D4D4D] font-medium text-xs basis-1/2">
@@ -59,7 +59,7 @@ export function UserDetails(_props: {
                             </div>
                           ) : (
                             <p className="text-[#585858] basis-1/2">
-                              {values[index]}
+                              {/* {values[index]} */}
                             </p>
                           )}
                         </div>
