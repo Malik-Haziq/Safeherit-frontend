@@ -4,6 +4,7 @@ import edit from "@images/edit.svg"
 import leftArrow from "@images/left-arrow.svg"
 import rightArrow from "@images/right-arrow.svg"
 import deleteIcon from "@images/delete.svg"
+import { UserDetails } from "../users/modal_admin"
 
 export default function UsersView() {
   const users = [
@@ -50,9 +51,24 @@ export default function UsersView() {
   ]
 
   console.log(users[0].pulseStatusSubtile.toLowerCase())
-
+  const modalControl = {
+    Name: "Rayan Adlardard",
+    "Joining date": "12 Apr 2023",
+    Plan: "yearly",
+    Payment: "paid",
+    Account: "active",
+    "Pulse status": { title: "Next schedule", subTitle: "Waiting for answer" },
+  }
   return (
     <div className={styles.AppView}>
+      {/* <UserDetails
+        openModal={true}
+        closeModal={false}
+        closeModalOnOverlayClick={true}
+        closeIconVisibility={true}
+        action={""}
+        modalControl={modalControl}
+      /> */}
       <main className="p-5 mx-auto w-[1101px]">
         <section className="mt-10 flex justify-end mb-8">
           <a
@@ -101,13 +117,17 @@ export default function UsersView() {
               <div className="w-12 h-12 text-[#04477B] bg-[#E6EDF2] flex items-center justify-center rounded-lg cursor-pointer">
                 1
               </div>
-              <div className="w-12 h-12 flex items-center justify-center cursor-pointer">2</div>
-              <div className="w-12 h-12 flex items-center justify-center cursor-pointer">3</div>
+              <div className="w-12 h-12 flex items-center justify-center cursor-pointer">
+                2
+              </div>
+              <div className="w-12 h-12 flex items-center justify-center cursor-pointer">
+                3
+              </div>
             </div>
-          <button className="px-4 py-2 text-[#04477B] border-[1px] border-[#04477B] rounded-lg flex items-center justify-center gap-2">
-            Next
-            <img src={rightArrow} alt="right arrow" />
-          </button>
+            <button className="px-4 py-2 text-[#04477B] border-[1px] border-[#04477B] rounded-lg flex items-center justify-center gap-2">
+              Next
+              <img src={rightArrow} alt="right arrow" />
+            </button>
           </div>
         </section>
       </main>
@@ -128,11 +148,7 @@ function User(_props: {
   return (
     <tr className="border-b-[1px] border-x-[1px] border-[#E5E5E5] h-16 rounded-2xl">
       <td className="w-[220px] pl-5 flex items-center gap-3 content-center h-16">
-        <img
-          src={edit}
-          alt="user image"
-          className="w-9 h-9 rounded-full"
-        />
+        <img src={edit} alt="user image" className="w-9 h-9 rounded-full" />
         <p className="text-[#00192B] text-lg font-semibold">
           {_props.userName}
         </p>
