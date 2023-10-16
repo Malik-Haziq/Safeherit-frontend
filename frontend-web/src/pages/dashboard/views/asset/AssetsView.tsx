@@ -32,9 +32,8 @@ import {
   getAllBeneficiaryAsset,
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
-import { DropDownButton, ConfirmationModal, Spinner } from "@/components"
-import { assetData, getRequiredFields } from "./data" 
-import { showToast } from "@/redux/reducers/ToastSlice"
+import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
+import { assetData, getRequiredFields } from "./data"
 import { AxiosResponse } from "axios"
 
 interface ModalControl {
@@ -197,7 +196,7 @@ export default function AssetsView() {
     requiredFields.forEach((field: string) => {
       if (!enteredFields.includes(field)) {
         isValid = false
-        dispatch(showToast({ message: `Please enter ${field}`, variant: "error" }))
+        toast(`Please enter ${field}`, "error")
       }
     })
     return isValid
@@ -209,7 +208,7 @@ export default function AssetsView() {
   const _submitStepOneModal = () => {
     // TODO validate fields
     if (!modalControl.category) {
-      dispatch(showToast({ message: "Please select an Asset category", variant: "error" }))
+      toast(`Please select an Asset category`, "error")
     } else {
       if (validateRequiredFields(modalControl, 0)) {
         setModalVisibility("Step-2")
@@ -232,7 +231,7 @@ export default function AssetsView() {
     }
     if (validateRequiredFields(modalControl, 1)) {
       if (modalAction == "edit") {
-        dispatch(showToast({ message: "Updating Asset", variant: "info" }))
+        toast("Updating Asset", "info")
         Data.id = selectedAsset
         dispatch(updateAsset(Data))
           .unwrap()
@@ -246,7 +245,7 @@ export default function AssetsView() {
           })
           .catch(() => {})
       } else if (modalAction == "create") {
-        dispatch(showToast({ message: "Creating Asset", variant: "info" }))
+        toast("Creating Asset", "info")
         dispatch(createAsset(Data))
           .unwrap()
           .then(() => {

@@ -9,7 +9,7 @@ import { PhoneNumField } from "@/components/phoneNumberField"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styles from "../../Dashboard.module.css"
-import { ValidatorDropDown, UserDetailsModal, Spinner } from "@/components"
+import { ValidatorDropDown, UserDetailsModal, Spinner, toast } from "@/components"
 import {
   StepZeroInformationModal,
   SuccessModal,
@@ -27,7 +27,6 @@ import {
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ConfirmationModal } from "@/components"
-import { showToast } from "@/redux/reducers/ToastSlice"
 import { isValidEmail, getFileFromFirebase, isValidPhone, isValidPhoneWithRegion } from "@/common"
 
 const initialState = {
@@ -91,20 +90,20 @@ export default function BeneficiariesView() {
 
   const _submitStepOneModal = () => {
     if (!modalControl.name) {
-      dispatch(showToast({ message: "please enter a valid name", variant: "error" }))
+      toast("please enter a valid name", "error")
     } else if (
       !isValidEmail(modalControl.primary_email) && !isValidEmail(modalControl.backup_email2) && !isValidEmail(modalControl.backup_email) ||
       modalControl.primary_email && !isValidEmail(modalControl.primary_email) ||
       modalControl.backup_email && !isValidEmail(modalControl.backup_email) ||
       modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2)
     ) {
-      dispatch(showToast({ message: "please enter a valid Email address", variant: "error" }))
+      toast("please enter a valid Email address", "error")
     } else if (
       !isValidPhoneWithRegion(modalControl.phone_number) && !isValidPhoneWithRegion(modalControl.backup_phone_number) ||
       modalControl.phone_number && !isValidPhoneWithRegion(modalControl.phone_number) ||
       modalControl.backup_phone_number && !isValidPhoneWithRegion(modalControl.backup_phone_number)
     ) {
-      dispatch(showToast({ message: "please enter valid Phone number", variant: "error" }))
+      toast("please enter a valid Phone number", "error")
     } else {
       setModalVisibility("Step-2")
     }
@@ -115,14 +114,14 @@ export default function BeneficiariesView() {
       !modalControl.instagram_username &&
       !modalControl.twitter_username
     ) {
-      dispatch(showToast({ message: "Atleast 1 social media accounts is compulsory", variant: "error" }))
+      toast("Atleast 1 social media accounts is compulsory", "error")
     } else {
       setModalVisibility("Step-3")
     }
   }
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
-      dispatch(showToast({ message: "Personalized message cannot be empty", variant: "error" }))
+      toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
         dispatch(updateBeneficiary(modalControl))
@@ -143,7 +142,7 @@ export default function BeneficiariesView() {
             // TODO: show fallback page
           })
       } else if (modalAction == "create") {
-        dispatch(showToast({ message: "creating beneficiary", variant: "info" }))
+        toast("creating beneficiary", "info")
         dispatch(createBeneficiary(modalControl))
           .unwrap()
           .then((res) => {
@@ -175,7 +174,7 @@ export default function BeneficiariesView() {
     }
   }
   const _submitDeleteModal = () => {
-    dispatch(showToast({ message: "deleting Beneficiary " + modalControl.name, variant: "info" }))
+    toast("deleting Beneficiary " + modalControl.name, "info")
     dispatch(deleteBeneficiary({ id: modalControl.id }))
       .unwrap()
       .then((res) => {
@@ -246,7 +245,7 @@ export default function BeneficiariesView() {
     navigate("/dashboard/validators")
   }
   const viewBeneficiary = (id: string) => {
-    dispatch(showToast({ message: "showing user data", variant: "info" }))
+    toast("showing user data", "info")
     dispatch(findBeneficiary({ id: id }))
       .unwrap()
       .then((res) => {
@@ -335,7 +334,7 @@ export default function BeneficiariesView() {
         action={modalAction}
         _submitModal={_submitRegisterPKModal}
         _handleKeyGeneration={() => {
-          dispatch(showToast({ message: "generate key pair", variant: "info" }))
+          toast("generating key pair", "info")
         }}
       />
       <ConfirmationModal

@@ -1,22 +1,6 @@
-import { useAppSelector } from '@/redux/hooks'
 import { SnackbarProvider, enqueueSnackbar } from 'notistack'
-import { useEffect } from 'react'
 
 export const CustomToast = () => {
-  const toast = useAppSelector(state => state.toast)
-  
-  useEffect(() => {
-    if (toast.message) {
-      enqueueSnackbar(toast.message, {
-        variant: toast.variant,
-        anchorOrigin: {
-          vertical: 'top',
-          horizontal: 'right'
-        }
-      })
-    }
-  }, [toast.message])
-  
   return (
     <SnackbarProvider
       autoHideDuration={3000}
@@ -24,4 +8,14 @@ export const CustomToast = () => {
       maxSnack={2}
     />
   )
+}
+
+export const toast = (message: string, variant: "default" | "error" | "success" | "warning" | "info") => {
+  enqueueSnackbar(message, {
+    variant: variant,
+    anchorOrigin: {
+      vertical: 'top',
+      horizontal: 'right'
+    }
+  })
 }

@@ -9,7 +9,7 @@ import validatorImage from "@images/validator-screen.svg"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styles from "../../Dashboard.module.css"
-import { ValidatorDropDown, ConfirmationModal, UserDetailsModal, Spinner } from "@/components"
+import { ValidatorDropDown, ConfirmationModal, UserDetailsModal, Spinner, toast } from "@/components"
 import {
   StepZeroInformationModal,
   StepOneModal,
@@ -25,7 +25,6 @@ import {
   deleteValidator,
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
-import { showToast } from "@/redux/reducers/ToastSlice"
 import { isValidEmail, getFileFromFirebase, isValidPhone, isValidPhoneWithRegion } from "@/common"
 
 const initialState = {
@@ -86,20 +85,20 @@ export default function ValidatorsView() {
 
   const _submitStepOneModal = () => {
     if (!modalControl.name) {
-      dispatch(showToast({ message: "please enter a valid name", variant: "error" }))
+      toast("please enter a valid name", "error")
     } else if (
       !isValidEmail(modalControl.primary_email) && !isValidEmail(modalControl.backup_email2) && !isValidEmail(modalControl.backup_email) ||
       modalControl.primary_email && !isValidEmail(modalControl.primary_email) ||
       modalControl.backup_email && !isValidEmail(modalControl.backup_email) ||
       modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2)
     ) {
-      dispatch(showToast({ message: "please enter a valid Email address", variant: "error" }))
+      toast("please enter a valid Email address", "error")
     } else if (
       !isValidPhoneWithRegion(modalControl.phone_number) && !isValidPhoneWithRegion(modalControl.backup_phone_number) ||
       modalControl.phone_number && !isValidPhoneWithRegion(modalControl.phone_number) ||
       modalControl.backup_phone_number && !isValidPhoneWithRegion(modalControl.backup_phone_number)
     ) {
-      dispatch(showToast({ message: "please enter valid Phone number", variant: "error" }))
+      toast("please enter a valid Phone number", "error")
     } else {
       setModalVisibility("Step-2")
     }
@@ -110,14 +109,14 @@ export default function ValidatorsView() {
       !modalControl.twitter_username &&
       !modalControl.instagram_username
     ) {
-      dispatch(showToast({ message: "Atleast 1 social media accounts is compulsory", variant: "error" }))
+      toast("Atleast 1 social media accounts is compulsory", "error")
     } else {
       setModalVisibility("Step-3")
     }
   }
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
-      dispatch(showToast({ message: "Personalized message cannot be empty", variant: "error" }))
+      toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
         dispatch(updateValidator(modalControl))
@@ -219,7 +218,7 @@ export default function ValidatorsView() {
     navigate("/dashboard/pulse")
   }
   const viewValidator = (id: string) => {
-    dispatch(showToast({ message: "showing user data", variant: "info" }))
+    toast("showing user data", "info")
     dispatch(findValidator({ id: id }))
       .unwrap()
       .then((res) => {

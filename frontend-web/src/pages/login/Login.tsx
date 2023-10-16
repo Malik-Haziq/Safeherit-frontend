@@ -7,8 +7,7 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { getUser, login, resetPassword } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
-import { ForgotPasswordModal } from "@/components"
-import { showToast } from "@/redux/reducers/ToastSlice"
+import { ForgotPasswordModal, toast } from "@/components"
 import { UserRolesModal, PrivateKeyModal } from "./modal_login"
 import {
   resetBeneficiaryOf,
@@ -51,21 +50,19 @@ export function Login() {
   }
 
   const _handleSubmit = () => {
-    dispatch(showToast({ message: "logging in", variant: "info" }))
+    toast("logging in", "info")
     if (formControl.email && formControl.password) {
-      dispatch(
-        login({ email: formControl.email, password: formControl.password }),
-      )
+      dispatch(login({ email: formControl.email, password: formControl.password }))
         .unwrap()
         .then((res) => {
           dispatch(getUser({}))
-            .unwrap()
+            .unwrap().catch()
             .then((res) => {
               setModalVisibility("user-roles")
             })
         })
         .catch((err) => {
-          dispatch(showToast({ message: err?.code, variant: "error" }))
+          toast(err?.code, "error")
         })
     }
   }
@@ -95,12 +92,9 @@ export function Login() {
   const _handleForgotPassword = () => {
     if (resetEmail) {
       dispatch(resetPassword({ email: resetEmail }))
-        .unwrap()
+        .unwrap().catch()
         .then((res) => {
-          dispatch(showToast({ message: "Email Sent", variant: "info" }))
-        })
-        .catch((err) => {
-          dispatch(showToast({ message: err?.code, variant: "error" }))
+          toast("Email Sent", "info")
         })
         .finally(() => {
           closeModal()
