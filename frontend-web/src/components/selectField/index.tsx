@@ -4,8 +4,8 @@ import styles from "./SelectField.module.css"
 /**
  * Component that displays user information.
  * @component
- * @param {object} _props - The _props required for component functioning.
- * @param {string} _props.selectContainer - select field container styles.
+ * @param {object} _props - The _props required for component functioning. select field container styles.
+ * @param {string} _props.selectContainer -
  * @param {Array} _props.data - array of values
  * @param {number} _props.value - selected value
  * @param {function} _props.setSelectedValue - set selected value to this method
@@ -13,7 +13,8 @@ import styles from "./SelectField.module.css"
  * @param {string} _props.rightIcon - path to right icon
  * @param {string} _props.rightIconAlt -
  * @param {string} _props.rightIconStyles - right icon styles
- * @param {number} _props.selectFieldWidth - need to provide width
+ * @param {number} _props.selectFieldWidth - need to provide width to the input field
+ * @param {number} _props.selectFieldMenuWidth - provide width to the menu list
  *
  *
  * @property
@@ -35,7 +36,10 @@ const IndicatorsContainer = (props?: any) => {
     </components.IndicatorsContainer>
   )
 }
-const selectFieldStyles = (selectFieldWidth?: number) => {
+const selectFieldStyles = (
+  selectFieldWidth?: number,
+  selectFieldMenuWidth?: number,
+) => {
   return {
     control: (baseStyles: any) => ({
       ...baseStyles,
@@ -46,6 +50,7 @@ const selectFieldStyles = (selectFieldWidth?: number) => {
       fontFamily: "Montserrat",
       fontWeight: 500,
       fontSize: "14px",
+      width: selectFieldWidth,
     }),
     menuList: (baseStyles: any) => ({
       ...baseStyles,
@@ -55,6 +60,14 @@ const selectFieldStyles = (selectFieldWidth?: number) => {
       fontFamily: "Montserrat",
       fontWeight: 400,
       fontSize: "14px",
+      width: selectFieldMenuWidth,
+    }),
+    menu: (baseStyles: any) => ({
+      ...baseStyles,
+      borderRadius: 5,
+      borderColor: "white",
+      backgroundColor: "white",
+      width: selectFieldMenuWidth,
     }),
   }
 }
@@ -81,16 +94,17 @@ export const SelectField = (_props: {
   rightIconAlt?: string
   rightIconStyles?: string
   selectFieldWidth?: number
+  selectFieldMenuWidth?: number
   selectFieldStyles?: any
 }) => {
   const [openMenu, setOpenMenu] = useState(false)
   const selectRef = useRef<HTMLDivElement | null>(null)
 
-  const _hanelSelect = () => {
+  const _handleSelect = () => {
     if (!openMenu) {
       selectRef?.current?.focus()
     }
-    if (!_props.selectProps.isDisabled) {
+    if (!_props.selectProps?.isDisabled) {
       setOpenMenu((val) => !val)
     }
   }
@@ -99,7 +113,7 @@ export const SelectField = (_props: {
     <div className={_props.selectContainer || styles.selectContainer}>
       <div
         className={_props.selectFieldStyles || styles.selectFieldStyles}
-        onClick={_hanelSelect}
+        onClick={_handleSelect}
       >
         <Select
           onBlur={() => setOpenMenu(false)}
@@ -111,7 +125,12 @@ export const SelectField = (_props: {
           {..._props.selectProps}
           // overriding pre-defined styles
           components={{ IndicatorsContainer }}
-          styles={{ ...selectFieldStyles(_props?.selectFieldWidth) }}
+          styles={{
+            ...selectFieldStyles(
+              _props.selectFieldWidth,
+              _props.selectFieldMenuWidth,
+            ),
+          }}
           theme={(theme) => selectFieldTheme(theme)}
           menuIsOpen={openMenu}
         />

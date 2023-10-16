@@ -9,8 +9,15 @@ import { getUser, login, resetPassword } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ForgotPasswordModal } from "@/components"
 import { showToast } from "@/redux/reducers/ToastSlice"
-import { UserRolesModal, PrivateKeyModal } from './modal_login'
-import { resetBeneficiaryOf, resetMapper, resetValidatorOf, updateActive, updateRole, updateRoleUser } from "@/redux/reducers/UserSlice"
+import { UserRolesModal, PrivateKeyModal } from "./modal_login"
+import {
+  resetBeneficiaryOf,
+  resetMapper,
+  resetValidatorOf,
+  updateActive,
+  updateRole,
+  updateRoleUser,
+} from "@/redux/reducers/UserSlice"
 import { SelectOption } from "@/types"
 
 export function Login() {
@@ -27,7 +34,7 @@ export function Login() {
   const [modalVisibility, setModalVisibility] = useState("none")
   const [selectedBeneficiary, setSelectedBeneficiary] = useState<SelectOption>()
   const [selectedValidator, setSelectedValidator] = useState<SelectOption>()
-  const [resetEmail, setResetEmail] = useState("") 
+  const [resetEmail, setResetEmail] = useState("")
 
   const closeModal = useCallback(() => {
     setModalVisibility("none")
@@ -51,9 +58,11 @@ export function Login() {
       )
         .unwrap()
         .then((res) => {
-          dispatch(getUser({})).unwrap().then((res) => {
-            setModalVisibility("user-roles")
-          })
+          dispatch(getUser({}))
+            .unwrap()
+            .then((res) => {
+              setModalVisibility("user-roles")
+            })
         })
         .catch((err) => {
           dispatch(showToast({ message: err?.code, variant: "error" }))
@@ -64,15 +73,14 @@ export function Login() {
   const _handleUserRolesSubmit = (selectedRole: string) => {
     if (
       selectedRole == "owner" ||
-      selectedRole == "beneficiary" && selectedBeneficiary ||
-      selectedRole == "validator" && selectedValidator
+      (selectedRole == "beneficiary" && selectedBeneficiary) ||
+      (selectedRole == "validator" && selectedValidator)
     ) {
       if (selectedRole == "beneficiary") {
         dispatch(updateRoleUser(user.userMap[selectedBeneficiary?.value || 0]))
         dispatch(resetMapper())
         dispatch(resetBeneficiaryOf())
-      }
-      else if (selectedRole == "validator") {
+      } else if (selectedRole == "validator") {
         dispatch(updateRoleUser(user.userMap[selectedValidator?.value || 0]))
         dispatch(resetMapper())
         dispatch(resetValidatorOf())
@@ -106,13 +114,13 @@ export function Login() {
         openModal={modalVisibility == "user-roles"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={false}
-        isBeneficiary = {user.isBeneficiary}
-        isOwner = {user.isOwner}
-        isValidator = {user.isValidator}
-        userName = {user.displayName}
-        _beneficiaryOf = {user._beneficiaryOf}
-        _validatorOf = {user._validatorOf}
+        closeIconVisibility={true}
+        isBeneficiary={user.isBeneficiary}
+        isOwner={user.isOwner}
+        isValidator={user.isValidator}
+        userName={user.displayName}
+        _beneficiaryOf={user._beneficiaryOf}
+        _validatorOf={user._validatorOf}
         selectedBeneficiary={selectedBeneficiary}
         setSelectedBeneficiary={setSelectedBeneficiary}
         selectedValidator={selectedValidator}
@@ -174,7 +182,9 @@ export function Login() {
               </div>
               <p
                 className="text-safe-text-blue-shade font-medium cursor-pointer"
-                onClick={() => {setModalVisibility("forgot-password")}}
+                onClick={() => {
+                  setModalVisibility("forgot-password")
+                }}
               >
                 Forgot Password?
               </p>
