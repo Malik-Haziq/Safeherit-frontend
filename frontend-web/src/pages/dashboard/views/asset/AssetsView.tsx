@@ -20,7 +20,7 @@ import {
   StepTwoModal,
   AssetDetail,
 } from "./modal_assets"
-import { ASSET_TYPES, ROUTE_CONSTANTS } from "@/common"
+import { ASSET_TYPES, ROUTE_CONSTANTS, useArray } from "@/common"
 
 import {
   findAsset,
@@ -33,7 +33,7 @@ import {
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner } from "@/components"
-import { assetData, getRequiredFields } from "./data" 
+import { assetData, getRequiredFields } from "./data"
 import { AxiosResponse } from "axios"
 
 interface ModalControl {
@@ -56,7 +56,13 @@ export default function AssetsView() {
   const [selected, setSelected] = useState("")
   const [selectedAsset, setSelectedAsset] = useState("")
   const [assetFile, setAssetFile] = useState("")
-
+  const [
+    modalHistory,
+    modalHistoryLength,
+    modalHistoryPop,
+    modalHistoryPush,
+    modalHistoryPopAll,
+  ] = useArray()
   useEffect(() => {
     // reset values incase of creating an asset
     if (!isEditingAsset.current) {
@@ -64,31 +70,36 @@ export default function AssetsView() {
     }
   }, [modalControl.category])
 
-  useEffect(() => { //Get Beneficiaries
+  useEffect(() => {
+    //Get Beneficiaries
     if (user.role == "owner") {
       dispatch(getAllBeneficiary({}))
-      .unwrap()
-      .catch(() => {// TODO: show fallback page
-      })
-      .finally(() => {
-        dispatch(getAllAsset({}))
+        .unwrap()
+        .catch(() => {
+          // TODO: show fallback page
+        })
+        .finally(() => {
+          dispatch(getAllAsset({}))
+            .unwrap()
+            .then((res) => {
+              updateAssetArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
+        })
+    } else if (user.role == "beneficiary") {
+      dispatch(getAllBeneficiaryAsset({}))
         .unwrap()
         .then((res) => {
           updateAssetArrayCount(res)
         })
-        .catch(() => {
-          // TODO: show fallback page
-        })
-      })
+        .catch(() => {})
     }
-    else if (user.role == "beneficiary") {
-      dispatch(getAllBeneficiaryAsset({}))
-      .unwrap()
-      .then((res) => {
-        updateAssetArrayCount(res)
-      })
-      .catch(() => {})
-    }
+  }, [])
+
+  useEffect(() => {
+    modalHistoryPopAll()
   }, [])
 
   const closeModal = useCallback(() => {
@@ -98,8 +109,14 @@ export default function AssetsView() {
     setAssetFile("")
     setSelectedAsset("")
     isEditingAsset.current = false
+    modalHistoryPopAll()
   }, [])
 
+  const showPreviousModal = () => {
+    modalHistoryPop()
+    const lastEl = modalHistory[modalHistoryLength - 1]
+    setModalVisibility(lastEl)
+  }
   const assetCatagories = [
     "All",
     "Bank",
@@ -189,7 +206,10 @@ export default function AssetsView() {
       setHasAssets(0)
     }
   }
-  const validateRequiredFields = (modalControl: ModalControl, modal: number) => {
+  const validateRequiredFields = (
+    modalControl: ModalControl,
+    modal: number,
+  ) => {
     let isValid = true
     const [requiredFields] = getRequiredFields(modalControl.category, modal)
     const enteredFields = Object.keys(modalControl)
@@ -211,6 +231,7 @@ export default function AssetsView() {
       alert("Please select an Asset category")
     } else {
       if (validateRequiredFields(modalControl, 0)) {
+        modalHistoryPush("step-1")
         setModalVisibility("Step-2")
       }
     }
@@ -227,7 +248,7 @@ export default function AssetsView() {
       category: modalControl.category,
       assignedBeneficiaryId: modalControl.Beneficiary,
       data: JSON.stringify(modalControl),
-      asset_file: assetFile
+      asset_file: assetFile,
     }
     if (validateRequiredFields(modalControl, 1)) {
       if (modalAction == "edit") {
@@ -237,11 +258,11 @@ export default function AssetsView() {
           .unwrap()
           .then(() => {
             dispatch(getAllAsset({}))
-            .unwrap()
-            .then((res) => {
-              updateAssetArrayCount(res)
-              closeModal()
-            })
+              .unwrap()
+              .then((res) => {
+                updateAssetArrayCount(res)
+                closeModal()
+              })
           })
           .catch(() => {})
       } else if (modalAction == "create") {
@@ -250,11 +271,12 @@ export default function AssetsView() {
           .unwrap()
           .then(() => {
             dispatch(getAllAsset({}))
-            .unwrap()
-            .then((res) => {
-              updateAssetArrayCount(res)
-              setModalVisibility("Step-Success")
-            })
+              .unwrap()
+              .then((res) => {
+                updateAssetArrayCount(res)
+                modalHistoryPush("Step-2")
+                setModalVisibility("Step-Success")
+              })
           })
           .catch(() => {})
       }
@@ -288,6 +310,7 @@ export default function AssetsView() {
   const newAsset = () => {
     setModalAction("create")
     setModalControl(initialState)
+    modalHistoryPush("step-0")
     setModalVisibility("Step-1")
   }
   const addAsset = () => {
@@ -331,6 +354,8 @@ export default function AssetsView() {
         closeIconVisibility={true}
         _submitModal={_submitStepZeroInformationModal}
         action={"string"}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <StepOneModal
         openModal={modalVisibility == "Step-1"}
@@ -343,6 +368,8 @@ export default function AssetsView() {
         assetTypes={assetTypes}
         _submitModal={_submitStepOneModal}
         disableAssetSelection={isEditingAsset.current}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <StepTwoModal
         openModal={modalVisibility == "Step-2"}
@@ -355,6 +382,8 @@ export default function AssetsView() {
         _submitModal={_submitStepTwoModal}
         setAssetFile={setAssetFile}
         assetFile={assetFile}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <SuccessModal
         openModal={modalVisibility == "Step-Success"}
@@ -363,6 +392,8 @@ export default function AssetsView() {
         closeIconVisibility={true}
         registerAnotherAsset={newAsset}
         gotoDashboard={_submitSuccessModal}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <ConfirmationModal
         openModal={modalVisibility == "Step-delete"}
@@ -382,25 +413,27 @@ export default function AssetsView() {
         delete={destroyAsset}
         edit={editAsset}
         assetId={selectedAsset}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
-      { hasAssets > 0 ? (
+      {hasAssets > 0 ? (
         <Assets
-        AssetDetailsCardArr={AssetDetailsCardArr}
-        assetCatagories={assetCatagories}
-        selected={selected}
-        setSelected={setSelected}
-        assetDetailsArr={asset.Asset_array}
-        destroyAsset={destroyAsset}
-        editAsset={editAsset}
-        viewAsset={viewAsset}
-        userRole={user.role}
-      />
+          AssetDetailsCardArr={AssetDetailsCardArr}
+          assetCatagories={assetCatagories}
+          selected={selected}
+          setSelected={setSelected}
+          assetDetailsArr={asset.Asset_array}
+          destroyAsset={destroyAsset}
+          editAsset={editAsset}
+          viewAsset={viewAsset}
+          userRole={user.role}
+        />
       ) : hasAssets == 0 ? (
         <AddAsset openStepZeroModal={addAsset} />
       ) : (
         <div className={styles.AppView}>
           <div className="relative h-[80vh]">
-            <Spinner/>
+            <Spinner />
           </div>
         </div>
       )}
@@ -617,26 +650,28 @@ function AssetDetails(_props: {
               _props.viewAsset(_props.assetId)
             }}
           />
-          {_props.userRole == "owner" && <>
-            <img
-              src={edit}
-              alt="edit icon"
-              className="cy-edit-asset-btn cursor-pointer"
-              id="cy-edit-asset-btn"
-              onClick={() => {
-                _props.editAsset(_props.assetId)
-              }}
-            />
-            <img
-              src={deleteIcon}
-              alt="delete icon"
-              className="cy-del-asset-btn cursor-pointer"
-              id="cy-del-asset-btn"
-              onClick={() => {
-                _props.destroyAsset(_props.assetId)
-              }}
-            />
-          </>}
+          {_props.userRole == "owner" && (
+            <>
+              <img
+                src={edit}
+                alt="edit icon"
+                className="cy-edit-asset-btn cursor-pointer"
+                id="cy-edit-asset-btn"
+                onClick={() => {
+                  _props.editAsset(_props.assetId)
+                }}
+              />
+              <img
+                src={deleteIcon}
+                alt="delete icon"
+                className="cy-del-asset-btn cursor-pointer"
+                id="cy-del-asset-btn"
+                onClick={() => {
+                  _props.destroyAsset(_props.assetId)
+                }}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import defaultIcon from "@images/safeherit_logo.svg"
 import closeIcon from "@images/close-icon.svg"
+import arrowLeft from "@images/left-arrow.png"
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment } from "react"
 import styles from "./Modal.module.css"
@@ -167,6 +168,8 @@ export const Modal = (_props: {
   elements: Array<any>
   modalTitle: string
   closeIconVisibility: boolean
+  arrayLength: any
+  showPreviousModal: any
 }) => {
   const elements = _props?.elements
   return (
@@ -209,6 +212,8 @@ export const Modal = (_props: {
                         closeModal={_props.closeModal}
                         title={_props.modalTitle}
                         closeIconVisibility={_props.closeIconVisibility}
+                        arrayLength={_props.arrayLength}
+                        showPreviousModal={_props.showPreviousModal}
                       />
                       <RenderModal elements={elements} />
                     </div>
@@ -227,9 +232,21 @@ function ModalHeader(_props: {
   closeModal: () => void
   title: string
   closeIconVisibility: boolean
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <div className={styles.header}>
+      {_props.arrayLength !== 0 && (
+        <div>
+          <img
+            src={arrowLeft}
+            alt="left Arrow"
+            className="cursor-pointer ml-4 w-5"
+            onClick={_props.showPreviousModal}
+          />
+        </div>
+      )}
       <div className={styles.title}>{_props.title}</div>
       {_props.closeIconVisibility && (
         <div className={styles.icon} onClick={_props.closeModal}>

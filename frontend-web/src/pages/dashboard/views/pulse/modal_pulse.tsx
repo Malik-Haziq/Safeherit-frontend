@@ -20,6 +20,8 @@ export function StepOneModal(_props: {
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -28,6 +30,8 @@ export function StepOneModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Setup Pulse Check"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -83,6 +87,8 @@ export function StepTwoModal(_props: {
     backup_phone_number: string
   }
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -91,6 +97,8 @@ export function StepTwoModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Setup Pulse Check"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -247,6 +255,8 @@ export function StepThreeModal(_props: {
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -255,6 +265,8 @@ export function StepThreeModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Setup Pulse Check"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -339,6 +351,8 @@ export function StepFourModal(_props: {
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -347,6 +361,8 @@ export function StepFourModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Setup Pulse Check"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -425,12 +441,16 @@ export function SuccessModal(_props: {
   closeIconVisibility: boolean
   action: string
   _submitModal: React.MouseEventHandler<HTMLButtonElement>
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       modalTitle={
         _props.action == "create"
           ? "Beneficiary Registered"

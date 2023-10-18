@@ -27,7 +27,13 @@ import {
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ConfirmationModal } from "@/components"
-import { isValidEmail, getFileFromFirebase, isValidPhone, isValidPhoneWithRegion } from "@/common"
+import {
+  isValidEmail,
+  getFileFromFirebase,
+  isValidPhone,
+  isValidPhoneWithRegion,
+  useArray,
+} from "@/common"
 
 const initialState = {
   id: "",
@@ -55,6 +61,13 @@ export default function BeneficiariesView() {
   const [videoUpload, setVideoUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
+  const [
+    modalHistory,
+    modalHistoryLength,
+    modalHistoryPop,
+    modalHistoryPush,
+    modalHistoryPopAll,
+  ] = useArray()
 
   const beneficiaryArray = useAppSelector(
     (state) => state.beneficiary.beneficiary_array,
@@ -75,6 +88,13 @@ export default function BeneficiariesView() {
       .catch(() => {
         // TODO: show fallback page
       })
+    // .finally(() => {
+    //   modalHistoryPush("step-pk")
+    // })
+  }, [])
+
+  useEffect(() => {
+    modalHistoryPopAll()
   }, [])
 
   const closeModal = useCallback(() => {
@@ -82,6 +102,7 @@ export default function BeneficiariesView() {
     setModalVisibility("none")
     setImageUpload("")
     setVideoUpload("")
+    modalHistoryPopAll()
   }, [])
 
   const addBeneficiary = useCallback(() => {
@@ -92,19 +113,26 @@ export default function BeneficiariesView() {
     if (!modalControl.name) {
       alert("please enter a valid name")
     } else if (
-      !isValidEmail(modalControl.primary_email) && !isValidEmail(modalControl.backup_email2) && !isValidEmail(modalControl.backup_email) ||
-      modalControl.primary_email && !isValidEmail(modalControl.primary_email) ||
-      modalControl.backup_email && !isValidEmail(modalControl.backup_email) ||
-      modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2)
+      (!isValidEmail(modalControl.primary_email) &&
+        !isValidEmail(modalControl.backup_email2) &&
+        !isValidEmail(modalControl.backup_email)) ||
+      (modalControl.primary_email &&
+        !isValidEmail(modalControl.primary_email)) ||
+      (modalControl.backup_email && !isValidEmail(modalControl.backup_email)) ||
+      (modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2))
     ) {
       alert("please enter a valid Email address")
     } else if (
-      !isValidPhoneWithRegion(modalControl.phone_number) && !isValidPhoneWithRegion(modalControl.backup_phone_number) ||
-      modalControl.phone_number && !isValidPhoneWithRegion(modalControl.phone_number) ||
-      modalControl.backup_phone_number && !isValidPhoneWithRegion(modalControl.backup_phone_number)
+      (!isValidPhoneWithRegion(modalControl.phone_number) &&
+        !isValidPhoneWithRegion(modalControl.backup_phone_number)) ||
+      (modalControl.phone_number &&
+        !isValidPhoneWithRegion(modalControl.phone_number)) ||
+      (modalControl.backup_phone_number &&
+        !isValidPhoneWithRegion(modalControl.backup_phone_number))
     ) {
       alert("please enter valid Phone number")
     } else {
+      modalHistoryPush("step-1")
       setModalVisibility("Step-2")
     }
   }
@@ -116,6 +144,7 @@ export default function BeneficiariesView() {
     ) {
       alert("Atleast 1 social media accounts is compulsory")
     } else {
+      modalHistoryPush("step-2")
       setModalVisibility("Step-3")
     }
   }
@@ -130,6 +159,7 @@ export default function BeneficiariesView() {
             dispatch(getAllBeneficiary({}))
               .unwrap()
               .then((res) => {
+                modalHistoryPush("step-3")
                 setModalVisibility("Step-success")
                 updateBeneficiaryArrayCount(res)
               })
@@ -149,6 +179,7 @@ export default function BeneficiariesView() {
             dispatch(getAllBeneficiary({}))
               .unwrap()
               .then((res) => {
+                modalHistoryPush("step-3")
                 setModalVisibility("Step-success")
                 updateBeneficiaryArrayCount(res)
               })
@@ -168,8 +199,10 @@ export default function BeneficiariesView() {
   }
   const _submitRegisterPKModal = () => {
     if (modalAction == "create") {
+      modalHistoryPush("Step-pk")
       setModalVisibility("Step-1")
     } else {
+      modalHistoryPush("Step-pk")
       setModalVisibility("Step-success")
     }
   }
@@ -203,6 +236,7 @@ export default function BeneficiariesView() {
     setModalControl(initialState)
     setImageUpload("")
     setVideoUpload("")
+    modalHistoryPush("Step-0")
     setModalVisibility("Step-pk")
   }
   const editBeneficiary = (id: string) => {
@@ -269,7 +303,11 @@ export default function BeneficiariesView() {
         setModalVisibility("User-Info")
       })
   }
-
+  const showPreviousModal = () => {
+    const lastEl = modalHistory[modalHistoryLength - 1]
+    setModalVisibility(lastEl)
+    modalHistoryPop()
+  }
   return (
     <>
       <UserDetailsModal
@@ -291,6 +329,8 @@ export default function BeneficiariesView() {
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepOneModal}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <StepTwoModal
         openModal={modalVisibility == "Step-2"}
@@ -303,6 +343,8 @@ export default function BeneficiariesView() {
         _submitModal={_submitStepTwoModal}
         setImageUpload={setImageUpload}
         imageUpload={imageUpload}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <StepThreeModal
         openModal={modalVisibility == "Step-3"}
@@ -315,6 +357,8 @@ export default function BeneficiariesView() {
         setVideoUpload={setVideoUpload}
         modalControl={modalControl}
         _submitModal={_submitStepThreeModal}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <SuccessModal
         openModal={modalVisibility == "Step-success"}
@@ -325,6 +369,8 @@ export default function BeneficiariesView() {
         registerAnotherBeneficiary={registerAnotherBeneficiary}
         gotoValidators={gotoValidators}
         _submitModal={_submitSuccessModal}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <RegisterPKModal
         openModal={modalVisibility == "Step-pk"}
@@ -336,6 +382,8 @@ export default function BeneficiariesView() {
         _handleKeyGeneration={() => {
           alert("generate key pair")
         }}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <ConfirmationModal
         openModal={modalVisibility == "Step-delete"}
@@ -352,6 +400,8 @@ export default function BeneficiariesView() {
         closeIconVisibility={true}
         action={modalAction}
         _submitModal={_submitStepZeroModal}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       {hasBeneficiaries == -1 ? (
         <div className={styles.AppView}>
