@@ -16,8 +16,8 @@ export default function DashboardNavbar(_props: {
   navBarHeadings: Record<string, NavBarItem>
   currentPath: any
 }) {
-  const user = useAppSelector(state => state.user)
-  const USER_NAME =  user.displayName || "Profile"
+  const user = useAppSelector((state) => state.user)
+  const USER_NAME = user.displayName || "Profile"
 
   const [image, setImage] = useState<string>("")
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function DashboardNavbar(_props: {
           arrowIcon={arrowDown}
           arrowDownClassName={"ml-1 "}
           userIcon={image ? image : userImg}
-          userIconClassName={"w-6 sm:w-8"}
+          userIconClassName={" sm:w-8 sm:h-8 rounded-full"}
           options={["Logout"]}
         />
       </div>
