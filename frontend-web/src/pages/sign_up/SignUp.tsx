@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { signup, updateUser } from "@redux/actions"
 import { useAppDispatch } from "@redux/hooks"
+import { toast } from "@/components"
 
 export function SignUp() {
   const { t } = useTranslation()
@@ -47,23 +48,22 @@ export function SignUp() {
       agreeTermAndCondition
     ) {
       if (formControl.password !== formControl.confirm_password) {
-        alert("password must match")
+        toast("password must match", "error")
       } else {
-        alert("signing up")
-        dispatch(
-          signup({ email: formControl.email, password: formControl.password }),
-        )
+        toast("signing up", "info")
+        dispatch(signup({ email: formControl.email, password: formControl.password }))
           .unwrap()
           .then((res) => {
             dispatch(updateUser({
               displayName: formControl.name
             }))
-            .unwrap()
-            .catch(() => {})
-            navigate("/pricing")
+            .unwrap().catch()
+            .finally(() => {
+              navigate("/pricing")
+            })
           })
           .catch((err) => {
-            alert(err.code)
+            toast(err?.code, "error")
           })
       }
     }

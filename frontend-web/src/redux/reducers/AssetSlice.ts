@@ -6,7 +6,7 @@ interface AssetState {
   category: string,
   assignedBeneficiaryId: string,
   data: any,
-  Asset_array: { data: any, id: string, category: string, assignedBeneficiaryId: string, asset_file: string }[]
+  Asset_array: { data: any, id: string, category: string, assignedBeneficiaryId: string, assignedBeneficiaryName:string, asset_file: string }[]
 }
 const initialState: AssetState = {
   id: "",
@@ -25,11 +25,12 @@ export const slice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(getAllAsset.fulfilled, (state, action) => {
-      let array: { data: any, id: string, category: string, assignedBeneficiaryId: string, asset_file: string }[] = []
-      action?.payload?.data?.data.map((data: { data: string, id: string, category: string, assignedBeneficiaryId: string, asset_file: string }) => {
+      let array: { data: any, id: string, category: string, assignedBeneficiaryId: string, assignedBeneficiaryName:string, asset_file: string }[] = []
+      action?.payload?.data?.data.map((data: { data: string, id: string, category: string, assignedBeneficiaryId: string, beneficiary:{name: string}, asset_file: string }) => {
         array.push(
           {
             assignedBeneficiaryId: data.assignedBeneficiaryId,
+            assignedBeneficiaryName: data?.beneficiary?.name,
             data: JSON.parse(data.data),
             id: data.id,
             category: data.category,
@@ -40,11 +41,12 @@ export const slice = createSlice({
       state.Asset_array = array
     })
     builder.addCase(getAllBeneficiaryAsset.fulfilled, (state, action) => {
-      let array: { data: any, id: string, category: string, assignedBeneficiaryId: string, asset_file: string }[] = []
-      action?.payload?.data?.data.map((data: { data: string, id: string, category: string, assignedBeneficiaryId: string, asset_file: string }) => {
+      let array: { data: any, id: string, category: string, assignedBeneficiaryId: string, assignedBeneficiaryName:string, asset_file: string }[] = []
+      action?.payload?.data?.data.map((data: { data: string, id: string, category: string, assignedBeneficiaryId: string, beneficiary:{name: string}, asset_file: string }) => {
         array.push(
           {
             assignedBeneficiaryId: data.assignedBeneficiaryId,
+            assignedBeneficiaryName: data?.beneficiary?.name,
             data: JSON.parse(data.data),
             id: data.id,
             category: data.category,

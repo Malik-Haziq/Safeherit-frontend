@@ -157,7 +157,7 @@ export function EditUserModal(_props: {
             hasRightIcon: true,
             rightIcon: arrowDown,
             rightIconAlt: "rightIcon",
-            selectFieldWidth: 490,
+            // selectFieldWidth: 490,
             selectContainer: "mx-7 mb-4 relative",
             selectFieldStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]",
             rightIconStyles: "absolute right-4 top-4 cursor-pointer",

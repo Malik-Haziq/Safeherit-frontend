@@ -215,9 +215,7 @@ export default function Dashboard() {
   const _handleLogout = () => {
     dispatch(logout({}))
       .unwrap()
-      .catch((err) => {
-        alert(err?.code)
-      })
+      .catch()
       .finally(() => {
         navigate("/login")
       })
