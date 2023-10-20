@@ -9,7 +9,7 @@ import { PhoneNumField } from "@/components/phoneNumberField"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styles from "../../Dashboard.module.css"
-import { ValidatorDropDown, UserDetailsModal, Spinner } from "@/components"
+import { ValidatorDropDown, UserDetailsModal, Spinner, toast } from "@/components"
 import {
   StepZeroInformationModal,
   SuccessModal,
@@ -90,20 +90,20 @@ export default function BeneficiariesView() {
 
   const _submitStepOneModal = () => {
     if (!modalControl.name) {
-      alert("please enter a valid name")
+      toast("please enter a valid name", "error")
     } else if (
       !isValidEmail(modalControl.primary_email) && !isValidEmail(modalControl.backup_email2) && !isValidEmail(modalControl.backup_email) ||
       modalControl.primary_email && !isValidEmail(modalControl.primary_email) ||
       modalControl.backup_email && !isValidEmail(modalControl.backup_email) ||
       modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2)
     ) {
-      alert("please enter a valid Email address")
+      toast("please enter a valid Email address", "error")
     } else if (
       !isValidPhoneWithRegion(modalControl.phone_number) && !isValidPhoneWithRegion(modalControl.backup_phone_number) ||
       modalControl.phone_number && !isValidPhoneWithRegion(modalControl.phone_number) ||
       modalControl.backup_phone_number && !isValidPhoneWithRegion(modalControl.backup_phone_number)
     ) {
-      alert("please enter valid Phone number")
+      toast("please enter a valid Phone number", "error")
     } else {
       setModalVisibility("Step-2")
     }
@@ -114,14 +114,14 @@ export default function BeneficiariesView() {
       !modalControl.instagram_username &&
       !modalControl.twitter_username
     ) {
-      alert("Atleast 1 social media accounts is compulsory")
+      toast("Atleast 1 social media accounts is compulsory", "error")
     } else {
       setModalVisibility("Step-3")
     }
   }
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
-      alert("Personalized message cannot be empty")
+      toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
         dispatch(updateBeneficiary(modalControl))
@@ -142,7 +142,7 @@ export default function BeneficiariesView() {
             // TODO: show fallback page
           })
       } else if (modalAction == "create") {
-        alert("creating beneficiary")
+        toast("creating beneficiary", "info")
         dispatch(createBeneficiary(modalControl))
           .unwrap()
           .then((res) => {
@@ -174,7 +174,7 @@ export default function BeneficiariesView() {
     }
   }
   const _submitDeleteModal = () => {
-    alert("deleting Beneficiary " + modalControl.name)
+    toast("deleting Beneficiary " + modalControl.name, "info")
     dispatch(deleteBeneficiary({ id: modalControl.id }))
       .unwrap()
       .then((res) => {
@@ -245,7 +245,7 @@ export default function BeneficiariesView() {
     navigate("/dashboard/validators")
   }
   const viewBeneficiary = (id: string) => {
-    alert("showing user data")
+    toast("showing user data", "info")
     dispatch(findBeneficiary({ id: id }))
       .unwrap()
       .then((res) => {
@@ -334,7 +334,7 @@ export default function BeneficiariesView() {
         action={modalAction}
         _submitModal={_submitRegisterPKModal}
         _handleKeyGeneration={() => {
-          alert("generate key pair")
+          toast("generating key pair", "info")
         }}
       />
       <ConfirmationModal

@@ -5,7 +5,7 @@ import arrowDown from "@images/chevron-down.svg"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useAppDispatch, useAppSelector} from "@redux/hooks"
 import { logout } from "@redux/actions"
-import { DropDownButton } from "@/components"
+import { DropDownButton, toast } from "@/components"
 
 export function NavBar() {
 
@@ -21,7 +21,7 @@ export function NavBar() {
     dispatch(logout({}))
       .unwrap()
       .catch((err) => {
-        alert(err?.code)
+        toast(err?.code, "error")
       })
       .finally(() => {
         navigate("/login")

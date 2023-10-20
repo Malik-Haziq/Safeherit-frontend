@@ -13,7 +13,7 @@ import { EditUserModal } from "./modal_account"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { getUser, updateUser } from "@redux/actions"
 import { getFileFromFirebase } from "@/common"
-import { Spinner } from "@/components"
+import { Spinner, toast } from "@/components"
 
 const initialState = {
   displayName: "",
@@ -57,7 +57,7 @@ export default function AccountView() {
     setModalVisibility("none")
   }
   const _submitEditUserModal = () => {
-    alert("updating user information")
+    toast("updating user information", "info")
     dispatch(updateUser(modalControl)).unwrap().finally(() => {
       closeModal()
     })

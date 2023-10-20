@@ -10,6 +10,7 @@ import { Login, SignUp, RegisterKey } from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar } from "./components"
 import { lazy } from "react"
+import { CustomToast } from "./components/customToast"
 
 const Pricing = lazy(() => import("./pages/pricing/Pricing"))
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"))
@@ -34,7 +35,10 @@ const HelpView = lazy(() => import("./pages/dashboard/views/help/HelpView"))
 function App() {
   return (
     // TODO: add suspense with loading fallback to handle loading time delays.
-    <AppRoutes />
+    <>
+      <CustomToast/>
+      <AppRoutes />
+    </>
   )
 }
 
