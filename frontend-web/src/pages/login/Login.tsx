@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { getUser, login, resetPassword } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
-import { ForgotPasswordModal } from "@/components"
+import { ForgotPasswordModal, toast } from "@/components"
 import { UserRolesModal, PrivateKeyModal } from "./modal_login"
 import {
   resetBeneficiaryOf,
@@ -50,21 +50,19 @@ export function Login() {
   }
 
   const _handleSubmit = () => {
-    alert("logging in")
+    toast("logging in", "info")
     if (formControl.email && formControl.password) {
-      dispatch(
-        login({ email: formControl.email, password: formControl.password }),
-      )
+      dispatch(login({ email: formControl.email, password: formControl.password }))
         .unwrap()
         .then((res) => {
           dispatch(getUser({}))
-            .unwrap()
+            .unwrap().catch()
             .then((res) => {
               setModalVisibility("user-roles")
             })
         })
         .catch((err) => {
-          alert(err.code)
+          toast(err?.code, "error")
         })
     }
   }
@@ -94,12 +92,9 @@ export function Login() {
   const _handleForgotPassword = () => {
     if (resetEmail) {
       dispatch(resetPassword({ email: resetEmail }))
-        .unwrap()
+        .unwrap().catch()
         .then((res) => {
-          alert("Email Sent")
-        })
-        .catch((err) => {
-          alert(err.code)
+          toast("Email Sent", "info")
         })
         .finally(() => {
           closeModal()

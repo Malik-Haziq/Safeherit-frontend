@@ -9,12 +9,7 @@ import validatorImage from "@images/validator-screen.svg"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styles from "../../Dashboard.module.css"
-import {
-  ValidatorDropDown,
-  ConfirmationModal,
-  UserDetailsModal,
-  Spinner,
-} from "@/components"
+import { ValidatorDropDown, ConfirmationModal, UserDetailsModal, Spinner, toast } from "@/components"
 import {
   StepZeroInformationModal,
   StepOneModal,
@@ -108,7 +103,7 @@ export default function ValidatorsView() {
 
   const _submitStepOneModal = () => {
     if (!modalControl.name) {
-      alert("please enter a valid name")
+      toast("please enter a valid name", "error")
     } else if (
       (!isValidEmail(modalControl.primary_email) &&
         !isValidEmail(modalControl.backup_email2) &&
@@ -118,7 +113,7 @@ export default function ValidatorsView() {
       (modalControl.backup_email && !isValidEmail(modalControl.backup_email)) ||
       (modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2))
     ) {
-      alert("please enter a valid Email address")
+      toast("please enter a valid Email address", "error")
     } else if (
       (!isValidPhoneWithRegion(modalControl.phone_number) &&
         !isValidPhoneWithRegion(modalControl.backup_phone_number)) ||
@@ -127,7 +122,7 @@ export default function ValidatorsView() {
       (modalControl.backup_phone_number &&
         !isValidPhoneWithRegion(modalControl.backup_phone_number))
     ) {
-      alert("please enter valid Phone number")
+      toast("please enter a valid Phone number", "error")
     } else {
       modalHistoryPush("Step-1")
       setModalVisibility("Step-2")
@@ -139,7 +134,7 @@ export default function ValidatorsView() {
       !modalControl.twitter_username &&
       !modalControl.instagram_username
     ) {
-      alert("Atleast 1 social media accounts is compulsory")
+      toast("Atleast 1 social media accounts is compulsory", "error")
     } else {
       modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
@@ -147,7 +142,7 @@ export default function ValidatorsView() {
   }
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
-      alert("Personalized message cannot be empty")
+      toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
         dispatch(updateValidator(modalControl))
@@ -251,7 +246,7 @@ export default function ValidatorsView() {
     navigate("/dashboard/pulse")
   }
   const viewValidator = (id: string) => {
-    alert("showing user data")
+    toast("showing user data", "info")
     dispatch(findValidator({ id: id }))
       .unwrap()
       .then((res) => {

@@ -3,6 +3,7 @@ import styles from "../../Dashboard.module.css"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useNavigate } from "react-router-dom"
 import { getOwnerValidation, logout, validateOwner } from "@/redux/actions"
+import { toast } from "@/components"
 
 export default function ValidationView() {
 
@@ -29,21 +30,17 @@ export default function ValidationView() {
   }
   const _handleLogout = () => {
     dispatch(logout({}))
-      .unwrap()
-      .catch((err) => {
-        alert(err?.code)
-      })
+      .unwrap().catch()
       .finally(() => {
         navigate("/login")
       })
   }
   
   const _handlePassedAway = (confirmation: boolean) => {
-    dispatch(validateOwner({passedAway: confirmation})).unwrap()
+    dispatch(validateOwner({passedAway: confirmation})).unwrap().catch()
     .then((res) => {
       getOwnerValidationData()
     })
-    .catch()
   }
 
 
