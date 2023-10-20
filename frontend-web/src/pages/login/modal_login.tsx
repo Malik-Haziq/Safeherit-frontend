@@ -3,6 +3,8 @@ import logo from "@images/safeherit_logo.svg"
 import userImg from "@images/user.svg"
 import { InputField, Modal, SelectField } from "@/components"
 import { SelectOption } from "@/types"
+import copyIcon from "@images/copy-icon.svg"
+import downloadIcon from "@images/download.svg"
 
 export function PrivateKeyModal(_props: {
   openModal: boolean
@@ -43,11 +45,7 @@ export function PrivateKeyModal(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={
-        _props.action == "create"
-          ? "Register Beneficiaries"
-          : "Edit Beneficiary Details"
-      }
+      modalTitle={"Load Private Key"}
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {
@@ -114,6 +112,138 @@ export function PrivateKeyModal(_props: {
                 </div>
               )
             },
+          },
+        },
+      ]}
+    />
+  )
+}
+export function GeneratePrivateKey(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  closeIconVisibility: boolean
+  action: string
+  videoUpload: string
+  // setVideoUpload: Function
+  _handleChange: React.ChangeEventHandler<HTMLInputElement>
+}) {
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={"Generate Public/Private Key Pair"}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "buttonView",
+          props: {
+            title: "Generate Public/Private Key Pair",
+            onclick: () => {},
+            buttonStyle:
+              "bg-[#47B29E] font-bold text-white px-8 py-4 rounded-2xl mx-auto mt-5",
+            buttonContainer: "flex mb-10",
+          },
+        },
+        {
+          type: "customView",
+          props: {
+            customViewContainer: "mx-6 mb-2",
+            CustomView: () => {
+              return (
+                <div className="flex justify-between items-center">
+                  <p className="text-[#00192B] font-semibold ">Public Key:</p>
+                  <div className="flex items-center gap-3 ">
+                    <div className="flex items-center gap-1 cursor-pointer">
+                      <span>Copy</span>
+                      <img src={copyIcon} alt="copy icon " />
+                    </div>
+                    <div className="flex items-center gap-1 cursor-pointer">
+                      <span>Download</span>
+                      <img src={downloadIcon} alt="download icon" />
+                    </div>
+                  </div>
+                </div>
+              )
+            },
+          },
+        },
+        {
+          type: "customView",
+          props: {
+            customViewContainer: "mx-6 mb-7",
+            CustomView: () => {
+              return (
+                <div className="flex justify-between items-center">
+                  <textarea className="w-full h-[68px] border-[1px] border-[#858992] rounded-[5px]"></textarea>
+                </div>
+              )
+            },
+          },
+        },
+        {
+          type: "customView",
+          props: {
+            customViewContainer: "mx-6 mb-2",
+            CustomView: () => {
+              return (
+                <div className="flex justify-between items-center">
+                  <p className="text-[#00192B] font-semibold ">
+                    Secret Phrase (Private Key):
+                  </p>
+                  <div className="flex items-center gap-3 ">
+                    <div className="flex items-center gap-1 cursor-pointer">
+                      <span>Copy</span>
+                      <img src={copyIcon} alt="copy icon " />
+                    </div>
+                    <div className="flex items-center gap-1 cursor-pointer">
+                      <span>Download</span>
+                      <img src={downloadIcon} alt="download icon" />
+                    </div>
+                  </div>
+                </div>
+              )
+            },
+          },
+        },
+        {
+          type: "customView",
+          props: {
+            customViewContainer: "mx-6 mb-7",
+            CustomView: () => {
+              return (
+                <div className="flex justify-between items-center">
+                  <textarea className="w-full h-[107px] border-[1px] border-[#858992] rounded-[5px] "></textarea>
+                </div>
+              )
+            },
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "Warning:",
+            textStyles:
+              "text-[#00192B] font-semibold text-start pl-6 mb-3 mt-2",
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "Make sure to save your Secret Phrase (Private Key) somewhere safe. We do not store it, and without it you will not be able to view your encrypted data.",
+            textStyles: "text-[#74777E] text-start pl-6 pr-7 mb-5",
+          },
+        },
+
+        {
+          type: "buttonView",
+          props: {
+            title: "Register the Generated Public Key",
+            onclick: () => {},
+            buttonStyle:
+              "bg-[#0971AA] font-bold text-white px-12 py-4 rounded-2xl mx-auto mt-5",
+            buttonContainer: "flex mb-10",
           },
         },
       ]}
