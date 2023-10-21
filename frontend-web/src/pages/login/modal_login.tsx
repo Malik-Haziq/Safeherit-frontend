@@ -128,6 +128,8 @@ export function UserRolesModal(_props: {
   closeIconVisibility: boolean
   isBeneficiary: boolean
   isOwner: boolean
+  isSuperAdmin: boolean
+  isAdmin: boolean
   isValidator: boolean
   userName: string
   _beneficiaryOf: SelectOption[]
@@ -166,6 +168,22 @@ export function UserRolesModal(_props: {
                       userImg={userImg}
                       userName={_props.userName}
                       userRole={"owner"}
+                      _handleUserRolesSubmit={_props._handleUserRolesSubmit}
+                    />
+                  )}
+                  {_props.isSuperAdmin && (
+                    <LoggedUser
+                      userImg={userImg}
+                      userName={_props.userName}
+                      userRole={"super-admin"}
+                      _handleUserRolesSubmit={_props._handleUserRolesSubmit}
+                    />
+                  )}
+                  {_props.isAdmin && (
+                    <LoggedUser
+                      userImg={userImg}
+                      userName={_props.userName}
+                      userRole={"admin"}
                       _handleUserRolesSubmit={_props._handleUserRolesSubmit}
                     />
                   )}
@@ -259,8 +277,8 @@ function LoggedUser(_props: {
               <InputField
                 name={""}
                 type={""}
-                placeholder={""}
-                value={_props.userName}
+                placeholder={" "}
+                value={_props.userName|| " "}
                 _handleChange={() => {}}
                 required={false}
                 hasRightIcon={false}

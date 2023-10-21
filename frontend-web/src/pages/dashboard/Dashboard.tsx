@@ -103,7 +103,37 @@ export default function Dashboard() {
       id: CONSTANT.HELP
     },
   }
-  const navBarHeadings: Record<string, NavBarItem> = user.role === "owner" ? ownerNavBarHeadings : user.role === "beneficiary" ? beneficiaryNavBarHeadings : validatorNavBarHeadings
+  const adminNavBarHeadings: Record<string, NavBarItem> = {
+    "/dashboard": {
+      screen: CONSTANT.ADMIN,
+      title: CONSTANT.ADMIN_TITLE,
+      id: CONSTANT.ADMIN
+    },
+    "/dashboard/setting": {
+      screen: CONSTANT.SETTINGS,
+      title: CONSTANT.SETTINGS_TITLE,
+      id: CONSTANT.SETTINGS
+    },
+  }
+  const superAdminNavBarHeadings: Record<string, NavBarItem> = {
+    "/dashboard": {
+      screen: CONSTANT.SUPER_ADMIN,
+      title: CONSTANT.SUPER_ADMIN_TITLE,
+      id: CONSTANT.SUPER_ADMIN
+    },
+    "/dashboard/setting": {
+      screen: CONSTANT.SETTINGS,
+      title: CONSTANT.SETTINGS_TITLE,
+      id: CONSTANT.SETTINGS
+    },
+  }
+  const navBarHeadings: Record<string, NavBarItem> = 
+    user.role === "owner" ? ownerNavBarHeadings : 
+    user.role === "beneficiary" ? beneficiaryNavBarHeadings : 
+    user.role === "validator" ? validatorNavBarHeadings : 
+    user.role === "admin" ? adminNavBarHeadings : 
+    user.role === "super-admin" ? superAdminNavBarHeadings : 
+    {}
 
   const OwnerDrawerMenu = [
     {
@@ -191,7 +221,49 @@ export default function Dashboard() {
       },
     },
   ]
-  const DRAWER_MENU = user.role === "owner" ? OwnerDrawerMenu : user.role === "beneficiary" ? beneficiaryDrawerMenu : validatorDrawerMenu
+  const adminDrawerMenu = [
+    {
+      icon: dashboardIcon,
+      option: CONSTANT.ADMIN,
+      navigate: () => {
+        navigate("/dashboard")
+        setSelectedOption(CONSTANT.ADMIN_TITLE)
+      },
+    },
+    {
+      icon: setting,
+      option: CONSTANT.SETTINGS,
+      navigate: () => {
+        navigate("/dashboard/setting")
+        setSelectedOption(CONSTANT.SETTINGS_TITLE)
+      },
+    },
+  ]
+  const superAdminDrawerMenu = [
+    {
+      icon: dashboardIcon,
+      option: CONSTANT.SUPER_ADMIN,
+      navigate: () => {
+        navigate("/dashboard")
+        setSelectedOption(CONSTANT.SUPER_ADMIN_TITLE)
+      },
+    },
+    {
+      icon: setting,
+      option: CONSTANT.SETTINGS,
+      navigate: () => {
+        navigate("/dashboard/setting")
+        setSelectedOption(CONSTANT.SETTINGS_TITLE)
+      },
+    },
+  ]
+  const DRAWER_MENU = 
+    user.role === "owner" ? OwnerDrawerMenu :
+    user.role === "beneficiary" ? beneficiaryDrawerMenu :
+    user.role === "validator" ? validatorDrawerMenu :
+    user.role === "admin" ? adminDrawerMenu :
+    user.role === "super-admin" ? superAdminDrawerMenu :
+    []
 
   const DRAWER_SETTINGS = user.role === "owner" ? [
     {
