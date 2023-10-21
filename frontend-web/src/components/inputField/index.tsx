@@ -1,3 +1,5 @@
+import React, { useState } from "react"
+
 export function InputField(_props: {
   name: string
   type: string
@@ -13,15 +15,95 @@ export function InputField(_props: {
   rightIconStyles?: string
   inputContainerStyles: string
   disabled?: boolean
+  mask?: "card" | "currency" | "date" | "time" | "tel"
+  // mask?: string
 }) {
+  const _handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (_props.mask) {
+      const inputValue = e.target.value // Remove existing spaces
+      let formatted = inputValue
+      switch (_props.mask) {
+        case "card": {
+          let formattedString = inputValue.replaceAll(" ", "")
+
+          if (/^\d+$/.test(formattedString) || formattedString == "") {
+
+            formattedString = formattedString.replace(/(\d{4}(?=\d))/g, "$1 ")
+            formattedString = formattedString.trim() 
+
+            const customEvent = {
+              target: {
+                name: e.target.name,
+                value: formattedString,
+              }, 
+            }
+            _props._handleChange(
+              customEvent as React.ChangeEvent<HTMLInputElement>,
+            )
+          }
+          break;
+        }
+        
+        case "time": {
+          formatted = inputValue
+            .replace(/(\d{2})(\d{2})/, "$1:$2") // Format as HH:MM
+            .slice(0, 5) // Limit to HH:MM
+
+          // Update the formatted value in state
+          _props._handleChange({
+            ...e,
+            target: {
+              ...e.target,
+              value: formatted, // Update the value with formatted value
+            },
+          })
+        }
+
+        case "currency": {
+          let formattedString = inputValue.replaceAll(",", "");
+          
+          if (/^\d+$/.test(formattedString) || formattedString == "") {
+
+            formattedString = formattedString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            formattedString = formattedString.trim();
+            console.log(formattedString)
+            const customEvent = {
+              target: {
+                name: e.target.name,
+                value: formattedString,
+              },
+            };
+          
+            _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+          } 
+        }
+
+        case "tel":{
+          let formattedString = inputValue;
+
+          if (/^\d+$/.test(formattedString) || formattedString == "") {
+            const customEvent = {
+              target: {
+                name: e.target.name,
+                value: formattedString,
+              },
+            };
+            _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+          }
+        }
+      }
+    } else {
+      _props._handleChange(e)
+    }
+  }
   return (
     <div className={_props.inputContainerStyles}>
       <input
         name={_props.name || ""}
-        type={_props.type || "text"}
-        placeholder={_props.placeholder || "input field"}
+        type={  _props.type || "text" }
+        placeholder={ _props.placeholder || "input field"}
         value={_props.value}
-        onChange={_props._handleChange}
+        onChange={_handleInputChange}
         required={_props.required || false}
         disabled={_props.disabled || false}
         className={

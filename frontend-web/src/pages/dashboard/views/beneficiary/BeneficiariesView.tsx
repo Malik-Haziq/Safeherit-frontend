@@ -5,11 +5,11 @@ import instagram from "@images/insta.svg"
 import twitter from "@images/twitter.svg"
 import userImg from "@images/user.svg"
 import beneficiaryImg from "@images/beneficiaryScreen.svg"
-
+import { PhoneNumField } from "@/components/phoneNumberField"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styles from "../../Dashboard.module.css"
-import { ValidatorDropDown, UserDetailsModal, Spinner } from "@/components"
+import { ValidatorDropDown, UserDetailsModal, Spinner, toast } from "@/components"
 import {
   StepZeroInformationModal,
   SuccessModal,
@@ -27,7 +27,7 @@ import {
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ConfirmationModal } from "@/components"
-import { isValidEmail, getFileFromFirebase, isValidPhone } from "@/common"
+import { isValidEmail, getFileFromFirebase, isValidPhone, isValidPhoneWithRegion } from "@/common"
 
 const initialState = {
   id: "",
@@ -90,18 +90,20 @@ export default function BeneficiariesView() {
 
   const _submitStepOneModal = () => {
     if (!modalControl.name) {
-      alert("please enter a valid name")
+      toast("please enter a valid name", "error")
     } else if (
-      !isValidEmail(modalControl.primary_email) &&
-      !isValidEmail(modalControl.backup_email) &&
-      !isValidEmail(modalControl.backup_email2)
+      !isValidEmail(modalControl.primary_email) && !isValidEmail(modalControl.backup_email2) && !isValidEmail(modalControl.backup_email) ||
+      modalControl.primary_email && !isValidEmail(modalControl.primary_email) ||
+      modalControl.backup_email && !isValidEmail(modalControl.backup_email) ||
+      modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2)
     ) {
-      alert("please enter a valid Email address")
+      toast("please enter a valid Email address", "error")
     } else if (
-      !isValidPhone(modalControl.phone_number) &&
-      !isValidPhone(modalControl.backup_phone_number)
+      !isValidPhoneWithRegion(modalControl.phone_number) && !isValidPhoneWithRegion(modalControl.backup_phone_number) ||
+      modalControl.phone_number && !isValidPhoneWithRegion(modalControl.phone_number) ||
+      modalControl.backup_phone_number && !isValidPhoneWithRegion(modalControl.backup_phone_number)
     ) {
-      alert("please enter valid Phone number")
+      toast("please enter a valid Phone number", "error")
     } else {
       setModalVisibility("Step-2")
     }
@@ -112,14 +114,14 @@ export default function BeneficiariesView() {
       !modalControl.instagram_username &&
       !modalControl.twitter_username
     ) {
-      alert("Atleast 1 social media accounts is compulsory")
+      toast("Atleast 1 social media accounts is compulsory", "error")
     } else {
       setModalVisibility("Step-3")
     }
   }
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
-      alert("Personalized message cannot be empty")
+      toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
         dispatch(updateBeneficiary(modalControl))
@@ -128,7 +130,7 @@ export default function BeneficiariesView() {
             dispatch(getAllBeneficiary({}))
               .unwrap()
               .then((res) => {
-                setModalVisibility("Step-pk")
+                setModalVisibility("Step-success")
                 updateBeneficiaryArrayCount(res)
               })
               .catch(() => {
@@ -140,7 +142,7 @@ export default function BeneficiariesView() {
             // TODO: show fallback page
           })
       } else if (modalAction == "create") {
-        alert("creating beneficiary")
+        toast("creating beneficiary", "info")
         dispatch(createBeneficiary(modalControl))
           .unwrap()
           .then((res) => {
@@ -172,7 +174,7 @@ export default function BeneficiariesView() {
     }
   }
   const _submitDeleteModal = () => {
-    alert("deleting Beneficiary " + modalControl.name)
+    toast("deleting Beneficiary " + modalControl.name, "info")
     dispatch(deleteBeneficiary({ id: modalControl.id }))
       .unwrap()
       .then((res) => {
@@ -192,14 +194,9 @@ export default function BeneficiariesView() {
   }
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
+    // debugger
     const { name, value } = event.target
-    if (name == "phone_number" || name == "backup_phone_number") {
-      if (isValidPhone(value) || value == "" || value == "+") {
-        setModalControl({ ...modalControl, [name]: value })
-      }
-    } else {
-      setModalControl({ ...modalControl, [name]: value })
-    }
+    setModalControl({ ...modalControl, [name]: value })
   }
   const newBeneficiary = () => {
     setModalAction("create")
@@ -248,7 +245,7 @@ export default function BeneficiariesView() {
     navigate("/dashboard/validators")
   }
   const viewBeneficiary = (id: string) => {
-    alert("showing user data")
+    toast("showing user data", "info")
     dispatch(findBeneficiary({ id: id }))
       .unwrap()
       .then((res) => {
@@ -337,7 +334,7 @@ export default function BeneficiariesView() {
         action={modalAction}
         _submitModal={_submitRegisterPKModal}
         _handleKeyGeneration={() => {
-          alert("generate key pair")
+          toast("generating key pair", "info")
         }}
       />
       <ConfirmationModal
@@ -359,7 +356,7 @@ export default function BeneficiariesView() {
       {hasBeneficiaries == -1 ? (
         <div className={styles.AppView}>
           <div className="relative h-[80vh]">
-            <Spinner/>
+            <Spinner />
           </div>
         </div>
       ) : hasBeneficiaries == 0 ? (
