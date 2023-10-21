@@ -6,6 +6,7 @@ export const CustomToast = () => {
       autoHideDuration={3000}
       preventDuplicate={true}
       maxSnack={2}
+      disableWindowBlurListener={true}
     />
   )
 }
