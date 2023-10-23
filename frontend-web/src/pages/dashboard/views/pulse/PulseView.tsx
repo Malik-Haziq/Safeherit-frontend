@@ -17,7 +17,7 @@ import {
   StepFourModal,
   SuccessModal,
 } from "./modal_pulse"
-import { isValidEmail, isValidPhone } from "@/common"
+import { isValidEmail, isValidPhone, useArray } from "@/common"
 import { toast } from "@/components"
 import { useAppDispatch } from "@/redux/hooks"
 import { updatePulse } from "@/redux/actions"
@@ -41,6 +41,13 @@ export default function PulseView() {
   const [pulseCheck, setPulseCheck] = useState(0)
   const [modalVisibility, setModalVisibility] = useState("none")
   const [modalControl, setModalControl] = useState(initialState)
+  const [
+    modalHistory,
+    modalHistoryLength,
+    modalHistoryPop,
+    modalHistoryPush,
+    modalHistoryPopAll,
+  ] = useArray()
 
   const checkPulsePeriodArr = ["30", "60", "90", "0"]
   const checkPUlseDateArr = {
@@ -55,12 +62,21 @@ export default function PulseView() {
     { heading: "Backup Phone 2", subHeading: "+9 234 566 560" },
   ]
 
+  useEffect(() => {
+    modalHistoryPopAll()
+  }, [])
+
+  useEffect(() => {
+    console.log(modalHistory)
+  }, [])
+
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
   }
 
   const _submitStepOneModal = () => {
+    modalHistoryPush("step-1")
     setModalVisibility("step-2")
   }
 
@@ -79,11 +95,13 @@ export default function PulseView() {
     // ) {
     //   toast("please enter a valid Email address", "error")
     // } else {
+    modalHistoryPush("step-2")
     setModalVisibility("step-3")
     // }
   }
 
   const _submitStepThreeModal = () => {
+    modalHistoryPush("step-3")
     setModalVisibility("step-4")
   }
 
@@ -92,6 +110,7 @@ export default function PulseView() {
       .unwrap()
       .catch()
       .then((res) => {
+        modalHistoryPush("step-4")
         setModalVisibility("success-modal")
       })
   }
@@ -105,7 +124,14 @@ export default function PulseView() {
   const _closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
+    modalHistoryPopAll()
   }, [])
+
+  const showPreviousModal = () => {
+    modalHistoryPop()
+    const lastEl = modalHistory[modalHistoryLength - 1]
+    setModalVisibility(lastEl)
+  }
 
   return (
     <div className={styles.AppView}>
@@ -117,8 +143,8 @@ export default function PulseView() {
         action={""}
         _submitModal={_submitStepOneModal}
         _handleChange={() => {}}
-        arrayLength={undefined}
-        showPreviousModal={undefined}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <StepTwoModal
         openModal={modalVisibility == "step-2"}
@@ -129,8 +155,8 @@ export default function PulseView() {
         _submitModal={_submitStepTwoModal}
         _handleChange={_handleChange}
         modalControl={modalControl}
-        arrayLength={undefined}
-        showPreviousModal={undefined}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <StepThreeModal
         openModal={modalVisibility == "step-3"}
@@ -140,8 +166,8 @@ export default function PulseView() {
         action={""}
         _submitModal={_submitStepThreeModal}
         _handleChange={_handleChange}
-        arrayLength={undefined}
-        showPreviousModal={undefined}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <StepFourModal
         openModal={modalVisibility == "step-4"}
@@ -152,8 +178,8 @@ export default function PulseView() {
         _submitModal={_submitStepFourModal}
         _handleChange={_handleChange}
         modalControl={modalControl}
-        arrayLength={undefined}
-        showPreviousModal={undefined}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <SuccessModal
         openModal={modalVisibility == "success-modal"}
@@ -162,8 +188,8 @@ export default function PulseView() {
         closeIconVisibility={true}
         action={""}
         _submitModal={_submitSuccessModal}
-        arrayLength={undefined}
-        showPreviousModal={undefined}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       {pulseCheck ? (
         <PulseCheckView
