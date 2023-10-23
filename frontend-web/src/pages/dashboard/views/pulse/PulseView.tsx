@@ -117,6 +117,8 @@ export default function PulseView() {
         action={""}
         _submitModal={_submitStepOneModal}
         _handleChange={() => {}}
+        arrayLength={undefined}
+        showPreviousModal={undefined}
       />
       <StepTwoModal
         openModal={modalVisibility == "step-2"}
@@ -127,6 +129,8 @@ export default function PulseView() {
         _submitModal={_submitStepTwoModal}
         _handleChange={_handleChange}
         modalControl={modalControl}
+        arrayLength={undefined}
+        showPreviousModal={undefined}
       />
       <StepThreeModal
         openModal={modalVisibility == "step-3"}
@@ -136,6 +140,8 @@ export default function PulseView() {
         action={""}
         _submitModal={_submitStepThreeModal}
         _handleChange={_handleChange}
+        arrayLength={undefined}
+        showPreviousModal={undefined}
       />
       <StepFourModal
         openModal={modalVisibility == "step-4"}
@@ -146,6 +152,8 @@ export default function PulseView() {
         _submitModal={_submitStepFourModal}
         _handleChange={_handleChange}
         modalControl={modalControl}
+        arrayLength={undefined}
+        showPreviousModal={undefined}
       />
       <SuccessModal
         openModal={modalVisibility == "success-modal"}
@@ -154,6 +162,8 @@ export default function PulseView() {
         closeIconVisibility={true}
         action={""}
         _submitModal={_submitSuccessModal}
+        arrayLength={undefined}
+        showPreviousModal={undefined}
       />
       {pulseCheck ? (
         <PulseCheckView

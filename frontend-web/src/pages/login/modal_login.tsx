@@ -13,6 +13,8 @@ export function PrivateKeyModal(_props: {
   videoUpload: string
   // setVideoUpload: Function
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
+  arrayLength: any
+  showPreviousModal: any
 }) {
   const handleImageInputChange = (event: any) => {
     const file = event.target.files[0]
@@ -49,6 +51,8 @@ export function PrivateKeyModal(_props: {
           : "Edit Beneficiary Details"
       }
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "textView",
@@ -137,6 +141,8 @@ export function UserRolesModal(_props: {
   selectedValidator: SelectOption | undefined
   setSelectedValidator: Function
   _handleUserRolesSubmit: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -145,6 +151,8 @@ export function UserRolesModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"User Roles "}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
