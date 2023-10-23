@@ -11,3 +11,4 @@ export const ASSETS = "/api-asset"
 
 export const GET_DATA = "/api-dashboard/data"
 export const GET_USER = "/api-auth"
+export const PULSE_CHECK = "/api-pulseCheck"
