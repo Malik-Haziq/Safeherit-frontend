@@ -19,6 +19,8 @@ export function StepZeroInformationModal(_props: {
   closeIconVisibility: boolean
   _submitModal: Function
   action: string
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -27,6 +29,8 @@ export function StepZeroInformationModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Register Beneficiaries"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -107,6 +111,8 @@ export function SuccessModal(_props: {
   registerAnotherBeneficiary: React.MouseEventHandler<HTMLButtonElement>
   gotoValidators: React.MouseEventHandler<HTMLButtonElement>
   _submitModal: React.MouseEventHandler<HTMLButtonElement>
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -119,6 +125,8 @@ export function SuccessModal(_props: {
           : "Edit Beneficiary Details"
       }
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -208,6 +216,8 @@ export function StepOneModal(_props: {
     backup_phone_number: string
   }
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -220,6 +230,8 @@ export function StepOneModal(_props: {
           : "Edit Beneficiary Details"
       }
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -378,6 +390,8 @@ export function StepTwoModal(_props: {
   _submitModal: Function
   imageUpload: string
   setImageUpload: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   const handleImageInputChange = (event: any) => {
     const file = event.target.files[0]
@@ -408,6 +422,8 @@ export function StepTwoModal(_props: {
           : "Edit Beneficiary Details"
       }
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -547,6 +563,8 @@ export function StepThreeModal(_props: {
     personalized_video: string
   }
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   const handleImageInputChange = (event: any) => {
     const file = event.target.files[0]
@@ -577,6 +595,8 @@ export function StepThreeModal(_props: {
           : "Edit Beneficiary Details"
       }
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -671,6 +691,8 @@ export function RegisterPKModal(_props: {
   action: string
   _submitModal: React.MouseEventHandler<HTMLButtonElement>
   _handleKeyGeneration: React.MouseEventHandler<HTMLButtonElement>
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -683,6 +705,8 @@ export function RegisterPKModal(_props: {
           : "Edit Beneficiary Details"
       }
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",

@@ -9,9 +9,11 @@ import { assetData } from "./data"
 import { useAppSelector } from "@redux/hooks"
 import { getValueOfObjectFromArray } from "@/common"
 
-const selectFieldStyles = "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]"
+const selectFieldStyles =
+  "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]"
 const selectFieldRightIconStyles = "absolute right-4 top-4 cursor-pointer"
-const textInputFieldStyles = "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2"
+const textInputFieldStyles =
+  "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
@@ -20,6 +22,8 @@ export function StepZeroInformationModal(_props: {
   closeIconVisibility: boolean
   _submitModal: Function
   action: string
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -28,6 +32,8 @@ export function StepZeroInformationModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Create New Assets"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -73,7 +79,7 @@ export function StepZeroInformationModal(_props: {
   )
 }
 interface ModalControl {
-  [key: string]: any; // This index signature allows string keys with any value
+  [key: string]: any // This index signature allows string keys with any value
 }
 
 const generateSelectFieldProps = (
@@ -81,7 +87,7 @@ const generateSelectFieldProps = (
   placeholder: string,
   value: any,
   name: string,
-  _handleChange: Function
+  _handleChange: Function,
 ) => {
   return {
     type: "selectView",
@@ -89,7 +95,7 @@ const generateSelectFieldProps = (
       data: assetTypes,
       value: value,
       selectProps: {
-        placeholder: placeholder
+        placeholder: placeholder,
       },
       setSelectedValue: (value: any) => {
         const customEvent = {
@@ -97,8 +103,8 @@ const generateSelectFieldProps = (
             name: name,
             value: value.value,
           },
-        };
-        _handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+        }
+        _handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
       },
       hasRightIcon: true,
       rightIcon: arrowDown,
@@ -115,7 +121,7 @@ const generateTextInputFieldProps = (
   name: string,
   placeholder: string,
   value: any,
-  _handleChange: Function
+  _handleChange: Function,
 ) => {
   return {
     type: "inputView",
@@ -141,22 +147,42 @@ export function StepOneModal(_props: {
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   modalControl: ModalControl
-  assetTypes: {value:string, label:string}[]
+  assetTypes: { value: string; label: string }[]
   _submitModal: Function
   disableAssetSelection: boolean
+  arrayLength: any
+  showPreviousModal: any
 }) {
-  const factoryElements = assetData[_props.modalControl?.category]?.[0];
+  const factoryElements = assetData[_props.modalControl?.category]?.[0]
   const conditionalElements = factoryElements
-  ? factoryElements.map((Asset) => {
-      if (Asset.type === "Text") {
-        return generateTextInputFieldProps(Asset.name, Asset.placeholder, _props.modalControl?.[Asset?.name] ? _props.modalControl?.[`${Asset?.name}`] : "", _props._handleChange);
-      } else if (Asset.type === "Select") {
-        return generateSelectFieldProps(Asset.value, Asset.placeholder, _props.modalControl?.[Asset?.name] ? {value: _props.modalControl?.[`${Asset?.name}`], label: _props.modalControl?.[`${Asset?.name}`]} : "", Asset.name, _props._handleChange)
-      }
-      return null; // Return null for other types or handle as needed
-    })
-  : [];
-  
+    ? factoryElements.map((Asset) => {
+        if (Asset.type === "Text") {
+          return generateTextInputFieldProps(
+            Asset.name,
+            Asset.placeholder,
+            _props.modalControl?.[Asset?.name]
+              ? _props.modalControl?.[`${Asset?.name}`]
+              : "",
+            _props._handleChange,
+          )
+        } else if (Asset.type === "Select") {
+          return generateSelectFieldProps(
+            Asset.value,
+            Asset.placeholder,
+            _props.modalControl?.[Asset?.name]
+              ? {
+                  value: _props.modalControl?.[`${Asset?.name}`],
+                  label: _props.modalControl?.[`${Asset?.name}`],
+                }
+              : "",
+            Asset.name,
+            _props._handleChange,
+          )
+        }
+        return null // Return null for other types or handle as needed
+      })
+    : []
+
   return (
     <Modal
       openModal={_props.openModal}
@@ -164,6 +190,8 @@ export function StepOneModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={_props.action == "create" ? "Create Assets" : "Edit Assets"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -177,10 +205,15 @@ export function StepOneModal(_props: {
           type: "selectView",
           props: {
             data: _props.assetTypes,
-            value: _props.modalControl.category? {value: _props.modalControl.category, label: _props.modalControl.category} : "",
+            value: _props.modalControl.category
+              ? {
+                  value: _props.modalControl.category,
+                  label: _props.modalControl.category,
+                }
+              : "",
             selectProps: {
               placeholder: "Select Asset Type",
-              isDisabled: _props.disableAssetSelection
+              isDisabled: _props.disableAssetSelection,
             },
             setSelectedValue: (value: any) => {
               const customEvent = {
@@ -188,8 +221,10 @@ export function StepOneModal(_props: {
                   name: "category",
                   value: value.value,
                 },
-              };
-              _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+              }
+              _props._handleChange(
+                customEvent as React.ChangeEvent<HTMLInputElement>,
+              )
             },
             hasRightIcon: true,
             rightIcon: arrowDown,
@@ -226,40 +261,65 @@ export function StepTwoModal(_props: {
   _submitModal: Function
   assetFile: any
   setAssetFile: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
-  const factoryElements = assetData[_props.modalControl?.category]?.[1];
-  const beneficiary = useAppSelector((state) => state.beneficiary);
+  const factoryElements = assetData[_props.modalControl?.category]?.[1]
+  const beneficiary = useAppSelector((state) => state.beneficiary)
 
   const conditionalElements = factoryElements
-  ? factoryElements.map((Asset) => {
-      if (Asset.type === "Text") {
-        return generateTextInputFieldProps(Asset.name, Asset.placeholder, _props.modalControl?.[Asset?.name] ? _props.modalControl?.[`${Asset?.name}`] : "", _props._handleChange);
-      } else if (Asset.type === "Select") {
-        if (Asset.name == "Beneficiary") {
-          return generateSelectFieldProps(
-            beneficiary.beneficiary_list,//send beneficiary list here
+    ? factoryElements.map((Asset) => {
+        if (Asset.type === "Text") {
+          return generateTextInputFieldProps(
+            Asset.name,
             Asset.placeholder,
-            _props.modalControl?.[Asset?.name] ?
-              {
-                value: _props.modalControl?.[`${Asset?.name}`], label: getValueOfObjectFromArray(beneficiary.beneficiary_list, _props.modalControl?.[`${Asset?.name}`])
-              } :
-              "",
-            Asset.name, _props._handleChange)
+            _props.modalControl?.[Asset?.name]
+              ? _props.modalControl?.[`${Asset?.name}`]
+              : "",
+            _props._handleChange,
+          )
+        } else if (Asset.type === "Select") {
+          if (Asset.name == "Beneficiary") {
+            return generateSelectFieldProps(
+              beneficiary.beneficiary_list, //send beneficiary list here
+              Asset.placeholder,
+              _props.modalControl?.[Asset?.name]
+                ? {
+                    value: _props.modalControl?.[`${Asset?.name}`],
+                    label: getValueOfObjectFromArray(
+                      beneficiary.beneficiary_list,
+                      _props.modalControl?.[`${Asset?.name}`],
+                    ),
+                  }
+                : "",
+              Asset.name,
+              _props._handleChange,
+            )
+          } else {
+            return generateSelectFieldProps(
+              Asset.value,
+              Asset.placeholder,
+              _props.modalControl?.[Asset?.name]
+                ? {
+                    value: _props.modalControl?.[`${Asset?.name}`],
+                    label: _props.modalControl?.[`${Asset?.name}`],
+                  }
+                : "",
+              Asset.name,
+              _props._handleChange,
+            )
+          }
         }
-        else {
-          return generateSelectFieldProps(Asset.value, Asset.placeholder, _props.modalControl?.[Asset?.name] ? {value: _props.modalControl?.[`${Asset?.name}`], label: _props.modalControl?.[`${Asset?.name}`]} : "", Asset.name, _props._handleChange)
-        }
-      }
-      return null; // Return null for other types or handle as needed
-    })
-  : [];
+        return null // Return null for other types or handle as needed
+      })
+    : []
 
   const handleFileInputChange = (event: any) => {
     const file = event.target.files[0]
     if (file) {
-      _props.setAssetFile(file);
+      _props.setAssetFile(file)
     }
-  };
+  }
   return (
     <Modal
       openModal={_props.openModal}
@@ -267,6 +327,8 @@ export function StepTwoModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={_props.action == "create" ? "Create Assets" : "Edit Assets"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -326,6 +388,8 @@ export function SuccessModal(_props: {
   closeIconVisibility: boolean
   registerAnotherAsset: React.MouseEventHandler<HTMLButtonElement>
   gotoDashboard: React.MouseEventHandler<HTMLButtonElement>
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -334,6 +398,8 @@ export function SuccessModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Asset Registered"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -402,6 +468,8 @@ export function AssetDetail(_props: {
   delete: Function
   edit: Function
   assetId: string
+  arrayLength: any
+  showPreviousModal: any
 }) {
   const headings = Object.keys(_props.modalControl)
   const values = Object.values(_props.modalControl)
@@ -412,6 +480,8 @@ export function AssetDetail(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={_props.action == "create" ? "Create Assets" : "Edit Assets"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "customView",
@@ -421,26 +491,37 @@ export function AssetDetail(_props: {
               return (
                 <section>
                   <div className="pt-6">
-                    {
-                      headings.map((heading, index) => {
-                        return (
-                          <div key={index} className="flex gap-6 items-center pb-6">
-                            <h2 className="text-[#292929] font-sm font-medium basis-2/5 text-right">
-                              {heading}
-                            </h2>
-                            <p className="text-[#585858] basis-3/5">
-                              {values[index]}
-                            </p>
-                          </div>
-                        )
-                      })
-                    }
+                    {headings.map((heading, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className="flex gap-6 items-center pb-6"
+                        >
+                          <h2 className="text-[#292929] font-sm font-medium basis-2/5 text-right">
+                            {heading}
+                          </h2>
+                          <p className="text-[#585858] basis-3/5">
+                            {values[index]}
+                          </p>
+                        </div>
+                      )
+                    })}
                   </div>
                   <div className="flex justify-end gap-2 w-full py-4 px-5 border-t-2 border-[#F0F0F0]">
-                    <button onClick={() => {_props.edit(_props.assetId)}} className="primary-btn rounded-lg font-sm font-medium text-[#414141] bg-white border-[1px] shadow-none border-[#DBDBDB]">
+                    <button
+                      onClick={() => {
+                        _props.edit(_props.assetId)
+                      }}
+                      className="primary-btn rounded-lg font-sm font-medium text-[#414141] bg-white border-[1px] shadow-none border-[#DBDBDB]"
+                    >
                       Edit
                     </button>
-                    <button onClick={() => {_props.delete(_props.assetId)}} className="primary-btn rounded-lg font-sm font-medium">
+                    <button
+                      onClick={() => {
+                        _props.delete(_props.assetId)
+                      }}
+                      className="primary-btn rounded-lg font-sm font-medium"
+                    >
                       Delete
                     </button>
                   </div>
