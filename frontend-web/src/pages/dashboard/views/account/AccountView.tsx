@@ -8,7 +8,7 @@ import warningIcon from "@images/warning.svg"
 
 import { useState, useEffect } from "react"
 import styles from "../../Dashboard.module.css"
-import MembershipPlanView from './MembershipPlanView'
+import MembershipPlanView from "./MembershipPlanView"
 import { EditUserModal } from "./modal_account"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { getUser, updateUser } from "@redux/actions"
@@ -22,13 +22,16 @@ const initialState = {
 }
 
 export default function AccountView() {
-
-  const user = useAppSelector(state => state.user)
+  const user = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
-  
+
   const [showMemberShipPlan, setShowMemberShipPlan] = useState(false)
-  const showPlanView = () => {setShowMemberShipPlan(true)}
-  const hidePlanView = () => {setShowMemberShipPlan(false)}
+  const showPlanView = () => {
+    setShowMemberShipPlan(true)
+  }
+  const hidePlanView = () => {
+    setShowMemberShipPlan(false)
+  }
   const [modalControl, setModalControl] = useState(initialState)
   const [imageUpload, setImageUpload] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
@@ -38,12 +41,13 @@ export default function AccountView() {
       .unwrap()
       .then((res) => {
         setModalControl(res.data.data)
-        getFileFromFirebase(res.data.data.profile_image).then((res) => {
-          setImageUpload(res)
-        })
-        .catch(() => {
-          setImageUpload("")
-        })
+        getFileFromFirebase(res.data.data.profile_image)
+          .then((res) => {
+            setImageUpload(res)
+          })
+          .catch(() => {
+            setImageUpload("")
+          })
       })
       .catch(() => {
         // TODO: show fallback page
@@ -58,9 +62,11 @@ export default function AccountView() {
   }
   const _submitEditUserModal = () => {
     toast("updating user information", "info")
-    dispatch(updateUser(modalControl)).unwrap().finally(() => {
-      closeModal()
-    })
+    dispatch(updateUser(modalControl))
+      .unwrap()
+      .finally(() => {
+        closeModal()
+      })
   }
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
@@ -70,32 +76,29 @@ export default function AccountView() {
 
   return (
     <>
-      {
-        showMemberShipPlan ?
-          <MembershipPlanView
-            hidePlanView={hidePlanView}
-          />
-        :
+      {showMemberShipPlan ? (
+        <MembershipPlanView hidePlanView={hidePlanView} />
+      ) : (
         <>
           <EditUserModal
-            openModal= {modalVisibility == "edit-user"}
-            closeModal= {closeModal}
-            closeModalOnOverlayClick= {false}
-            closeIconVisibility= {true}
-            _handleChange= {_handleChange}
-            modalControl= {modalControl}
-            _submitModal= {_submitEditUserModal}
-            imageUpload= {imageUpload}
-            setImageUpload= {setImageUpload}
+            openModal={modalVisibility == "edit-user"}
+            closeModal={closeModal}
+            closeModalOnOverlayClick={false}
+            closeIconVisibility={true}
+            _handleChange={_handleChange}
+            modalControl={modalControl}
+            _submitModal={_submitEditUserModal}
+            imageUpload={imageUpload}
+            setImageUpload={setImageUpload}
             email={user.email}
           />
-          {
-            user.loading ?
+          {user.loading ? (
             <div className={styles.AppView}>
               <div className="relative h-[80vh]">
-                <Spinner/>
+                <Spinner />
               </div>
-            </div> :
+            </div>
+          ) : (
             <div className={styles.AppView}>
               <main className="p-6 w-full">
                 <UserProfile
@@ -131,9 +134,9 @@ export default function AccountView() {
                 </section>
               </main>
             </div>
-          }
+          )}
         </>
-      }
+      )}
     </>
   )
 }
@@ -161,7 +164,10 @@ function UserProfile(_props: {
             <small className="text-[#707070]">{_props.userEmail}</small>
           </div>
         </div>
-        <button onClick={_props.editUser}className="primary-btn rounded-[14px] bg-[#0971AA] cursor-pointer">
+        <button
+          onClick={_props.editUser}
+          className="primary-btn rounded-[14px] bg-[#0971AA] cursor-pointer"
+        >
           Edit Profile
         </button>
       </div>
@@ -262,7 +268,10 @@ function MembershipPlan(_props: {
             <span className="text-[#00192B] font-bold"> {_props.date}</span>
           </p>
         </div>
-        <button onClick={_props.showPlanView} className="primary-btn bg-[#0971AA] rounded-2xl">
+        <button
+          onClick={_props.showPlanView}
+          className="primary-btn bg-[#0971AA] rounded-2xl"
+        >
           See more details
         </button>
       </div>

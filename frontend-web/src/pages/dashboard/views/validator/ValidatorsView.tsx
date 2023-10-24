@@ -9,7 +9,13 @@ import validatorImage from "@images/validator-screen.svg"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styles from "../../Dashboard.module.css"
-import { ValidatorDropDown, ConfirmationModal, UserDetailsModal, Spinner, toast } from "@/components"
+import {
+  ValidatorDropDown,
+  ConfirmationModal,
+  UserDetailsModal,
+  Spinner,
+  toast,
+} from "@/components"
 import {
   StepZeroInformationModal,
   StepOneModal,
@@ -286,8 +292,6 @@ export default function ValidatorsView() {
         modalTitle={"Register Validators"}
         closeIconVisibility={true}
         _submitModal={_submitStepZeroModal}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       <StepFourSuccessModal
         openModal={modalVisibility == "Step-4"}
@@ -297,8 +301,6 @@ export default function ValidatorsView() {
         closeIconVisibility={true}
         registerAnother={registerAnotherValidator}
         pulseCheck={pulseCheck}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       <ConfirmationModal
         openModal={modalVisibility == "Step-delete"}

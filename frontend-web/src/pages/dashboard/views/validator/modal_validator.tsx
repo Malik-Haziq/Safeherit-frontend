@@ -16,8 +16,6 @@ export function StepZeroInformationModal(_props: {
   modalTitle: string
   closeIconVisibility: boolean
   _submitModal: Function
-  arrayLength: any
-  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -26,8 +24,6 @@ export function StepZeroInformationModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={_props.modalTitle}
       closeIconVisibility={_props.closeIconVisibility}
-      arrayLength={_props.arrayLength}
-      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -521,8 +517,6 @@ export function StepFourSuccessModal(_props: {
   closeIconVisibility: boolean
   registerAnother: React.MouseEventHandler<HTMLButtonElement>
   pulseCheck: React.MouseEventHandler<HTMLButtonElement>
-  arrayLength: any
-  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -531,8 +525,6 @@ export function StepFourSuccessModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={_props.modalTitle}
       closeIconVisibility={_props.closeIconVisibility}
-      arrayLength={_props.arrayLength}
-      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",

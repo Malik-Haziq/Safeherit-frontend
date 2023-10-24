@@ -9,7 +9,12 @@ import { PhoneNumField } from "@/components/phoneNumberField"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styles from "../../Dashboard.module.css"
-import { ValidatorDropDown, UserDetailsModal, Spinner, toast } from "@/components"
+import {
+  ValidatorDropDown,
+  UserDetailsModal,
+  Spinner,
+  toast,
+} from "@/components"
 import {
   StepZeroInformationModal,
   SuccessModal,
@@ -369,8 +374,6 @@ export default function BeneficiariesView() {
         registerAnotherBeneficiary={registerAnotherBeneficiary}
         gotoValidators={gotoValidators}
         _submitModal={_submitSuccessModal}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       <RegisterPKModal
         openModal={modalVisibility == "Step-pk"}
@@ -400,8 +403,6 @@ export default function BeneficiariesView() {
         closeIconVisibility={true}
         action={modalAction}
         _submitModal={_submitStepZeroModal}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       {hasBeneficiaries == -1 ? (
         <div className={styles.AppView}>

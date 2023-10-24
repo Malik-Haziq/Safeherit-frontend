@@ -26,8 +26,6 @@ export function EditUserModal(_props: {
   imageUpload: string
   setImageUpload: Function
   email: string
-  arrayLength: any
-  showPreviousModal: any
 }) {
   const Languages = [{ value: "en", label: "en" }]
   const handleImageInputChange = (event: any) => {
@@ -55,8 +53,6 @@ export function EditUserModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Edit Profile"}
       closeIconVisibility={_props.closeIconVisibility}
-      arrayLength={_props.arrayLength}
-      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "customView",

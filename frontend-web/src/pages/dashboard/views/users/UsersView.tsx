@@ -61,14 +61,6 @@ export default function UsersView() {
   }
   return (
     <div className={styles.AppView}>
-      {/* <UserDetails
-        openModal={true}
-        closeModal={false}
-        closeModalOnOverlayClick={true}
-        closeIconVisibility={true}
-        action={""}
-        modalControl={modalControl}
-      /> */}
       <main className="p-5 mx-auto w-[1101px]">
         <section className="mt-10 flex justify-end mb-8">
           <a

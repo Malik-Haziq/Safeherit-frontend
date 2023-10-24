@@ -143,8 +143,6 @@ export default function PulseView() {
         action={""}
         _submitModal={_submitStepOneModal}
         _handleChange={() => {}}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       <StepTwoModal
         openModal={modalVisibility == "step-2"}
@@ -188,8 +186,6 @@ export default function PulseView() {
         closeIconVisibility={true}
         action={""}
         _submitModal={_submitSuccessModal}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       {pulseCheck ? (
         <PulseCheckView

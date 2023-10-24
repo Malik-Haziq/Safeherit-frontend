@@ -168,8 +168,8 @@ export const Modal = (_props: {
   elements: Array<any>
   modalTitle: string
   closeIconVisibility: boolean
-  arrayLength: any
-  showPreviousModal: any
+  arrayLength?: any
+  showPreviousModal?: any
 }) => {
   const elements = _props?.elements
   return (
@@ -237,7 +237,7 @@ function ModalHeader(_props: {
 }) {
   return (
     <div className={styles.header}>
-      {_props.arrayLength !== 0 && (
+      {_props.arrayLength ? (
         <div>
           <img
             src={arrowLeft}
@@ -246,6 +246,8 @@ function ModalHeader(_props: {
             onClick={_props.showPreviousModal}
           />
         </div>
+      ) : (
+        ""
       )}
       <div className={styles.title}>{_props.title}</div>
       {_props.closeIconVisibility && (
