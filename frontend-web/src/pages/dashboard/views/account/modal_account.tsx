@@ -2,13 +2,13 @@ import userImg from "@images/user.svg"
 import uploadIcon from "@images/upload-icon.svg"
 import arrowDown from "@images/arrow-down.svg"
 
-import { Modal } from "@/components";
+import { Modal } from "@/components"
 
 interface CustomChangeEvent {
   target: {
-    name: string;
-    value: string | ArrayBuffer | null | undefined;
-  };
+    name: string
+    value: string | ArrayBuffer | null | undefined
+  }
 }
 
 export function EditUserModal(_props: {
@@ -18,37 +18,34 @@ export function EditUserModal(_props: {
   closeIconVisibility: boolean
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   modalControl: {
-    displayName: string,
-    language: string,
-    profile_image: string,
+    displayName: string
+    language: string
+    profile_image: string
   }
   _submitModal: Function
   imageUpload: string
   setImageUpload: Function
   email: string
 }) {
-
-  const Languages = [
-    {value: "en", label: "en"},
-  ]
+  const Languages = [{ value: "en", label: "en" }]
   const handleImageInputChange = (event: any) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = (e) => {
-        const dataURL = e.target?.result;
+        const dataURL = e.target?.result
         _props.setImageUpload(dataURL)
         const customEvent: CustomChangeEvent = {
           target: {
             name: "profile_image",
             value: file,
           },
-        };
-        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
-      };
-      reader.readAsDataURL(file);
+        }
+        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
   return (
     <Modal
       openModal={_props.openModal}
@@ -73,8 +70,7 @@ export function EditUserModal(_props: {
                   />
                   <div className="flex items-center justify-center gap-2 mb-8">
                     <div className="mx-auto my-7 w-[128px] h-[128px] flex items-center justify-center bg-white rounded-full shadow-lg relative">
-                    {
-                      _props.imageUpload ? 
+                      {_props.imageUpload ? (
                         <>
                           <img
                             src={_props.imageUpload || userImg}
@@ -87,7 +83,7 @@ export function EditUserModal(_props: {
                             className="h-10 w-10 absolute bottom-0 right-0 rounded-full"
                           />
                         </>
-                      :
+                      ) : (
                         <>
                           <img
                             src={userImg}
@@ -100,7 +96,7 @@ export function EditUserModal(_props: {
                             className="h-10 w-10 absolute bottom-0 right-0 rounded-full"
                           />
                         </>
-                      }
+                      )}
                     </div>
                   </div>
                 </div>
@@ -141,9 +137,12 @@ export function EditUserModal(_props: {
           type: "selectView",
           props: {
             data: Languages,
-            value: {value: _props.modalControl.language, label: _props.modalControl.language},
+            value: {
+              value: _props.modalControl.language,
+              label: _props.modalControl.language,
+            },
             selectProps: {
-              placeholder: "Select a Language"
+              placeholder: "Select a Language",
             },
             setSelectedValue: (value: any) => {
               const customEvent = {
@@ -151,15 +150,18 @@ export function EditUserModal(_props: {
                   name: "language",
                   value: value.value,
                 },
-              };
-              _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+              }
+              _props._handleChange(
+                customEvent as React.ChangeEvent<HTMLInputElement>,
+              )
             },
             hasRightIcon: true,
             rightIcon: arrowDown,
             rightIconAlt: "rightIcon",
             // selectFieldWidth: 490,
             selectContainer: "mx-7 mb-4 relative",
-            selectFieldStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]",
+            selectFieldStyles:
+              "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]",
             rightIconStyles: "absolute right-4 top-4 cursor-pointer",
           },
         },

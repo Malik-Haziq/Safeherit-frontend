@@ -354,8 +354,6 @@ export default function AssetsView() {
         closeIconVisibility={true}
         _submitModal={_submitStepZeroInformationModal}
         action={"string"}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       <StepOneModal
         openModal={modalVisibility == "Step-1"}
@@ -392,8 +390,6 @@ export default function AssetsView() {
         closeIconVisibility={true}
         registerAnotherAsset={newAsset}
         gotoDashboard={_submitSuccessModal}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       <ConfirmationModal
         openModal={modalVisibility == "Step-delete"}

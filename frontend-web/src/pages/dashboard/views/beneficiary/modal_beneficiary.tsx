@@ -19,8 +19,6 @@ export function StepZeroInformationModal(_props: {
   closeIconVisibility: boolean
   _submitModal: Function
   action: string
-  arrayLength: any
-  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -29,8 +27,6 @@ export function StepZeroInformationModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Register Beneficiaries"}
       closeIconVisibility={_props.closeIconVisibility}
-      arrayLength={_props.arrayLength}
-      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -111,8 +107,6 @@ export function SuccessModal(_props: {
   registerAnotherBeneficiary: React.MouseEventHandler<HTMLButtonElement>
   gotoValidators: React.MouseEventHandler<HTMLButtonElement>
   _submitModal: React.MouseEventHandler<HTMLButtonElement>
-  arrayLength: any
-  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -125,8 +119,6 @@ export function SuccessModal(_props: {
           : "Edit Beneficiary Details"
       }
       closeIconVisibility={_props.closeIconVisibility}
-      arrayLength={_props.arrayLength}
-      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -245,7 +237,7 @@ export function StepOneModal(_props: {
           type: "textView",
           props: {
             text: "Personal info",
-            textStyles: "text=[#00192B] font-semibold pl-7 mb-3",
+            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
           },
         },
         {
