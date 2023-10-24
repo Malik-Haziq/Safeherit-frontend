@@ -175,7 +175,6 @@ function MethodRow(_props: { heading: string; subHeading: string }) {
   )
 }
 
-
 function SetUpPulseCheck(_props: {
   openStepZeroModal: React.MouseEventHandler<HTMLButtonElement>
 }) {
@@ -187,7 +186,7 @@ function SetUpPulseCheck(_props: {
           No Pulse checked
         </h2>
         <p className="text-[#868686] mb-10">
-          You still didn’t set up ho we should make sure you are alive.
+          You should setup your pulse check so we can verify that you’re alive.
         </p>
         <button
           onClick={_props.openStepZeroModal}
