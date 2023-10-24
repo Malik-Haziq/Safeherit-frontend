@@ -70,6 +70,11 @@ const _handleErrors = (error: any) => {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
+    if (error?.response?.data?.message == "Unauthorized") {
+      sessionStorage.clear()
+      localStorage.clear()
+      window.location.reload()
+    }
     toast(error?.response?.data?.message, "error")
   } else if (error.request) {
     // The request was made but no response was received
