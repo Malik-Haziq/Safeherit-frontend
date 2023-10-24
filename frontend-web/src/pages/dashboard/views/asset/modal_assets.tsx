@@ -22,8 +22,6 @@ export function StepZeroInformationModal(_props: {
   closeIconVisibility: boolean
   _submitModal: Function
   action: string
-  arrayLength: any
-  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -32,8 +30,6 @@ export function StepZeroInformationModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Create New Assets"}
       closeIconVisibility={_props.closeIconVisibility}
-      arrayLength={_props.arrayLength}
-      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -388,8 +384,6 @@ export function SuccessModal(_props: {
   closeIconVisibility: boolean
   registerAnotherAsset: React.MouseEventHandler<HTMLButtonElement>
   gotoDashboard: React.MouseEventHandler<HTMLButtonElement>
-  arrayLength: any
-  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -398,8 +392,6 @@ export function SuccessModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Asset Registered"}
       closeIconVisibility={_props.closeIconVisibility}
-      arrayLength={_props.arrayLength}
-      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",

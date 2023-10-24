@@ -35,12 +35,12 @@ const initialState = {
 }
 
 type YourObjectType = {
-  [key: string]: { heading: string; subHeading: string }[];
-};
+  [key: string]: { heading: string; subHeading: string }[]
+}
 
 export default function PulseView() {
   const dispatch = useAppDispatch()
-  const user = useAppSelector(state => state.user)
+  const user = useAppSelector((state) => state.user)
   const navigate = useNavigate()
 
   const [pulseCheck, setPulseCheck] = useState(false)
@@ -69,11 +69,15 @@ export default function PulseView() {
 
   const getUserDetails = () => {
     dispatch(getUser({}))
-    .unwrap().catch()
-    .then((res) => {
-      // console.log(res)
-      setPulseCheck(true)
-    })
+      .unwrap()
+      .catch()
+      .then((res) => {
+        if (JSON.parse(res.data.data.pulseCheckActive)) {
+          setPulseCheck(true)
+        } else {
+          setPulseCheck(false)
+        }
+      })
   }
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
@@ -103,6 +107,7 @@ export default function PulseView() {
       .then((res) => {
         modalHistoryPush("step-4")
         setModalVisibility("success-modal")
+        getUserDetails()
       })
   }
 
@@ -134,8 +139,6 @@ export default function PulseView() {
         action={""}
         _submitModal={_submitStepOneModal}
         _handleChange={() => {}}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       <StepTwoModal
         openModal={modalVisibility == "step-2"}
@@ -179,8 +182,6 @@ export default function PulseView() {
         closeIconVisibility={true}
         action={""}
         _submitModal={_submitSuccessModal}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       {pulseCheck ? (
         <PulseCheckView
@@ -207,7 +208,7 @@ function PulseCheckView(_props: {
   checkPulsePeriodArr: any
   checkPUlseDateArr: any
   checkAliveMethodArr: any
-  methodArr: { heading: string; subHeading: string; }[]
+  methodArr: { heading: string; subHeading: string }[]
   confirmationDetails: string
   setConfirmationDetails: any
   pulseCheckDays: string
@@ -258,17 +259,21 @@ function PulseCheckView(_props: {
                     key={index}
                     setConfirmationDetails={_props.setConfirmationDetails}
                     method={value}
-                    selected={_props.confirmationDetails == value ? true : false}
+                    selected={
+                      _props.confirmationDetails == value ? true : false
+                    }
                   />
                 )
               })}
             </div>
             <div className="p-5 flex flex-col gap-3 ">
               {_props.methodArr.map((value: any) => {
-                return <MethodRow
-                  heading={value.heading}
-                  subHeading={value.subHeading}
-                />
+                return (
+                  <MethodRow
+                    heading={value.heading}
+                    subHeading={value.subHeading}
+                  />
+                )
               })}
             </div>
           </article>
@@ -332,10 +337,16 @@ function CheckPulseDates(_props: {
   )
 }
 
-function CheckAliveMethod(_props: { method: string; selected: boolean, setConfirmationDetails: any }) {
+function CheckAliveMethod(_props: {
+  method: string
+  selected: boolean
+  setConfirmationDetails: any
+}) {
   return (
     <p
-      onClick={() => {_props.setConfirmationDetails(_props.method)}}
+      onClick={() => {
+        _props.setConfirmationDetails(_props.method)
+      }}
       className={
         _props.selected
           ? "py-4 px-2 cursor-pointer text-[#04477B] font-medium  border-b-2 border-b-[#04477B]"

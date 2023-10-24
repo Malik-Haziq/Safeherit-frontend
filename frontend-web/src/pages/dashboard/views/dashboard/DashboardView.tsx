@@ -130,25 +130,22 @@ function Cards(_props: {
       </div>
 
       <div className="h-[444px] overflow-y-auto">
-        {
-          _props.loading ? (
-            <div>Loading...</div>
-          ) :
-          _props.assetsInfo.length ? (
-            _props.assetsInfo.map((info: any, index: string) => {
-              return (
-                <Row
-                  key={index}
-                  img={info.img}
-                  title={info.title}
-                  subTitle={info.subTitle}
-                />
-              )
-            })
-          ) : (
-            <div>No {_props.title} registered</div>
-          )
-        }
+        {_props.loading ? (
+          <div>Loading...</div>
+        ) : _props.assetsInfo.length ? (
+          _props.assetsInfo.map((info: any, index: string) => {
+            return (
+              <Row
+                key={index}
+                img={info.img}
+                title={info.title}
+                subTitle={info.subTitle}
+              />
+            )
+          })
+        ) : (
+          <div>No {_props.title} registered</div>
+        )}
       </div>
     </div>
   )
