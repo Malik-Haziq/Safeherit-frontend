@@ -7,6 +7,8 @@ export function UserDetails(_props: {
   closeIconVisibility: boolean
   action: string
   modalControl: any
+  arrayLength: any
+  showPreviousModal: any
 }) {
   const headings = [{}]
   const values = [{}]
@@ -17,6 +19,8 @@ export function UserDetails(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"User"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "customView",

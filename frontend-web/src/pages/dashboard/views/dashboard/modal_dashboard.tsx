@@ -57,6 +57,8 @@ export function DashboardModal() {
           },
         },
       ]}
+      arrayLength={undefined}
+      showPreviousModal={undefined}
     />
   )
 }

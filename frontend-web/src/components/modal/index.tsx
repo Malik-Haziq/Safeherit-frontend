@@ -232,8 +232,8 @@ function ModalHeader(_props: {
   closeModal: () => void
   title: string
   closeIconVisibility: boolean
-  arrayLength: any
-  showPreviousModal: any
+  arrayLength?: any
+  showPreviousModal?: any
 }) {
   return (
     <div className={styles.header}>

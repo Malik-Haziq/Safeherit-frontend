@@ -19,8 +19,8 @@ import {
 } from "./modal_pulse"
 import { isValidEmail, isValidPhone, useArray } from "@/common"
 import { toast } from "@/components"
-import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { getUser, updatePulse } from "@/redux/actions"
+import { useAppDispatch } from "@/redux/hooks"
+import { updatePulse } from "@/redux/actions"
 import { useNavigate } from "react-router-dom"
 
 const initialState = {
@@ -34,18 +34,12 @@ const initialState = {
   pulseCheckNonValidationMonths: "0",
 }
 
-type YourObjectType = {
-  [key: string]: { heading: string; subHeading: string }[];
-};
-
 export default function PulseView() {
   const dispatch = useAppDispatch()
-  const user = useAppSelector(state => state.user)
   const navigate = useNavigate()
 
-  const [pulseCheck, setPulseCheck] = useState(false)
+  const [pulseCheck, setPulseCheck] = useState(0)
   const [modalVisibility, setModalVisibility] = useState("none")
-  const [confirmationDetails, setConfirmationDetails] = useState("Email")
   const [modalControl, setModalControl] = useState(initialState)
   const [
     modalHistory,
@@ -60,21 +54,22 @@ export default function PulseView() {
     lastPulseCheck: "April 12th, 2023",
     nextPulseCheck: "22 days",
   }
+
   const checkAliveMethodArr = ["Email", "Phone", "Social media"]
+  const methodArr = [
+    { heading: "Primary Phone", subHeading: "+1 234 566 890" },
+    { heading: "Backup Phone 1", subHeading: "+7 234 566 890" },
+    { heading: "Backup Phone 2", subHeading: "+9 234 566 560" },
+  ]
 
   useEffect(() => {
     modalHistoryPopAll()
-    getUserDetails()
   }, [])
 
-  const getUserDetails = () => {
-    dispatch(getUser({}))
-    .unwrap().catch()
-    .then((res) => {
-      // console.log(res)
-      setPulseCheck(true)
-    })
-  }
+  useEffect(() => {
+    console.log(modalHistory)
+  }, [])
+
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
@@ -86,8 +81,23 @@ export default function PulseView() {
   }
 
   const _submitStepTwoModal = () => {
+    // if (
+    //   !isValidEmail(modalControl.pulseCheckEmail1) ||
+    //   (modalControl.pulseCheckEmail1 &&
+    //     !isValidEmail(modalControl.pulseCheckEmail2)) ||
+    //   (modalControl.pulseCheckEmail2 &&
+    //     !isValidEmail(modalControl.pulseCheckEmail3)) ||
+    //   (modalControl.pulseCheckEmail3 &&
+    //     !isValidPhone(modalControl.pulseCheckPhone1)) ||
+    //   (modalControl.pulseCheckPhone1 &&
+    //     !isValidPhone(modalControl.pulseCheckPhone2)) ||
+    //   modalControl.pulseCheckPhone2
+    // ) {
+    //   toast("please enter a valid Email address", "error")
+    // } else {
     modalHistoryPush("step-2")
     setModalVisibility("step-3")
+    // }
   }
 
   const _submitStepThreeModal = () => {
@@ -96,7 +106,6 @@ export default function PulseView() {
   }
 
   const _submitStepFourModal = () => {
-    toast("creating pulse check ", "info")
     dispatch(updatePulse(modalControl))
       .unwrap()
       .catch()
@@ -108,7 +117,7 @@ export default function PulseView() {
 
   const _submitSuccessModal = () => {
     setModalVisibility("none")
-    getUserDetails()
+    setPulseCheck(1)
     navigate("/dashboard/assets")
   }
 
@@ -187,10 +196,7 @@ export default function PulseView() {
           checkPulsePeriodArr={checkPulsePeriodArr}
           checkPUlseDateArr={checkPUlseDateArr}
           checkAliveMethodArr={checkAliveMethodArr}
-          methodArr={user.pulseDetail[confirmationDetails]}
-          confirmationDetails={confirmationDetails}
-          setConfirmationDetails={setConfirmationDetails}
-          pulseCheckDays={user.pulseCheckDays}
+          methodArr={methodArr}
         />
       ) : (
         <SetUpPulseCheck
@@ -207,10 +213,7 @@ function PulseCheckView(_props: {
   checkPulsePeriodArr: any
   checkPUlseDateArr: any
   checkAliveMethodArr: any
-  methodArr: { heading: string; subHeading: string; }[]
-  confirmationDetails: string
-  setConfirmationDetails: any
-  pulseCheckDays: string
+  methodArr: any
 }) {
   return (
     <div className="px-8 py-4">
@@ -231,14 +234,8 @@ function PulseCheckView(_props: {
             days:
           </p>
           <div className="flex justify-between mb-6 gap-3">
-            {_props.checkPulsePeriodArr.map((value: any, index: string) => {
-              return (
-                <CheckPulsePeriod
-                  key={index}
-                  days={value}
-                  selected={_props.pulseCheckDays == value ? true : false}
-                />
-              )
+            {_props.checkPulsePeriodArr.map((el: any) => {
+              return <CheckPulsePeriod days={el} selected={false} />
             })}
           </div>
           <div className="bg-[#ECF6FA] text-[#0C8AC1] flex flex-col gap-2 py-3 pl-5 text-sm rounded-xl mb-6">
@@ -252,23 +249,18 @@ function PulseCheckView(_props: {
           </h2>
           <article className="bg-[#F9F9F9] border-[1px] border-[#E1E1E1] rounded-xl h-[334px] overflow-auto scrollbar">
             <div className="flex gap-8 border-b-[1px] border-b-[#e1e1e1] text-[#707070] pl-5 ">
-              {_props.checkAliveMethodArr.map((value: any, index: string) => {
-                return (
-                  <CheckAliveMethod
-                    key={index}
-                    setConfirmationDetails={_props.setConfirmationDetails}
-                    method={value}
-                    selected={_props.confirmationDetails == value ? true : false}
-                  />
-                )
+              {_props.checkAliveMethodArr.map((el: any) => {
+                return <CheckAliveMethod method={el} selected={false} />
               })}
             </div>
             <div className="p-5 flex flex-col gap-3 ">
-              {_props.methodArr.map((value: any) => {
-                return <MethodRow
-                  heading={value.heading}
-                  subHeading={value.subHeading}
-                />
+              {_props.methodArr.map((method: any) => {
+                return (
+                  <MethodRow
+                    heading={method.heading}
+                    subHeading={method.subHeading}
+                  />
+                )
               })}
             </div>
           </article>
@@ -332,10 +324,9 @@ function CheckPulseDates(_props: {
   )
 }
 
-function CheckAliveMethod(_props: { method: string; selected: boolean, setConfirmationDetails: any }) {
+function CheckAliveMethod(_props: { method: string; selected: boolean }) {
   return (
     <p
-      onClick={() => {_props.setConfirmationDetails(_props.method)}}
       className={
         _props.selected
           ? "py-4 px-2 cursor-pointer text-[#04477B] font-medium  border-b-2 border-b-[#04477B]"
