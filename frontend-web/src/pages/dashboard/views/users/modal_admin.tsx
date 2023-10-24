@@ -83,3 +83,76 @@ export function UserDetails(_props: {
     />
   )
 }
+
+export function NewUserModal(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  closeIconVisibility: boolean
+  _handleChange: Function
+  _submitModal: Function
+  modalControl: any
+}) {
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={ "Create User"}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "inputView",
+          props: {
+            name: "email",
+            type: "text",
+            placeholder: "Email",
+            value: _props.modalControl.email,
+            _handleChange: _props._handleChange,
+            required: true,
+            inputStyles: "rounded-3xl w-full",
+            hasRightIcon: false,
+            inputContainerStyles: "mx-7 mt-7 mb-4 relative",
+          },
+        },
+        {
+          type: "inputView",
+          props: {
+            name: "phoneNumber",
+            type: "text",
+            placeholder: "Phone Number",
+            value: _props.modalControl.phoneNumber,
+            _handleChange: _props._handleChange,
+            required: true,
+            inputStyles: "rounded-3xl w-full",
+            hasRightIcon: false,
+            inputContainerStyles: "mx-7 mb-4 relative",
+          },
+        },
+        {
+          type: "inputView",
+          props: {
+            name: "displayName",
+            type: "text",
+            placeholder: "Name",
+            value: _props.modalControl.displayName,
+            _handleChange: _props._handleChange,
+            required: true,
+            inputStyles: "rounded-3xl w-full",
+            hasRightIcon: false,
+            inputContainerStyles: "mx-7 mb-4 relative",
+          },
+        },
+        {
+          type: "buttonView",
+          props: {
+            title: "Next",
+            onclick: _props._submitModal,
+            buttonStyle: "",
+            buttonContainer: "mx-48 mb-10",
+          },
+        },
+      ]}
+    />
+  )
+}

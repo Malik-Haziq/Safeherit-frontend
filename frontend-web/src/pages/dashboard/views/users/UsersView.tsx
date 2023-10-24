@@ -5,26 +5,27 @@ import edit from "@images/edit.svg"
 import leftArrow from "@images/left-arrow.svg"
 import rightArrow from "@images/right-arrow.svg"
 import deleteIcon from "@images/delete.svg"
-import { UserDetails } from "../users/modal_admin"
-import { useEffect, useState } from "react"
+import { NewUserModal } from "../users/modal_admin"
+import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getUsers } from "@/redux/actions/AdminAction"
 import { toast, Spinner } from "@/components"
+import { createUser } from "@/redux/actions/UserActions"
 
-  // const modalControl = {
-  //   Name: "Rayan Adlardard",
-  //   "Joining date": "12 Apr 2023",
-  //   Plan: "yearly",
-  //   Payment: "paid",
-  //   Account: "active",
-  //   "Pulse status": { title: "Next schedule", subTitle: "Waiting for answer" },
-  // }
+const initialState = {
+  email: "",
+  phoneNumber: "",
+  displayName: "",
+}
+
 
 export default function UsersView() {
   const dispatch = useAppDispatch()
   const admin = useAppSelector(state => state.admin)
   const [currentPage, setCurrentPage] = useState(1)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true)  
+  const [modalControl, setModalControl] = useState(initialState)
+  const [modalVisibility, setModalVisibility] = useState("none")
 
   useEffect(() => {
     fetchUsers()
@@ -34,7 +35,32 @@ export default function UsersView() {
     fetchUsers()
   }, [currentPage])
 
+  const closeModal = useCallback(() => {
+    setModalControl(initialState)
+    setModalVisibility("none")
+  }, [])
+  const _handleChange = (event: { target: { name: any; value: any } }) => {
+    // debugger
+    const { name, value } = event.target
+    setModalControl({ ...modalControl, [name]: value })
+  }
+
+  const createUserSubmit = () => {
+    if (modalControl.displayName && modalControl.email && modalControl.phoneNumber) {
+      dispatch(createUser(modalControl)).unwrap().catch()
+      .then(() => {
+        fetchUsers()
+        closeModal()
+        toast("User Created", "success")
+      })
+    }
+    else {
+      toast("All fields are required", 'warning')
+    }
+  }
+
   const fetchUsers = () => {
+    setLoading(true)
     dispatch(getUsers({"page": currentPage})).unwrap().finally(() => {
       setLoading(false)
     })
@@ -60,18 +86,30 @@ export default function UsersView() {
   const viewUser = (id: string) => {
     toast("functionality not implimented", "error")
   }
+  const createAccount = () => {
+    setModalVisibility('create-user')
+  }
 
   return (
     <div className={styles.AppView}>
+      <NewUserModal
+        openModal= {modalVisibility == 'create-user'}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        _handleChange={_handleChange}
+        _submitModal= {createUserSubmit}
+        modalControl= {modalControl}
+      />
       <main className="p-5 mx-auto w-[1101px]">
-        <section className="mt-10 flex justify-end mb-8">
+        <button onClick={createAccount} className="mt-10 flex justify-end mb-8">
           <a
             href="#"
             className="primary-btn bg-[#04477B] text-white rounded-md py-2 font-medium flex items-center gap-2"
           >
             <span className="text-3xl">+</span> Create Account
           </a>
-        </section>
+        </button>
         <section className="rounded-xl h-[676px] border-[1px] flex justify-between flex-col">
           <table className="rounded-3xl ">
             <thead className="bg-[#F2F2F2] px-5 py-3 rounded-t-xl text-sm uppercase border-[1px] border-[#E5E5E5]">

@@ -240,14 +240,14 @@ function LoggedUser(_props: {
           <p className="font-medium text-sm">
             {_props.userRole?.toUpperCase()}
           </p>
-          <p
+          <button
             onClick={() => {
               _props._handleUserRolesSubmit(_props.userRole)
             }}
             className="text-sm font-medium text-[#0C8AC1] cursor-pointer hover:opacity-75"
           >
             Login
-          </p>
+          </button>
         </div>
         <div className="flex flex-col gap-2">
           {_props.userRole.toLowerCase() == "beneficiary" ? (
