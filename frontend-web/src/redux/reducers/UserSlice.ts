@@ -2,6 +2,9 @@ import { createSlice } from "@reduxjs/toolkit"
 import { login, logout, signup, getUser, updateUser } from "../actions/UserActions"
 import { SelectOption } from "@/types"
 
+type YourObjectType = {
+  [key: string]: { heading: string; subHeading: string }[];
+}
 interface UserState {
   email: string
   name: string
@@ -22,6 +25,11 @@ interface UserState {
   role: string
   selectedRoleUser: {[key: string]: any}
   userMap: {[key: string]: any}
+  pulseDetail: YourObjectType
+  pulseCheckNonValidationMonths: string
+  pulseCheckDays: string
+  pulseCheckActive: string
+  pulseCheckValidationRequired: string
 }
 const initialState: UserState = {
   email: "",
@@ -43,6 +51,27 @@ const initialState: UserState = {
   role: "none",
   selectedRoleUser: {},
   userMap: {},
+  pulseDetail: {
+    'Email': [
+      { heading: "Primary Phone", subHeading: "gmail.com" },
+      { heading: "Backup Phone 1", subHeading: "+ymail" },
+      { heading: "Backup Phone 2", subHeading: "+9 234 566 " },
+    ],
+    'Phone': [
+      { heading: "Primary Phone", subHeading: "+1 234 566 890" },
+      { heading: "Backup Phone 1", subHeading: "+7 234 566 890" },
+      { heading: "Backup Phone 2", subHeading: "+9 234 566 560" },
+    ],
+    'Social media': [
+      { heading: "Social media", subHeading: "hard coded" },
+      { heading: "Social media 1", subHeading: "hard coded" },
+      { heading: "Social media 2", subHeading: "hard coded" },
+    ],
+  },
+  pulseCheckNonValidationMonths: '',
+  pulseCheckDays: '',
+  pulseCheckActive: '',
+  pulseCheckValidationRequired: '',
 }
 
 export const slice = createSlice({
@@ -96,6 +125,27 @@ export const slice = createSlice({
     })
     builder.addCase(getUser.fulfilled, (state, action) => {
       state.loading = false
+      const methodArr: YourObjectType = {
+        'Email': [
+          { heading: "Pulse Check Email 1", subHeading: action.payload.data.data.pulseCheckEmail1 },
+          { heading: "Pulse Check Email 2", subHeading: action.payload.data.data.pulseCheckEmail2 },
+          { heading: "Pulse Check Email 3", subHeading: action.payload.data.data.pulseCheckEmail3 },
+        ],
+        'Phone': [
+          { heading: "Primary Phone", subHeading: action.payload.data.data.pulseCheckPhone1 },
+          { heading: "Backup Phone 1", subHeading: action.payload.data.data.pulseCheckPhone2 },
+        ],
+        'Social media': [
+          { heading: "Social media", subHeading: "hard coded" },
+          { heading: "Social media 1", subHeading: "hard coded" },
+          { heading: "Social media 2", subHeading: "hard coded" },
+        ],
+      }
+      state.pulseDetail = methodArr
+      state.pulseCheckNonValidationMonths = action.payload.data.data.pulseCheckNonValidationMonths
+      state.pulseCheckActive = action.payload.data.data.pulseCheckActive
+      state.pulseCheckDays = action.payload.data.data.pulseCheckDays
+      state.pulseCheckValidationRequired = action.payload.data.data.pulseCheckValidationRequired
       state.displayName = action.payload.data.data.displayName
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image
