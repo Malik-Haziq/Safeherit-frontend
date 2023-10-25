@@ -446,7 +446,7 @@ function AddAsset(_props: {
         <img src={AddAssetImg} className="mb-10" alt="validator screen image" />
         <h2 className="text-[#00192B] text-xl font-bold mb-2">No Assets</h2>
         <p className="text-[#868686] mb-10">
-          There is no any assets in your Board please create assets.
+          There are no assets on your board. Please create assets.
         </p>
         <button
           onClick={_props.openStepZeroModal}
