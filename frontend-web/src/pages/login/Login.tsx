@@ -2,13 +2,17 @@ import logo from "@images/safeherit_logo.svg"
 import loginImg from "@images/login-img.png"
 import star from "@images/star.svg"
 
-import { useCallback, useState } from "react"
+import { ChangeEvent, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { getUser, login, resetPassword } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ForgotPasswordModal, toast } from "@/components"
-import { UserRolesModal, PrivateKeyModal } from "./modal_login"
+import {
+  UserRolesModal,
+  PrivateKeyModal,
+  GeneratePrivateKey,
+} from "./modal_login"
 import {
   resetBeneficiaryOf,
   resetMapper,
@@ -52,11 +56,14 @@ export function Login() {
   const _handleSubmit = () => {
     toast("logging in", "info")
     if (formControl.email && formControl.password) {
-      dispatch(login({ email: formControl.email, password: formControl.password }))
+      dispatch(
+        login({ email: formControl.email, password: formControl.password }),
+      )
         .unwrap()
         .then((res) => {
           dispatch(getUser({}))
-            .unwrap().catch()
+            .unwrap()
+            .catch()
             .then((res) => {
               setModalVisibility("user-roles")
             })
@@ -92,7 +99,8 @@ export function Login() {
   const _handleForgotPassword = () => {
     if (resetEmail) {
       dispatch(resetPassword({ email: resetEmail }))
-        .unwrap().catch()
+        .unwrap()
+        .catch()
         .then((res) => {
           toast("Email Sent", "info")
         })
