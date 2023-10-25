@@ -3,6 +3,8 @@ import arrowDown from "@images/chevron-down.svg"
 
 import { DropDownButton, Notifications } from "@/components"
 import { useAppSelector } from "@redux/hooks"
+import { useEffect, useState } from "react"
+import { getFileFromFirebase } from "@/common"
 
 type NavBarItem = {
   screen: string
@@ -14,8 +16,19 @@ export default function DashboardNavbar(_props: {
   navBarHeadings: Record<string, NavBarItem>
   currentPath: any
 }) {
-  const user = useAppSelector(state => state.user)
-  const USER_NAME =  user.displayName || "Profile"
+  const user = useAppSelector((state) => state.user)
+  const USER_NAME = user.displayName || "Profile"
+
+  const [image, setImage] = useState<string>("")
+  useEffect(() => {
+    getFileFromFirebase(user.profile_image)
+      .then((res) => {
+        setImage(res)
+      })
+      .catch(() => {
+        setImage("")
+      })
+  }, [user.profile_image])
 
   return (
     <div className="h-[83px] p-2 sm:p-7 flex justify-between items-center shadow-sm min-w-[1200px] max-w-[100vw]">
@@ -37,8 +50,8 @@ export default function DashboardNavbar(_props: {
           titleClassName={"text-sm sm:text-base"}
           arrowIcon={arrowDown}
           arrowDownClassName={"ml-1 "}
-          userIcon={userImg}
-          userIconClassName={"w-6 sm:w-8"}
+          userIcon={image ? image : userImg}
+          userIconClassName={" sm:w-8 sm:h-8 rounded-full"}
           options={["Logout"]}
         />
       </div>
