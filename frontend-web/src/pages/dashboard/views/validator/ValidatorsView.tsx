@@ -9,7 +9,13 @@ import validatorImage from "@images/validator-screen.svg"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styles from "../../Dashboard.module.css"
-import { ValidatorDropDown, ConfirmationModal, UserDetailsModal, Spinner, toast } from "@/components"
+import {
+  ValidatorDropDown,
+  ConfirmationModal,
+  UserDetailsModal,
+  Spinner,
+  toast,
+} from "@/components"
 import {
   StepZeroInformationModal,
   StepOneModal,
@@ -25,7 +31,13 @@ import {
   deleteValidator,
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
-import { isValidEmail, getFileFromFirebase, isValidPhone, isValidPhoneWithRegion } from "@/common"
+import {
+  isValidEmail,
+  getFileFromFirebase,
+  isValidPhone,
+  isValidPhoneWithRegion,
+  useArray,
+} from "@/common"
 
 const initialState = {
   id: "",
@@ -51,6 +63,13 @@ export default function ValidatorsView() {
   const [imageUpload, setImageUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
+  const [
+    modalHistory,
+    modalHistoryLength,
+    modalHistoryPop,
+    modalHistoryPush,
+    modalHistoryPopAll,
+  ] = useArray()
 
   const validatorArray = useAppSelector(
     (state) => state.validator.validator_array,
@@ -73,10 +92,15 @@ export default function ValidatorsView() {
       })
   }, [])
 
+  useEffect(() => {
+    modalHistoryPopAll()
+  }, [])
+
   const closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
     setImageUpload("")
+    modalHistoryPopAll()
   }, [])
 
   const addValidator = useCallback(() => {
@@ -87,19 +111,26 @@ export default function ValidatorsView() {
     if (!modalControl.name) {
       toast("please enter a valid name", "error")
     } else if (
-      !isValidEmail(modalControl.primary_email) && !isValidEmail(modalControl.backup_email2) && !isValidEmail(modalControl.backup_email) ||
-      modalControl.primary_email && !isValidEmail(modalControl.primary_email) ||
-      modalControl.backup_email && !isValidEmail(modalControl.backup_email) ||
-      modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2)
+      (!isValidEmail(modalControl.primary_email) &&
+        !isValidEmail(modalControl.backup_email2) &&
+        !isValidEmail(modalControl.backup_email)) ||
+      (modalControl.primary_email &&
+        !isValidEmail(modalControl.primary_email)) ||
+      (modalControl.backup_email && !isValidEmail(modalControl.backup_email)) ||
+      (modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2))
     ) {
       toast("please enter a valid Email address", "error")
     } else if (
-      !isValidPhoneWithRegion(modalControl.phone_number) && !isValidPhoneWithRegion(modalControl.backup_phone_number) ||
-      modalControl.phone_number && !isValidPhoneWithRegion(modalControl.phone_number) ||
-      modalControl.backup_phone_number && !isValidPhoneWithRegion(modalControl.backup_phone_number)
+      (!isValidPhoneWithRegion(modalControl.phone_number) &&
+        !isValidPhoneWithRegion(modalControl.backup_phone_number)) ||
+      (modalControl.phone_number &&
+        !isValidPhoneWithRegion(modalControl.phone_number)) ||
+      (modalControl.backup_phone_number &&
+        !isValidPhoneWithRegion(modalControl.backup_phone_number))
     ) {
       toast("please enter a valid Phone number", "error")
     } else {
+      modalHistoryPush("Step-1")
       setModalVisibility("Step-2")
     }
   }
@@ -111,6 +142,7 @@ export default function ValidatorsView() {
     ) {
       toast("Atleast 1 social media accounts is compulsory", "error")
     } else {
+      modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
     }
   }
@@ -143,6 +175,7 @@ export default function ValidatorsView() {
             dispatch(getAllValidator({}))
               .unwrap()
               .then((res) => {
+                modalHistoryPush("Step-3")
                 setModalVisibility("Step-4")
                 updateValidatorArrayCount(res)
               })
@@ -184,6 +217,7 @@ export default function ValidatorsView() {
     setModalAction("create")
     setModalControl(initialState)
     setImageUpload("")
+    modalHistoryPush("Step-0")
     setModalVisibility("Step-1")
   }
   const editValidator = (id: string) => {
@@ -235,7 +269,11 @@ export default function ValidatorsView() {
         setModalVisibility("User-Info")
       })
   }
-
+  const showPreviousModal = () => {
+    modalHistoryPop()
+    const lastEl = modalHistory[modalHistoryLength - 1]
+    setModalVisibility(lastEl)
+  }
   return (
     <>
       <UserDetailsModal
@@ -281,6 +319,8 @@ export default function ValidatorsView() {
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepOneModal}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <StepTwoModal
         openModal={modalVisibility == "Step-2"}
@@ -293,6 +333,8 @@ export default function ValidatorsView() {
         _submitModal={_submitStepTwoModal}
         imageUpload={imageUpload}
         setImageUpload={setImageUpload}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       <StepThreeModal
         openModal={modalVisibility == "Step-3"}
@@ -303,13 +345,15 @@ export default function ValidatorsView() {
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepThreeModal}
+        arrayLength={modalHistoryLength}
+        showPreviousModal={showPreviousModal}
       />
       {hasValidators == -1 ? (
         <div className={styles.AppView}>
-        <div className="relative h-[80vh]">
-          <Spinner/>
+          <div className="relative h-[80vh]">
+            <Spinner />
+          </div>
         </div>
-      </div>
       ) : hasValidators == 0 ? (
         <AddValidators openStepZeroModal={addValidator} />
       ) : (

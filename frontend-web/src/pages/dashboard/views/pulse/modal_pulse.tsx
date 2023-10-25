@@ -12,6 +12,14 @@ import linkFacebook from "@images/link-facebook.svg"
 import linkTwitter from "@images/link-twitter.svg"
 import linkInsta from "@images/link-insta.svg"
 
+import { useEffect, useRef, useState } from "react"
+interface CustomChangeEvent {
+  target: {
+    name: string
+    value: string | ArrayBuffer | null | undefined
+  }
+}
+
 export function StepOneModal(_props: {
   openModal: boolean
   closeModal: any
@@ -57,7 +65,7 @@ export function StepOneModal(_props: {
           type: "buttonView",
           props: {
             title: "Next",
-            onclick: () => {},
+            onclick: _props._submitModal,
             buttonStyle: "",
             buttonContainer: "mx-48 mb-10",
           },
@@ -75,15 +83,47 @@ export function StepTwoModal(_props: {
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   modalControl: {
-    name: string
-    primary_email: string
-    backup_email: string
-    backup_email2: string
-    phone_number: string
-    backup_phone_number: string
+    pulseCheckDays: string
+    pulseCheckEmail1: string
+    pulseCheckEmail2: string
+    pulseCheckEmail3: string
+    pulseCheckPhone1: string
+    pulseCheckPhone2: string
   }
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
+  const [selectedDays, setSelectedDays] = useState("30")
+  const [customDays, setCustomDays] = useState("")
+
+  function handleDays(days: string) {
+    setSelectedDays(days)
+    const customEvent: CustomChangeEvent = {
+      target: {
+        name: "pulseCheckDays",
+        value: days,
+      },
+    }
+    _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+  }
+
+  // useEffect(() => {
+  //   // console.log(customDays)
+  //   // customDaysRef?.current?.focus()
+  // }, [customDays])
+
+  function handleCustomDays(event: { target: { name: any; value: any } }) {
+    // setCustomDays(event.target.value)
+    // const customEvent: CustomChangeEvent = {
+    //   target: {
+    //     name: "pulseCheckDays",
+    //     value: event.target.value,
+    //   },
+    // }
+    // _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+  }
+
   return (
     <Modal
       openModal={_props.openModal}
@@ -91,6 +131,8 @@ export function StepTwoModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Setup Pulse Check"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -114,29 +156,65 @@ export function StepTwoModal(_props: {
             CustomView: () => {
               return (
                 <div className="grid grid-cols-2 grid-rows-2 gap-2 mb-5">
-                  <div className="w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]">
+                  <div
+                    className={
+                      selectedDays == "30"
+                        ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
+                        : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
+                    }
+                    onClick={() => handleDays("30")}
+                  >
                     <p className="text-[#00192B] font-semibold">
                       30 <span className=" font-medium text-sm">Days</span>
                     </p>
-                    <img src={radioBlueIcon} alt="radio icon" />
+                    {selectedDays == "30" ? (
+                      <img src={radioBlueIcon} alt="radio icon" />
+                    ) : (
+                      <img src={radioGrayIcon} alt="radio icon" />
+                    )}
                   </div>
-                  <div className="w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl">
+                  <div
+                    className={
+                      selectedDays == "60"
+                        ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
+                        : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
+                    }
+                    onClick={() => handleDays("60")}
+                  >
                     <p className="text-[#00192B] font-semibold">
-                      30 <span className=" font-medium text-sm">Days</span>
+                      60 <span className=" font-medium text-sm">Days</span>
                     </p>
-                    <img src={radioIcon} alt="radio icon" />
+                    {selectedDays == "60" ? (
+                      <img src={radioBlueIcon} alt="radio icon" />
+                    ) : (
+                      <img src={radioGrayIcon} alt="radio icon" />
+                    )}
                   </div>
-                  <div className="w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl">
+                  <div
+                    className={
+                      selectedDays == "90"
+                        ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
+                        : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
+                    }
+                    onClick={() => handleDays("90")}
+                  >
                     <p className="text-[#00192B] font-semibold">
-                      30 <span className=" font-medium text-sm">Days</span>
+                      90 <span className=" font-medium text-sm">Days</span>
                     </p>
-                    <img src={radioIcon} alt="radio icon" />
+                    {selectedDays == "90" ? (
+                      <img src={radioBlueIcon} alt="radio icon" />
+                    ) : (
+                      <img src={radioGrayIcon} alt="radio icon" />
+                    )}
                   </div>
                   <div className="">
                     <input
+                      disabled={true}
                       type="text"
                       placeholder="Custom"
                       className="w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl focus:outline-none placeholder:text-[#00192B] placeholder:font-semibold"
+                      onChange={handleCustomDays}
+                      value={customDays}
                     />
                   </div>
                 </div>
@@ -155,10 +233,10 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
-            name: "primary_email",
+            name: "pulseCheckEmail1",
             type: "text",
             placeholder: "Email",
-            value: _props.modalControl.primary_email,
+            value: _props.modalControl.pulseCheckEmail1,
             _handleChange: _props._handleChange,
             required: false,
             inputStyles: "rounded-3xl ",
@@ -169,10 +247,10 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
-            name: "backup_email",
+            name: "pulseCheckEmail2",
             type: "text",
             placeholder: "Backup email 1",
-            value: _props.modalControl.backup_email,
+            value: _props.modalControl.pulseCheckEmail2,
             _handleChange: _props._handleChange,
             required: false,
             inputStyles: "rounded-3xl ",
@@ -182,10 +260,10 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
-            name: "backup_email2",
+            name: "pulseCheckEmail3",
             type: "text",
             placeholder: "Backup email 2",
-            value: _props.modalControl.backup_email2,
+            value: _props.modalControl.pulseCheckEmail3,
             _handleChange: _props._handleChange,
             required: false,
             inputStyles: "rounded-3xl ",
@@ -202,10 +280,10 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
-            name: "phone_number",
+            name: "pulseCheckPhone1",
             type: "tel",
             placeholder: "Phone Number",
-            value: _props.modalControl.phone_number,
+            value: _props.modalControl.pulseCheckPhone1,
             _handleChange: _props._handleChange,
             required: false,
             inputStyles: "rounded-3xl ",
@@ -215,10 +293,10 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
-            name: "backup_phone_number",
+            name: "pulseCheckPhone2",
             type: "tel",
             placeholder: "Backup Phone Number",
-            value: _props.modalControl.backup_phone_number,
+            value: _props.modalControl.pulseCheckPhone2,
             _handleChange: _props._handleChange,
             required: false,
             inputStyles: "rounded-3xl ",
@@ -247,6 +325,8 @@ export function StepThreeModal(_props: {
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -255,6 +335,8 @@ export function StepThreeModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Setup Pulse Check"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -321,7 +403,7 @@ export function StepThreeModal(_props: {
           type: "buttonView",
           props: {
             title: "Confirm & Next",
-            onclick: () => {},
+            onclick: _props._submitModal,
             buttonStyle: "",
             buttonContainer: "mx-48 mb-10",
           },
@@ -338,8 +420,51 @@ export function StepFourModal(_props: {
   closeIconVisibility: boolean
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
+  modalControl: {
+    pulseCheckValidationRequired: string
+    pulseCheckNonValidationMonths: string
+  }
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
+  const [getResponseFromValidator, setGetResponseFromValidator] =
+    useState("opt-1")
+
+  function handleClick(selectedOption: string) {
+    setGetResponseFromValidator(selectedOption)
+  }
+
+  useEffect(() => {
+    if (_props.modalControl.pulseCheckValidationRequired == "true") {
+      triggerEvent("pulseCheckNonValidationMonths", "0")
+    }
+  }, [_props.modalControl.pulseCheckValidationRequired])
+
+  useEffect(() => {
+    if (_props.modalControl.pulseCheckNonValidationMonths == "3") {
+      triggerEvent("pulseCheckValidationRequired", "false")
+    }
+  }, [_props.modalControl.pulseCheckNonValidationMonths])
+
+  useEffect(() => {
+    if (getResponseFromValidator == "opt-1") {
+      triggerEvent("pulseCheckValidationRequired", "true")
+    } else {
+      triggerEvent("pulseCheckNonValidationMonths", "3")
+    }
+  }, [getResponseFromValidator])
+
+  const triggerEvent = (name: string, value: string) => {
+    const customEvent: CustomChangeEvent = {
+      target: {
+        name: name,
+        value: value,
+      },
+    }
+    _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+  }
+
   return (
     <Modal
       openModal={_props.openModal}
@@ -347,6 +472,8 @@ export function StepFourModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={"Setup Pulse Check"}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -361,21 +488,21 @@ export function StepFourModal(_props: {
           type: "textView",
           props: {
             text: "We recommend that you register at least two validators in case one of them cannot be reached. SafeHerit will make your encrypted data available to your beneficiaries as soon as one of your validators confirms your passing.",
-            textStyles: "text-[#4F4F4F] pl-7 mb-3",
+            textStyles: "text-[#4F4F4F] px-7 mb-3 text-start",
           },
         },
         {
           type: "textView",
           props: {
             text: "Below you can define how SafeHerit should proceed if we get no response from any of your validators after multiple attempts using all the contact information you registered.",
-            textStyles: "text-[#4F4F4F] pl-7 mb-3",
+            textStyles: "text-[#4F4F4F] px-7 mb-9 text-start",
           },
         },
         {
           type: "textView",
           props: {
             text: "If we get no response from any validator:  ",
-            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
+            textStyles: "text-[#00192B] font-semibold pl-7 mb-3 text-start",
           },
         },
         {
@@ -385,18 +512,41 @@ export function StepFourModal(_props: {
             CustomView: () => {
               return (
                 <div className="flex flex-col gap-3 mb-10">
-                  <div className="flex items-center gap-3 text-sm font-semibold mb-3 text-[#47B29E]">
-                    <img src={radioGreenIcon} alt="radio icon green" />
-                    <p>
+                  <div
+                    className={
+                      getResponseFromValidator == "opt-1"
+                        ? "flex items-center gap-3 text-sm font-semibold mb-3 text-[#47B29E]"
+                        : "flex items-center gap-3 text-sm font-medium mb-3 text-[#8C8C8C]"
+                    }
+                    onClick={() => handleClick("opt-1")}
+                  >
+                    {getResponseFromValidator == "opt-1" ? (
+                      <img src={radioGreenIcon} alt="radio icon green" />
+                    ) : (
+                      <img src={radioGrayIcon} alt="radio icon green" />
+                    )}
+
+                    <p className="text-start cursor-default">
                       Keep following up: do not contact my beneficiaries unless
                       you get a confirmation from a validator.
                     </p>
                   </div>
-                  <div className="flex items-center gap-3 text-sm font-medium text-[#8C8C8C]">
-                    <img src={radioGrayIcon} alt="radio icon green" />
-                    <p>
-                      Keep following up: do not contact my beneficiaries unless
-                      you get a confirmation from a validator.
+                  <div
+                    className={
+                      getResponseFromValidator == "opt-2"
+                        ? "flex items-center gap-3 text-sm font-semibold mb-3 text-[#47B29E]"
+                        : "flex items-center gap-3 text-sm font-medium mb-3 text-[#8C8C8C]"
+                    }
+                    onClick={() => handleClick("opt-2")}
+                  >
+                    {getResponseFromValidator == "opt-2" ? (
+                      <img src={radioGreenIcon} alt="radio icon green" />
+                    ) : (
+                      <img src={radioGrayIcon} alt="radio icon green" />
+                    )}
+                    <p className="text-start cursor-default">
+                      Make the data available to my beneficiaries after n months
+                      without a response from any validator.
                     </p>
                   </div>
                 </div>
@@ -408,7 +558,7 @@ export function StepFourModal(_props: {
           type: "buttonView",
           props: {
             title: "Done",
-            onclick: () => {},
+            onclick: _props._submitModal,
             buttonStyle: "",
             buttonContainer: "mx-48 mb-10",
           },
@@ -431,11 +581,7 @@ export function SuccessModal(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={
-        _props.action == "create"
-          ? "Beneficiary Registered"
-          : "Edit Beneficiary Details"
-      }
+      modalTitle={"Setup Pulse Check"}
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {

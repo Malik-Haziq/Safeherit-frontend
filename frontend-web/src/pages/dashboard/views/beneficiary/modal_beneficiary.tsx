@@ -208,6 +208,8 @@ export function StepOneModal(_props: {
     backup_phone_number: string
   }
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -220,6 +222,8 @@ export function StepOneModal(_props: {
           : "Edit Beneficiary Details"
       }
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -233,7 +237,7 @@ export function StepOneModal(_props: {
           type: "textView",
           props: {
             text: "Personal info",
-            textStyles: "text=[#00192B] font-semibold pl-7 mb-3",
+            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
           },
         },
         {
@@ -378,6 +382,8 @@ export function StepTwoModal(_props: {
   _submitModal: Function
   imageUpload: string
   setImageUpload: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   const handleImageInputChange = (event: any) => {
     const file = event.target.files[0]
@@ -408,6 +414,8 @@ export function StepTwoModal(_props: {
           : "Edit Beneficiary Details"
       }
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -547,6 +555,8 @@ export function StepThreeModal(_props: {
     personalized_video: string
   }
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   const handleImageInputChange = (event: any) => {
     const file = event.target.files[0]
@@ -577,6 +587,8 @@ export function StepThreeModal(_props: {
           : "Edit Beneficiary Details"
       }
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -671,6 +683,8 @@ export function RegisterPKModal(_props: {
   action: string
   _submitModal: React.MouseEventHandler<HTMLButtonElement>
   _handleKeyGeneration: React.MouseEventHandler<HTMLButtonElement>
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -683,6 +697,8 @@ export function RegisterPKModal(_props: {
           : "Edit Beneficiary Details"
       }
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",

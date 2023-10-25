@@ -6,17 +6,29 @@ import {
 } from "firebase/auth"
 import { auth } from "../../firebase"
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { setToken } from "../reducers/UserSlice";
-import { GET, PUT, jsonToFormData, GET_USER, DELETE, POST, CREATE_USER } from "@/common"
+import { setToken } from "../reducers/UserSlice"
+import {
+  GET,
+  PUT,
+  jsonToFormData,
+  GET_USER,
+  DELETE,
+  POST,
+  CREATE_USER,
+  PULSE_CHECK,
+} from "@/common"
 
 export const login = createAsyncThunk(
   "login",
-  async (Data: { email: string; password: string }, {dispatch, rejectWithValue }) => {
+  async (
+    Data: { email: string; password: string },
+    { dispatch, rejectWithValue },
+  ) => {
     const { email, password } = Data
     try {
       let response = await signInWithEmailAndPassword(auth, email, password)
       let token = await response.user.getIdToken()
-      dispatch(setToken(token)) 
+      dispatch(setToken(token))
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -26,12 +38,15 @@ export const login = createAsyncThunk(
 
 export const signup = createAsyncThunk(
   "signup",
-  async (Data: { email: string; password: string }, {dispatch,  rejectWithValue }) => {
+  async (
+    Data: { email: string; password: string },
+    { dispatch, rejectWithValue },
+  ) => {
     const { email, password } = Data
     try {
       let response = await createUserWithEmailAndPassword(auth, email, password)
       let token = await response.user.getIdToken()
-      dispatch(setToken(token)) 
+      dispatch(setToken(token))
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -66,8 +81,8 @@ export const resetPassword = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
   "getUser",
-  async (Data: {}, {getState, rejectWithValue }) => {
-    const { user } = getState() as { user: {token: any} };
+  async (Data: {}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: { token: any } }
     const params = { ROUTE: GET_USER, Body: {}, token: user.token }
     try {
       let response = await GET(params)
@@ -81,9 +96,9 @@ export const getUser = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   "updateUser",
   async (Data: {}, { getState, rejectWithValue }) => {
-    const { user } = getState() as { user: {token: any} };
+    const { user } = getState() as { user: { token: any } }
     let formData = jsonToFormData(Data)
-    const params = { ROUTE: GET_USER, Body: formData, token: user.token  }
+    const params = { ROUTE: GET_USER, Body: formData, token: user.token }
     try {
       let response = await PUT(params)
       return response
@@ -95,8 +110,8 @@ export const updateUser = createAsyncThunk(
 
 export const deleteUser = createAsyncThunk(
   "deleteUser",
-  async (Data: {}, {getState, rejectWithValue }) => {
-    const { user } = getState() as { user: {token: any} };
+  async (Data: {}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: { token: any } }
     const params = { ROUTE: GET_USER, Body: {}, token: user.token }
     try {
       let response = await DELETE(params)
@@ -110,11 +125,26 @@ export const deleteUser = createAsyncThunk(
 export const createUser = createAsyncThunk(
   "createUser",
   async (Data: {}, { getState, rejectWithValue }) => {
-    const { user } = getState() as { user: {token: any} };
+    const { user } = getState() as { user: { token: any } }
     let formData = jsonToFormData(Data)
-    const params = { ROUTE: CREATE_USER, Body: formData, token: user.token  }
+    const params = { ROUTE: CREATE_USER, Body: formData, token: user.token }
     try {
       let response = await POST(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const updatePulse = createAsyncThunk(
+  "updatePulse",
+  async (Data: {}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: { token: any } }
+    let formData = jsonToFormData(Data)
+    const params = { ROUTE: PULSE_CHECK, Body: formData, token: user.token }
+    try {
+      let response = await PUT(params)
       return response
     } catch (error) {
       return rejectWithValue(error)

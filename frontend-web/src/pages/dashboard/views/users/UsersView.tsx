@@ -18,12 +18,11 @@ const initialState = {
   displayName: "",
 }
 
-
 export default function UsersView() {
   const dispatch = useAppDispatch()
-  const admin = useAppSelector(state => state.admin)
+  const admin = useAppSelector((state) => state.admin)
   const [currentPage, setCurrentPage] = useState(1)
-  const [loading, setLoading] = useState(true)  
+  const [loading, setLoading] = useState(true)
   const [modalControl, setModalControl] = useState(initialState)
   const [modalVisibility, setModalVisibility] = useState("none")
 
@@ -46,24 +45,31 @@ export default function UsersView() {
   }
 
   const createUserSubmit = () => {
-    if (modalControl.displayName && modalControl.email && modalControl.phoneNumber) {
-      dispatch(createUser(modalControl)).unwrap().catch()
-      .then(() => {
-        fetchUsers()
-        closeModal()
-        toast("User Created", "success")
-      })
-    }
-    else {
-      toast("All fields are required", 'warning')
+    if (
+      modalControl.displayName &&
+      modalControl.email &&
+      modalControl.phoneNumber
+    ) {
+      dispatch(createUser(modalControl))
+        .unwrap()
+        .catch()
+        .then(() => {
+          fetchUsers()
+          closeModal()
+          toast("User Created", "success")
+        })
+    } else {
+      toast("All fields are required", "warning")
     }
   }
 
   const fetchUsers = () => {
     setLoading(true)
-    dispatch(getUsers({"page": currentPage})).unwrap().finally(() => {
-      setLoading(false)
-    })
+    dispatch(getUsers({ page: currentPage }))
+      .unwrap()
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   const _changePage = (page: number) => {
@@ -71,35 +77,35 @@ export default function UsersView() {
     setCurrentPage(page)
   }
   const _previousPage = () => {
-    _changePage(currentPage-1)
+    _changePage(currentPage - 1)
   }
   const _nextPage = () => {
-    _changePage(currentPage+1)
+    _changePage(currentPage + 1)
   }
 
   const deleteUser = (id: string) => {
-    toast("functionality not implimented", "error")
+    toast("functionality not implemented", "error")
   }
   const editUser = (id: string) => {
-    toast("functionality not implimented", "error")
+    toast("functionality not implemented", "error")
   }
   const viewUser = (id: string) => {
-    toast("functionality not implimented", "error")
+    toast("functionality not implemented", "error")
   }
   const createAccount = () => {
-    setModalVisibility('create-user')
+    setModalVisibility("create-user")
   }
 
   return (
     <div className={styles.AppView}>
       <NewUserModal
-        openModal= {modalVisibility == 'create-user'}
+        openModal={modalVisibility == "create-user"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
         _handleChange={_handleChange}
-        _submitModal= {createUserSubmit}
-        modalControl= {modalControl}
+        _submitModal={createUserSubmit}
+        modalControl={modalControl}
       />
       <main className="p-5 mx-auto w-[1101px]">
         <button onClick={createAccount} className="mt-10 flex justify-end mb-8">
@@ -117,25 +123,29 @@ export default function UsersView() {
                 <th className="w-[240px] text-start">
                   <p className="pl-5 py-3 font-medium">user</p>
                 </th>
-                <th className="w-[140px] text-start font-medium">joining Date</th>
+                <th className="w-[140px] text-start font-medium">
+                  joining Date
+                </th>
                 <th className="w-[100px] text-start font-medium">plan</th>
                 <th className="w-[100px] text-start font-medium">payment</th>
                 <th className="w-[170px] text-start font-medium">account</th>
-                <th className="w-[180px] text-start font-medium">pulse Status</th>
+                <th className="w-[180px] text-start font-medium">
+                  pulse Status
+                </th>
                 <th className="pr-5 font-medium">Action</th>
               </tr>
             </thead>
-            {
-              loading ? 
+            {loading ? (
               <div>
                 <Spinner />
-              </div> :
+              </div>
+            ) : (
               <tbody>
                 {admin.users.map((user, index) => {
                   return (
                     <User
                       key={index}
-                      userImg={''}
+                      userImg={""}
                       userName={user.name}
                       userId={user.id}
                       joiningDate={`${user.joining_date}`}
@@ -143,7 +153,7 @@ export default function UsersView() {
                       payment={user.payment_status}
                       account={user.account_status}
                       pulseStatusTitle={user.pulse_status}
-                      pulseStatusSubtile={' '}
+                      pulseStatusSubtile={" "}
                       viewUser={viewUser}
                       editUser={editUser}
                       deleteUser={deleteUser}
@@ -151,45 +161,45 @@ export default function UsersView() {
                   )
                 })}
               </tbody>
-            }
+            )}
           </table>
           <div className="flex items-center justify-between p-5">
-            <button 
+            <button
               onClick={_previousPage}
-              disabled = {currentPage == 1}
+              disabled={currentPage == 1}
               className={
-                currentPage > 1 ?
-                "px-4 py-2 text-[#04477B] border-[1px] border-[#04477B] rounded-lg flex items-center justify-center gap-2" :
-                "px-4 py-2 text-[#E6EDF9] border-[1px] border-[#E6EDF2] rounded-lg flex items-center justify-center gap-2"
+                currentPage > 1
+                  ? "px-4 py-2 text-[#04477B] border-[1px] border-[#04477B] rounded-lg flex items-center justify-center gap-2"
+                  : "px-4 py-2 text-[#E6EDF9] border-[1px] border-[#E6EDF2] rounded-lg flex items-center justify-center gap-2"
               }
             >
               <img src={leftArrow} alt="left arrow" />
               Previous
             </button>
             <div className="flex items-center justify-center">
-            {
-              Array.from({ length: admin.totalPages }).map((_, index) => (
-                <div 
+              {Array.from({ length: admin.totalPages }).map((_, index) => (
+                <div
                   key={index}
-                  onClick={() => {_changePage(index+1)}}
+                  onClick={() => {
+                    _changePage(index + 1)
+                  }}
                   className={
-                    currentPage == index+1 ?
-                    "w-12 h-12 text-[#04477B] bg-[#E6EDF2] flex items-center justify-center rounded-lg cursor-pointer" :
-                    "w-12 h-12 flex items-center justify-center cursor-pointer"
+                    currentPage == index + 1
+                      ? "w-12 h-12 text-[#04477B] bg-[#E6EDF2] flex items-center justify-center rounded-lg cursor-pointer"
+                      : "w-12 h-12 flex items-center justify-center cursor-pointer"
                   }
                 >
-                  {index+1}
+                  {index + 1}
                 </div>
-              ))
-            }
+              ))}
             </div>
             <button
               onClick={_nextPage}
-              disabled = {currentPage == admin.totalPages}
+              disabled={currentPage == admin.totalPages}
               className={
-                currentPage < admin.totalPages ?
-                "px-4 py-2 text-[#04477B] border-[1px] border-[#04477B] rounded-lg flex items-center justify-center gap-2" :
-                "px-4 py-2 text-[#E6EDF9] border-[1px] border-[#E6EDF2] rounded-lg flex items-center justify-center gap-2"
+                currentPage < admin.totalPages
+                  ? "px-4 py-2 text-[#04477B] border-[1px] border-[#04477B] rounded-lg flex items-center justify-center gap-2"
+                  : "px-4 py-2 text-[#E6EDF9] border-[1px] border-[#E6EDF2] rounded-lg flex items-center justify-center gap-2"
               }
             >
               Next
@@ -219,7 +229,11 @@ function User(_props: {
   return (
     <tr className="border-b-[1px] border-x-[1px] border-[#E5E5E5] h-16 rounded-2xl">
       <td className="w-[220px] pl-5 flex items-center gap-3 content-center h-16">
-        <img src={_props.userImg || userImg} alt="user image" className="w-9 h-9 rounded-full" />
+        <img
+          src={_props.userImg || userImg}
+          alt="user image"
+          className="w-9 h-9 rounded-full"
+        />
         <p className="text-[#00192B] text-lg font-semibold">
           {_props.userName}
         </p>
@@ -276,21 +290,27 @@ function User(_props: {
             alt="view icon"
             className="cy-view-asset-btn cursor-pointer"
             id="cy-view-asset-btn"
-            onClick={() => {_props.viewUser(_props.userId)}}
+            onClick={() => {
+              _props.viewUser(_props.userId)
+            }}
           />
           <img
             src={edit}
             alt="edit icon"
             className="cy-edit-asset-btn cursor-pointer"
             id="cy-edit-asset-btn"
-            onClick={() => {_props.editUser(_props.userId)}}
+            onClick={() => {
+              _props.editUser(_props.userId)
+            }}
           />
           <img
             src={deleteIcon}
             alt="delete icon"
             className="cy-del-asset-btn cursor-pointer"
             id="cy-del-asset-btn"
-            onClick={() => {_props.deleteUser(_props.userId)}}
+            onClick={() => {
+              _props.deleteUser(_props.userId)
+            }}
           />
         </div>
       </td>

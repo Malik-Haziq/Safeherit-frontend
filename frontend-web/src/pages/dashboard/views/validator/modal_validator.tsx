@@ -109,6 +109,8 @@ export function StepOneModal(_props: {
   modalTitle: string
   closeIconVisibility: boolean
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
+  arrayLength: any
+  showPreviousModal: any
   modalControl: {
     name: string
     primary_email: string
@@ -127,6 +129,8 @@ export function StepOneModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={_props.modalTitle}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -200,11 +204,11 @@ export function StepOneModal(_props: {
           props: {
             name: "phone_number",
             placeholder: "Phone number",
-            value:_props?.modalControl?.phone_number?.split(' ')[1],
-            code:_props?.modalControl?.phone_number?.split(' ')[0],
+            value: _props?.modalControl?.phone_number?.split(" ")[1],
+            code: _props?.modalControl?.phone_number?.split(" ")[0],
             inputStyles: "",
             inputContainerStyles: "",
-            selectFieldStyles:"",
+            selectFieldStyles: "",
             selectFieldMenuWidth: "",
             _handleChange: _props._handleChange,
           },
@@ -214,11 +218,11 @@ export function StepOneModal(_props: {
           props: {
             name: "backup_phone_number",
             placeholder: "Backup phone number",
-            value:_props?.modalControl?.backup_phone_number?.split(' ')[1],
-            code:_props?.modalControl?.backup_phone_number?.split(' ')[0],
+            value: _props?.modalControl?.backup_phone_number?.split(" ")[1],
+            code: _props?.modalControl?.backup_phone_number?.split(" ")[0],
             inputStyles: "",
             inputContainerStyles: "",
-            selectFieldStyles:"",
+            selectFieldStyles: "",
             selectFieldMenuWidth: "",
             _handleChange: _props._handleChange,
           },
@@ -263,9 +267,9 @@ export function StepOneModal(_props: {
 
 interface CustomChangeEvent {
   target: {
-    name: string;
-    value: string | ArrayBuffer | null | undefined;
-  };
+    name: string
+    value: string | ArrayBuffer | null | undefined
+  }
 }
 
 export function StepTwoModal(_props: {
@@ -284,25 +288,27 @@ export function StepTwoModal(_props: {
   _submitModal: Function
   imageUpload: string
   setImageUpload: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   const handleImageInputChange = (event: any) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = (e) => {
-        const dataURL = e.target?.result;
+        const dataURL = e.target?.result
         _props.setImageUpload(dataURL)
         const customEvent: CustomChangeEvent = {
           target: {
             name: "profile_image",
             value: file,
           },
-        };
-        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
-      };
-      reader.readAsDataURL(file);
+        }
+        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
   return (
     <Modal
       openModal={_props.openModal}
@@ -310,6 +316,8 @@ export function StepTwoModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={_props.modalTitle}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
@@ -402,19 +410,19 @@ export function StepTwoModal(_props: {
                     <span className="text-[#858992] font-medium">
                       Click to upload <br /> a profile picture →
                     </span>
-                    {
-                      _props.imageUpload ? 
+                    {_props.imageUpload ? (
                       <img
                         src={_props.imageUpload || profilePic}
                         alt="user image"
                         className="w-20 h-20"
-                      /> :
+                      />
+                    ) : (
                       <img
                         src={profilePic}
                         alt="user image"
                         className="w-20 h-20"
                       />
-                    }
+                    )}
                   </div>
                 </div>
               )
@@ -446,6 +454,8 @@ export function StepThreeModal(_props: {
     personalized_message: string
   }
   _submitModal: Function
+  arrayLength: any
+  showPreviousModal: any
 }) {
   return (
     <Modal
@@ -454,6 +464,8 @@ export function StepThreeModal(_props: {
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
       modalTitle={_props.modalTitle}
       closeIconVisibility={_props.closeIconVisibility}
+      arrayLength={_props.arrayLength}
+      showPreviousModal={_props.showPreviousModal}
       elements={[
         {
           type: "iconView",
