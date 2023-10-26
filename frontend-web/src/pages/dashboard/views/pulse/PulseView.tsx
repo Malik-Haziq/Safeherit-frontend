@@ -85,18 +85,18 @@ export default function PulseView() {
   }
 
   const _submitStepOneModal = () => {
-    modalHistoryPush("step-1")
-    setModalVisibility("step-2")
+    modalHistoryPush("Step-1")
+    setModalVisibility("Step-2")
   }
 
   const _submitStepTwoModal = () => {
-    modalHistoryPush("step-2")
-    setModalVisibility("step-3")
+    modalHistoryPush("Step-2")
+    setModalVisibility("Step-3")
   }
 
   const _submitStepThreeModal = () => {
-    modalHistoryPush("step-3")
-    setModalVisibility("step-4")
+    modalHistoryPush("Step-3")
+    setModalVisibility("Step-4")
   }
 
   const _submitStepFourModal = () => {
@@ -105,7 +105,7 @@ export default function PulseView() {
       .unwrap()
       .catch()
       .then((res) => {
-        modalHistoryPush("step-4")
+        modalHistoryPush("Step-4")
         setModalVisibility("success-modal")
         getUserDetails()
       })
@@ -124,15 +124,15 @@ export default function PulseView() {
   }, [])
 
   const showPreviousModal = () => {
-    modalHistoryPop()
     const lastEl = modalHistory[modalHistoryLength - 1]
+    modalHistoryPop()
     setModalVisibility(lastEl)
   }
 
   return (
     <div className={styles.AppView}>
       <StepOneModal
-        openModal={modalVisibility == "step-1"}
+        openModal={modalVisibility == "Step-1"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
@@ -141,7 +141,7 @@ export default function PulseView() {
         _handleChange={() => {}}
       />
       <StepTwoModal
-        openModal={modalVisibility == "step-2"}
+        openModal={modalVisibility == "Step-2"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
@@ -153,7 +153,7 @@ export default function PulseView() {
         showPreviousModal={showPreviousModal}
       />
       <StepThreeModal
-        openModal={modalVisibility == "step-3"}
+        openModal={modalVisibility == "Step-3"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
@@ -164,7 +164,7 @@ export default function PulseView() {
         showPreviousModal={showPreviousModal}
       />
       <StepFourModal
-        openModal={modalVisibility == "step-4"}
+        openModal={modalVisibility == "Step-4"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
@@ -196,7 +196,7 @@ export default function PulseView() {
       ) : (
         <SetUpPulseCheck
           openStepZeroModal={() => {
-            setModalVisibility("step-1")
+            setModalVisibility("Step-1")
           }}
         />
       )}

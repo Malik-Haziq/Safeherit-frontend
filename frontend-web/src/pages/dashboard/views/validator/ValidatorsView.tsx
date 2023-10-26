@@ -151,6 +151,7 @@ export default function ValidatorsView() {
       toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
+        toast("updating validator", "info")
         dispatch(updateValidator(modalControl))
           .unwrap()
           .then((res) => {
@@ -169,6 +170,7 @@ export default function ValidatorsView() {
             // TODO: show fallback page
           })
       } else if (modalAction == "create") {
+        toast("creating validator", "info")
         dispatch(createValidator(modalControl))
           .unwrap()
           .then((res) => {
@@ -270,8 +272,8 @@ export default function ValidatorsView() {
       })
   }
   const showPreviousModal = () => {
-    modalHistoryPop()
     const lastEl = modalHistory[modalHistoryLength - 1]
+    modalHistoryPop()
     setModalVisibility(lastEl)
   }
   return (
