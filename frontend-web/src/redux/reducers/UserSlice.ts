@@ -119,7 +119,6 @@ export const slice = createSlice({
       state.name = action.payload.user.displayName || ""
       state.photo = action.payload.user.photoURL || ""
       state.phone = action.payload.user.phoneNumber || ""
-      state.active = true
     })
     builder.addCase(logout.fulfilled, (state, action) => {
       return initialState
@@ -202,6 +201,7 @@ export const slice = createSlice({
       state.displayName = action.payload.data.data.displayName
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image
+      state.active = true
     })
   },
 })

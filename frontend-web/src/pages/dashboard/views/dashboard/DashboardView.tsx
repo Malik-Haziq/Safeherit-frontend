@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { getData } from "@redux/actions"
 import { useEffect, useState } from "react"
 import { getFileFromFirebase, ROUTE_CONSTANTS } from "@/common"
+import { Spinner } from "@/components"
 
 export default function DashboardView() {
   const dispatch = useAppDispatch()
@@ -129,9 +130,9 @@ function Cards(_props: {
         </a>
       </div>
 
-      <div className="h-[444px] overflow-y-auto">
+      <div className="h-[444px] overflow-y-auto relative">
         {_props.loading ? (
-          <div>Loading...</div>
+          <Spinner/>
         ) : _props.assetsInfo.length ? (
           _props.assetsInfo.map((info: any, index: string) => {
             return (

@@ -137,7 +137,7 @@ export default function BeneficiariesView() {
     ) {
       toast("please enter a valid Phone number", "error")
     } else {
-      modalHistoryPush("step-1")
+      modalHistoryPush("Step-1")
       setModalVisibility("Step-2")
     }
   }
@@ -149,7 +149,7 @@ export default function BeneficiariesView() {
     ) {
       toast("Atleast 1 social media accounts is compulsory", "error")
     } else {
-      modalHistoryPush("step-2")
+      modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
     }
   }
@@ -164,7 +164,7 @@ export default function BeneficiariesView() {
             dispatch(getAllBeneficiary({}))
               .unwrap()
               .then((res) => {
-                modalHistoryPush("step-3")
+                modalHistoryPush("Step-3")
                 setModalVisibility("Step-success")
                 updateBeneficiaryArrayCount(res)
               })
@@ -184,7 +184,7 @@ export default function BeneficiariesView() {
             dispatch(getAllBeneficiary({}))
               .unwrap()
               .then((res) => {
-                modalHistoryPush("step-3")
+                modalHistoryPush("Step-3")
                 setModalVisibility("Step-success")
                 updateBeneficiaryArrayCount(res)
               })
@@ -310,8 +310,8 @@ export default function BeneficiariesView() {
   }
   const showPreviousModal = () => {
     const lastEl = modalHistory[modalHistoryLength - 1]
-    setModalVisibility(lastEl)
     modalHistoryPop()
+    setModalVisibility(lastEl)
   }
   return (
     <>

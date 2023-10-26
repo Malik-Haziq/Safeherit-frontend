@@ -113,8 +113,8 @@ export default function AssetsView() {
   }, [])
 
   const showPreviousModal = () => {
-    modalHistoryPop()
     const lastEl = modalHistory[modalHistoryLength - 1]
+    modalHistoryPop()
     setModalVisibility(lastEl)
   }
   const assetCatagories = [
@@ -231,7 +231,7 @@ export default function AssetsView() {
       toast(`Please select an Asset category`, "error")
     } else {
       if (validateRequiredFields(modalControl, 0)) {
-        modalHistoryPush("step-1")
+        modalHistoryPush("Step-1")
         setModalVisibility("Step-2")
       }
     }
@@ -310,7 +310,7 @@ export default function AssetsView() {
   const newAsset = () => {
     setModalAction("create")
     setModalControl(initialState)
-    modalHistoryPush("step-0")
+    modalHistoryPush("Step-0")
     setModalVisibility("Step-1")
   }
   const addAsset = () => {
