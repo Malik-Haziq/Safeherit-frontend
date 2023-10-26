@@ -22,8 +22,14 @@ export const CONSTANT = {
   TESTAMENT_TITLE: "Manage your information",
   VALIDATION: "Validation",
   VALIDATION_TITLE: "View the messages left for you",
+  ADMIN: "Users",
+  ADMIN_TITLE: "Admin Dashboard",
+  SUPER_ADMIN: "Users",
+  SUPER_ADMIN_TITLE: "Admin Dashboard",
   HELP: "Help",
   HELP_TITLE: "Get the help",
+  SETTINGS: "Settings",
+  SETTINGS_TITLE: "Account Settings",
   LOGOUT: "Logout",
 }
 

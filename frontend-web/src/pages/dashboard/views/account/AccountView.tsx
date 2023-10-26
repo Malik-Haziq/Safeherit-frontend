@@ -11,9 +11,10 @@ import styles from "../../Dashboard.module.css"
 import MembershipPlanView from "./MembershipPlanView"
 import { EditUserModal } from "./modal_account"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
-import { getUser, updateUser } from "@redux/actions"
+import { getUser, updateUser, deleteUser, logout } from "@redux/actions"
 import { getFileFromFirebase } from "@/common"
-import { Spinner, toast } from "@/components"
+import { ConfirmationModal, Spinner, toast } from "@/components"
+import { useNavigate } from "react-router-dom"
 
 const initialState = {
   displayName: "",
@@ -24,6 +25,7 @@ const initialState = {
 export default function AccountView() {
   const user = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const [showMemberShipPlan, setShowMemberShipPlan] = useState(false)
   const showPlanView = () => {
@@ -74,6 +76,35 @@ export default function AccountView() {
     setModalControl({ ...modalControl, [name]: value })
   }
 
+  const _handleLogout = () => {
+    dispatch(logout({}))
+      .unwrap()
+      .catch((err) => {
+        toast(err?.code, "error")
+      })
+      .finally(() => {
+        navigate("/login")
+      })
+  }
+
+  const _submitUserDeletionRequest = () => {
+    toast("Deleting user", "info")
+    dispatch(deleteUser({}))
+      .unwrap()
+      .catch()
+      .then((response) => {
+        toast(response?.data.message, "info")
+        _handleLogout()
+      })
+      .finally(() => {
+        closeModal()
+      })
+  }
+
+  const _handleUserDeletion = () => {
+    setModalVisibility("delete-user")
+  }
+
   return (
     <>
       {showMemberShipPlan ? (
@@ -91,6 +122,14 @@ export default function AccountView() {
             imageUpload={imageUpload}
             setImageUpload={setImageUpload}
             email={user.email}
+          />
+          <ConfirmationModal
+            closeModalOnOverlayClick={false}
+            openModal={modalVisibility == "delete-user"}
+            closeModal={closeModal}
+            _submitModal={_submitUserDeletionRequest}
+            heading={""}
+            body={"Are you sure you want to delete this user?"}
           />
           {user.loading ? (
             <div className={styles.AppView}>
@@ -126,7 +165,7 @@ export default function AccountView() {
                     </p>
                     <button
                       className="primary-btn bg-[#D8D8D8] rounded-2xl text-[#686868] text-sm"
-                      onClick={() => {}}
+                      onClick={_handleUserDeletion}
                     >
                       Delete Account
                     </button>

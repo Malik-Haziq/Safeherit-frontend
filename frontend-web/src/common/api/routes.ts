@@ -11,4 +11,6 @@ export const ASSETS = "/api-asset"
 
 export const GET_DATA = "/api-dashboard/data"
 export const GET_USER = "/api-auth"
+export const GET_USERS = "/api-admin/users"
+export const CREATE_USER = "/api-admin/create-user"
 export const PULSE_CHECK = "/api-pulseCheck"

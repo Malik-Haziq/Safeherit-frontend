@@ -7,7 +7,16 @@ import {
 import { auth } from "../../firebase"
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { setToken } from "../reducers/UserSlice"
-import { GET, PUT, jsonToFormData, GET_USER, PULSE_CHECK } from "@/common"
+import {
+  GET,
+  PUT,
+  jsonToFormData,
+  GET_USER,
+  DELETE,
+  POST,
+  CREATE_USER,
+  PULSE_CHECK,
+} from "@/common"
 
 export const login = createAsyncThunk(
   "login",
@@ -92,6 +101,35 @@ export const updateUser = createAsyncThunk(
     const params = { ROUTE: GET_USER, Body: formData, token: user.token }
     try {
       let response = await PUT(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const deleteUser = createAsyncThunk(
+  "deleteUser",
+  async (Data: {}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: { token: any } }
+    const params = { ROUTE: GET_USER, Body: {}, token: user.token }
+    try {
+      let response = await DELETE(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const createUser = createAsyncThunk(
+  "createUser",
+  async (Data: {}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: { token: any } }
+    let formData = jsonToFormData(Data)
+    const params = { ROUTE: CREATE_USER, Body: formData, token: user.token }
+    try {
+      let response = await POST(params)
       return response
     } catch (error) {
       return rejectWithValue(error)

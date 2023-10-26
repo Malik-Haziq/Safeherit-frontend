@@ -37,3 +37,14 @@ export const ProtectedOwnerAndBeneficiaryRoutes = () => {
     return <Navigate to={redirectTo} replace />
   }
 }
+
+export const ProtectedAdminRoutes = () => {
+  const role = useAppSelector(state => state.user.role)
+  const redirectTo: string = ROUTE_CONSTANTS.DASHBOARD
+  if (role == "admin" || role == "super-admin") {
+    return <Outlet />
+  }
+  else {
+    return <Navigate to={redirectTo} replace />
+  }
+}

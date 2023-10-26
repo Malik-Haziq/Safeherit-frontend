@@ -76,18 +76,18 @@ export function Login() {
 
   const _handleUserRolesSubmit = (selectedRole: string) => {
     if (
-      selectedRole == "owner" ||
+      selectedRole == "owner" || selectedRole == "super-admin" || selectedRole == "admin" ||
       (selectedRole == "beneficiary" && selectedBeneficiary) ||
       (selectedRole == "validator" && selectedValidator)
     ) {
       if (selectedRole == "beneficiary") {
         dispatch(updateRoleUser(user.userMap[selectedBeneficiary?.value || 0]))
-        dispatch(resetMapper())
-        dispatch(resetBeneficiaryOf())
       } else if (selectedRole == "validator") {
         dispatch(updateRoleUser(user.userMap[selectedValidator?.value || 0]))
+      } else {
         dispatch(resetMapper())
         dispatch(resetValidatorOf())
+        dispatch(resetBeneficiaryOf())
       }
       setModalVisibility("none")
       dispatch(updateActive(true))
@@ -119,6 +119,8 @@ export function Login() {
         closeIconVisibility={true}
         isBeneficiary={user.isBeneficiary}
         isOwner={user.isOwner}
+        isSuperAdmin={user.isSuperAdmin}
+        isAdmin={user.isAdmin}
         isValidator={user.isValidator}
         userName={user.displayName}
         _beneficiaryOf={user._beneficiaryOf}

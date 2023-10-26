@@ -21,6 +21,8 @@ interface UserState {
   _validatorOf: SelectOption[]
   isBeneficiary: boolean
   isOwner: boolean
+  isSuperAdmin: boolean
+  isAdmin: boolean
   isValidator: boolean
   role: string
   selectedRoleUser: {[key: string]: any}
@@ -47,6 +49,8 @@ const initialState: UserState = {
   _validatorOf: [],
   isBeneficiary: false,
   isOwner: true,
+  isSuperAdmin: true,
+  isAdmin: true,
   isValidator: false,
   role: "none",
   selectedRoleUser: {},
@@ -151,6 +155,8 @@ export const slice = createSlice({
       state.profile_image = action.payload.data.data.profile_image
       state.isBeneficiary = action.payload.data.data.isBeneficiary
       state.isOwner = action.payload.data.data.isOwner
+      state.isSuperAdmin = action.payload.data.data.isSuperAdmin
+      state.isAdmin = action.payload.data.data.isAdmin
       state.isValidator = action.payload.data.data.isValidator
       state._beneficiaryOf = action.payload.data.data._beneficiaryOf
 

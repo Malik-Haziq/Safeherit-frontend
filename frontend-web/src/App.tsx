@@ -1,4 +1,4 @@
-import { ProtectedRegisterationRoute, ProtectedRoute, ProtectedOwnerRoutes, ProtectedOwnerAndBeneficiaryRoutes } from "./common"
+import { ProtectedRegisterationRoute, ProtectedRoute, ProtectedOwnerRoutes, ProtectedOwnerAndBeneficiaryRoutes, ProtectedAdminRoutes } from "./common"
 import {
   BrowserRouter,
   Route,
@@ -31,6 +31,7 @@ const AccountView = lazy(
   () => import("./pages/dashboard/views/account/AccountView"),
 )
 const HelpView = lazy(() => import("./pages/dashboard/views/help/HelpView"))
+const SettingView = lazy(() => import("./pages/dashboard/views/setting/SettingView"))
 
 function App() {
   return (
@@ -97,6 +98,12 @@ function AppRoutes() {
               <Route
                 path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
                 element={<AssetsView />}
+              />
+            </Route>
+            <Route element={<ProtectedAdminRoutes />}>
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_SETTINGS}
+                element={<SettingView />}
               />
             </Route>
           </Route>
