@@ -14,11 +14,15 @@ import styles from './pages/dashboard/Dashboard.module.css'
 // TODO create a custom loading screen for suspense
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Suspense fallback={<div className={styles.AppView}>
-        <div className="relative h-[80vh]">
-      <Spinner/>
+    <Suspense 
+      fallback = {
+        <div className={styles.AppView}>
+          <div className="relative h-[80vh]">
+            <Spinner/>
+          </div>
         </div>
-      </div>}> 
+      }
+    > 
       <Provider store={store}>
         <PersistGate loading={<div>loading</div>} persistor={persistor}>
           <App />
