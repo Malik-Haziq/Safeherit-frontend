@@ -26,6 +26,7 @@ const initialNewUserState = {
 const userInitialState = {
   "User name": "",
   "User id": "",
+  "User email": "",
   "Joining date": "",
   "Plan": "",
   "Payment status": "",
@@ -112,8 +113,17 @@ export default function UsersView() {
   const editUser = (id: string) => {
     toast("functionality not implemented", "error")
   }
-  const viewUser = (userImg: string, userName: string, userId: string, joiningDate: string, plan: string, payment: string, account: string, pulseStatusTitle: string) => {
-    setViewControl({"User name": userName, "User id": userId, "Joining date": joiningDate, "Plan": plan, "Payment status": payment, "Account type": account, "Pulse status": pulseStatusTitle})
+  const viewUser = (userImg: string, userName: string, userId: string, joiningDate: string, plan: string, payment: string, account: string, pulseStatusTitle: string, userEmail: string) => {
+    setViewControl({
+      "User name": userName,
+      "User id": userId,
+      "User email": userEmail,
+      "Joining date": joiningDate,
+      "Plan": plan,
+      "Payment status": payment,
+      "Account type": account,
+      "Pulse status": pulseStatusTitle
+    })
     setModalVisibility('view-user')
   }
   const createAccount = () => {
@@ -186,6 +196,7 @@ export default function UsersView() {
                       userImg={""}
                       userName={user.name}
                       userId={user.id}
+                      userEmail={user.email}
                       joiningDate={`${user.joining_date}`}
                       plan={user.plan}
                       payment={user.payment_status}
@@ -254,6 +265,7 @@ function User(_props: {
   userImg: any
   userName: string
   userId: string
+  userEmail: string
   joiningDate: string
   plan: string
   payment: string
@@ -329,7 +341,7 @@ function User(_props: {
             className="cy-view-asset-btn cursor-pointer"
             id="cy-view-asset-btn"
             onClick={() => {
-              _props.viewUser(_props.userImg, _props.userName, _props.userId, _props.joiningDate, _props.plan, _props.payment, _props.account, _props.pulseStatusTitle)
+              _props.viewUser(_props.userImg, _props.userName, _props.userId, _props.joiningDate, _props.plan, _props.payment, _props.account, _props.pulseStatusTitle, _props.userEmail)
             }}
           />
           <img

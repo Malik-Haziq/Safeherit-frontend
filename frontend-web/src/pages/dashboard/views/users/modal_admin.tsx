@@ -165,6 +165,7 @@ export function UserDetail(_props: {
   modalControl: {
     "User name": string,
     "User id": string,
+    "User email": string,
     "Joining date": string,
     "Plan": string,
     "Payment status": string,
@@ -197,7 +198,7 @@ export function UserDetail(_props: {
                           className="flex gap-6 items-center pb-6"
                         >
                           <h2 className="text-[#292929] font-sm font-medium basis-2/5 text-right">
-                            {heading}
+                            {heading.toLocaleUpperCase()}
                           </h2>
                           <p className="text-[#585858] basis-3/5">
                             {values[index]}
