@@ -5,7 +5,7 @@ import edit from "@images/edit.svg"
 import leftArrow from "@images/left-arrow.svg"
 import rightArrow from "@images/right-arrow.svg"
 import deleteIcon from "@images/delete.svg"
-import { NewUserModal } from "../users/modal_admin"
+import { NewUserModal, UserDetail } from "../users/modal_admin"
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getUsers } from "@/redux/actions/AdminAction"
@@ -18,12 +18,23 @@ const initialState = {
   displayName: "",
 }
 
+const userInitialState = {
+  "User name": "",
+  "User id": "",
+  "Joining date": "",
+  "Plan": "",
+  "Payment status": "",
+  "Account type": "",
+  "Pulse status": ""
+}
+
 export default function UsersView() {
   const dispatch = useAppDispatch()
   const admin = useAppSelector((state) => state.admin)
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(true)
   const [modalControl, setModalControl] = useState(initialState)
+  const [userViewControl, setViewControl] = useState(userInitialState)
   const [modalVisibility, setModalVisibility] = useState("none")
 
   useEffect(() => {
@@ -89,8 +100,9 @@ export default function UsersView() {
   const editUser = (id: string) => {
     toast("functionality not implemented", "error")
   }
-  const viewUser = (id: string) => {
-    toast("functionality not implemented", "error")
+  const viewUser = (userImg: string, userName: string, userId: string, joiningDate: string, plan: string, payment: string, account: string, pulseStatusTitle: string) => {
+    setViewControl({"User name": userName, "User id": userId, "Joining date": joiningDate, "Plan": plan, "Payment status": payment, "Account type": account, "Pulse status": pulseStatusTitle})
+    setModalVisibility('view-user')
   }
   const createAccount = () => {
     setModalVisibility("create-user")
@@ -106,6 +118,13 @@ export default function UsersView() {
         _handleChange={_handleChange}
         _submitModal={createUserSubmit}
         modalControl={modalControl}
+      />
+      <UserDetail
+        openModal={modalVisibility == "view-user"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        modalControl={userViewControl}
       />
       <main className="p-5 mx-auto w-[1101px]">
         <button onClick={createAccount} className="mt-10 flex justify-end mb-8">
@@ -291,7 +310,7 @@ function User(_props: {
             className="cy-view-asset-btn cursor-pointer"
             id="cy-view-asset-btn"
             onClick={() => {
-              _props.viewUser(_props.userId)
+              _props.viewUser(_props.userImg, _props.userName, _props.userId, _props.joiningDate, _props.plan, _props.payment, _props.account, _props.pulseStatusTitle)
             }}
           />
           <img
