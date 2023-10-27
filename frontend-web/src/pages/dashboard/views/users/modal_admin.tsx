@@ -215,3 +215,59 @@ export function UserDetail(_props: {
     />
   )
 }
+
+export function NewUserDetail(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  closeIconVisibility: boolean
+  modalControl: {
+    "Email": string,
+    "Phone Number": string,
+    "Display Name": string,
+    "Password": string,
+  }
+}) {
+  const headings = Object.keys(_props.modalControl)
+  const values = Object.values(_props.modalControl)
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={"Your New User Credentials"}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "customView",
+          props: {
+            customViewContainer: "",
+            CustomView: () => {
+              return (
+                <section>
+                  <div className="pt-6">
+                    {headings.map((heading, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className="flex gap-6 items-center pb-6"
+                        >
+                          <h2 className="text-[#292929] font-sm font-medium basis-2/5 text-right">
+                            {heading}
+                          </h2>
+                          <p className="text-[#585858] basis-3/5">
+                            {values[index]}
+                          </p>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </section>
+              )
+            },
+          },
+        },
+      ]}
+    />
+  )
+}

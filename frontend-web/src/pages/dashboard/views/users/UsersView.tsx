@@ -5,7 +5,7 @@ import edit from "@images/edit.svg"
 import leftArrow from "@images/left-arrow.svg"
 import rightArrow from "@images/right-arrow.svg"
 import deleteIcon from "@images/delete.svg"
-import { NewUserModal, UserDetail } from "../users/modal_admin"
+import { NewUserDetail, NewUserModal, UserDetail } from "../users/modal_admin"
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getUsers } from "@/redux/actions/AdminAction"
@@ -17,7 +17,12 @@ const initialState = {
   phoneNumber: "",
   displayName: "",
 }
-
+const initialNewUserState = {
+  "Email": "",
+  "Phone Number": "",
+  "Display Name": "",
+  "Password": "",
+}
 const userInitialState = {
   "User name": "",
   "User id": "",
@@ -35,6 +40,7 @@ export default function UsersView() {
   const [loading, setLoading] = useState(true)
   const [modalControl, setModalControl] = useState(initialState)
   const [userViewControl, setViewControl] = useState(userInitialState)
+  const [newUserCredentials, setNewUserCredentials] = useState(initialNewUserState)
   const [modalVisibility, setModalVisibility] = useState("none")
 
   useEffect(() => {
@@ -64,9 +70,15 @@ export default function UsersView() {
       dispatch(createUser(modalControl))
         .unwrap()
         .catch()
-        .then(() => {
+        .then((res) => {
           fetchUsers()
-          closeModal()
+          setNewUserCredentials({
+            "Email": modalControl.email,
+            "Phone Number": modalControl.phoneNumber,
+            "Display Name": modalControl.displayName,
+            "Password": res.data.data.password
+          })
+          setModalVisibility('view-new-user')
           toast("User Created", "success")
         })
     } else {
@@ -125,6 +137,13 @@ export default function UsersView() {
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
         modalControl={userViewControl}
+      />
+      <NewUserDetail
+        openModal={modalVisibility == "view-new-user"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        modalControl={newUserCredentials}
       />
       <main className="p-5 mx-auto w-[1101px]">
         <button onClick={createAccount} className="mt-10 flex justify-end mb-8">
