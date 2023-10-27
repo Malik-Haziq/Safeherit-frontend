@@ -545,7 +545,7 @@ function Validator(_props: {
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
           <a
-            href={_props.facebook_link}
+            href={_props.facebook_link || 'https://www.facebook.com/login.php'}
             target="_blank"
             rel="noopener noreferrer"
           >

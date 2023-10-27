@@ -12,4 +12,5 @@ export interface User {
   payment_status: string
   account_status: string
   pulse_status: string
+  email: string
 }

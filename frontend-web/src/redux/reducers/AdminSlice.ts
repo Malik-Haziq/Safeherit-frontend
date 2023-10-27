@@ -32,6 +32,7 @@ export const slice = createSlice({
           let date = new Date(item?.createdAt?._seconds * 1000)
           let dateString = date.toDateString()
           temporary_array.push({
+            email: item.email || "example@example.com",
             name: item.displayName || "Username not Set",
             id: item.uid,
             image: item.image,
