@@ -8,9 +8,10 @@ import {
 } from "react-router-dom"
 import { Login, SignUp, RegisterKey } from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
-import { NavBar } from "./components"
+import { NavBar, Spinner } from "./components"
 import { lazy } from "react"
 import { CustomToast } from "./components/customToast"
+import { useAppSelector } from "./redux/hooks"
 
 const Pricing = lazy(() => import("./pages/pricing/Pricing"))
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"))
@@ -34,10 +35,12 @@ const HelpView = lazy(() => import("./pages/dashboard/views/help/HelpView"))
 const SettingView = lazy(() => import("./pages/dashboard/views/setting/SettingView"))
 
 function App() {
+  const loader = useAppSelector(state => state.loader)
   return (
     // TODO: add suspense with loading fallback to handle loading time delays.
     <>
       <CustomToast/>
+      { loader.loaderVisibility && <Spinner withOverlay={true}/> }
       <AppRoutes />
     </>
   )

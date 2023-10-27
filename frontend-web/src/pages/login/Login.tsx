@@ -6,6 +6,7 @@ import { ChangeEvent, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { getUser, login, resetPassword } from "@redux/actions"
+import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ForgotPasswordModal, toast } from "@/components"
 import {
@@ -28,6 +29,8 @@ export function Login() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const user = useAppSelector((state) => state.user)
+  const startLoader = () => dispatch(setLoaderVisibility(true))
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
 
   const [formControl, setFormControl] = useState({
     email: "",
@@ -56,6 +59,7 @@ export function Login() {
   const _handleSubmit = () => {
     toast("logging in", "info")
     if (formControl.email && formControl.password) {
+      startLoader()
       dispatch(
         login({ email: formControl.email, password: formControl.password }),
       )
@@ -77,6 +81,9 @@ export function Login() {
         })
         .catch((err) => {
           toast(err?.code, "error")
+        })
+        .finally(() => {
+          stopLoader()
         })
     }
   }
@@ -105,6 +112,7 @@ export function Login() {
 
   const _handleForgotPassword = () => {
     if (resetEmail) {
+      startLoader()
       dispatch(resetPassword({ email: resetEmail }))
         .unwrap()
         .catch()
@@ -113,6 +121,7 @@ export function Login() {
         })
         .finally(() => {
           closeModal()
+          stopLoader()
         })
     }
   }
