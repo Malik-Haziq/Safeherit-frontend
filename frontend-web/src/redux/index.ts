@@ -7,6 +7,7 @@ import beneficiary from "./reducers/BeneficiarySlice"
 import asset from "./reducers/AssetSlice"
 import dashboard from "./reducers/DashboardSlice"
 import admin from "./reducers/AdminSlice"
+import loader from "./reducers/LoaderSlice"
 import sessionStorage from "redux-persist/es/storage/session"
 
 const rootPersistConfig = {
@@ -19,6 +20,7 @@ const sessionPersistConfig = {
 }
 const rootReducer = combineReducers({ 
   user: persistReducer(sessionPersistConfig, user),
+  loader: persistReducer(sessionPersistConfig, loader),
   validator: persistReducer(rootPersistConfig, validator),
   beneficiary: persistReducer(rootPersistConfig, beneficiary),
   asset: persistReducer(rootPersistConfig, asset),
