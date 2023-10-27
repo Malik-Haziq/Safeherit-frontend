@@ -65,7 +65,14 @@ export function Login() {
             .unwrap()
             .catch()
             .then((res) => {
-              setModalVisibility("user-roles")
+              if (res.data.data.isOwner && !res.data.data.isBeneficiary && !res.data.data.isValidator && !res.data.data.isAdmin && !res.data.data.isSuperAdmin) {
+                setModalVisibility("none")
+                dispatch(updateActive(true))
+                dispatch(updateRole("owner"))
+                navigate("/dashboard")
+              } else {
+                setModalVisibility("user-roles")
+              }
             })
         })
         .catch((err) => {
