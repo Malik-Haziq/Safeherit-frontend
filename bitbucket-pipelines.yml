@@ -9,6 +9,7 @@ pipelines:
             - node -v
             - npm install
             - npm run build
+            - npm run test:run
       - step:
           name: 'Deployment to Firebase Testing'
           deployment: testing
