@@ -118,6 +118,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
         required={element?.props?.required}
         inputStyles={element?.props?.inputStyles}
         textAreaContainerStyles={element?.props?.inputContainerStyles}
+        isDisabled={element?.props?.isDisabled}
       />
     )
   }
@@ -319,6 +320,7 @@ function TextAreaField(_props: {
   required: boolean
   inputStyles: string
   textAreaContainerStyles: string
+  isDisabled?: boolean
 }) {
   return (
     <div className={_props.textAreaContainerStyles}>
@@ -329,6 +331,7 @@ function TextAreaField(_props: {
         onChange={_props._handleChange}
         required={_props.required || false}
         className={_props.inputStyles}
+        disabled={_props.isDisabled}
       />
     </div>
   )
