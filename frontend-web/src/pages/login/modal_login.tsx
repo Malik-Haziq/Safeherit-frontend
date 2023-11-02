@@ -5,7 +5,7 @@ import { InputField, Modal, SelectField } from "@/components"
 import { SelectOption } from "@/types"
 import copyIcon from "@images/copy-icon.svg"
 import downloadIcon from "@images/download.svg"
-
+import downArrow from '@images/Arrow-Down-Circle.svg'
 export function PrivateKeyModal(_props: {
   openModal: boolean
   closeModal: any
@@ -366,18 +366,21 @@ function LoggedUser(_props: {
   return (
     <div className="flex items-center justify-between items-end py-1 mx-14 my-4 border-b-[1px] ">
       <div className="flex flex-col gap-2">
-        <div className="flex flex-row justify-between">
-          <p className="font-medium text-sm">
+        <div className="flex flex-col items-start w-[428px]">
+          <p className="font-medium text-[#bbb] text-sm mb-2">
             {_props.userRole?.toUpperCase()}
           </p>
-          <button
-            onClick={() => {
-              _props._handleUserRolesSubmit(_props.userRole)
-            }}
-            className="text-sm font-medium text-[#0C8AC1] cursor-pointer hover:opacity-75"
-          >
-            Login
-          </button>
+          <div className="flex justify-between w-full">
+            <small className="text-lg font-medium">John Hammer</small>
+            <button
+              onClick={() => {
+                _props._handleUserRolesSubmit(_props.userRole)
+              }}
+              className="text-sm font-medium text-[#0C8AC1] cursor-pointer hover:opacity-75"
+              > 
+              Login
+            </button>
+          </div>
         </div>
         <div className="flex flex-col gap-2">
           {_props.userRole.toLowerCase() == "beneficiary" ? (
@@ -387,9 +390,11 @@ function LoggedUser(_props: {
               selectProps={{ placeholder: "Select Owner", isSearchable: false }}
               setSelectedValue={_props.setSelectedBeneficiary}
               selectFieldStyles={
-                "rounded-3xl font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] w-[430px]"
+                "rounded-3xl font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] my-3 relative"
               }
-              hasRightIcon={false}
+              hasRightIcon={true}
+              rightIcon={downArrow}
+              rightIconStyles='absolute right-4 top-4 cursor-pointer'
             />
           ) : _props.userRole.toLowerCase() == "validator" ? (
             <SelectField
@@ -398,25 +403,14 @@ function LoggedUser(_props: {
               selectProps={{ placeholder: "Select Owner", isSearchable: false }}
               setSelectedValue={_props.setSelectedValidator}
               selectFieldStyles={
-                "rounded-3xl font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] w-[430px]"
+                "rounded-2xl font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] my-3 relative"
               }
-              hasRightIcon={false}
+              hasRightIcon={true}
+              rightIcon={downArrow}
+              rightIconStyles='absolute right-4 top-4 cursor-pointer'
             />
           ) : (
-            <div className="flex justify-center items-center w-[200] font-semibold">
-              <InputField
-                name={""}
-                type={""}
-                placeholder={" "}
-                value={_props.userName|| " "}
-                _handleChange={() => {}}
-                required={false}
-                hasRightIcon={false}
-                inputContainerStyles={"rounded-3xl w-[430px]"}
-                inputStyles={"w-[430px] bg-white"}
-                disabled={true}
-              />
-            </div>
+            <div></div>
           )}
         </div>
       </div>
