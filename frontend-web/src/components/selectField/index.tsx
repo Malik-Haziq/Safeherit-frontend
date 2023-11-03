@@ -50,7 +50,7 @@ const selectFieldStyles = (
       fontFamily: "Montserrat",
       fontWeight: 500,
       fontSize: "14px",
-      width: selectFieldWidth,
+      width: selectFieldWidth ? selectFieldWidth : '100%',
     }),
     menuList: (baseStyles: any) => ({
       ...baseStyles,
@@ -60,14 +60,14 @@ const selectFieldStyles = (
       fontFamily: "Montserrat",
       fontWeight: 400,
       fontSize: "14px",
-      width: selectFieldMenuWidth,
+      width: selectFieldMenuWidth ? selectFieldMenuWidth : '100%',
     }),
     menu: (baseStyles: any) => ({
       ...baseStyles,
       borderRadius: 5,
       borderColor: "white",
       backgroundColor: "white",
-      width: selectFieldMenuWidth,
+      width: selectFieldMenuWidth ? selectFieldMenuWidth : '100%',
     }),
   }
 }
