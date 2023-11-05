@@ -30,6 +30,7 @@ export const UserDetailsModal = (_props: {
     personalized_message?: string
     personalized_video?: string
     profile_image?: string
+    public_key?: string
   }
 }) => {
   return (
@@ -262,7 +263,7 @@ export const UserDetailsModal = (_props: {
                           />
                         </div>
                         <div className="w-[446px] h-[112px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-2 px-4 overflow-auto border-[rgba(6, 90, 147, 0.30)]  border-2  ">
-                          Public key
+                          {_props.modalControl.public_key}
                         </div>
                       </div>
                     </aside>

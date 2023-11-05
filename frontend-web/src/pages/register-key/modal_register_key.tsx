@@ -11,10 +11,11 @@ interface Data {
 
 export function PrivateKeyModal(_props: {
   openModal: boolean
-  closeModal: any
+  closeModal: React.MouseEventHandler<HTMLButtonElement>
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
+  _handleRegisterPK: React.MouseEventHandler<HTMLButtonElement>
 }) {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -112,7 +113,7 @@ export function PrivateKeyModal(_props: {
                   <button onClick={_props.closeModal} className="primary-btn rounded-xl px-9 border-[1px] border-[#04477B] text-[#04477B] bg-white shadow-none">
                     Cancel
                   </button>
-                  <button className="primary-btn rounded-xl px-9 bg-[#04477B] text-white shadow-none">
+                  <button onClick={_props._handleRegisterPK} className="primary-btn rounded-xl px-9 bg-[#04477B] text-white shadow-none">
                     Load
                   </button>
                 </div>

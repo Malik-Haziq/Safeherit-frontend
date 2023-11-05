@@ -7,6 +7,8 @@ import { GeneratePrivateKey, PrivateKeyModal } from "./modal_register_key"
 import Encryption from "@/common/utils/encryption"
 import { toast } from "@/components"
 import { copyToClipboard, downloadJson } from "@/common/utils"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { updatePK } from "@/redux/actions"
 
 const initialState = {
   publicKey: "",
@@ -15,10 +17,13 @@ const initialState = {
 
 export default function RegisterKey() {
   const location = useLocation();
+  const dispatch = useAppDispatch()
   const navigate = useNavigate();
   const { state } = location;
 
-  const encryptionService = new Encryption;
+  const encryptionService = new Encryption();
+  
+  const user = useAppSelector((state) => state.user)
   
   const [modalVisibility, setModalVisibility] = useState('none')
   const [modalControl, setModalControl] = useState(initialState)
@@ -38,7 +43,12 @@ export default function RegisterKey() {
   }, [])
 
   const _handleGenerate = useCallback(() => {
-    setModalVisibility("Generate-PK")
+    if (user.role == "beneficiary") {
+      setModalVisibility("Load-PK")
+    }
+    else {
+      setModalVisibility("Generate-PK")
+    }
   }, [])
 
   const _handleGeneratePKPair = useCallback(() => {
@@ -49,7 +59,21 @@ export default function RegisterKey() {
     }, 1000);
   }, [])
 
-  const _handleRegisterPK = useCallback(() => {}, [])
+  const _handleRegisterPK = () => {
+    if (encryptionService.validateKeyPair(modalControl.publicKey, modalControl.privateKey)) {
+      dispatch(updatePK({publicKey: modalControl.publicKey})).unwrap()
+      .then(res => {
+        toast("Keys Registered", "success")
+        navigate('/dashboard')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    }
+    else {
+      toast("Unable to verify keys", "error")
+    }
+  }
 
   const downloadPrivateKey = useCallback(() => {
     if (modalControl.privateKey) {
@@ -99,6 +123,7 @@ export default function RegisterKey() {
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
         _handleChange={_handleChange}
+        _handleRegisterPK={_handleRegisterPK}
       />
       <GeneratePrivateKey
         openModal={modalVisibility == "Generate-PK"}

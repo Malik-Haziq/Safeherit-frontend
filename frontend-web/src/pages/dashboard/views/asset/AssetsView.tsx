@@ -113,7 +113,7 @@ export default function AssetsView() {
   }, [])
 
   const showPreviousModal = () => {
-    const lastEl = modalHistory[modalHistoryLength - 1]
+    const lastEl = modalHistory[modalHistoryLength - 1] || 'none'
     modalHistoryPop()
     setModalVisibility(lastEl)
   }
@@ -246,7 +246,7 @@ export default function AssetsView() {
       asset_file: any
     } = {
       category: modalControl.category,
-      assignedBeneficiaryId: modalControl.Beneficiary,
+      assignedBeneficiaryId: modalControl.Beneficiary || null,
       data: JSON.stringify(modalControl),
       asset_file: assetFile,
     }

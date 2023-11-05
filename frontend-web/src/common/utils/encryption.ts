@@ -38,11 +38,17 @@ class Encryption {
   }
 
   public validateKeyPair(publicKey: string, privateKey: string): boolean {
-    const data = "Hello World"
-    const encrypted = this.encrypt(publicKey, data)
-    const decrypted = this.decrypt(privateKey, encrypted)
-    return data === decrypted
+    try {
+      const data = "Hello World"
+      const encrypted = this.encrypt(publicKey, data)
+      const decrypted = this.decrypt(privateKey, encrypted)
+      return data === decrypted
+    } catch (error) {
+      return false
+    }
   }
+
+  // TODO add getters for private key from session storage
 }
 
 export default Encryption

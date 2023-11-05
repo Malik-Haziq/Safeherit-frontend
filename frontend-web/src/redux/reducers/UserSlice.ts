@@ -32,6 +32,7 @@ interface UserState {
   pulseCheckDays: string
   pulseCheckActive: string
   pulseCheckValidationRequired: string
+  publicKey: string
 }
 const initialState: UserState = {
   email: "",
@@ -76,6 +77,7 @@ const initialState: UserState = {
   pulseCheckDays: '',
   pulseCheckActive: '',
   pulseCheckValidationRequired: '',
+  publicKey: '',
 }
 
 export const slice = createSlice({

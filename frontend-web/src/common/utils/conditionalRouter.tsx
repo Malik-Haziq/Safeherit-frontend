@@ -1,12 +1,37 @@
 import { Navigate, Outlet } from "react-router-dom"
 import { ROUTE_CONSTANTS } from ".."
 import { useAppSelector } from "@redux/hooks"
+import Encryption from "./encryption"
 
 export const ProtectedRoute = () => {
   const active = useAppSelector(state => state.user.active)
   const ifActive: boolean = active ? true : false
   const redirectTo: string = ROUTE_CONSTANTS.LOGIN
   return ifActive ? <Outlet /> : <Navigate to={redirectTo} replace />
+}
+
+// export const ProtectedPricingRoute = () => {
+//   const active = useAppSelector(state => state.user.active)
+//   const ifActive: boolean = active ? true : false
+//   const redirectTo: string = ROUTE_CONSTANTS.LOGIN
+//   return ifActive ? <Outlet /> : <Navigate to={redirectTo} replace />
+// }
+
+// export const ProtectedRegisterKeyRoute = () => {
+//   const active = useAppSelector(state => state.user.active)
+//   const ifActive: boolean = active ? true : false
+//   const redirectTo: string = ROUTE_CONSTANTS.LOGIN
+//   return ifActive ? <Outlet /> : <Navigate to={redirectTo} replace />
+// }
+
+export const ProtectedEncryptionRoute = () => {
+  const privateKey = sessionStorage.getItem("privateKey") || ''
+  const publicKey = useAppSelector(state => state.user.publicKey)
+  const userRole = useAppSelector(state => state.user.role)
+  let redirectTo: string = ROUTE_CONSTANTS.REGISTER_KEY
+  const encryptionService = new Encryption()
+  const isValidKey = encryptionService.validateKeyPair(publicKey, privateKey)
+  return isValidKey || userRole == "validator" ? <Outlet /> : <Navigate to={redirectTo} replace />
 }
 
 export const ProtectedOwnerRoutes = () => {

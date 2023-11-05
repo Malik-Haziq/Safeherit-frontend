@@ -71,7 +71,7 @@ export function Login() {
                 setModalVisibility("none")
                 dispatch(updateActive(true))
                 dispatch(updateRole("owner"))
-                navigate("/register", { state: { from: 'login' } });
+                navigate("/dashboard", { state: { from: 'login' } });
               } else {
                 setModalVisibility("user-roles")
               }
@@ -106,7 +106,7 @@ export function Login() {
       setModalVisibility("none")
       dispatch(updateActive(true))
       dispatch(updateRole(selectedRole))
-      navigate("/register", { state: { from: 'login' } });
+      navigate("/dashboard", { state: { from: 'login' } });
     }
   }
 

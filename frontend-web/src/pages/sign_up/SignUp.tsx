@@ -9,7 +9,9 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { signup, updateUser } from "@redux/actions"
 import { useAppDispatch } from "@redux/hooks"
+import { updateProfile } from "firebase/auth"
 import { toast } from "@/components"
+import { updateActive } from "@/redux/reducers/UserSlice"
 
 export function SignUp() {
   const { t } = useTranslation()
@@ -54,11 +56,14 @@ export function SignUp() {
         dispatch(signup({ email: formControl.email, password: formControl.password }))
           .unwrap()
           .then((res) => {
-            dispatch(updateUser({
-              displayName: formControl.name
-            }))
-            .unwrap().catch()
+            updateProfile(res.user, {
+              displayName: formControl.name,
+            })
+            .catch((err) => {
+              toast(err?.code, "error")
+            })
             .finally(() => {
+              dispatch(updateActive(true))
               navigate("/pricing")
             })
           })

@@ -16,6 +16,7 @@ const initialState = {
   personalized_message: "",
   personalized_video: "",
   profile_image: "",
+  public_key: "",
   beneficiary_array: [{}],
   beneficiary_list: [] as SelectOption[],
 }
@@ -53,6 +54,7 @@ export const slice = createSlice({
       state.instagram_username = action.payload.data.data.instagram_username
       state.backup_email2 = action.payload.data.data.backup_email2
       state.backup_phone_number = action.payload.data.data.backup_phone_number
+      state.public_key = action.payload.data.data.public_key
     })
   },
 })

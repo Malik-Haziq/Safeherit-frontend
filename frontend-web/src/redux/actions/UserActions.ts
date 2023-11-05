@@ -16,6 +16,7 @@ import {
   POST,
   CREATE_USER,
   PULSE_CHECK,
+  PUBLIC_KEY,
 } from "@/common"
 
 export const login = createAsyncThunk(
@@ -143,6 +144,21 @@ export const updatePulse = createAsyncThunk(
     const { user } = getState() as { user: { token: any } }
     let formData = jsonToFormData(Data)
     const params = { ROUTE: PULSE_CHECK, Body: formData, token: user.token }
+    try {
+      let response = await PUT(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const updatePK = createAsyncThunk(
+  "updatePK",
+  async (Data: {}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: { token: any } }
+    let formData = jsonToFormData(Data)
+    const params = { ROUTE: PUBLIC_KEY, Body: formData, token: user.token }
     try {
       let response = await PUT(params)
       return response
