@@ -60,7 +60,11 @@ export default function RegisterKey() {
   }, [])
 
   const _handleRegisterPK = () => {
-    if (encryptionService.validateKeyPair(modalControl.publicKey, modalControl.privateKey)) {
+    if (modalVisibility == "Load-PK") {
+      sessionStorage.setItem("privateKey", modalControl.privateKey)
+      navigate('/dashboard')
+    }
+    else if (encryptionService.validateKeyPair(modalControl.publicKey, modalControl.privateKey)) {
       dispatch(updatePK({publicKey: modalControl.publicKey})).unwrap()
       .then(res => {
         toast("Keys Registered", "success")

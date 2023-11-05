@@ -98,14 +98,13 @@ export function Login() {
         dispatch(updateRoleUser(user.userMap[selectedBeneficiary?.value || 0]))
       } else if (selectedRole == "validator") {
         dispatch(updateRoleUser(user.userMap[selectedValidator?.value || 0]))
-      } else {
-        dispatch(resetMapper())
-        dispatch(resetValidatorOf())
-        dispatch(resetBeneficiaryOf())
       }
       setModalVisibility("none")
       dispatch(updateActive(true))
       dispatch(updateRole(selectedRole))
+      dispatch(resetMapper())
+      dispatch(resetValidatorOf())
+      dispatch(resetBeneficiaryOf())
       navigate("/dashboard", { state: { from: 'login' } });
     }
   }

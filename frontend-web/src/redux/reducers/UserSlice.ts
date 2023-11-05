@@ -94,11 +94,16 @@ export const slice = createSlice({
     },
     updateRole: (state, action) => {
       state.role = action.payload
-      if (action.payload == "beneficiary") {
-      }
     },
     updateRoleUser: (state, action) => {
-      state.selectedRoleUser = action.payload
+      if (action.payload.role == "beneficiary") {
+        state.publicKey = action.payload.public_key
+      }
+      state.selectedRoleUser = {
+        "ownerEmail": action.payload.ownerEmail,
+        "beneficiaryId": action.payload.beneficiaryId,
+        "ownerName": action.payload.ownerName,
+      }
     },
     resetMapper: (state) => {
       state.userMap = {}
@@ -179,6 +184,8 @@ export const slice = createSlice({
             ownerEmail: element.ownerEmail,
             beneficiaryId: element.beneficiaryId,
             ownerName: element.ownerName,
+            public_key: element.public_key,
+            role: "beneficiary"
           }
         })
         state.userMap = beneficiaryMapper
@@ -198,6 +205,7 @@ export const slice = createSlice({
             ownerEmail: element.ownerEmail,
             validatorId: element.validatorId,
             ownerName: element.ownerName,
+            role: "validator"
           }
         })
         state.userMap = {...state.userMap, ...validatorMapper}

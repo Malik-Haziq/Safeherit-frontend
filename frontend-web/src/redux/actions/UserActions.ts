@@ -60,6 +60,7 @@ export const logout = createAsyncThunk(
   async (Data: {}, { rejectWithValue }) => {
     try {
       let response = await signOut(auth)
+      sessionStorage.clear()
       return response
     } catch (error) {
       return rejectWithValue(error)
