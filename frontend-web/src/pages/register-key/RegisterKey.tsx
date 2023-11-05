@@ -64,6 +64,7 @@ export default function RegisterKey() {
       dispatch(updatePK({publicKey: modalControl.publicKey})).unwrap()
       .then(res => {
         toast("Keys Registered", "success")
+        sessionStorage.setItem("privateKey", modalControl.privateKey)
         navigate('/dashboard')
       })
       .catch((err) => {

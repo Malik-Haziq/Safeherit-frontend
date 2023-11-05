@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { login, logout, signup, getUser, updateUser } from "../actions/UserActions"
+import { login, logout, signup, getUser, updateUser, updatePK } from "../actions/UserActions"
 import { SelectOption } from "@/types"
 
-type YourObjectType = {
+type PulseDetails = {
   [key: string]: { heading: string; subHeading: string }[];
 }
 interface UserState {
@@ -17,6 +17,7 @@ interface UserState {
   language: string
   profile_image: string
   loading: boolean
+  beneficiaryOf: {}[]
   _beneficiaryOf: SelectOption[]
   _validatorOf: SelectOption[]
   isBeneficiary: boolean
@@ -27,7 +28,7 @@ interface UserState {
   role: string
   selectedRoleUser: {[key: string]: any}
   userMap: {[key: string]: any}
-  pulseDetail: YourObjectType
+  pulseDetail: PulseDetails
   pulseCheckNonValidationMonths: string
   pulseCheckDays: string
   pulseCheckActive: string
@@ -46,6 +47,7 @@ const initialState: UserState = {
   language: "",
   profile_image: "",
   loading: false,
+  beneficiaryOf: [],
   _beneficiaryOf: [],
   _validatorOf: [],
   isBeneficiary: false,
@@ -92,6 +94,8 @@ export const slice = createSlice({
     },
     updateRole: (state, action) => {
       state.role = action.payload
+      if (action.payload == "beneficiary") {
+      }
     },
     updateRoleUser: (state, action) => {
       state.selectedRoleUser = action.payload
@@ -130,7 +134,7 @@ export const slice = createSlice({
     })
     builder.addCase(getUser.fulfilled, (state, action) => {
       state.loading = false
-      const methodArr: YourObjectType = {
+      const methodArr: PulseDetails = {
         'Email': [
           { heading: "Pulse Check Email 1", subHeading: action.payload.data.data.pulseCheckEmail1 },
           { heading: "Pulse Check Email 2", subHeading: action.payload.data.data.pulseCheckEmail2 },
@@ -159,7 +163,8 @@ export const slice = createSlice({
       state.isSuperAdmin = action.payload.data.data.isSuperAdmin
       state.isAdmin = action.payload.data.data.isAdmin
       state.isValidator = action.payload.data.data.isValidator
-      state._beneficiaryOf = action.payload.data.data._beneficiaryOf
+      state.beneficiaryOf = action.payload.data.data._beneficiaryOf
+      state.publicKey = action.payload.data.data?.publicKey || ""
 
       let beneficiaryOfArray: SelectOption[] = []
       const beneficiaryMapper: {[key: string]: any} = {};
@@ -168,7 +173,7 @@ export const slice = createSlice({
         action.payload.data.data._beneficiaryOf.forEach((element: any) => {
           beneficiaryOfArray.push({
             label: element.ownerEmail + " - " + element.ownerName,
-            value: element.beneficiaryId,
+            value: element.beneficiaryId
           })
           beneficiaryMapper[element.beneficiaryId] = {
             ownerEmail: element.ownerEmail,
@@ -195,7 +200,7 @@ export const slice = createSlice({
             ownerName: element.ownerName,
           }
         })
-        state.userMap = validatorMapper
+        state.userMap = {...state.userMap, ...validatorMapper}
         state._validatorOf = validatorOfArray
       }
     })
@@ -204,6 +209,9 @@ export const slice = createSlice({
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image
       state.active = true
+    })
+    builder.addCase(updatePK.fulfilled, (state, action) => {
+      state.publicKey = action.payload.data.data.publicKey
     })
   },
 })
