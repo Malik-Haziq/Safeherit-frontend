@@ -2,6 +2,7 @@ import {
   ALL_ASSETS,
   ASSETS,
   BENEFICIARY_ASSETS,
+  BENEFICIARY_ASSET_BY_ID,
   DELETE,
   GET,
   POST,
@@ -102,6 +103,29 @@ export const findAsset = createAsyncThunk(
       let response = await GET(params)
       response.data.data = assetEnc.decryptAssetDataForOwner(
         ownerPrivateKey,
+        response.data.data,
+      )
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const findBeneficiaryAsset = createAsyncThunk(
+  "findAsset",
+  async (Data: { id: string, owner_email: string, beneficiary_id: string }, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: { token: "" } }
+    const params = {
+      ROUTE: `${BENEFICIARY_ASSET_BY_ID}?id=${Data.id}&beneficiary_id=${Data.beneficiary_id}&owner_email=${Data.owner_email}`,
+      Body: {},
+      token: user.token,
+    }
+    const beneficiaryPrivateKey = sessionStorage.getItem("privateKey") || ""
+    try {
+      let response = await GET(params)
+      response.data.data = assetEnc.decryptAssetDataForBeneficiary(
+        beneficiaryPrivateKey,
         response.data.data,
       )
       return response

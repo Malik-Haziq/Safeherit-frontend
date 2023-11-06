@@ -30,6 +30,7 @@ import {
   createAsset,
   getAllBeneficiary,
   getAllBeneficiaryAsset,
+  findBeneficiaryAsset,
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
@@ -339,15 +340,35 @@ export default function AssetsView() {
     setModalVisibility("Step-delete")
   }
   const viewAsset = (assetId: string) => {
-    dispatch(findAsset({ id: assetId }))
-      .unwrap()
-      .then((res) => {
-        isEditingAsset.current = true
-        setSelectedAsset(assetId)
-        setModalControl(JSON.parse(res.data.data.data))
-        setModalAction("view")
-        setModalVisibility("Asset-Info")
-      })
+    if (user.role == "owner") {
+      dispatch(findAsset({ id: assetId }))
+        .unwrap()
+        .then((res) => {
+          isEditingAsset.current = true //TODO look into this why is this here
+          setSelectedAsset(assetId)
+          setModalControl(JSON.parse(res.data.data.data))
+          setModalAction("view")
+          setModalVisibility("Asset-Info")
+        })
+    } else if (user.role == "beneficiary") {
+      const owner_email = user.selectedRoleUser?.ownerEmail
+      const beneficiary_id = user.selectedRoleUser?.beneficiaryId
+      dispatch(findBeneficiaryAsset(
+        { 
+          id: assetId,
+          owner_email: owner_email,
+          beneficiary_id: beneficiary_id 
+        }
+      ))
+        .unwrap()
+        .then((res) => {
+          isEditingAsset.current = true //TODO look into this why is this here
+          setSelectedAsset(assetId)
+          setModalControl(JSON.parse(res.data.data.data))
+          setModalAction("view")
+          setModalVisibility("Asset-Info")
+        })
+    }
   }
 
   return (
@@ -416,6 +437,7 @@ export default function AssetsView() {
         assetId={selectedAsset}
         arrayLength={modalHistoryLength}
         showPreviousModal={showPreviousModal}
+        role={user.role}
       />
       {hasAssets > 0 ? (
         <Assets
