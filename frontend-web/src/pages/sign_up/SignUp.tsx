@@ -63,6 +63,9 @@ export function SignUp() {
             })
             .finally(() => {
               navigate("/pricing")
+              dispatch(updateUser({
+                displayName: formControl.name
+              })).unwrap().catch()
             })
           })
           .catch((err) => {

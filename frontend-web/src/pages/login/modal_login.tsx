@@ -73,7 +73,7 @@ export function UserRolesModal(_props: {
                   {_props.isBeneficiary && (
                     <LoggedUser
                       userImg={userImg}
-                      userName={_props.userName}
+                      userName={"Select Owner"}
                       _beneficiaryOf={_props._beneficiaryOf}
                       userRole={"beneficiary"}
                       setSelectedBeneficiary={_props.setSelectedBeneficiary}
@@ -84,7 +84,7 @@ export function UserRolesModal(_props: {
                   {_props.isValidator && (
                     <LoggedUser
                       userImg={userImg}
-                      userName={_props.userName}
+                      userName={"Select Owner"}
                       _validatorOf={_props._validatorOf}
                       userRole={"validator"}
                       setSelectedValidator={_props.setSelectedValidator}
@@ -124,7 +124,13 @@ function LoggedUser(_props: {
             {_props.userRole?.toUpperCase()}
           </p>
           <div className="flex justify-between w-full">
-            <small className="text-lg font-medium">John Hammer</small>
+            <small className= {
+              _props.userRole == "beneficiary" || _props.userRole == "validator" ? "text-sm font-small text-[#bbb]" : "text-lg font-medium" }>{
+              _props.selectedBeneficiary ? _props.selectedBeneficiary.label :
+              _props.selectedValidator ? _props.selectedValidator.label :
+              _props.userName
+            }
+            </small>
             <button
               onClick={() => {
                 _props._handleUserRolesSubmit(_props.userRole)
