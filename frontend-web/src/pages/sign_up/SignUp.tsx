@@ -2,8 +2,7 @@ import logo from "@images/safeherit_logo.svg"
 import userIcon from "@images/UserIcon.png"
 import emailIcon from "@images/EmailIcon.png"
 import passwordVisibilityIcon from "@images/PasswordVisibilityIcon.png"
-import signUpImg from "@images/sign-up-img.jpg"
-
+import signupImg from '@images/signup-pic.png'
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
@@ -73,7 +72,7 @@ export function SignUp() {
   }
 
   return (
-    <main className="flex flex-col md:flex-row justify-center lg:justify-between font-safe-font-default w-screen ">
+    <main className="flex flex-col md:flex-row justify-center lg:justify-between font-safe-font-default w-screen h-[calc(100vh-80px)]">
       <section className="flex items-center  flex-col gap-8 w-full lg:w-2/5 my-8">
         <div className="mt-6">
           <img
@@ -177,12 +176,8 @@ export function SignUp() {
           </a>
         </small>
       </section>
-      <section className="bg-safe-blue hidden lg:flex lg:items-center lg:justify-center lg:w-3/5  ">
-        <img
-          src={signUpImg}
-          alt="Sign up img"
-          className="min-h-full min-w-full h-[91vh]"
-        />
+      <section className="bg-safe-blue hidden lg:flex lg:items-center lg:justify-center lg:w-3/5 relative" style={{background: 'url("../../../assets/images/signup-bg.svg")', backgroundRepeat: 'no-repeat',backgroundPosition: 'center', backgroundSize: 'cover'}}>
+        <img src={signupImg} alt="sign up image" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       </section>
     </main>
   )
