@@ -130,6 +130,9 @@ export const slice = createSlice({
       state.name = action.payload.user.displayName || ""
       state.photo = action.payload.user.photoURL || ""
       state.phone = action.payload.user.phoneNumber || ""
+      state.active = true
+      state.role = "owner"
+      state.isOwner = true
     })
     builder.addCase(logout.fulfilled, (state, action) => {
       return initialState

@@ -11,7 +11,6 @@ import { signup, updateUser } from "@redux/actions"
 import { useAppDispatch } from "@redux/hooks"
 import { updateProfile } from "firebase/auth"
 import { toast } from "@/components"
-import { updateActive } from "@/redux/reducers/UserSlice"
 
 export function SignUp() {
   const { t } = useTranslation()
@@ -63,7 +62,6 @@ export function SignUp() {
               toast(err?.code, "error")
             })
             .finally(() => {
-              dispatch(updateActive(true))
               navigate("/pricing")
             })
           })
