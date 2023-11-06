@@ -47,6 +47,7 @@ export default function AssetsView() {
   const navigate = useNavigate()
   const asset = useAppSelector((state) => state.asset)
   const user = useAppSelector((state) => state.user)
+  const beneficiary = useAppSelector((state) => state.beneficiary)
 
   const [hasAssets, setHasAssets] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
@@ -113,7 +114,7 @@ export default function AssetsView() {
   }, [])
 
   const showPreviousModal = () => {
-    const lastEl = modalHistory[modalHistoryLength - 1] || 'none'
+    const lastEl = modalHistory[modalHistoryLength - 1] || "none"
     modalHistoryPop()
     setModalVisibility(lastEl)
   }
@@ -242,11 +243,15 @@ export default function AssetsView() {
       id?: string
       category: string
       assignedBeneficiaryId: string
+      assignedBeneficiaryPublicKey: string
       data: string
       asset_file: any
     } = {
       category: modalControl.category,
-      assignedBeneficiaryId: modalControl.Beneficiary || null,
+      assignedBeneficiaryId: modalControl.Beneficiary || "",
+      assignedBeneficiaryPublicKey: modalControl.Beneficiary
+        ? beneficiary.beneficiary_mapper[modalControl.Beneficiary].public_key
+        : "",
       data: JSON.stringify(modalControl),
       asset_file: assetFile,
     }

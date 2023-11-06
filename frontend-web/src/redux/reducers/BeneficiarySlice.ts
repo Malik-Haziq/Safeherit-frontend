@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getAllBeneficiary, findTestment, findBeneficiary } from "../actions/BeneficiaryAction"
+import { getAllBeneficiary, findTestment } from "../actions/BeneficiaryAction"
 import { SelectOption } from "@/types"
 
 const initialState = {
@@ -19,6 +19,7 @@ const initialState = {
   public_key: "",
   beneficiary_array: [{}],
   beneficiary_list: [] as SelectOption[],
+  beneficiary_mapper: {} as { [key: string]: any },
 }
 
 export const slice = createSlice({
@@ -27,19 +28,25 @@ export const slice = createSlice({
   reducers: {
     addBeneficiary: (state, action) => {
       state.beneficiary_array = [...state.beneficiary_array, action.payload]
-    }
+    },
   },
   extraReducers(builder) {
     builder.addCase(getAllBeneficiary.fulfilled, (state, action) => {
       state.beneficiary_array = action?.payload?.data?.data || []
       let beneficiary_list: SelectOption[] = []
-      action.payload.data.data.map ((item: any) => {
+      const beneficiaryMapper: { [key: string]: any } = {}
+
+      action.payload.data.data.map((item: any) => {
         beneficiary_list.push({
           label: item.name,
           value: item.id,
         })
-      }) 
+        beneficiaryMapper[item.id] = {
+          public_key: item.public_key,
+        }
+      })
       state.beneficiary_list = beneficiary_list
+      state.beneficiary_mapper = beneficiaryMapper
     })
     builder.addCase(findTestment.fulfilled, (state, action) => {
       state.personalized_video = action.payload.data.data.personalized_video
@@ -59,6 +66,6 @@ export const slice = createSlice({
   },
 })
 
-export const {addBeneficiary} = slice.actions
+export const { addBeneficiary } = slice.actions
 
 export default slice.reducer

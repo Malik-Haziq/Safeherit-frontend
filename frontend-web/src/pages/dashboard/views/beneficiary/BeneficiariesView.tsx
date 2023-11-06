@@ -41,7 +41,7 @@ import {
   downloadJson,
 } from "@/common"
 import { PrivateKeyModal, GeneratePrivateKey } from "@/pages/register-key/modal_register_key"
-import Encryption from "@/common/utils/encryption"
+import Encryption from "@/common/encryption/encryption"
 
 const initialState = {
   id: "",

@@ -18,7 +18,7 @@ describe("Encryption", () => {
 
   it("should encrypt and decrypt data.", () => {
     const { publicKey, privateKey } = encryption.generateKeyPair()
-    const data = "Hello World"
+    const data = "Hello World, this is just test data, nothing to see here."
     const encrypted = encryption.encrypt(publicKey, data)
     const decrypted = encryption.decrypt(privateKey, encrypted)
     expect(data).toEqual(decrypted)

@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom"
 import { ROUTE_CONSTANTS } from ".."
 import { useAppSelector } from "@redux/hooks"
-import Encryption from "./encryption"
+import Encryption from "../encryption/encryption"
 
 export const ProtectedRoute = () => {
   const active = useAppSelector(state => state.user.active)
