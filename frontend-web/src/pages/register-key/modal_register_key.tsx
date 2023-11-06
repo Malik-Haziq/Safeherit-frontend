@@ -189,7 +189,7 @@ export function GeneratePrivateKey(_props: {
           props: {
             textAreaContainerStyles: "flex justify-between items-center",
             name:"publicKey",
-            inputStyles:"w-full h-[68px] border-[1px] border-[#858992] rounded-[5px]",
+            inputStyles:"h-[68px] w-[502px] mx-6 p-2 border-[1px] border-[#858992] rounded-[5px] resize-none",
             value:_props.modalControl.publicKey,
             _handleChange:_props._handleChange,
             isDisabled: true
@@ -225,7 +225,7 @@ export function GeneratePrivateKey(_props: {
           props: {
             textAreaContainerStyles: "flex justify-between items-center",
             name:"privateKey",
-            inputStyles:"w-full h-[107px] border-[1px] border-[#858992] rounded-[5px] ",
+            inputStyles:"h-[107px] w-[502px] mx-6 p-2 resize-none border-[1px] border-[#858992] rounded-[5px] mx-6",
             value:_props.modalControl.privateKey,
             _handleChange:_props._handleChange,
             isDisabled: true
