@@ -3,7 +3,7 @@ import userImg from "@images/user.svg"
 import { InputField, Modal, SelectField } from "@/components"
 import { SelectOption } from "@/types"
 import downArrow from '@images/Arrow-Down-Circle.svg'
-
+ 
 export function UserRolesModal(_props: {
   openModal: boolean
   closeModal: any
