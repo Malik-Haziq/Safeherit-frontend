@@ -30,6 +30,7 @@ import {
   createAsset,
   getAllBeneficiary,
   getAllBeneficiaryAsset,
+  findBeneficiaryAsset,
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
@@ -47,6 +48,7 @@ export default function AssetsView() {
   const navigate = useNavigate()
   const asset = useAppSelector((state) => state.asset)
   const user = useAppSelector((state) => state.user)
+  const beneficiary = useAppSelector((state) => state.beneficiary)
 
   const [hasAssets, setHasAssets] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
@@ -113,7 +115,7 @@ export default function AssetsView() {
   }, [])
 
   const showPreviousModal = () => {
-    const lastEl = modalHistory[modalHistoryLength - 1]
+    const lastEl = modalHistory[modalHistoryLength - 1] || "none"
     modalHistoryPop()
     setModalVisibility(lastEl)
   }
@@ -242,11 +244,15 @@ export default function AssetsView() {
       id?: string
       category: string
       assignedBeneficiaryId: string
+      assignedBeneficiaryPublicKey: string
       data: string
       asset_file: any
     } = {
       category: modalControl.category,
-      assignedBeneficiaryId: modalControl.Beneficiary,
+      assignedBeneficiaryId: modalControl.Beneficiary || "",
+      assignedBeneficiaryPublicKey: modalControl.Beneficiary
+        ? beneficiary.beneficiary_mapper[modalControl.Beneficiary].public_key
+        : "",
       data: JSON.stringify(modalControl),
       asset_file: assetFile,
     }
@@ -334,15 +340,35 @@ export default function AssetsView() {
     setModalVisibility("Step-delete")
   }
   const viewAsset = (assetId: string) => {
-    dispatch(findAsset({ id: assetId }))
-      .unwrap()
-      .then((res) => {
-        isEditingAsset.current = true
-        setSelectedAsset(assetId)
-        setModalControl(JSON.parse(res.data.data.data))
-        setModalAction("view")
-        setModalVisibility("Asset-Info")
-      })
+    if (user.role == "owner") {
+      dispatch(findAsset({ id: assetId }))
+        .unwrap()
+        .then((res) => {
+          isEditingAsset.current = true //TODO look into this why is this here
+          setSelectedAsset(assetId)
+          setModalControl(JSON.parse(res.data.data.data))
+          setModalAction("view")
+          setModalVisibility("Asset-Info")
+        })
+    } else if (user.role == "beneficiary") {
+      const owner_email = user.selectedRoleUser?.ownerEmail
+      const beneficiary_id = user.selectedRoleUser?.beneficiaryId
+      dispatch(findBeneficiaryAsset(
+        { 
+          id: assetId,
+          owner_email: owner_email,
+          beneficiary_id: beneficiary_id 
+        }
+      ))
+        .unwrap()
+        .then((res) => {
+          isEditingAsset.current = true //TODO look into this why is this here
+          setSelectedAsset(assetId)
+          setModalControl(JSON.parse(res.data.data.data))
+          setModalAction("view")
+          setModalVisibility("Asset-Info")
+        })
+    }
   }
 
   return (
@@ -411,6 +437,7 @@ export default function AssetsView() {
         assetId={selectedAsset}
         arrayLength={modalHistoryLength}
         showPreviousModal={showPreviousModal}
+        role={user.role}
       />
       {hasAssets > 0 ? (
         <Assets

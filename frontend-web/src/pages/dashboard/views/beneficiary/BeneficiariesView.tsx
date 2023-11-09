@@ -35,10 +35,13 @@ import { ConfirmationModal } from "@/components"
 import {
   isValidEmail,
   getFileFromFirebase,
-  isValidPhone,
+  copyToClipboard,
   isValidPhoneWithRegion,
   useArray,
+  downloadJson,
 } from "@/common"
+import { PrivateKeyModal, GeneratePrivateKey } from "@/pages/register-key/modal_register_key"
+import Encryption from "@/common/encryption/encryption"
 
 const initialState = {
   id: "",
@@ -54,14 +57,22 @@ const initialState = {
   personalized_message: "",
   personalized_video: "",
   profile_image: "",
+  public_key: ""
+}
+
+const initialStateForEncryptionKeys = {
+  publicKey: "",
+  privateKey: ""
 }
 
 export default function BeneficiariesView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const encryptionService = new Encryption();
 
   const [hasBeneficiaries, setHasBeneficiaries] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
+  const [modalEncryptionKeyControl, setModalEncryptionKeyControl] = useState(initialStateForEncryptionKeys)
   const [imageUpload, setImageUpload] = useState("")
   const [videoUpload, setVideoUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
@@ -104,6 +115,7 @@ export default function BeneficiariesView() {
 
   const closeModal = useCallback(() => {
     setModalControl(initialState)
+    setModalEncryptionKeyControl(initialStateForEncryptionKeys)
     setModalVisibility("none")
     setImageUpload("")
     setVideoUpload("")
@@ -158,7 +170,7 @@ export default function BeneficiariesView() {
       toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
-        dispatch(updateBeneficiary(modalControl))
+        dispatch(updateBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
           .unwrap()
           .then((res) => {
             dispatch(getAllBeneficiary({}))
@@ -178,7 +190,7 @@ export default function BeneficiariesView() {
           })
       } else if (modalAction == "create") {
         toast("creating beneficiary", "info")
-        dispatch(createBeneficiary(modalControl))
+        dispatch(createBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
           .unwrap()
           .then((res) => {
             dispatch(getAllBeneficiary({}))
@@ -202,14 +214,9 @@ export default function BeneficiariesView() {
   const _submitSuccessModal = () => {
     closeModal()
   }
-  const _submitRegisterPKModal = () => {
-    if (modalAction == "create") {
-      modalHistoryPush("Step-pk")
-      setModalVisibility("Step-1")
-    } else {
-      modalHistoryPush("Step-pk")
-      setModalVisibility("Step-success")
-    }
+  const _submitRegisterPKModal = (registerKeyModalType?: string) => {
+    modalHistoryPush("Step-pk")
+    registerKeyModalType == "generate-key" ? setModalVisibility("Generate-PK") : setModalVisibility("Load-PK")
   }
   const _submitDeleteModal = () => {
     toast("deleting Beneficiary " + modalControl.name, "info")
@@ -235,6 +242,10 @@ export default function BeneficiariesView() {
     // debugger
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
+  }
+  const _handleEncryptionKeyChange = (event: { target: { name: any; value: any } }) => {
+    const { name, value } = event.target
+    setModalEncryptionKeyControl({ ...modalEncryptionKeyControl, [name]: value })
   }
   const newBeneficiary = () => {
     setModalAction("create")
@@ -309,12 +320,101 @@ export default function BeneficiariesView() {
       })
   }
   const showPreviousModal = () => {
-    const lastEl = modalHistory[modalHistoryLength - 1]
+    const lastEl = modalHistory[modalHistoryLength - 1] || 'none'
     modalHistoryPop()
     setModalVisibility(lastEl)
   }
+
+  
+  const _handleRegisterPK = () => {
+    if (encryptionService.validateKeyPair(modalEncryptionKeyControl.publicKey, modalEncryptionKeyControl.privateKey)) {
+      if (modalAction == "create") {
+        modalHistoryPush("Step-pk")
+        setModalVisibility("Step-1")
+      } else {
+        modalHistoryPush("Step-pk")
+        setModalVisibility("Step-success")
+      }
+    }
+    else {
+      toast("Unable to verify keys", "error")
+    }
+  }
+
+  const _handleGeneratePKPair = useCallback(() => {
+    toast("Generating Public/Private Key", "info")
+    setTimeout(() => {
+      setModalEncryptionKeyControl(encryptionService.generateKeyPair())
+      toast("Keys Generated", "success")
+    }, 1000);
+  }, [])
+
+  const downloadPrivateKey = useCallback(() => {
+    if (modalEncryptionKeyControl.privateKey) {
+      const KEY = {privateKey: modalEncryptionKeyControl.privateKey}
+      downloadJson(KEY, 'privateKey.json')
+      toast("Download Complete", "success")
+    }
+    else {
+      toast("Kindly Generate Private Key", "error")
+    }
+  }, [modalEncryptionKeyControl.privateKey])
+
+  const copyPrivateKey = useCallback(() => {
+    if (modalEncryptionKeyControl.privateKey) {
+      copyToClipboard(modalEncryptionKeyControl.privateKey)
+    }
+    else {
+      toast("Kindly Generate Private Key", "error")
+    }
+  }, [modalEncryptionKeyControl.privateKey])
+
+  const downloadPublicKey = useCallback(() => {
+    if (modalEncryptionKeyControl.publicKey) {
+      const KEY = {publicKey: modalEncryptionKeyControl.publicKey}
+      downloadJson(KEY, 'publicKey.json')
+      toast("Download Complete", "success")
+    }
+    else {
+      toast("Kindly Generate Public Key", "error")
+    }
+  }, [modalEncryptionKeyControl.publicKey])
+
+  const copyPublicKey = useCallback(() => {
+    if (modalEncryptionKeyControl.publicKey) {
+      copyToClipboard(modalEncryptionKeyControl.publicKey)
+    }
+    else {
+      toast("Kindly Generate Public Key", "error")
+    }
+  }, [modalEncryptionKeyControl.publicKey])
+
   return (
     <>
+      <PrivateKeyModal
+        openModal={modalVisibility == "Load-PK"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        _handleChange={_handleEncryptionKeyChange}
+        _handleRegisterPK={_handleRegisterPK}
+      />
+
+      <GeneratePrivateKey
+        openModal={modalVisibility == "Generate-PK"}
+        closeModal= {closeModal}
+        closeModalOnOverlayClick= {false}
+        closeIconVisibility= {true}
+        modalControl={modalEncryptionKeyControl}
+        _handleChange={_handleEncryptionKeyChange}
+        _handleGeneratePKPair={_handleGeneratePKPair}
+        _handleRegisterPK={_handleRegisterPK}
+        downloadPrivateKey={downloadPrivateKey}
+        downloadPublicKey={downloadPublicKey}
+        copyPrivateKey={copyPrivateKey}
+        copyPublicKey={copyPublicKey}
+      />
+
       <UserDetailsModal
         openModal={modalVisibility == "User-Info"}
         closeModal={closeModal}
@@ -381,9 +481,11 @@ export default function BeneficiariesView() {
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
         action={modalAction}
-        _submitModal={_submitRegisterPKModal}
+        _submitModal={() => {
+          _submitRegisterPKModal()
+        }}
         _handleKeyGeneration={() => {
-          toast("generating key pair", "info")
+          _submitRegisterPKModal('generate-key')
         }}
         arrayLength={modalHistoryLength}
         showPreviousModal={showPreviousModal}

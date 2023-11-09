@@ -1,4 +1,10 @@
-import { ProtectedRegisterationRoute, ProtectedRoute, ProtectedOwnerRoutes, ProtectedOwnerAndBeneficiaryRoutes, ProtectedAdminRoutes } from "./common"
+import {
+  ProtectedRoute,
+  ProtectedOwnerRoutes,
+  ProtectedOwnerAndBeneficiaryRoutes,
+  ProtectedAdminRoutes,
+  ProtectedEncryptionRoute
+} from "./common"
 import {
   BrowserRouter,
   Route,
@@ -6,7 +12,7 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom"
-import { Login, SignUp, RegisterKey } from "./pages"
+import { Login, SignUp } from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar, Spinner } from "./components"
 import { lazy } from "react"
@@ -14,6 +20,7 @@ import { CustomToast } from "./components/customToast"
 import { useAppSelector } from "./redux/hooks"
 
 const Pricing = lazy(() => import("./pages/pricing/Pricing"))
+const RegisterKey = lazy(() => import("./pages/register-key/RegisterKey"))
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"))
 const AssetsView = lazy(
   () => import("./pages/dashboard/views/asset/AssetsView"),
@@ -51,63 +58,56 @@ function AppRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<NavBarLayout />}>
-          <Route element={<ProtectedRegisterationRoute />}>
-            <Route path={ROUTE_CONSTANTS.SIGN_UP} element={<SignUp />} />
-          </Route>
-
           <Route element={<ProtectedRoute />}>
+            {/* TODO validator should not be able to see this page*/}
             <Route path={ROUTE_CONSTANTS.PRICING} element={<Pricing />} />
+            {/* TODO validator & beneficiary should not be able to see this page*/}
+            <Route path={ROUTE_CONSTANTS.REGISTER_KEY} element={<RegisterKey />} />
           </Route>
-          <Route
-            path={ROUTE_CONSTANTS.REGISTER_KEY}
-            element={<RegisterKey />}
-          />
-          <Route
-            path="*"
-            element={<Navigate to={ROUTE_CONSTANTS.HOME} replace />}
-          />
+          <Route path={ROUTE_CONSTANTS.SIGN_UP} element={<SignUp />} />
+          <Route path="*" element={<Navigate to={ROUTE_CONSTANTS.HOME} replace />} />
         </Route>
 
-        <Route element={<ProtectedRegisterationRoute />}>
-          <Route path={ROUTE_CONSTANTS.LOGIN} element={<Login />} />
-        </Route>
+        <Route path={ROUTE_CONSTANTS.LOGIN} element={<Login />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<Dashboard />}>
-            <Route path="" element={<DashboardControl />} />
-            <Route
-              path={ROUTE_CONSTANTS.DASHBOARD_HELP}
-              element={<HelpView />}
-            />
-            <Route element={<ProtectedOwnerRoutes />}>
+          <Route element={<ProtectedEncryptionRoute />}>
+            <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<Dashboard />}>
+              <Route path="" element={<DashboardControl />} />
               <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}
-                element={<BeneficiariesView />}
+                path={ROUTE_CONSTANTS.DASHBOARD_HELP}
+                element={<HelpView />}
               />
-              <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}
-                element={<ValidatorsView />}
-              />
-              <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
-                element={<PulseView />}
-              />
-              <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT}
-                element={<AccountView />}
-              />
-            </Route>
-            <Route element={<ProtectedOwnerAndBeneficiaryRoutes />}>
-              <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
-                element={<AssetsView />}
-              />
-            </Route>
-            <Route element={<ProtectedAdminRoutes />}>
-              <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_SETTINGS}
-                element={<SettingView />}
-              />
+              <Route element={<ProtectedOwnerRoutes />}>
+                <Route
+                  path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}
+                  element={<BeneficiariesView />}
+                />
+                <Route
+                  path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}
+                  element={<ValidatorsView />}
+                />
+                <Route
+                  path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
+                  element={<PulseView />}
+                />
+                <Route
+                  path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT}
+                  element={<AccountView />}
+                />
+              </Route>
+              <Route element={<ProtectedOwnerAndBeneficiaryRoutes />}>
+                <Route
+                  path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
+                  element={<AssetsView />}
+                />
+              </Route>
+              <Route element={<ProtectedAdminRoutes />}>
+                <Route
+                  path={ROUTE_CONSTANTS.DASHBOARD_SETTINGS}
+                  element={<SettingView />}
+                />
+              </Route>
             </Route>
           </Route>
         </Route>

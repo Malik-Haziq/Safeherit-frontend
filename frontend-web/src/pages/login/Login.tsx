@@ -11,8 +11,6 @@ import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ForgotPasswordModal, toast } from "@/components"
 import {
   UserRolesModal,
-  PrivateKeyModal,
-  GeneratePrivateKey,
 } from "./modal_login"
 import {
   resetBeneficiaryOf,
@@ -73,18 +71,20 @@ export function Login() {
                 setModalVisibility("none")
                 dispatch(updateActive(true))
                 dispatch(updateRole("owner"))
-                navigate("/dashboard")
+                navigate("/dashboard", { state: { from: 'login' } });
               } else {
                 setModalVisibility("user-roles")
               }
             })
+            .finally(() => {
+              stopLoader()
+            })
         })
         .catch((err) => {
           toast(err?.code, "error")
-        })
-        .finally(() => {
           stopLoader()
         })
+
     }
   }
 
@@ -98,15 +98,14 @@ export function Login() {
         dispatch(updateRoleUser(user.userMap[selectedBeneficiary?.value || 0]))
       } else if (selectedRole == "validator") {
         dispatch(updateRoleUser(user.userMap[selectedValidator?.value || 0]))
-      } else {
-        dispatch(resetMapper())
-        dispatch(resetValidatorOf())
-        dispatch(resetBeneficiaryOf())
       }
       setModalVisibility("none")
       dispatch(updateActive(true))
       dispatch(updateRole(selectedRole))
-      navigate("/dashboard")
+      dispatch(resetMapper())
+      dispatch(resetValidatorOf())
+      dispatch(resetBeneficiaryOf())
+      navigate("/dashboard", { state: { from: 'login' } });
     }
   }
 
@@ -155,7 +154,7 @@ export function Login() {
         setResetEmail={setResetEmail}
         sendEmail={_handleForgotPassword}
       />
-      <section className="pt-10 px-10 basis-2/5 flex flex-col gap-48">
+      <section className="pt-10 pb-1.5 px-10 basis-2/5 flex flex-col justify-between">
         <img src={logo} alt="safeherit logo" className="h-8 w-40" />
         <div className="mx-auto">
           <h2 className="text-3xl mb-2 font-semibold font-monstrate text-safe-text-black">

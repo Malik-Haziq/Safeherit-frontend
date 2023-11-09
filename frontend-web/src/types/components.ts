@@ -3,6 +3,13 @@ export interface SelectOption {
   value: string;
 }
 
+export interface CustomChangeEvent {
+  target: {
+    name: string
+    value: string
+  }
+}
+
 export interface User {
   id: string
   name: string

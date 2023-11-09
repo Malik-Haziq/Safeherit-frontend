@@ -462,6 +462,7 @@ export function AssetDetail(_props: {
   assetId: string
   arrayLength: any
   showPreviousModal: any
+  role: string
 }) {
   const headings = Object.keys(_props.modalControl)
   const values = Object.values(_props.modalControl)
@@ -499,24 +500,28 @@ export function AssetDetail(_props: {
                       )
                     })}
                   </div>
-                  <div className="flex justify-end gap-2 w-full py-4 px-5 border-t-2 border-[#F0F0F0]">
-                    <button
-                      onClick={() => {
-                        _props.edit(_props.assetId)
-                      }}
-                      className="primary-btn rounded-lg font-sm font-medium text-[#414141] bg-white border-[1px] shadow-none border-[#DBDBDB]"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => {
-                        _props.delete(_props.assetId)
-                      }}
-                      className="primary-btn rounded-lg font-sm font-medium"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  {
+                    _props.role != "beneficiary" ?
+                    <div className="flex justify-end gap-2 w-full py-4 px-5 border-t-2 border-[#F0F0F0]">
+                      <button
+                        onClick={() => {
+                          _props.edit(_props.assetId)
+                        }}
+                        className="primary-btn rounded-lg font-sm font-medium text-[#414141] bg-white border-[1px] shadow-none border-[#DBDBDB]"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => {
+                          _props.delete(_props.assetId)
+                        }}
+                        className="primary-btn rounded-lg font-sm font-medium"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    : <></>
+                  }
                 </section>
               )
             },

@@ -12,7 +12,8 @@
     "test:run": "vitest --run",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "type-check": "tsc"
+    "type-check": "tsc",
+		"compile": "tsc --noEmit --watch"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",

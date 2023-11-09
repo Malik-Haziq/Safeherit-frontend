@@ -1,9 +1,12 @@
 import tick from "@images/tick.svg"
 
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function Pricing() {
   const [selectedPlan, setSelectedPlan] = useState("Yearly")
+  const navigate = useNavigate()
+  
   const packagePlans = [
     { plan: "Monthly", price: "19.99", priceTime: "month" },
     { plan: "Yearly", price: "199", priceTime: "year" },
@@ -12,6 +15,9 @@ export default function Pricing() {
 
   function _handlePlanSelect(selectedPlan: string) {
     setSelectedPlan(selectedPlan)
+    setTimeout(() => {
+      navigate("/register")
+    }, 2000);
   }
 
   return (

@@ -1,16 +1,149 @@
 import arrowRight from "@images/Arrow - Right.svg"
 import registerPageVideo from "@images/register_page_video.png"
 import safepal from "@images/Safepal.svg"
+import { useLocation, useNavigate } from "react-router-dom"
+import { useCallback, useEffect, useState } from "react"
+import { GeneratePrivateKey, PrivateKeyModal } from "./modal_register_key"
+import Encryption from "@/common/encryption/encryption"
+import { toast } from "@/components"
+import { copyToClipboard, downloadJson } from "@/common/utils"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { updatePK } from "@/redux/actions"
 
-import { useNavigate } from "react-router-dom"
+const initialState = {
+  publicKey: "",
+  privateKey: ""
+}
 
-export function RegisterKey() {
-  const navigate = useNavigate()
-  const _handleRegister = () => {
-    navigate("/dashboard")
+export default function RegisterKey() {
+  const location = useLocation();
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate();
+  const { state } = location;
+
+  const encryptionService = new Encryption();
+  
+  const user = useAppSelector((state) => state.user)
+  
+  const [modalVisibility, setModalVisibility] = useState('none')
+  const [modalControl, setModalControl] = useState(initialState)
+
+  const closeModal = useCallback(() => {
+    setModalControl(initialState)
+    setModalVisibility("none")
+  }, [])
+
+  const _handleChange = (event: { target: { name: any; value: any } }) => {
+    const { name, value } = event.target
+    setModalControl({ ...modalControl, [name]: value })
   }
+
+  const _handleRegister = useCallback(() => {
+    setModalVisibility("Load-PK")
+  }, [])
+
+  const _handleGenerate = useCallback(() => {
+    if (user.role == "beneficiary") {
+      setModalVisibility("Load-PK")
+    }
+    else {
+      setModalVisibility("Generate-PK")
+    }
+  }, [])
+
+  const _handleGeneratePKPair = useCallback(() => {
+    toast("Generating Public/Private Key", "info")
+    setTimeout(() => {
+      setModalControl(encryptionService.generateKeyPair())
+      toast("Keys Generated", "success")
+    }, 1000);
+  }, [])
+
+  const _handleRegisterPK = () => {
+    if (modalVisibility == "Load-PK") {
+      sessionStorage.setItem("privateKey", modalControl.privateKey)
+      navigate('/dashboard')
+    }
+    else if (encryptionService.validateKeyPair(modalControl.publicKey, modalControl.privateKey)) {
+      dispatch(updatePK({publicKey: modalControl.publicKey})).unwrap()
+      .then(res => {
+        toast("Keys Registered", "success")
+        sessionStorage.setItem("privateKey", modalControl.privateKey)
+        navigate('/dashboard')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    }
+    else {
+      toast("Unable to verify keys", "error")
+    }
+  }
+
+  const downloadPrivateKey = useCallback(() => {
+    if (modalControl.privateKey) {
+      const KEY = {privateKey: modalControl.privateKey}
+      downloadJson(KEY, 'privateKey.json')
+      toast("Download Complete", "success")
+    }
+    else {
+      toast("Kindly Generate Private Key", "error")
+    }
+  }, [modalControl.privateKey])
+
+  const copyPrivateKey = useCallback(() => {
+    if (modalControl.privateKey) {
+      copyToClipboard(modalControl.privateKey)
+    }
+    else {
+      toast("Kindly Generate Private Key", "error")
+    }
+  }, [modalControl.privateKey])
+
+  const downloadPublicKey = useCallback(() => {
+    if (modalControl.publicKey) {
+      const KEY = {publicKey: modalControl.publicKey}
+      downloadJson(KEY, 'publicKey.json')
+      toast("Download Complete", "success")
+    }
+    else {
+      toast("Kindly Generate Public Key", "error")
+    }
+  }, [modalControl.publicKey])
+
+  const copyPublicKey = useCallback(() => {
+    if (modalControl.publicKey) {
+      copyToClipboard(modalControl.publicKey)
+    }
+    else {
+      toast("Kindly Generate Public Key", "error")
+    }
+  }, [modalControl.publicKey])
+
   return (
     <main className="flex  min-h-[calc(100vh-80px)] ">
+      <PrivateKeyModal
+        openModal={modalVisibility == "Load-PK"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        _handleChange={_handleChange}
+        _handleRegisterPK={_handleRegisterPK}
+      />
+      <GeneratePrivateKey
+        openModal={modalVisibility == "Generate-PK"}
+        closeModal= {closeModal}
+        closeModalOnOverlayClick= {false}
+        closeIconVisibility= {true}
+        modalControl={modalControl}
+        _handleChange={_handleChange}
+        _handleGeneratePKPair={_handleGeneratePKPair}
+        _handleRegisterPK={_handleRegisterPK}
+        downloadPrivateKey={downloadPrivateKey}
+        downloadPublicKey={downloadPublicKey}
+        copyPrivateKey={copyPrivateKey}
+        copyPublicKey={copyPublicKey}
+      />
       <section className="basis-2/5 flex flex-col justify-center items-center px-24 ">
         <h1 className="text-safe-text-dark-blue text-2xl text-center font-bold mb-7">
           Register your Secret Key
@@ -32,7 +165,7 @@ export function RegisterKey() {
           Don’t have a Public/Private key yet?
         </small>
 
-        <a className="flex gap-3 justify-between items-center bg-white shadow-md py-2 px-4 rounded-lg cursor-pointer w-full">
+        <a onClick={_handleGenerate} className="cy-add-generate-PK flex gap-3 justify-between items-center bg-white shadow-md py-2 px-4 rounded-lg cursor-pointer w-full">
           <div className="flex justify-center items-center gap-4">
             <img src={safepal} alt="safepal icon" />
             <span className="text-safe-text-black-tint font-medium">

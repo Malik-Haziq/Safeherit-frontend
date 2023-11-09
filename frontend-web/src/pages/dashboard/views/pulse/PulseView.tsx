@@ -124,7 +124,7 @@ export default function PulseView() {
   }, [])
 
   const showPreviousModal = () => {
-    const lastEl = modalHistory[modalHistoryLength - 1]
+    const lastEl = modalHistory[modalHistoryLength - 1] || 'none'
     modalHistoryPop()
     setModalVisibility(lastEl)
   }
