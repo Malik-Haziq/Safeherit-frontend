@@ -141,7 +141,7 @@ function LoggedUser(_props: {
             </button>
           </div>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="cy-role-select-field flex flex-col gap-2">
           {_props.userRole.toLowerCase() == "beneficiary" ? (
             <SelectField
               data={_props._beneficiaryOf}
@@ -149,7 +149,7 @@ function LoggedUser(_props: {
               selectProps={{ placeholder: "Select Owner", isSearchable: false }}
               setSelectedValue={_props.setSelectedBeneficiary}
               selectFieldStyles={
-                "rounded-3xl font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] my-3 relative"
+                "cy-beneficiary-owner rounded-3xl font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] my-3 relative"
               }
               hasRightIcon={true}
               rightIcon={downArrow}
@@ -162,7 +162,7 @@ function LoggedUser(_props: {
               selectProps={{ placeholder: "Select Owner", isSearchable: false }}
               setSelectedValue={_props.setSelectedValidator}
               selectFieldStyles={
-                "rounded-2xl font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] my-3 relative"
+                "cy-validator-owner rounded-2xl font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] my-3 relative"
               }
               hasRightIcon={true}
               rightIcon={downArrow}
