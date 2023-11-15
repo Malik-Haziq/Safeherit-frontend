@@ -24,6 +24,7 @@ export function EditUserModal(_props: {
   }
   _submitModal: Function
   imageUpload: string
+  userImage: string
   setImageUpload: Function
   email: string
 }) {
@@ -70,10 +71,10 @@ export function EditUserModal(_props: {
                   />
                   <div className="flex items-center justify-center gap-2 mb-8">
                     <div className="mx-auto my-7 w-[128px] h-[128px] flex items-center justify-center bg-white rounded-full shadow-lg relative">
-                      {_props.imageUpload ? (
+                      {_props.imageUpload || _props.userImage ? (
                         <>
                           <img
-                            src={_props.imageUpload || userImg}
+                            src={_props.imageUpload || _props.userImage || userImg}
                             alt=""
                             className="w-[124px] h-[124px] rounded-full"
                           />

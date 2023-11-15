@@ -2,10 +2,12 @@ import logo from "@images/safeherit_logo.svg";
 import userImg from "@images/user.svg"
 import arrowDown from "@images/chevron-down.svg"
 
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom"
 import { useAppDispatch, useAppSelector} from "@redux/hooks"
 import { logout } from "@redux/actions"
 import { DropDownButton, toast } from "@/components"
+import { getFileFromFirebase } from "@/common";
 
 export function NavBar() {
 
@@ -15,6 +17,21 @@ export function NavBar() {
   const navigate = useNavigate()
   const currentPath = useLocation()
   const registerBtn = ["/signup", "/"]
+
+  const [userImage, setUserImage] = useState('')
+
+  useEffect(() => {
+    if (user.profile_image) {
+      getFileFromFirebase(user.profile_image)
+          .then((res) => {
+            setUserImage(res)
+          })
+          .catch(() => {
+            setUserImage("")
+          })
+    }
+  }, [user.profile_image ])
+  
   // TODO manually terminate the use session on logout failiure (browser storage etc)
   // Do the above commented change for all _handleLogout methods
   const _handleLogout = () => {
@@ -78,8 +95,8 @@ export function NavBar() {
             title={USER_NAME}
             arrowIcon={arrowDown}
             arrowDownClassName={"ml-1"}
-            userIcon={userImg}
-            userIconClassName={""}
+            userIcon={userImage || userImg}
+            userIconClassName={"sm:w-8 sm:h-8 rounded-full"}
             optionText={"Logout"}
             options={["Logout"]}
           />

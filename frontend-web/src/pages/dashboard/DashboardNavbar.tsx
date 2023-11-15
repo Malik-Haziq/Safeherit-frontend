@@ -17,7 +17,6 @@ export default function DashboardNavbar(_props: {
   currentPath: any
 }) {
   const user = useAppSelector((state) => state.user)
-  const USER_NAME = user.displayName || "Profile"
 
   const [image, setImage] = useState<string>("")
   useEffect(() => {
@@ -46,7 +45,7 @@ export default function DashboardNavbar(_props: {
         <DropDownButton
           className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
           onClick={_props._handleLogout}
-          title={USER_NAME}
+          title={user.displayName || "Profile"}
           titleClassName={"text-sm sm:text-base"}
           arrowIcon={arrowDown}
           arrowDownClassName={"ml-1 "}

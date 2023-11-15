@@ -36,36 +36,52 @@ export default function AccountView() {
   }
   const [modalControl, setModalControl] = useState(initialState)
   const [imageUpload, setImageUpload] = useState("")
+  const [userImage, setUserImage] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
 
   useEffect(() => {
+    getUserDetails()
+  }, [])
+
+  useEffect(() => {
+    if (user.profile_image) {
+      getFileFromFirebase(user.profile_image)
+        .then((res) => {
+          setUserImage(res)
+        })
+        .catch(() => {
+          setUserImage("")
+        })
+    }
+  }, [user.profile_image])
+
+  const getUserDetails = () => {
     dispatch(getUser({}))
       .unwrap()
       .then((res) => {
         setModalControl(res.data.data)
-        getFileFromFirebase(res.data.data.profile_image)
-          .then((res) => {
-            setImageUpload(res)
-          })
-          .catch(() => {
-            setImageUpload("")
-          })
       })
       .catch(() => {
         // TODO: show fallback page
       })
-  }, [])
+  }
 
   const editUser = () => {
     setModalVisibility("edit-user")
   }
+
   const closeModal = () => {
     setModalVisibility("none")
+    setImageUpload('')
   }
+  
   const _submitEditUserModal = () => {
-    toast("updating user information", "info")
+    toast("Updating user information", "info")
     dispatch(updateUser(modalControl))
       .unwrap()
+      .then(() => {
+        toast("User updated", "success")
+      })
       .finally(() => {
         closeModal()
       })
@@ -120,6 +136,7 @@ export default function AccountView() {
             modalControl={modalControl}
             _submitModal={_submitEditUserModal}
             imageUpload={imageUpload}
+            userImage={userImage}
             setImageUpload={setImageUpload}
             email={user.email}
           />
@@ -141,7 +158,7 @@ export default function AccountView() {
             <div className={styles.AppView}>
               <main className="p-6 w-full">
                 <UserProfile
-                  userImg={imageUpload || userImg}
+                  userImg={userImage || userImg}
                   userName={user.displayName}
                   userEmail={user.email}
                   editUser={editUser}
