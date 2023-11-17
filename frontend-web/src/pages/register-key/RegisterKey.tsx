@@ -60,20 +60,22 @@ export default function RegisterKey() {
   }, [])
 
   const _handleRegisterPK = () => {
-    if (modalVisibility == "Load-PK") {
-      sessionStorage.setItem("privateKey", modalControl.privateKey)
-      navigate('/dashboard')
-    }
-    else if (encryptionService.validateKeyPair(modalControl.publicKey, modalControl.privateKey)) {
-      dispatch(updatePK({publicKey: modalControl.publicKey})).unwrap()
-      .then(res => {
-        toast("Keys Registered", "success")
+    if (encryptionService.validateKeyPair(modalControl.publicKey || user.publicKey, modalControl.privateKey)) {
+      if (modalVisibility == "Load-PK") {
         sessionStorage.setItem("privateKey", modalControl.privateKey)
         navigate('/dashboard')
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+      }
+      else {
+        dispatch(updatePK({publicKey: modalControl.publicKey})).unwrap()
+        .then(res => {
+          toast("Keys Registered", "success")
+          sessionStorage.setItem("privateKey", modalControl.privateKey)
+          navigate('/dashboard')
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      }
     }
     else {
       toast("Unable to verify keys", "error")

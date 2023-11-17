@@ -15,7 +15,7 @@ export const toast = (message: string, variant: "default" | "error" | "success" 
   enqueueSnackbar(message, {
     variant: variant,
     anchorOrigin: {
-      vertical: 'top',
+      vertical: 'bottom',
       horizontal: 'right'
     }
   })

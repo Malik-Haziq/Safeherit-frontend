@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       }
     > 
       <Provider store={store}>
-        <PersistGate loading={<div>loading</div>} persistor={persistor}>
+        <PersistGate loading={<Spinner withOverlay={true}/>} persistor={persistor}>
           <App />
         </PersistGate>
       </Provider>
