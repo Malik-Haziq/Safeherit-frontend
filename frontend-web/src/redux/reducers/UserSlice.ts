@@ -33,7 +33,8 @@ interface UserState {
   pulseCheckDays: string
   pulseCheckActive: string
   pulseCheckValidationRequired: string
-  publicKey: string
+  publicKey: string,
+  isLoading: boolean
 }
 const initialState: UserState = {
   email: "",
@@ -80,6 +81,7 @@ const initialState: UserState = {
   pulseCheckActive: '',
   pulseCheckValidationRequired: '',
   publicKey: '',
+  isLoading: false,
 }
 
 export const slice = createSlice({
@@ -215,11 +217,18 @@ export const slice = createSlice({
         state._validatorOf = validatorOfArray
       }
     })
+    builder.addCase(updateUser.pending, (state, action) => {
+      state.isLoading = true
+    })
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.displayName = action.payload.data.data.displayName
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image
-      state.active = true
+      state.active = true,
+      state.isLoading = false
+    })
+    builder.addCase(updateUser.rejected, (state, action) => {
+      state.isLoading = false
     })
     builder.addCase(updatePK.fulfilled, (state, action) => {
       state.publicKey = action.payload.data.data.publicKey

@@ -9,18 +9,20 @@ import { getUser, login, resetPassword } from "@redux/actions"
 import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ForgotPasswordModal, toast } from "@/components"
-import {
-  UserRolesModal,
-} from "./modal_login"
+import { UserRolesModal } from "./modal_login"
 import {
   resetBeneficiaryOf,
   resetMapper,
   resetValidatorOf,
+  setToken,
   updateActive,
   updateRole,
   updateRoleUser,
 } from "@/redux/reducers/UserSlice"
 import { SelectOption } from "@/types"
+import GoogleAuthButton from "@/components/GoogleAuthButton/GoogleAuthButton"
+import { signInWithPopup } from "firebase/auth"
+import { auth, provider } from "@/firebase"
 
 export function Login() {
   const { t } = useTranslation()
@@ -67,11 +69,17 @@ export function Login() {
             .unwrap()
             .catch()
             .then((res) => {
-              if (res.data.data.isOwner && !res.data.data.isBeneficiary && !res.data.data.isValidator && !res.data.data.isAdmin && !res.data.data.isSuperAdmin) {
+              if (
+                res.data.data.isOwner &&
+                !res.data.data.isBeneficiary &&
+                !res.data.data.isValidator &&
+                !res.data.data.isAdmin &&
+                !res.data.data.isSuperAdmin
+              ) {
                 setModalVisibility("none")
                 dispatch(updateActive(true))
                 dispatch(updateRole("owner"))
-                navigate("/dashboard", { state: { from: 'login' } });
+                navigate("/dashboard", { state: { from: "login" } })
               } else {
                 setModalVisibility("user-roles")
               }
@@ -84,13 +92,48 @@ export function Login() {
           toast(err?.code, "error")
           stopLoader()
         })
-
     }
   }
 
+  const _handleGoogleLogin = () => {
+    provider.setCustomParameters({ prompt: 'select_account' });
+    signInWithPopup(auth, provider).then(async (res) => {
+      const name = res.user.displayName;
+      const email = res.user.email;
+
+      let token = await res.user.getIdToken()
+      dispatch(setToken(token))
+      dispatch(getUser({}))
+      .unwrap()
+      .catch()
+      .then((res) => {
+        if (
+          res.data.data.isOwner &&
+          !res.data.data.isBeneficiary &&
+          !res.data.data.isValidator &&
+          !res.data.data.isAdmin &&
+          !res.data.data.isSuperAdmin
+        ) {
+          setModalVisibility("none")
+          dispatch(updateActive(true))
+          dispatch(updateRole("owner"))
+          navigate("/dashboard", { state: { from: "login" } })
+        } else {
+          setModalVisibility("user-roles")
+        }
+      })
+      .finally(() => {
+        stopLoader()
+      })
+    })
+  }
+
+
   const _handleUserRolesSubmit = (selectedRole: string) => {
     if (
-      selectedRole == "owner" || selectedRole == "super-admin" || selectedRole == "admin" ||
+      selectedRole == "owner" ||
+      selectedRole == "super-admin" ||
+      selectedRole == "admin" ||
       (selectedRole == "beneficiary" && selectedBeneficiary) ||
       (selectedRole == "validator" && selectedValidator)
     ) {
@@ -105,7 +148,7 @@ export function Login() {
       dispatch(resetMapper())
       dispatch(resetValidatorOf())
       dispatch(resetBeneficiaryOf())
-      navigate("/dashboard", { state: { from: 'login' } });
+      navigate("/dashboard", { state: { from: "login" } })
     }
   }
 
@@ -124,6 +167,7 @@ export function Login() {
         })
     }
   }
+
 
   return (
     <main className="flex flex-row justify-center lg:justify-between font-safe-font-default w-screen h-screen">
@@ -208,9 +252,17 @@ export function Login() {
                 Forgot Password?
               </p>
             </div>
-            <button className="primary-btn rounded-md bg-safe-blue-shade px-40">
-              Login
-            </button>
+            <div className="flex flex-col">
+              <button className="primary-btn rounded-md bg-safe-blue-shade px-40">
+                Login
+              </button>
+              <p className="text-center py-2">OR</p>
+
+              <GoogleAuthButton
+                handleClick={_handleGoogleLogin}
+                type={"signin"}
+              />
+            </div>
             <small className="text-sm text-safe-text-black font-medium mx-auto">
               Don't have an account?&nbsp;
               <a

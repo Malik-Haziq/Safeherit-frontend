@@ -2,14 +2,17 @@ import logo from "@images/safeherit_logo.svg"
 import userIcon from "@images/UserIcon.png"
 import emailIcon from "@images/EmailIcon.png"
 import passwordVisibilityIcon from "@images/PasswordVisibilityIcon.png"
-import signupImg from '@images/signup-pic.png'
+import signupImg from "@images/signup-pic.png"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { signup, updateUser } from "@redux/actions"
-import { useAppDispatch } from "@redux/hooks"
-import { updateProfile } from "firebase/auth"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
+import { signInWithPopup, updateProfile } from "firebase/auth"
 import { toast } from "@/components"
+import GoogleAuthButton from "@/components/GoogleAuthButton/GoogleAuthButton"
+import { auth, provider } from "@/firebase"
+import { setToken } from "@/redux/reducers/UserSlice"
 
 export function SignUp() {
   const { t } = useTranslation()
@@ -25,6 +28,9 @@ export function SignUp() {
     confirm_password_visibility: false,
   })
   const [agreeTermAndCondition, setAgreeTermAndCondition] = useState(false)
+  const isLoading = useAppSelector(state => state.user.isLoading)
+  console.log("🚀 ~ file: SignUp.tsx:32 ~ SignUp ~ isLoading:", isLoading)
+
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
@@ -51,27 +57,65 @@ export function SignUp() {
         toast("password must match", "error")
       } else {
         toast("signing up", "info")
-        dispatch(signup({ email: formControl.email, password: formControl.password }))
+        dispatch(
+          signup({ email: formControl.email, password: formControl.password }),
+        )
           .unwrap()
           .then((res) => {
             updateProfile(res.user, {
               displayName: formControl.name,
             })
-            .catch((err) => {
-              toast(err?.code, "error")
-            })
-            .finally(() => {
-              navigate("/pricing")
-              dispatch(updateUser({
-                displayName: formControl.name
-              })).unwrap().catch()
-            })
+              .catch((err) => {
+                toast(err?.code, "error")
+              })
+              .finally(() => {
+                navigate("/pricing")
+                dispatch(
+                  updateUser({
+                    displayName: formControl.name,
+                  }),
+                )
+                  .unwrap()
+                  .catch()
+              })
           })
           .catch((err) => {
             toast(err?.code, "error")
           })
       }
     }
+  }
+
+  const _handleGoogleLogin = () => {
+    provider.setCustomParameters({ prompt: "select_account" })
+    signInWithPopup(auth, provider).then(async (res) => {
+      const name = res.user.displayName
+      const email = res.user.email
+
+      let token = await res.user.getIdToken()
+      dispatch(setToken(token))
+      updateProfile(res.user, {
+        displayName: name ?? email,
+      })
+        .catch((err) => {
+          toast(err?.code, "error")
+        })
+        .finally(() => {
+          console.log("check1")
+
+          dispatch(
+            updateUser({
+              displayName: name ?? email,
+            }),
+          )
+            .unwrap()
+            .then((res) => {
+              console.log("check2")
+              navigate("/pricing")
+            })
+            .catch()
+        })
+    })
   }
 
   return (
@@ -168,9 +212,18 @@ export function SignUp() {
               </a>
             </small>
           </div>
-          <button className="primary-btn px-16 uppercase w-fit mx-auto">
-            Sign up
-          </button>
+          <div className="flex flex-col">
+            <button className="primary-btn px-16 uppercase w-fit mx-auto">
+              Sign up
+            </button>
+            <p className="text-center py-2">OR</p>
+
+            <GoogleAuthButton
+              handleClick={_handleGoogleLogin}
+              type={"signup"}
+              isLoading={isLoading}
+            />
+          </div>
         </form>
         <small className="text-sm text-safe-text-dark-gray my-8">
           Already have an account?&nbsp;
@@ -179,8 +232,20 @@ export function SignUp() {
           </a>
         </small>
       </section>
-      <section className="bg-safe-blue hidden lg:flex lg:items-center lg:justify-center lg:w-3/5 relative" style={{background: 'url("../../../assets/images/signup-bg.svg")', backgroundRepeat: 'no-repeat',backgroundPosition: 'center', backgroundSize: 'cover'}}>
-        <img src={signupImg} alt="sign up image" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      <section
+        className="bg-safe-blue hidden lg:flex lg:items-center lg:justify-center lg:w-3/5 relative"
+        style={{
+          background: 'url("../../../assets/images/signup-bg.svg")',
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+        }}
+      >
+        <img
+          src={signupImg}
+          alt="sign up image"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        />
       </section>
     </main>
   )
