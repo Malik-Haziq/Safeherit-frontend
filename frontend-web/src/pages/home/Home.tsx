@@ -9,8 +9,11 @@ import screenShot3 from '@images/screenshot-3.png'
 import user from '@images/user.svg'
 import testUser from '@images/signup-pic.png'
 import logo from '@images/safeherit_logo.svg'
+import { useNavigate } from "react-router-dom"
 
 export function Home(){
+    const navigate = useNavigate()
+
     const slides = [<CarouselElement/>,<CarouselElement/>,<CarouselElement/>]
 
     return <main className='m-w-[1280px] mx-auto font-safe-font-default'>
@@ -18,7 +21,7 @@ export function Home(){
             <aside className='basis-3/5 flex flex-col gap-3'>
                 <h1 className='text-[58px] font-bold leading-tight' >Your Legacy, Secured for the Digital Age with SafeHerit</h1>
                 <p className='text-xl mb-5'>From your hard-earned savings in the bank to yourprecious memories stored digitally, SafeHeritensures your online treasures aren't lost in theether. Keep control of your digital life,even in the afterlife.</p>
-                <a href="#" className='text-[#04477B] bg-white rounded-2xl px-8 py-5 w-fit font-bold'>Register the Generated Public Key</a>
+                <a className='text-[#04477B] bg-white rounded-2xl px-8 py-5 w-fit font-bold' onClick={()=>navigate("/register")}>Register the Generated Public Key</a>
             </aside>
             <aside className=''>
                 <img src={headerImg} alt="a couple looking at laptop" />
