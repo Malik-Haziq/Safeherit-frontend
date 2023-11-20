@@ -84,11 +84,11 @@ export function NavBar() {
             </li>
           </ul>
         </div>
-        {registerBtn.includes(currentPath.pathname) ? (
+
+        {!user.active ? 
           <button className="primary-btn " onClick={_handleLoginPress}>
             Login / Register
-          </button>
-        ) : (
+          </button> : 
           <DropDownButton
             className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer "
             onClick={_handleLogout}
@@ -99,8 +99,7 @@ export function NavBar() {
             userIconClassName={"sm:w-8 sm:h-8 rounded-full"}
             optionText={"Logout"}
             options={["Logout"]}
-          />
-        )}
+          />}
       </nav>
     </div>
   )

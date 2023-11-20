@@ -267,11 +267,12 @@ function PulseCheckView(_props: {
               })}
             </div>
             <div className="p-5 flex flex-col gap-3 ">
-              {_props.methodArr.map((value: any) => {
+              {_props.methodArr.map((value: any, i: number) => {
                 return (
                   <MethodRow
                     heading={value.heading}
                     subHeading={value.subHeading}
+                    key={i}
                   />
                 )
               })}

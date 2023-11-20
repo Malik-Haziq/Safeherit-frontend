@@ -5,6 +5,8 @@ export const ROUTE_CONSTANTS = {
   PRICING: "/pricing",
   REGISTER_KEY: "/register",
   HOME: "/",
+  ABOUT: "/about",
+  CONTACT: "/contact",
   DASHBOARD_ASSETS: "assets",
   DASHBOARD_BENEFICIARIES: "beneficiaries",
   DASHBOARD_VALIDATORS: "validators",

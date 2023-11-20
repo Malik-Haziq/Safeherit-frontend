@@ -606,14 +606,14 @@ function Beneficiaries(_props: {
               <p className="text-sm">Name</p>
             </li>
             <li className="text-safe-text-gray-shade text-sm">Email</li>
-            <li className="text-safe-text-gray-shade text-sm">Phone Number</li>
+            <li className="text-safe-text-gray-shade text-sm">Phone&nbsp;Number</li>
             <li className="text-safe-text-gray-shade text-sm relative w-[140px]">
               <p className="w-36 absolute right-20 -top-3">
-                Backup Phone Number
+                Backup&nbsp;Phone&nbsp;Number
               </p>
             </li>
             <li className="text-safe-text-gray-shade text-sm relative -top-3">
-              <p className="absolute right-14  w-24">Social Media</p>
+              <p className="absolute right-14  w-24">Social&nbsp;Media</p>
             </li>
           </ul>
 

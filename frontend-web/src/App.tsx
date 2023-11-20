@@ -12,7 +12,7 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom"
-import { Login, SignUp } from "./pages"
+import { Login, SignUp, Home, About, Contact } from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar, Spinner } from "./components"
 import { lazy } from "react"
@@ -61,6 +61,9 @@ function AppRoutes() {
           <Route element={<ProtectedRoute />}>
             {/* TODO validator should not be able to see this page*/}
             <Route path={ROUTE_CONSTANTS.PRICING} element={<Pricing />} />
+            <Route path={ROUTE_CONSTANTS.ABOUT} element={<About />} />
+            <Route path={ROUTE_CONSTANTS.CONTACT} element={<Contact />} />
+            <Route path={''} element={<Home />} />
             {/* TODO validator & beneficiary should not be able to see this page*/}
             <Route path={ROUTE_CONSTANTS.REGISTER_KEY} element={<RegisterKey />} />
           </Route>
