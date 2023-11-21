@@ -37,7 +37,8 @@ export async function verifyPhoneNumber(
   const phoneAuthProvider = new PhoneAuthProvider(auth);
   try {
     return await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
-  }catch (e) {
+  }
+  catch (e) {
     return false;
   }
 }
@@ -53,7 +54,8 @@ export async function enrollUser(
   try {
     await multiFactor(user).enroll(multiFactorAssertion, 'Personal Phone Number');
     return true;
-  }catch (e) {
+  }
+  catch (e) {
     return false;
   }
 }

@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
+import { ApplicationVerifier, RecaptchaVerifier } from "@firebase/auth";
+import { auth } from "@/firebase";
 
 export const useArray = () => {
   const [array, setArray] = useState<string[]>([])
@@ -24,4 +26,23 @@ export const useArray = () => {
   }
 
   return [array, arrayLength, pop, push, popAll] as const
+}
+
+export function useRecaptcha(componentId: string) {
+  const [recaptcha, setRecaptcha] = useState<ApplicationVerifier>();
+
+  useEffect(() => {
+    const recaptchaVerifier = new RecaptchaVerifier(componentId, {
+      "size": "invisible",
+      "callback": () => {}
+    }, auth);
+
+    setRecaptcha(recaptchaVerifier);
+
+    return () => {
+      recaptchaVerifier.clear();
+    }
+  }, [componentId]);
+
+  return recaptcha;
 }

@@ -1,37 +1,27 @@
 import styles from "../../Dashboard.module.css"
-import { useRef, useState, ChangeEvent, useEffect } from "react";
+import { useRef, useState, ChangeEvent } from "react";
 import { auth } from "@/firebase";
 import { toast } from "@/components";
-import { User } from "@firebase/auth";
-import { verifyPhoneNumber, enrollUser } from "@/common";
-import {ApplicationVerifier, RecaptchaVerifier} from "@firebase/auth";
+import {User} from "@firebase/auth";
+import { useRecaptcha, verifyPhoneNumber, enrollUser } from "@/common";
 
 export default function TwoFAAuth(_props:{
   hideTwoFA: React.MouseEventHandler<HTMLButtonElement>
 }) {
+
+  const recaptcha = useRecaptcha('authenticate');
   const [verificationCodeId, setVerificationCodeId] = useState<string | null>(null);
   const [confirmationCodeVisibility, setConfirmationCodeVisibility] = useState<boolean>(false);
-  const recaptcha = useRef<ApplicationVerifier>();
-
-  useEffect(() => {
-    const recaptchaVerifier = new RecaptchaVerifier('authenticate', {}, auth);
-
-    recaptcha.current = recaptchaVerifier
-
-    return () => {
-      recaptchaVerifier.clear();
-    }
-    });
 
   async function getPhoneNumber(phoneNumber: string) {
-    if (!auth.currentUser || !recaptcha.current) {
+    if (!auth.currentUser || !recaptcha) {
       return;
     }
 
     const verificationId = await verifyPhoneNumber(
       auth.currentUser,
       phoneNumber,
-      recaptcha.current
+      recaptcha
     );
 
     if (!verificationId) {
