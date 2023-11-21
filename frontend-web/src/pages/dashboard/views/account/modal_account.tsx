@@ -76,12 +76,12 @@ export function EditUserModal(_props: {
                           <img
                             src={_props.imageUpload || _props.userImage || userImg}
                             alt=""
-                            className="w-[124px] h-[124px] rounded-full"
+                            className="w-[124px] h-[124px] rounded-full object-contain"
                           />
                           <img
                             src={uploadIcon}
                             alt=""
-                            className="h-10 w-10 absolute bottom-0 right-0 rounded-full"
+                            className="h-10 w-10 absolute bottom-0 right-0 rounded-full object-contain"
                           />
                         </>
                       ) : (
@@ -89,12 +89,12 @@ export function EditUserModal(_props: {
                           <img
                             src={userImg}
                             alt=""
-                            className="w-[124px] h-[124px] rounded-full"
+                            className="w-[124px] h-[124px] rounded-full object-contain"
                           />
                           <img
                             src={uploadIcon}
                             alt=""
-                            className="h-10 w-10 absolute bottom-0 right-0 rounded-full"
+                            className="h-10 w-10 absolute bottom-0 right-0 rounded-full object-contain"
                           />
                         </>
                       )}

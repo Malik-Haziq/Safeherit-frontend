@@ -86,7 +86,7 @@ export function Home(){
                     </div>
                     <div>
                         <div className='flex items-center gap-3'> 
-                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full ' />
+                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full object-contain ' />
                             <div>
                                 <h3 className='font-semibold'>Jane Cooper</h3>
                                 <small className='text-[#848484] text-sm'>Jane@gmail.com</small>
@@ -111,7 +111,7 @@ export function Home(){
                     </div>
                     <div>
                         <div className='flex items-center gap-3'> 
-                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full ' />
+                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full object-contain' />
                             <div>
                                 <h3 className='font-semibold'>Jane Cooper</h3>
                                 <small className='text-[#848484] text-sm'>Jane@gmail.com</small>
@@ -136,7 +136,7 @@ export function Home(){
                     </div>
                     <div>
                         <div className='flex items-center gap-3'> 
-                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full ' />
+                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full object-contain' />
                             <div>
                                 <h3 className='font-semibold'>Jane Cooper</h3>
                                 <small className='text-[#848484] text-sm'>Jane@gmail.com</small>
@@ -175,7 +175,7 @@ function CarouselElement(){
             <aside className='basis-1/2'>
                 <p className='text-[22px] mb-4'>"Testimonial Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt."</p>
                 <div className='flex items-center gap-3'> 
-                    <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full ' />
+                    <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full object-contain' />
                     <div>
                         <h3 className='font-semibold'>Jane Cooper</h3>
                         <small className='text-[#848484] text-sm'>Jane@gmail.com</small>

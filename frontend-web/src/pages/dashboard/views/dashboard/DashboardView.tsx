@@ -165,7 +165,7 @@ function Row(_props: { img: any; title: string; subTitle: string }) {
   }, [_props.img])
   return (
     <div className="p-4 flex gap-4 border-b-[.5px] ">
-      <img src={image || users} alt="" className="w-11 h-11 rounded-full" />
+      <img src={image || users} alt="" className="w-11 h-11 rounded-full object-contain" />
       <div>
         <h4 className="font-semibold">{_props.title}</h4>
         <small className="text-safe-text-light-gray-1 text-sm">

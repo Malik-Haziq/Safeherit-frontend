@@ -212,7 +212,7 @@ function UserProfile(_props: {
             <img
               src={_props.userImg}
               alt="User Image"
-              className="w-[90px] h-[90px] rounded-full "
+              className="w-[90px] h-[90px] rounded-full object-contain"
             />
           </div>
           <div className="ml-28">

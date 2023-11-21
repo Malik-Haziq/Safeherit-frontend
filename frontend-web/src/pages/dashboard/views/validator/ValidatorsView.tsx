@@ -34,7 +34,6 @@ import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import {
   isValidEmail,
   getFileFromFirebase,
-  isValidPhone,
   isValidPhoneWithRegion,
   useArray,
 } from "@/common"
@@ -515,13 +514,13 @@ function Validator(_props: {
             <img
               src={image || userImg}
               alt="user image"
-              className="rounded-full h-11 w-11"
+              className="rounded-full h-11 w-11 object-contain"
             />
           ) : (
             <img
               src={userImg}
               alt="user image"
-              className="rounded-full h-11 w-11"
+              className="rounded-full h-11 w-11 object-contain"
             />
           )
           // TODO add loading view

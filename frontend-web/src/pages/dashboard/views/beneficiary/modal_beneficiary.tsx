@@ -512,13 +512,13 @@ export function StepTwoModal(_props: {
                       <img
                         src={_props.imageUpload || profilePic}
                         alt="user image"
-                        className="w-20 h-20 rounded-full"
+                        className="w-20 h-20 rounded-full object-contain"
                       />
                     ) : (
                       <img
                         src={profilePic}
                         alt="user image"
-                        className="w-20 h-20 rounded-full"
+                        className="w-20 h-20 rounded-full object-contain"
                       />
                     )}
                   </div>

@@ -96,7 +96,7 @@ export function NavBar() {
             arrowIcon={arrowDown}
             arrowDownClassName={"ml-1"}
             userIcon={userImage || userImg}
-            userIconClassName={"sm:w-8 sm:h-8 rounded-full"}
+            userIconClassName={"sm:w-8 sm:h-8 rounded-full object-contain"}
             optionText={"Logout"}
             options={["Logout"]}
           />}

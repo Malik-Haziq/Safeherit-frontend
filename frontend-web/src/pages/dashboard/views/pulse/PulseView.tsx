@@ -17,7 +17,7 @@ import {
   StepFourModal,
   SuccessModal,
 } from "./modal_pulse"
-import { isValidEmail, isValidPhone, useArray } from "@/common"
+import { isValidEmail, isValidPhoneWithRegion, useArray } from "@/common"
 import { toast } from "@/components"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getUser, updatePulse } from "@/redux/actions"
@@ -90,8 +90,33 @@ export default function PulseView() {
   }
 
   const _submitStepTwoModal = () => {
-    modalHistoryPush("Step-2")
-    setModalVisibility("Step-3")
+
+    if (!modalControl.pulseCheckDays) {
+      toast("please enter a valid name", "error")
+    } else if (
+      (!isValidEmail(modalControl.pulseCheckEmail1) &&
+        !isValidEmail(modalControl.pulseCheckEmail2) &&
+        !isValidEmail(modalControl.pulseCheckEmail3)) ||
+      (modalControl.pulseCheckEmail1 &&
+        !isValidEmail(modalControl.pulseCheckEmail1)) ||
+      (modalControl.pulseCheckEmail2 && !isValidEmail(modalControl.pulseCheckEmail2)) ||
+      (modalControl.pulseCheckEmail3 && !isValidEmail(modalControl.pulseCheckEmail3))
+    ) {
+      toast("please enter a valid Email address", "error")
+    } else if (
+      (!isValidPhoneWithRegion(modalControl.pulseCheckPhone1) &&
+        !isValidPhoneWithRegion(modalControl.pulseCheckPhone2)) ||
+      (modalControl.pulseCheckPhone1 &&
+        !isValidPhoneWithRegion(modalControl.pulseCheckPhone1)) ||
+      (modalControl.pulseCheckPhone2 &&
+        !isValidPhoneWithRegion(modalControl.pulseCheckPhone2))
+    ) {
+      toast("please enter a valid Phone number", "error")
+    } else {
+      modalHistoryPush("Step-2")
+      setModalVisibility("Step-3")
+    }
+
   }
 
   const _submitStepThreeModal = () => {

@@ -31,7 +31,7 @@ export default function TestamentView() {
             beneficiary.personalized_message ?
             <>
               <header className="py-3  bg-[#F6F6F6] text-center rounded-t-2xl text-[#00192B] font-bold text-lg">
-                {"Written Testament"}
+                Written Testament
               </header>
               <div className="p-7 text-[#4F4F4F] ">{beneficiary.personalized_message}</div>
             </>
@@ -42,7 +42,7 @@ export default function TestamentView() {
 
         <section className="w-[520px] shadow-md rounded-2xl min-h-[480px] ">
           <header className="py-3 bg-[#F6F6F6] text-center rounded-t-2xl text-[#00192B] font-bold text-lg">
-            {"Video Testament"}
+            Video Testament
           </header>
           <div className="p-7 scroll-auto text-[#00192B] text-lg text-center">
             { 
@@ -50,7 +50,7 @@ export default function TestamentView() {
               <>
                 <h2 className="py-3 font-bold">{user.selectedRoleUser?.ownerName} left this video for you</h2>
                 <p className="mb-6">Click on the video to play it.</p>
-                <video controls  className="rounded-xl mb-7">
+                <video controls  className="rounded-xl mb-7 mx-auto w-[466px] h-[263px]">
                   <source src={videoUrl} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video> 
@@ -64,7 +64,7 @@ export default function TestamentView() {
                 </a>
               </>
               : 
-              <div>Loading...</div>
+              <div>{user.selectedRoleUser?.ownerName} left no video for you</div>
             }
           </div>
         </section>
