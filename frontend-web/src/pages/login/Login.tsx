@@ -5,7 +5,7 @@ import star from "@images/star.svg"
 import { ChangeEvent, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { getUser, login, resetPassword } from "@redux/actions"
+import { getUser, login, loginWithGoogle, resetPassword } from "@redux/actions"
 import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ForgotPasswordModal, toast } from "@/components"
@@ -54,38 +54,50 @@ export function Login() {
     setRememberMe(event.target.checked)
   }
 
+  const getUserDetails = () => {
+    dispatch(getUser({}))
+    .unwrap()
+    .catch()
+    .then((res) => {
+      if (res.data.data.isOwner && !res.data.data.isBeneficiary && !res.data.data.isValidator && !res.data.data.isAdmin && !res.data.data.isSuperAdmin) {
+        setModalVisibility("none")
+        dispatch(updateActive(true))
+        dispatch(updateRole("owner"))
+        navigate("/dashboard", { state: { from: 'login' } });
+      } else {
+        setModalVisibility("user-roles")
+      }
+    })
+    .finally(() => {
+      stopLoader()
+    })
+  }
   const _handleSubmit = () => {
     toast("logging in", "info")
     if (formControl.email && formControl.password) {
       startLoader()
-      dispatch(
-        login({ email: formControl.email, password: formControl.password }),
-      )
+      dispatch(login({ email: formControl.email, password: formControl.password }))
         .unwrap()
         .then((res) => {
-          dispatch(getUser({}))
-            .unwrap()
-            .catch()
-            .then((res) => {
-              if (res.data.data.isOwner && !res.data.data.isBeneficiary && !res.data.data.isValidator && !res.data.data.isAdmin && !res.data.data.isSuperAdmin) {
-                setModalVisibility("none")
-                dispatch(updateActive(true))
-                dispatch(updateRole("owner"))
-                navigate("/dashboard", { state: { from: 'login' } });
-              } else {
-                setModalVisibility("user-roles")
-              }
-            })
-            .finally(() => {
-              stopLoader()
-            })
+          getUserDetails()
         })
         .catch((err) => {
           toast(err?.code, "error")
           stopLoader()
         })
-
     }
+  }
+
+  const _loginWithGoogle = () => {
+    dispatch(loginWithGoogle({}))
+      .unwrap()
+      .then((res) => {
+        getUserDetails()
+      })
+      .catch((err) => {
+        toast(err?.code, "error")
+        stopLoader()
+      })
   }
 
   const _handleUserRolesSubmit = (selectedRole: string) => {
@@ -221,6 +233,9 @@ export function Login() {
               </a>
             </small>
           </form>
+          <button onClick={_loginWithGoogle} className="primary-btn font-medium rounded-md justify-center">
+            Login With Google
+          </button>
         </div>
         <footer className="flex justify-between">
           <small>© 2023 SafeHerit.com</small>

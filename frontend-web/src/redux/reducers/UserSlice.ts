@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { login, logout, signup, getUser, updateUser, updatePK } from "../actions/UserActions"
+import { login, loginWithGoogle, logout, signup, getUser, updateUser, updatePK } from "../actions/UserActions"
 import { SelectOption } from "@/types"
 
 type PulseDetails = {
@@ -95,6 +95,9 @@ export const slice = createSlice({
     updateRole: (state, action) => {
       state.role = action.payload
     },
+    updatePhone: (state, action) => {
+      state.phone = action.payload
+    },
     updateRoleUser: (state, action) => {
       if (action.payload.role == "beneficiary") {
         state.publicKey = action.payload.public_key
@@ -120,6 +123,12 @@ export const slice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
+      state.email = action.payload.user.email || ""
+      state.displayName = action.payload.user.displayName || ""
+      state.photo = action.payload.user.photoURL || ""
+      state.phone = action.payload.user.phoneNumber || ""
+    })
+    builder.addCase(loginWithGoogle.fulfilled, (state, action) => {
       state.email = action.payload.user.email || ""
       state.displayName = action.payload.user.displayName || ""
       state.photo = action.payload.user.photoURL || ""
@@ -227,6 +236,6 @@ export const slice = createSlice({
   },
 })
 
-export const { updateName, updateActive, setToken, updateRole, updateRoleUser, resetMapper, resetBeneficiaryOf, resetValidatorOf } = slice.actions
+export const { updateName, updateActive, setToken, updateRole, updatePhone, updateRoleUser, resetMapper, resetBeneficiaryOf, resetValidatorOf } = slice.actions
 
 export default slice.reducer

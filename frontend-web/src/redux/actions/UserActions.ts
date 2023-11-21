@@ -3,6 +3,8 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from "firebase/auth"
 import { auth } from "../../firebase"
 import { createAsyncThunk } from "@reduxjs/toolkit"
@@ -28,6 +30,23 @@ export const login = createAsyncThunk(
     const { email, password } = Data
     try {
       let response = await signInWithEmailAndPassword(auth, email, password)
+      let token = await response.user.getIdToken()
+      dispatch(setToken(token))
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const loginWithGoogle = createAsyncThunk(
+  "loginWithGoogle",
+  async (
+    Data: {},
+    { dispatch, rejectWithValue },
+  ) => {
+    try {
+      let response = await signInWithPopup(auth, new GoogleAuthProvider());
       let token = await response.user.getIdToken()
       dispatch(setToken(token))
       return response
