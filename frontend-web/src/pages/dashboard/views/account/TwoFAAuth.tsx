@@ -1,9 +1,10 @@
 import styles from "../../Dashboard.module.css"
-import { useRef, useState, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import { auth } from "@/firebase";
 import { toast } from "@/components";
 import {User} from "@firebase/auth";
-import { useRecaptcha, verifyPhoneNumber, enrollUser } from "@/common";
+import { useRecaptcha, verifyPhoneNumber, enrollUser, isValidPhoneWithRegion } from "@/common";
+import { PhoneNumField } from "@/components";
 
 export default function TwoFAAuth(_props:{
   hideTwoFA: Function
@@ -73,12 +74,20 @@ export default function TwoFAAuth(_props:{
 function PhoneRegistration({getPhoneNumber}: {
   getPhoneNumber: (phoneNumber: string) => void
 }) {
-  const phoneNumber = useRef<HTMLInputElement>(null);
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   function handleClick() {
-    if (phoneNumber.current) {
-      getPhoneNumber(phoneNumber.current.value);
+    if (isValidPhoneWithRegion(phoneNumber)) {
+      getPhoneNumber(phoneNumber);
     }
+    else {
+      toast("Invalid Phone Number", "error")
+    }
+  }
+  
+  const _handleChange = (event: { target: { name: any, value: any}}) => {
+    const {name, value} = event.target
+    setPhoneNumber(value)
   }
 
   return (
@@ -90,13 +99,15 @@ function PhoneRegistration({getPhoneNumber}: {
         </div>
         <div className="space-y-4 my-6">
           <div className="relative flex items-center">
-            <input
-              ref={phoneNumber}
-              type="text"
-              name="password"
-              id="password"
-              placeholder="Insert your phone number"
-              className="focus:outline-none block w-full rounded-xl placeholder-gray-500 bg-gray-100 pl-12 pr-4 h-12 text-gray-600 transition duration-300 invalid:ring-2 invalid:ring-red-400 focus:ring-2 focus:ring-black"
+            <PhoneNumField
+              name="phone_number"
+              placeholder=""
+              selectFieldStyles=""
+              inputStyles=""
+              inputContainerStyles=""
+              _handleChange={_handleChange}
+              value={phoneNumber?.split(' ')[1]}
+              code={phoneNumber?.split(' ')[0]}
             />
           </div>
         </div>
