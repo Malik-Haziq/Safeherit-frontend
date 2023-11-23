@@ -6,7 +6,7 @@ import {User} from "@firebase/auth";
 import { useRecaptcha, verifyPhoneNumber, enrollUser } from "@/common";
 
 export default function TwoFAAuth(_props:{
-  hideTwoFA: React.MouseEventHandler<HTMLButtonElement>
+  hideTwoFA: Function
 }) {
 
   const recaptcha = useRecaptcha('authenticate');
@@ -25,30 +25,43 @@ export default function TwoFAAuth(_props:{
     );
 
     if (!verificationId) {
-      toast('Something went wrong.', 'error');
-    }else {
-      setVerificationCodeId(verificationId);
+      toast('Unable to verify User, please login again to proceed.', 'error');
     }
+    else {
+      setVerificationCodeId(verificationId);
+      setConfirmationCodeVisibility(true)
+    }
+  }
+
+  const _cancelConfirmationCode = () => {
+    setConfirmationCodeVisibility(false)
+    setVerificationCodeId(null)
+  }
+
+  const returnToAccountView = () => {
+    _cancelConfirmationCode()
+    _props.hideTwoFA()
   }
 
   return (
     <div className={styles.AppView}>
-      <button onClick={_props.hideTwoFA} className=" mb-4 mt-2 p-2 hover:opacity-75 rounded-lg shadow-md my-[5px] w-[200px] mx-2">← Back to My Account</button>
+      <button onClick={returnToAccountView} className=" mb-4 mt-2 p-2 hover:opacity-75 rounded-lg shadow-md my-[5px] w-[200px] mx-2">← Back to My Account</button>
       <>
         {
           !verificationCodeId && !confirmationCodeVisibility &&
           <PhoneRegistration
             getPhoneNumber={getPhoneNumber}
-            setConfirmationCodeVisibility={setConfirmationCodeVisibility}
           />
         }
         {
           verificationCodeId &&
           auth.currentUser &&
+          confirmationCodeVisibility &&
           <CodeSignup
             currentUser={auth.currentUser}
             verificationCodeId={verificationCodeId}
-            setConfirmationCodeVisibility={setConfirmationCodeVisibility}
+            _cancelConfirmationCode={_cancelConfirmationCode}
+            returnToAccountView={returnToAccountView}
           />
         }
         <div id='authenticate'></div>
@@ -57,9 +70,8 @@ export default function TwoFAAuth(_props:{
   )
 }
 
-function PhoneRegistration({getPhoneNumber, setConfirmationCodeVisibility}: {
+function PhoneRegistration({getPhoneNumber}: {
   getPhoneNumber: (phoneNumber: string) => void
-  setConfirmationCodeVisibility: Function
 }) {
   const phoneNumber = useRef<HTMLInputElement>(null);
 
@@ -90,9 +102,6 @@ function PhoneRegistration({getPhoneNumber, setConfirmationCodeVisibility}: {
         </div>
         <div className="flex justify-between mt-4 gap-x-4">
           <button
-            onClick={() => setConfirmationCodeVisibility(true)}
-            className='rounded-xl flex gap-x-4 mb-8 text-black h-11 w-1/2 items-center justify-center px-6 border border-gray-500'>Cancel</button>
-          <button
             onClick={handleClick}
             className="bg-black rounded-xl flex h-11 w-1/2 items-center justify-center px-6">
             <span
@@ -106,10 +115,11 @@ function PhoneRegistration({getPhoneNumber, setConfirmationCodeVisibility}: {
   )
 }
 
-function CodeSignup({currentUser, verificationCodeId, setConfirmationCodeVisibility}: {
+function CodeSignup({currentUser, verificationCodeId, _cancelConfirmationCode, returnToAccountView}: {
   currentUser: User,
   verificationCodeId: string
-  setConfirmationCodeVisibility: Function
+  _cancelConfirmationCode: Function
+  returnToAccountView: Function
 }) {
 
   async function getCode(code: string) {
@@ -120,24 +130,25 @@ function CodeSignup({currentUser, verificationCodeId, setConfirmationCodeVisibil
     );
 
     if (response) {
-      toast("number verified", "success")
+      toast("Number verified", "success")
+      returnToAccountView()
     }else {
-      toast('Something went wrong.', 'error');
-      setConfirmationCodeVisibility(false)
+      toast('Unable to verify code, Please try again.', 'error');
+      _cancelConfirmationCode()
     }
   }
 
   return (
     <Code 
       getCode={getCode}
-      setConfirmationCodeVisibility={setConfirmationCodeVisibility}
+      _cancelConfirmationCode={_cancelConfirmationCode}
     />
   )
 }
 
-function Code({getCode, setConfirmationCodeVisibility}: {
+function Code({getCode, _cancelConfirmationCode}: {
   getCode: (code: string) => void
-  setConfirmationCodeVisibility: Function
+  _cancelConfirmationCode: Function
 }) {
   let code = new Array<string>(6).fill('');
 
@@ -173,7 +184,7 @@ function Code({getCode, setConfirmationCodeVisibility}: {
       </div>
       <div className="flex mt-4 gap-x-4">
         <button
-          onClick={() => setConfirmationCodeVisibility(false)}
+          onClick={() => _cancelConfirmationCode()}
           className='rounded-xl flex gap-x-4 mb-8 text-black h-11 w-1/2 items-center justify-center px-6 border border-gray-500'>
           Cancel
         </button>
@@ -213,8 +224,8 @@ function Input({index, getValue}: {
       value={value}
       disabled={index > 0}
       onChange={checkValue}
-      className="transition ease-in-out duration-300 flex flex-1 items-center disabled:cursor-not-allowed border-2 outline-none focus:outline-none focus:shadow-[0_0_0_4px_rgba(209,213,218,0.45)] focus:border-2 h-[44px] md:h-[52px] w-full px-4 rounded-xl"
-      type="number"
+      className="transition ease-in-out duration-300 flex flex-1 items-center disabled:cursor-not-allowed border-2 outline-none focus:outline-none focus:shadow-[0_0_0_4px_rgba(209,213,218,0.45)] focus:border-2 h-[44px] md:h-[52px] w-full px-5 rounded-xl"
+      type="text"
     />
   )
 }

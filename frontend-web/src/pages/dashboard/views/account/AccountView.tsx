@@ -57,7 +57,10 @@ export default function AccountView() {
   const hidePlanView = () => setShowMemberShipPlan(false)
 
   const showTwoFA = () => setShowTwoFAAuth(true)
-  const hideTwoFA = () => setShowTwoFAAuth(false)
+  const hideTwoFA = () => {
+    setShowTwoFAAuth(false)
+    setAuth2FAEnabled(verifyIfUserIsEnrolled())
+  }
 
   const getUserDetails = () => {
     dispatch(getUser({}))
@@ -284,7 +287,7 @@ function UserProfileDetails(_props: {
             </small>
           </div>
           <button
-            onClick={_props.enable2FA}
+            onClick={_props.verified ? () => {} : _props.enable2FA}
             className={
               _props.verified
                 ? "primary-btn bg-[#0AB64E] cursor-pointer rounded-full py-2 px-6 text-sm"
