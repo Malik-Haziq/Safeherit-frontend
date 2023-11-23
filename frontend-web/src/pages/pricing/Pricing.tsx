@@ -1,3 +1,4 @@
+import { Spinner } from "@/components"
 import tick from "@images/tick.svg"
 
 import { useState } from "react"
@@ -5,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 
 export default function Pricing() {
   const [selectedPlan, setSelectedPlan] = useState("Yearly")
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   
   const packagePlans = [
@@ -14,6 +16,7 @@ export default function Pricing() {
   ]
 
   function _handlePlanSelect(selectedPlan: string) {
+    setIsLoading(true)
     setSelectedPlan(selectedPlan)
     setTimeout(() => {
       navigate("/register")
@@ -21,7 +24,8 @@ export default function Pricing() {
   }
 
   return (
-    <main className="font-safe-font-default">
+    <main className="font-safe-font-default relative">
+      {isLoading && <Spinner withOverlay={true} />}
       <section className="bg-safe-blue-tint text-safe-text-white flex justify-center items-center flex-col py-[74px]">
         <h1 className="text-safe-text-white text-2xl sm:text-3xl font-bold mb-4 text-center">
           Get Started Now Pick a Plan

@@ -133,8 +133,7 @@ export default function BeneficiariesView() {
       (!isValidEmail(modalControl.primary_email) &&
         !isValidEmail(modalControl.backup_email2) &&
         !isValidEmail(modalControl.backup_email)) ||
-      (modalControl.primary_email &&
-        !isValidEmail(modalControl.primary_email)) ||
+      (modalControl.primary_email && !isValidEmail(modalControl.primary_email)) ||
       (modalControl.backup_email && !isValidEmail(modalControl.backup_email)) ||
       (modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2))
     ) {
@@ -149,8 +148,8 @@ export default function BeneficiariesView() {
     ) {
       toast("please enter a valid Phone number", "error")
     } else {
-      modalHistoryPush("Step-1")
-      setModalVisibility("Step-2")
+                modalHistoryPush("Step-1")
+        setModalVisibility("Step-2")
     }
   }
   const _submitStepTwoModal = () => {
@@ -165,12 +164,27 @@ export default function BeneficiariesView() {
       setModalVisibility("Step-3")
     }
   }
+
+  const validateData = (data: { [key: string]: any }) => {
+    const validatedData: { [key: string]: any } = {};
+
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        validatedData[key] = data[key] !== '' ? data[key] : ' ';
+      }
+    }
+    return validatedData;
+  };
+  
+
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
       toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
-        dispatch(updateBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
+        const validatedData = validateData(modalControl)
+
+        dispatch(updateBeneficiary({...validatedData, public_key: modalEncryptionKeyControl.publicKey}))
           .unwrap()
           .then((res) => {
             dispatch(getAllBeneficiary({}))
@@ -189,8 +203,9 @@ export default function BeneficiariesView() {
             // TODO: show fallback page
           })
       } else if (modalAction == "create") {
+        const validatedData = validateData(modalControl)
         toast("creating beneficiary", "info")
-        dispatch(createBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
+        dispatch(createBeneficiary({...validatedData, public_key: modalEncryptionKeyControl.publicKey}))
           .unwrap()
           .then((res) => {
             dispatch(getAllBeneficiary({}))

@@ -10,7 +10,7 @@ import stepTwo from "@images/step_2_of_4.svg"
 import stepThree from "@images/step_3_of_4.svg"
 import stepFour from "@images/step_4_of_4.svg"
 
-import { Modal } from "@/components"
+import { Modal, toast } from "@/components"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
@@ -559,22 +559,27 @@ export function StepThreeModal(_props: {
   showPreviousModal: any
 }) {
   const handleImageInputChange = (event: any) => {
+    const maxSize = 100 * 1024 * 1024;
     const file = event.target.files[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const dataURL = e.target?.result
-        _props.setVideoUpload(dataURL)
-        const customEvent: CustomChangeEvent = {
-          target: {
-            name: "personalized_video",
-            value: file,
-          },
+      if(file.size > maxSize){
+        toast("Video's size should be less than 100MBs", "error")
+      } else {
+          const reader = new FileReader()
+            reader.onload = (e) => { 
+            const dataURL = e.target?.result
+            _props.setVideoUpload(dataURL)
+                        const customEvent: CustomChangeEvent = {
+              target: {
+                name: "personalized_video",
+                value: file,
+              },
+            }
+            _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+            }
+            reader.readAsDataURL(file)
         }
-        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
       }
-      reader.readAsDataURL(file)
-    }
   }
   return (
     <Modal
@@ -651,7 +656,7 @@ export function StepThreeModal(_props: {
                     ) : (
                       <img
                         src={uploadVideoIcon}
-                        alt="user image"
+                        alt="upload video"
                         className="w-20 h-20 rounded-full"
                       />
                     )}

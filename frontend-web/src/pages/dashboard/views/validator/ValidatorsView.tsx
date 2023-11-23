@@ -145,8 +145,20 @@ export default function ValidatorsView() {
       setModalVisibility("Step-3")
     }
   }
+
+  const validateData = (data: { [key: string]: any }) => {
+    const validatedData: { [key: string]: any } = {};
+    
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        validatedData[key] = data[key] !== '' ? data[key] : ' ';
+      }
+    }
+    return validatedData;
+  };
+
   const _submitStepThreeModal = () => {
-    if (!modalControl.personalized_message) {
+        if (!modalControl.personalized_message) {
       toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
@@ -169,8 +181,9 @@ export default function ValidatorsView() {
             // TODO: show fallback page
           })
       } else if (modalAction == "create") {
+        const validatedData = validateData(modalControl)
         toast("creating validator", "info")
-        dispatch(createValidator(modalControl))
+        dispatch(createValidator(validatedData))
           .unwrap()
           .then((res) => {
             dispatch(getAllValidator({}))
