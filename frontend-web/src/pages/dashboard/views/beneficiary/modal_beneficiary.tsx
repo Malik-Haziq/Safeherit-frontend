@@ -561,26 +561,29 @@ export function StepThreeModal(_props: {
   const handleImageInputChange = (event: any) => {
     const maxSize = 100 * 1024 * 1024;
     const file = event.target.files[0]
+    
     if (file) {
       if(file.size > maxSize){
         toast("Video's size should be less than 100MBs", "error")
-      } else {
-          const reader = new FileReader()
-            reader.onload = (e) => { 
-            const dataURL = e.target?.result
-            _props.setVideoUpload(dataURL)
-                        const customEvent: CustomChangeEvent = {
-              target: {
-                name: "personalized_video",
-                value: file,
-              },
-            }
-            _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
-            }
-            reader.readAsDataURL(file)
+      } 
+      else {
+        const reader = new FileReader()
+        reader.onload = (e) => { 
+        const dataURL = e.target?.result
+        _props.setVideoUpload(dataURL)
+        const customEvent: CustomChangeEvent = {
+          target: {
+            name: "personalized_video",
+            value: file,
+          },
         }
+        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+        }
+        reader.readAsDataURL(file)
       }
+    }
   }
+
   return (
     <Modal
       openModal={_props.openModal}

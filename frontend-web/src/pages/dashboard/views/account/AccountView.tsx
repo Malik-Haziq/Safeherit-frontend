@@ -37,10 +37,10 @@ export default function AccountView() {
   const [modalVisibility, setModalVisibility] = useState("none")
   const [auth2FAEnabled, setAuth2FAEnabled] = useState(false)
   
-  // useEffect(()=>{
-  //   const key = sessionStorage.getItem("privateKey")
-  //   setModalControl({ ...modalControl, privateKey: key })
-  // }, [modalControl.privateKey])
+  useEffect(()=>{
+    const key = sessionStorage.getItem("privateKey")
+    setModalControl({ ...modalControl, privateKey: key || "" })
+  }, [modalControl.privateKey])
 
   useEffect(() => {
     getUserDetails()

@@ -148,8 +148,8 @@ export default function BeneficiariesView() {
     ) {
       toast("please enter a valid Phone number", "error")
     } else {
-                modalHistoryPush("Step-1")
-        setModalVisibility("Step-2")
+      modalHistoryPush("Step-1")
+      setModalVisibility("Step-2")
     }
   }
   const _submitStepTwoModal = () => {
@@ -165,26 +165,12 @@ export default function BeneficiariesView() {
     }
   }
 
-  const validateData = (data: { [key: string]: any }) => {
-    const validatedData: { [key: string]: any } = {};
-
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        validatedData[key] = data[key] !== '' ? data[key] : ' ';
-      }
-    }
-    return validatedData;
-  };
-  
-
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
       toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
-        const validatedData = validateData(modalControl)
-
-        dispatch(updateBeneficiary({...validatedData, public_key: modalEncryptionKeyControl.publicKey}))
+        dispatch(updateBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
           .unwrap()
           .then((res) => {
             dispatch(getAllBeneficiary({}))
@@ -203,9 +189,8 @@ export default function BeneficiariesView() {
             // TODO: show fallback page
           })
       } else if (modalAction == "create") {
-        const validatedData = validateData(modalControl)
         toast("creating beneficiary", "info")
-        dispatch(createBeneficiary({...validatedData, public_key: modalEncryptionKeyControl.publicKey}))
+        dispatch(createBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
           .unwrap()
           .then((res) => {
             dispatch(getAllBeneficiary({}))

@@ -27,7 +27,7 @@ export default function DashboardNavbar(_props: {
       .catch(() => {
         setImage("")
       })
-  }, [user])
+  }, [user.profile_image])
 
   return (
     <div className="h-[83px] p-2 sm:p-7 flex justify-between items-center shadow-sm min-w-[1200px] max-w-[100vw]">

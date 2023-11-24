@@ -146,17 +146,6 @@ export default function ValidatorsView() {
     }
   }
 
-  const validateData = (data: { [key: string]: any }) => {
-    const validatedData: { [key: string]: any } = {};
-    
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        validatedData[key] = data[key] !== '' ? data[key] : ' ';
-      }
-    }
-    return validatedData;
-  };
-
   const _submitStepThreeModal = () => {
         if (!modalControl.personalized_message) {
       toast("Personalized message cannot be empty", "error")
@@ -181,9 +170,8 @@ export default function ValidatorsView() {
             // TODO: show fallback page
           })
       } else if (modalAction == "create") {
-        const validatedData = validateData(modalControl)
         toast("creating validator", "info")
-        dispatch(createValidator(validatedData))
+        dispatch(createValidator(modalControl))
           .unwrap()
           .then((res) => {
             dispatch(getAllValidator({}))
