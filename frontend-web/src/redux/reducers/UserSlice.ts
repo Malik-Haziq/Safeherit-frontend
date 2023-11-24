@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { login, logout, signup, getUser, updateUser, updatePK } from "../actions/UserActions"
+import { login, loginWithGoogle, logout, signup, getUser, updateUser, updatePK } from "../actions/UserActions"
 import { SelectOption } from "@/types"
 
 type PulseDetails = {
@@ -95,6 +95,34 @@ export const slice = createSlice({
     updateRole: (state, action) => {
       state.role = action.payload
     },
+    updateRoleCheck: (state, action) => {
+      switch (action.payload.role)
+      {
+        case "owner": {
+          state.isOwner = action.payload.value
+          break;
+        }
+        case "beneficiary": {
+          state.isBeneficiary = action.payload.value
+          break;
+        }
+        case "validator": {
+          state.isValidator = action.payload.value
+          break;
+        }
+        case "admin": {
+          state.isAdmin = action.payload.value
+          break;
+        }
+        case "super-admin": {
+          state.isSuperAdmin = action.payload.value
+          break;
+        }
+      }
+    },
+    updatePhone: (state, action) => {
+      state.phone = action.payload
+    },
     updateRoleUser: (state, action) => {
       if (action.payload.role == "beneficiary") {
         state.publicKey = action.payload.public_key
@@ -116,10 +144,23 @@ export const slice = createSlice({
     },
     setToken: (state, action) => {
       state.token = action.payload;
+    },
+    setCredentials: (state, action) => {
+      state.token = action.payload.token
+      state.email = action.payload.email
+      state.displayName = action.payload.user || ""
+      state.photo = action.payload.user || ""
+      state.phone = action.payload.user || ""
     }
   },
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
+      state.email = action.payload.user.email || ""
+      state.displayName = action.payload.user.displayName || ""
+      state.photo = action.payload.user.photoURL || ""
+      state.phone = action.payload.user.phoneNumber || ""
+    })
+    builder.addCase(loginWithGoogle.fulfilled, (state, action) => {
       state.email = action.payload.user.email || ""
       state.displayName = action.payload.user.displayName || ""
       state.photo = action.payload.user.photoURL || ""
@@ -227,6 +268,6 @@ export const slice = createSlice({
   },
 })
 
-export const { updateName, updateActive, setToken, updateRole, updateRoleUser, resetMapper, resetBeneficiaryOf, resetValidatorOf } = slice.actions
+export const { updateName, updateActive, setToken, updateRole, updatePhone, updateRoleUser, resetMapper, resetBeneficiaryOf, resetValidatorOf, setCredentials, updateRoleCheck } = slice.actions
 
 export default slice.reducer
