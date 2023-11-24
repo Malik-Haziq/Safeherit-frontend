@@ -22,7 +22,7 @@ export function verifyIfUserIsEnrolled() {
     return enrolledFactors.length > 0;
   }
   else {
-    alert("User not found")
+    toast("User not found", "error")
     return false
   }
 }
@@ -34,7 +34,13 @@ export async function verifyUserEnrolled(
   const {verificationId, resolver} = verificationMFA;
   const credentials = PhoneAuthProvider.credential(verificationId, verificationCode);
   const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(credentials);
-  return await resolver.resolveSignIn(multiFactorAssertion);
+  try {
+    return await resolver.resolveSignIn(multiFactorAssertion);
+  }
+  catch (e) {
+    toastError(e)
+    return false;
+  }
 }
 
 export async function verifyPhoneNumber(
@@ -53,13 +59,7 @@ export async function verifyPhoneNumber(
     return await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
   }
   catch (e) {
-    const errorWithCode = e as { code?: string };
-
-    if (errorWithCode && errorWithCode.code) {
-      toast(errorWithCode.code, "error");
-    } else {
-      toast('Unable to verify User, please login again to proceed.', 'error');
-    }
+    toastError(e)
     return false;
   }
 }
@@ -77,6 +77,7 @@ export async function enrollUser(
     return true;
   }
   catch (e) {
+    toastError(e)
     return false;
   }
 }
@@ -99,7 +100,16 @@ export async function verifyUserMFA(
       const verificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
       return { verificationId, resolver }
     }catch (e) {
+      toastError(e)
       return false
     }
+  }
+}
+
+function toastError (e: any) {
+  const errorWithCode = e as { code?: string };
+
+  if (errorWithCode && errorWithCode.code) {
+    toast(errorWithCode.code, "error");
   }
 }

@@ -152,10 +152,7 @@ export function Login() {
         0
       )
 
-      if (!data) {
-        toast('Something went wrong.', 'error');
-      }
-      else {
+      if (data) {
         const {verificationId, resolver} = data;
         setVerificationId(verificationId);
         setResolver(resolver);

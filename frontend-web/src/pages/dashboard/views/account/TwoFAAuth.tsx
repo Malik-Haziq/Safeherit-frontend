@@ -163,7 +163,7 @@ function CodeSignup({currentUser, verificationCodeId, _cancelConfirmationCode, r
       returnToAccountView()
     }
     else {
-      toast('Unable to verify code, Please try again.', 'error');
+      toast("Number not verified", "success")
       _cancelConfirmationCode()
     }
   }
