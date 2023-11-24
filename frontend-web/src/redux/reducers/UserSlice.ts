@@ -119,7 +119,6 @@ export const slice = createSlice({
           break;
         }
       }
-      state.role = action.payload
     },
     updatePhone: (state, action) => {
       state.phone = action.payload
