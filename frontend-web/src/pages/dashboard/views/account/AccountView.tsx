@@ -12,9 +12,10 @@ import MembershipPlanView from "./MembershipPlanView"
 import { EditUserModal } from "./modal_account"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { getUser, updateUser, deleteUser, logout } from "@redux/actions"
-import { getFileFromFirebase } from "@/common"
+import { getFileFromFirebase, verifyIfUserIsEnrolled } from "@/common"
 import { ConfirmationModal, Spinner, toast } from "@/components"
 import { useNavigate } from "react-router-dom"
+import TwoFAAuth from "./TwoFAAuth"
 
 const initialState = {
   displayName: "",
@@ -28,19 +29,16 @@ export default function AccountView() {
   const navigate = useNavigate()
 
   const [showMemberShipPlan, setShowMemberShipPlan] = useState(false)
-  const showPlanView = () => {
-    setShowMemberShipPlan(true)
-  }
-  const hidePlanView = () => {
-    setShowMemberShipPlan(false)
-  }
+  const [showTwoFAAuth, setShowTwoFAAuth] = useState(false)
   const [modalControl, setModalControl] = useState(initialState)
   const [imageUpload, setImageUpload] = useState("")
   const [userImage, setUserImage] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
+  const [auth2FAEnabled, setAuth2FAEnabled] = useState(false)
 
   useEffect(() => {
     getUserDetails()
+    setAuth2FAEnabled(verifyIfUserIsEnrolled())
   }, [])
 
   useEffect(() => {
@@ -54,6 +52,15 @@ export default function AccountView() {
         })
     }
   }, [user.profile_image])
+
+  const showPlanView = () => setShowMemberShipPlan(true)
+  const hidePlanView = () => setShowMemberShipPlan(false)
+
+  const showTwoFA = () => setShowTwoFAAuth(true)
+  const hideTwoFA = () => {
+    setShowTwoFAAuth(false)
+    setAuth2FAEnabled(verifyIfUserIsEnrolled())
+  }
 
   const getUserDetails = () => {
     dispatch(getUser({}))
@@ -123,9 +130,13 @@ export default function AccountView() {
 
   return (
     <>
-      {showMemberShipPlan ? (
-        <MembershipPlanView hidePlanView={hidePlanView} />
-      ) : (
+      {
+        showTwoFAAuth ? (
+          <TwoFAAuth hideTwoFA={hideTwoFA} />
+        ) :
+        showMemberShipPlan ? (
+          <MembershipPlanView hidePlanView={hidePlanView} />
+        ) : (
         <>
           <EditUserModal
             openModal={modalVisibility == "edit-user"}
@@ -167,7 +178,8 @@ export default function AccountView() {
                   userName={user.displayName}
                   userEmail={user.email}
                   userLanguage="English"
-                  verified={false}
+                  verified={auth2FAEnabled}
+                  enable2FA={showTwoFA}
                 />
                 <MembershipPlan
                   plan={"Monthly"}
@@ -236,6 +248,7 @@ function UserProfileDetails(_props: {
   userEmail: string
   userLanguage: string
   verified: boolean
+  enable2FA: React.MouseEventHandler<HTMLButtonElement>
 }) {
   return (
     <section className="rounded-2xl shadow-md mb-4">
@@ -265,7 +278,7 @@ function UserProfileDetails(_props: {
           <div>
             <div className="flex gap-2 items-center">
               <h2 className="text-xl font-semibold ">2FA</h2>
-              <img src={warningIcon} alt="Warning Icon" />
+              {!_props.verified && <img src={warningIcon} alt="Warning Icon" />}
             </div>
             <small className="text-[#707070]">
               {_props.verified
@@ -274,6 +287,7 @@ function UserProfileDetails(_props: {
             </small>
           </div>
           <button
+            onClick={_props.verified ? () => {} : _props.enable2FA}
             className={
               _props.verified
                 ? "primary-btn bg-[#0AB64E] cursor-pointer rounded-full py-2 px-6 text-sm"

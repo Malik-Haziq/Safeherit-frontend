@@ -1,0 +1,242 @@
+import styles from "../../Dashboard.module.css"
+import { useState, ChangeEvent } from "react";
+import { auth } from "@/firebase";
+import { toast } from "@/components";
+import {User} from "@firebase/auth";
+import { useRecaptcha, verifyPhoneNumber, enrollUser, isValidPhoneWithRegion } from "@/common";
+import { PhoneNumField } from "@/components";
+import { useAppDispatch } from "@/redux/hooks";
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice";
+
+export default function TwoFAAuth(_props:{
+  hideTwoFA: Function
+}) {
+  
+  const dispatch = useAppDispatch()
+  const recaptcha = useRecaptcha('authenticate');
+  const [verificationCodeId, setVerificationCodeId] = useState<string | null>(null);
+  const [confirmationCodeVisibility, setConfirmationCodeVisibility] = useState<boolean>(false);
+
+  const startLoader = () => dispatch(setLoaderVisibility(true))
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
+
+  async function getPhoneNumber(phoneNumber: string) {
+    startLoader()
+    if (!auth.currentUser || !recaptcha) {
+      return;
+    }
+
+    const verificationId = await verifyPhoneNumber(
+      auth.currentUser,
+      phoneNumber,
+      recaptcha
+    );
+
+    if (!verificationId) {
+      setConfirmationCodeVisibility(false)
+      setVerificationCodeId(null)
+    }
+    else {
+      setVerificationCodeId(verificationId);
+      setConfirmationCodeVisibility(true)
+    }
+    stopLoader()
+  }
+
+  const _cancelConfirmationCode = () => {
+    setConfirmationCodeVisibility(false)
+    setVerificationCodeId(null)
+  }
+
+  const returnToAccountView = () => {
+    _cancelConfirmationCode()
+    _props.hideTwoFA()
+  }
+
+  return (
+    <div className={styles.AppView}>
+      <button onClick={returnToAccountView} className=" mb-4 mt-2 p-2 hover:opacity-75 rounded-lg shadow-md my-[5px] w-[200px] mx-2">← Back to My Account</button>
+      <>
+        {
+          !verificationCodeId && !confirmationCodeVisibility &&
+          <PhoneRegistration
+            getPhoneNumber={getPhoneNumber}
+          />
+        }
+        {
+          verificationCodeId &&
+          auth.currentUser &&
+          confirmationCodeVisibility &&
+          <CodeSignup
+            currentUser={auth.currentUser}
+            verificationCodeId={verificationCodeId}
+            _cancelConfirmationCode={_cancelConfirmationCode}
+            returnToAccountView={returnToAccountView}
+          />
+        }
+        <div id='authenticate'></div>
+      </>
+    </div>
+  )
+}
+
+function PhoneRegistration({getPhoneNumber}: {
+  getPhoneNumber: (phoneNumber: string) => void
+}) {
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  function handleClick() {
+    if (isValidPhoneWithRegion(phoneNumber)) {
+      getPhoneNumber(phoneNumber);
+    }
+    else {
+      toast("Invalid Phone Number", "error")
+    }
+  }
+  
+  const _handleChange = (event: { target: { name: any, value: any}}) => {
+    const {name, value} = event.target
+    setPhoneNumber(value)
+  }
+
+  return (
+    <div className='flex sm:justify-center items-center px-4 sm:px-0'>
+      <div className="bg-white flex flex-col p-5 md:p-6  border-2 shadow-md shadow-gray-100/10  border-palladium rounded-xl w-full sm:max-w-[440px]">
+        <div className="flex flex-col justify-between">
+          <h1 className='font-medium text-[22px] leading-[130%] md:mr-8'>Provide your phone</h1>
+          <p className='text-slate-500 mt-2 text-base'>Fill in your phone number to receive the code</p>
+        </div>
+        <div className="space-y-4 my-6">
+          <div className="relative flex items-center">
+            <PhoneNumField
+              name="phone_number"
+              placeholder=""
+              selectFieldStyles=""
+              inputStyles=""
+              inputContainerStyles=""
+              _handleChange={_handleChange}
+              value={phoneNumber?.split(' ')[1]}
+              code={phoneNumber?.split(' ')[0]}
+            />
+          </div>
+        </div>
+        <div className="flex justify-between mt-4 gap-x-4">
+          <button
+            onClick={handleClick}
+            className="bg-black rounded-xl flex h-11 w-1/2 items-center justify-center px-6">
+            <span
+              className="text-base font-light text-white">
+              Send SMS
+            </span>
+            </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function CodeSignup({currentUser, verificationCodeId, _cancelConfirmationCode, returnToAccountView}: {
+  currentUser: User,
+  verificationCodeId: string
+  _cancelConfirmationCode: Function
+  returnToAccountView: Function
+}) {
+
+  let code = new Array<string>(6).fill('');
+
+  function handleClick() {
+    const finalCode = code.reduce((previousValue, currentValue) => {
+      return previousValue.concat(currentValue);
+    })
+    getCode(finalCode);
+  }
+  
+  async function getCode(code: string) {
+    const response = await enrollUser(
+      currentUser,
+      verificationCodeId,
+      code
+    );
+
+    if (response) {
+      toast("Number verified", "success")
+      returnToAccountView()
+    }
+    else {
+      toast("Number not verified", "error")
+      _cancelConfirmationCode()
+    }
+  }
+
+  return (
+    <div className='flex sm:justify-center items-center px-4 sm:px-0'>
+      <div className="bg-white flex flex-col p-5 md:p-6  border-2 border-palladium rounded-xl w-full sm:max-w-[440px]">
+        <div className="flex justify-between">
+          <div>
+            <h1 className='font-medium text-[22px] leading-[130%] md:mr-8'>Verify your phone</h1>
+            <p className='text-slate-500 mt-2 text-base'>We sent you an SMS code to your phone number</p>
+          </div>
+        </div>
+        <div className='flex gap-x-4 mt-6 md:mt-8 pb-4'>
+          {
+            code.map((value, index) => {
+              return (
+                <Input
+                  key={index}
+                  index={index}
+                  getValue={(value, index) => {
+                    code[index] = value;
+                  }}
+                />
+              )
+            })
+          }
+        </div>
+        <div className="flex mt-4 gap-x-4">
+          <button
+            onClick={() => _cancelConfirmationCode()}
+            className='rounded-xl flex gap-x-4 mb-8 text-black h-11 w-1/2 items-center justify-center px-6 border border-gray-500'>
+            Cancel
+          </button>
+          <button
+            onClick={handleClick}
+            className="bg-black rounded-xl flex h-11 w-1/2 items-center justify-center px-6">
+            <span
+              className="text-base font-light text-white">
+              Submit
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Input({index, getValue}: {
+  index: number,
+  getValue: (value: string, index: number) => void
+}) {
+  const [value, setValue] = useState<string>('');
+
+  function checkValue(event: ChangeEvent<HTMLInputElement>) {
+    const currentValue = event.currentTarget.value.slice(-1);
+    setValue(currentValue);
+    getValue(currentValue, index);
+
+    const nextElement = event.currentTarget.nextSibling;
+    if (nextElement instanceof HTMLInputElement) {
+      nextElement.disabled = false;
+      nextElement.focus();
+    }
+  }
+
+  return (
+    <input
+      value={value}
+      disabled={index > 0}
+      onChange={checkValue}
+      className="transition ease-in-out duration-300 flex flex-1 items-center disabled:cursor-not-allowed border-2 outline-none focus:outline-none focus:shadow-[0_0_0_4px_rgba(209,213,218,0.45)] focus:border-2 h-[44px] md:h-[52px] w-full px-5 rounded-xl"
+      type="text"
+    />
+  )
+}
