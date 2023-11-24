@@ -6,6 +6,7 @@ export * from "./notificationDropDown/index"
 export * from "./spinner/Spinner"
 export * from "./inputField/index"
 export * from "./phoneNumberField"
+export * from "./GoogleAuthButton/GoogleAuthButton"
 
 export * from "./modal/index"
 export * from "./modal/ConfirmationModal"

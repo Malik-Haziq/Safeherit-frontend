@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom"
 import { getUser, login, loginWithGoogle, resetPassword } from "@redux/actions"
 import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
-import { ForgotPasswordModal, toast } from "@/components"
+import { ForgotPasswordModal, toast, GoogleAuthButton } from "@/components"
 import {
   UserRolesModal,
 } from "./modal_login"
@@ -336,9 +336,11 @@ export function Login() {
                   </a>
                 </small>
               </form>
-              <button onClick={_loginWithGoogle} className="primary-btn font-medium rounded-md justify-center">
-                Login With Google
-              </button>
+              <GoogleAuthButton 
+                handleClick={_loginWithGoogle} 
+                type={"login"}
+                buttonText={"Login with google"}                
+              />
               <div id='authenticate'></div>
             </div>
             <footer className="flex justify-between">
