@@ -323,9 +323,17 @@ export function Login() {
                     Forgot Password?
                   </p>
                 </div>
-                <button className="primary-btn rounded-md bg-safe-blue-shade px-40">
-                  Login
-                </button>
+                <div className="flex flex-col">
+                  <button className="primary-btn rounded-md bg-safe-blue-shade px-40">
+                    Login
+                  </button>
+                  <p className="text-center py-2">OR</p>
+                  <GoogleAuthButton 
+                    handleClick={_loginWithGoogle} 
+                    type={"login"}
+                    buttonText={"Login with google"}                
+                  />
+                </div>
                 <small className="text-sm text-safe-text-black font-medium mx-auto">
                   Don't have an account?&nbsp;
                   <a
@@ -336,11 +344,7 @@ export function Login() {
                   </a>
                 </small>
               </form>
-              <GoogleAuthButton 
-                handleClick={_loginWithGoogle} 
-                type={"login"}
-                buttonText={"Login with google"}                
-              />
+
               <div id='authenticate'></div>
             </div>
             <footer className="flex justify-between">
