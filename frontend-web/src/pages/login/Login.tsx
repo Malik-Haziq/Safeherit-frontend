@@ -16,16 +16,21 @@ import {
   resetBeneficiaryOf,
   resetMapper,
   resetValidatorOf,
+  setCredentials,
   updateActive,
   updateRole,
   updateRoleUser,
 } from "@/redux/reducers/UserSlice"
 import { SelectOption } from "@/types"
+import { useRecaptcha, verifyUserEnrolled, verifyUserMFA } from "@/common"
+import { MultiFactorResolver } from "@firebase/auth"
+import { auth } from "@/firebase"
 
 export function Login() {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const recaptcha = useRecaptcha('authenticate')
   const user = useAppSelector((state) => state.user)
   const startLoader = () => dispatch(setLoaderVisibility(true))
   const stopLoader = () => dispatch(setLoaderVisibility(false))
@@ -39,6 +44,56 @@ export function Login() {
   const [selectedBeneficiary, setSelectedBeneficiary] = useState<SelectOption>()
   const [selectedValidator, setSelectedValidator] = useState<SelectOption>()
   const [resetEmail, setResetEmail] = useState("")
+  const [verificationId, setVerificationId] = useState<string>();
+  const [resolver, setResolver] = useState<MultiFactorResolver | null>();
+
+  let code = new Array<string>(6).fill('');
+
+  async function getCode(code: string) {
+    if (verificationId && resolver) {
+      try {
+        const response = await verifyUserEnrolled(
+          {
+            verificationId,
+            resolver
+          },
+          code
+        );
+        if (response) {
+          const currentUser = auth.currentUser;
+          if (currentUser) {
+            currentUser.getIdToken()
+            .then((idToken) => {
+              dispatch(setCredentials({token: idToken, displayName: currentUser.displayName, phone: currentUser.phoneNumber, photo: currentUser.photoURL, email: currentUser.email}))
+              getUserDetails()
+            })
+            .catch((error) => {
+              toast("Unable to obtain token from server, Please login again.", 'error')
+            });
+          }
+          else {
+            toast("Unable to obtain token from server, Please login again.", 'error')
+          }
+        }
+        else {
+          toast('Something went wrong while verifing code.', 'error');
+        }
+      }
+      catch(err) {
+        const errorWithCode = err as { code?: string };
+        if (errorWithCode && errorWithCode.code) {
+          toast(errorWithCode.code, "error");
+        } else {
+          toast('Something went wrong while verifing code.', 'error');
+        }
+      }
+    }
+    else {
+      toast('Something went wrong. Please try again.', 'error');
+    }
+    setVerificationId('')
+    setResolver(null)
+  }
 
   const closeModal = useCallback(() => {
     setModalVisibility("none")
@@ -72,6 +127,7 @@ export function Login() {
       stopLoader()
     })
   }
+
   const _handleSubmit = () => {
     toast("logging in", "info")
     if (formControl.email && formControl.password) {
@@ -82,10 +138,44 @@ export function Login() {
           getUserDetails()
         })
         .catch((err) => {
-          toast(err?.code, "error")
+          _handleMFA(err)
           stopLoader()
         })
     }
+  }
+
+  const _handleMFA = async (response: any) => {
+    if (response.code === 'auth/multi-factor-auth-required' && recaptcha) {
+      const data = await verifyUserMFA(
+        response,
+        recaptcha,
+        0
+      )
+
+      if (!data) {
+        toast('Something went wrong.', 'error');
+      }
+      else {
+        const {verificationId, resolver} = data;
+        setVerificationId(verificationId);
+        setResolver(resolver);
+      }
+    }
+    else {
+      toast(response?.code, "error")
+    }
+  }
+
+  const _handleMFASubmit = () => {
+    const finalCode = code.reduce((previousValue, currentValue) => {
+      return previousValue.concat(currentValue);
+    })
+    getCode(finalCode);
+  }
+
+  const _handleMFACancel = () => {
+    setVerificationId('')
+    setResolver(null)
   }
 
   const _loginWithGoogle = () => {
@@ -95,7 +185,7 @@ export function Login() {
         getUserDetails()
       })
       .catch((err) => {
-        toast(err?.code, "error")
+        _handleMFA(err)
         stopLoader()
       })
   }
@@ -139,137 +229,233 @@ export function Login() {
 
   return (
     <main className="flex flex-row justify-center lg:justify-between font-safe-font-default w-screen h-screen">
-      <UserRolesModal
-        openModal={modalVisibility == "user-roles"}
-        closeModal={closeModal}
-        closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
-        isBeneficiary={user.isBeneficiary}
-        isOwner={user.isOwner}
-        isSuperAdmin={user.isSuperAdmin}
-        isAdmin={user.isAdmin}
-        isValidator={user.isValidator}
-        userName={user.displayName}
-        _beneficiaryOf={user._beneficiaryOf}
-        _validatorOf={user._validatorOf}
-        selectedBeneficiary={selectedBeneficiary}
-        setSelectedBeneficiary={setSelectedBeneficiary}
-        selectedValidator={selectedValidator}
-        setSelectedValidator={setSelectedValidator}
-        _handleUserRolesSubmit={_handleUserRolesSubmit}
-      />
-      <ForgotPasswordModal
-        openModal={modalVisibility == "forgot-password"}
-        closeModal={closeModal}
-        closeModalOnOverlayClick={true}
-        resetEmail={resetEmail}
-        setResetEmail={setResetEmail}
-        sendEmail={_handleForgotPassword}
-      />
-      <section className="pt-10 pb-1.5 px-10 basis-2/5 flex flex-col justify-between">
-        <img src={logo} alt="safeherit logo" className="h-8 w-40" />
-        <div className="mx-auto">
-          <h2 className="text-3xl mb-2 font-semibold font-monstrate text-safe-text-black">
-            Login
-          </h2>
-          <p className="text-safe-text-black text-base mb-8 font-medium opacity-80">
-            Login with your credential information
-          </p>
-          <form
-            className="flex flex-col gap-5 mb-6"
-            onSubmit={(e) => {
-              e.preventDefault()
-              _handleSubmit()
-            }}
-          >
-            <InputField
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formControl.email}
-              _handleChange={_handleChange}
-              inputLable="Email"
-            />
-
-            <InputField
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formControl.password}
-              _handleChange={_handleChange}
-              inputLable="password"
-            />
-            <div className="flex justify-between items-center ">
-              <div className="flex gap-2 text-safe-text-gray items-center justify-center  ">
-                <input
-                  type="checkbox"
-                  className="mr-2 block h-5 w-5"
-                  checked={rememberMe}
-                  onChange={_setRememberMe}
-                />
-                <small className="text-base text-safe-text-black font-medium">
-                  Remember Me
-                </small>
-              </div>
-              <p
-                className="text-safe-text-blue-shade font-medium cursor-pointer"
-                onClick={() => {
-                  setModalVisibility("forgot-password")
+      {
+        verificationId &&
+        resolver &&
+        <CodeSignIn
+          _handleMFASubmit={_handleMFASubmit}
+          _handleMFACancel={_handleMFACancel}
+          code={code}
+        />
+      }
+      {
+        !verificationId &&
+        !resolver &&
+        <>
+          <UserRolesModal
+            openModal={modalVisibility == "user-roles"}
+            closeModal={closeModal}
+            closeModalOnOverlayClick={false}
+            closeIconVisibility={true}
+            isBeneficiary={user.isBeneficiary}
+            isOwner={user.isOwner}
+            isSuperAdmin={user.isSuperAdmin}
+            isAdmin={user.isAdmin}
+            isValidator={user.isValidator}
+            userName={user.displayName}
+            _beneficiaryOf={user._beneficiaryOf}
+            _validatorOf={user._validatorOf}
+            selectedBeneficiary={selectedBeneficiary}
+            setSelectedBeneficiary={setSelectedBeneficiary}
+            selectedValidator={selectedValidator}
+            setSelectedValidator={setSelectedValidator}
+            _handleUserRolesSubmit={_handleUserRolesSubmit}
+          />
+          <ForgotPasswordModal
+            openModal={modalVisibility == "forgot-password"}
+            closeModal={closeModal}
+            closeModalOnOverlayClick={true}
+            resetEmail={resetEmail}
+            setResetEmail={setResetEmail}
+            sendEmail={_handleForgotPassword}
+          />
+          <section className="pt-10 pb-1.5 px-10 basis-2/5 flex flex-col justify-between">
+            <img src={logo} alt="safeherit logo" className="h-8 w-40" />
+            <div className="mx-auto">
+              <h2 className="text-3xl mb-2 font-semibold font-monstrate text-safe-text-black">
+                Login
+              </h2>
+              <p className="text-safe-text-black text-base mb-8 font-medium opacity-80">
+                Login with your credential information
+              </p>
+              <form
+                className="flex flex-col gap-5 mb-6"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  _handleSubmit()
                 }}
               >
-                Forgot Password?
-              </p>
+                <InputField
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={formControl.email}
+                  _handleChange={_handleChange}
+                  inputLable="Email"
+                />
+
+                <InputField
+                  type="password"
+                  name="password"
+                  placeholder="Enter your password"
+                  value={formControl.password}
+                  _handleChange={_handleChange}
+                  inputLable="password"
+                />
+                <div className="flex justify-between items-center ">
+                  <div className="flex gap-2 text-safe-text-gray items-center justify-center  ">
+                    <input
+                      type="checkbox"
+                      className="mr-2 block h-5 w-5"
+                      checked={rememberMe}
+                      onChange={_setRememberMe}
+                    />
+                    <small className="text-base text-safe-text-black font-medium">
+                      Remember Me
+                    </small>
+                  </div>
+                  <p
+                    className="text-safe-text-blue-shade font-medium cursor-pointer"
+                    onClick={() => {
+                      setModalVisibility("forgot-password")
+                    }}
+                  >
+                    Forgot Password?
+                  </p>
+                </div>
+                <button className="primary-btn rounded-md bg-safe-blue-shade px-40">
+                  Login
+                </button>
+                <small className="text-sm text-safe-text-black font-medium mx-auto">
+                  Don't have an account?&nbsp;
+                  <a
+                    href="/signup"
+                    className="text-safe-text-dark-link-blue font-bold"
+                  >
+                    Sign up
+                  </a>
+                </small>
+              </form>
+              <button onClick={_loginWithGoogle} className="primary-btn font-medium rounded-md justify-center">
+                Login With Google
+              </button>
+              <div id='authenticate'></div>
             </div>
-            <button className="primary-btn rounded-md bg-safe-blue-shade px-40">
-              Login
-            </button>
-            <small className="text-sm text-safe-text-black font-medium mx-auto">
-              Don't have an account?&nbsp;
-              <a
-                href="/signup"
-                className="text-safe-text-dark-link-blue font-bold"
-              >
-                Sign up
-              </a>
-            </small>
-          </form>
-          <button onClick={_loginWithGoogle} className="primary-btn font-medium rounded-md justify-center">
-            Login With Google
+            <footer className="flex justify-between">
+              <small>© 2023 SafeHerit.com</small>
+              <small>help@safeherit.com</small>
+            </footer>
+          </section>
+          <section className="hidden lg:block basis-3/5 bg-safe-white-shade relative">
+            <div className="pt-16 xl:pt-20 px-12 xl:px-20">
+              <p className="font-medium text-3xl mb-6">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore
+              </p>
+              <div className="flex justify-between">
+                <span className="font-semibold text-safe-text-black flex justify-center items-center gap-2 ">
+                  <div className=" w-5 h-[1px] bg-safe-black"></div>
+                  Rayan Adlardard
+                </span>
+                <div className="flex">
+                  <img src={star} alt="star icon" />
+                  <img src={star} alt="star icon" />
+                  <img src={star} alt="star icon" />
+                  <img src={star} alt="star icon" />
+                  <img src={star} alt="star icon" />
+                </div>
+              </div>
+              <small>Founder, Safeherit</small>
+            </div>
+            <img
+              src={loginImg}
+              alt="dashboad image"
+              className="absolute -bottom-10 xl:bottom-0 -right-10 xl:right-0 w-[500] h-[523] xl:max-w-[700px] xl:max-h-[623px]"
+            />
+          </section>
+        </>
+      }
+    </main>
+  )
+}
+
+type Props = {
+  _handleMFASubmit: Function
+  _handleMFACancel: Function
+  code:  Array<string>
+}
+export function CodeSignIn({_handleMFASubmit,  _handleMFACancel, code}: Props) {
+
+  return (
+    <div className='flex sm:justify-center items-center px-4 sm:px-0'>
+      <div className="bg-white flex flex-col p-5 md:p-6  border-2 border-palladium rounded-xl w-full sm:max-w-[440px]">
+        <div className="flex justify-between">
+          <div>
+            <h1 className='font-medium text-[22px] leading-[130%] md:mr-8'>Verify your phone</h1>
+            <p className='text-slate-500 mt-2 text-base'>We sent you an SMS code to your phone number</p>
+          </div>
+        </div>
+        <div className='flex gap-x-4 mt-6 md:mt-8 pb-4'>
+          {
+            code.map((value, index) => {
+              return (
+                <Input
+                  key={index}
+                  index={index}
+                  getValue={(value, index) => {
+                    code[index] = value;
+                  }}
+                />
+              )
+            })
+          }
+        </div>
+        <div className="flex mt-4 gap-x-4">
+          <button
+            onClick={() => _handleMFACancel()}
+            className='rounded-xl flex gap-x-4 mb-8 text-black h-11 w-1/2 items-center justify-center px-6 border border-gray-500'>
+            Cancel
+          </button>
+          <button
+            onClick={() => _handleMFASubmit()}
+            className="bg-black rounded-xl flex h-11 w-1/2 items-center justify-center px-6">
+            <span
+              className="text-base font-light text-white">
+              Submit
+            </span>
           </button>
         </div>
-        <footer className="flex justify-between">
-          <small>© 2023 SafeHerit.com</small>
-          <small>help@safeherit.com</small>
-        </footer>
-      </section>
-      <section className="hidden lg:block basis-3/5 bg-safe-white-shade relative">
-        <div className="pt-16 xl:pt-20 px-12 xl:px-20">
-          <p className="font-medium text-3xl mb-6">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore
-          </p>
-          <div className="flex justify-between">
-            <span className="font-semibold text-safe-text-black flex justify-center items-center gap-2 ">
-              <div className=" w-5 h-[1px] bg-safe-black"></div>
-              Rayan Adlardard
-            </span>
-            <div className="flex">
-              <img src={star} alt="star icon" />
-              <img src={star} alt="star icon" />
-              <img src={star} alt="star icon" />
-              <img src={star} alt="star icon" />
-              <img src={star} alt="star icon" />
-            </div>
-          </div>
-          <small>Founder, Safeherit</small>
-        </div>
-        <img
-          src={loginImg}
-          alt="dashboad image"
-          className="absolute -bottom-10 xl:bottom-0 -right-10 xl:right-0 w-[500] h-[523] xl:max-w-[700px] xl:max-h-[623px]"
-        />
-      </section>
-    </main>
+      </div>
+    </div>
+  )
+}
+
+function Input({index, getValue}: {
+  index: number,
+  getValue: (value: string, index: number) => void
+}) {
+  const [value, setValue] = useState<string>('');
+
+  function checkValue(event: ChangeEvent<HTMLInputElement>) {
+    const currentValue = event.currentTarget.value.slice(-1);
+    setValue(currentValue);
+    getValue(currentValue, index);
+
+    const nextElement = event.currentTarget.nextSibling;
+    if (nextElement instanceof HTMLInputElement) {
+      nextElement.disabled = false;
+      nextElement.focus();
+    }
+  }
+
+  return (
+    <input
+      value={value}
+      disabled={index > 0}
+      onChange={checkValue}
+      className="transition ease-in-out duration-300 flex flex-1 items-center disabled:cursor-not-allowed border-2 outline-none focus:outline-none focus:shadow-[0_0_0_4px_rgba(209,213,218,0.45)] focus:border-2 h-[44px] md:h-[52px] w-full px-5 rounded-xl"
+      type="text"
+    />
   )
 }
 

@@ -1,5 +1,8 @@
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import {
+  MultiFactorError,
+  MultiFactorResolver,
+  getMultiFactorResolver,
   multiFactor,
 } from "@firebase/auth";
 import { auth } from '@/firebase';
@@ -21,6 +24,16 @@ export function verifyIfUserIsEnrolled() {
     alert("User not found")
     return false
   }
+}
+
+export async function verifyUserEnrolled(
+  verificationMFA: {verificationId: string, resolver: MultiFactorResolver},
+  verificationCode: string
+) {
+  const {verificationId, resolver} = verificationMFA;
+  const credentials = PhoneAuthProvider.credential(verificationId, verificationCode);
+  const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(credentials);
+  return await resolver.resolveSignIn(multiFactorAssertion);
 }
 
 export async function verifyPhoneNumber(
@@ -57,5 +70,28 @@ export async function enrollUser(
   }
   catch (e) {
     return false;
+  }
+}
+
+export async function verifyUserMFA(
+  error: MultiFactorError,
+  recaptchaVerifier: ApplicationVerifier,
+  selectedIndex: number
+): Promise<false | { verificationId: string, resolver: MultiFactorResolver} | void> {
+  const resolver = getMultiFactorResolver(auth, error);
+
+  if (resolver.hints[selectedIndex].factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
+    const phoneInfoOptions = {
+      multiFactorHint: resolver.hints[selectedIndex],
+      session: resolver.session
+    }
+
+    const phoneAuthProvider = new PhoneAuthProvider(auth);
+    try {
+      const verificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
+      return { verificationId, resolver }
+    }catch (e) {
+      return false
+    }
   }
 }

@@ -119,6 +119,13 @@ export const slice = createSlice({
     },
     setToken: (state, action) => {
       state.token = action.payload;
+    },
+    setCredentials: (state, action) => {
+      state.token = action.payload.token
+      state.email = action.payload.email
+      state.displayName = action.payload.user || ""
+      state.photo = action.payload.user || ""
+      state.phone = action.payload.user || ""
     }
   },
   extraReducers(builder) {
@@ -236,6 +243,6 @@ export const slice = createSlice({
   },
 })
 
-export const { updateName, updateActive, setToken, updateRole, updatePhone, updateRoleUser, resetMapper, resetBeneficiaryOf, resetValidatorOf } = slice.actions
+export const { updateName, updateActive, setToken, updateRole, updatePhone, updateRoleUser, resetMapper, resetBeneficiaryOf, resetValidatorOf, setCredentials } = slice.actions
 
 export default slice.reducer

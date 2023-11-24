@@ -152,7 +152,8 @@ function CodeSignup({currentUser, verificationCodeId, _cancelConfirmationCode, r
     if (response) {
       toast("Number verified", "success")
       returnToAccountView()
-    }else {
+    }
+    else {
       toast('Unable to verify code, Please try again.', 'error');
       _cancelConfirmationCode()
     }
