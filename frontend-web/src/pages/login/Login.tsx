@@ -339,11 +339,6 @@ export function Login() {
                   </a>
                 </small>
               </form>
-              <GoogleAuthButton 
-                handleClick={_loginWithGoogle} 
-                type={"login"}
-                buttonText={"Login with google"}                
-              />
               <div id='authenticate'></div>
             </div>
             <footer className="flex justify-between">
