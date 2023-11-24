@@ -99,6 +99,8 @@ export function SignUp() {
       })
       .catch((err) => {
         toast(err?.code, "error")
+      })
+      .finally(() => {
         stopLoader()
       })
   }

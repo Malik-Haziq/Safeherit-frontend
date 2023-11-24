@@ -4,6 +4,7 @@ import {
   MultiFactorResolver,
   getMultiFactorResolver,
   multiFactor,
+  sendEmailVerification,
 } from "@firebase/auth";
 import { auth } from '@/firebase';
 import { ApplicationVerifier, PhoneAuthProvider, PhoneMultiFactorGenerator, User } from 'firebase/auth';
@@ -106,10 +107,30 @@ export async function verifyUserMFA(
   }
 }
 
+export async function sendEmailVerificationEmail(): Promise<boolean> {
+  if (auth.currentUser) {
+    try {
+      await sendEmailVerification(auth.currentUser);
+      return true;
+    }catch (e) {
+      toastError(e)
+      return false;
+    }
+  }
+  else {
+    return false
+  }
+}
+
+export function isEmailVerified () {
+  if (auth.currentUser)
+    return auth.currentUser.emailVerified
+}
+
 function toastError (e: any) {
   const errorWithCode = e as { code?: string };
 
-  if (errorWithCode && errorWithCode.code) {
+  if (errorWithCode && errorWithCode.code && errorWithCode.code != "auth/too-many-requests") {
     toast(errorWithCode.code, "error");
   }
 }

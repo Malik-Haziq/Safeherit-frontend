@@ -5,7 +5,7 @@ import star from "@images/star.svg"
 import { ChangeEvent, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { getUser, login, loginWithGoogle, resetPassword } from "@redux/actions"
+import { getUser, login, loginWithGoogle, resetPassword, updateUser } from "@redux/actions"
 import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ForgotPasswordModal, toast, GoogleAuthButton } from "@/components"
@@ -19,11 +19,12 @@ import {
   setCredentials,
   updateActive,
   updateRole,
+  updateRoleCheck,
   updateRoleUser,
 } from "@/redux/reducers/UserSlice"
 import { SelectOption } from "@/types"
-import { useRecaptcha, verifyUserEnrolled, verifyUserMFA } from "@/common"
-import { MultiFactorResolver } from "@firebase/auth"
+import { isEmailVerified, sendEmailVerificationEmail, useRecaptcha, verifyUserEnrolled, verifyUserMFA } from "@/common"
+import { MultiFactorResolver, getAdditionalUserInfo } from "@firebase/auth"
 import { auth } from "@/firebase"
 
 export function Login() {
@@ -134,8 +135,19 @@ export function Login() {
       startLoader()
       dispatch(login({ email: formControl.email, password: formControl.password }))
         .unwrap()
-        .then((res) => {
-          getUserDetails()
+        .then(async (res) => {
+          const verifiedEmail = isEmailVerified();
+          if (verifiedEmail) {      
+            getUserDetails()
+          }
+          else {
+            toast("Please verify your email", 'error')
+            const emailSent = await sendEmailVerificationEmail()
+            if (emailSent) {
+              toast("Verification Email Sent", "info")
+            }
+            stopLoader()
+          }
         })
         .catch((err) => {
           _handleMFA(err)
@@ -181,11 +193,28 @@ export function Login() {
     startLoader()
     dispatch(loginWithGoogle({}))
       .unwrap()
-      .then((res) => {
-        getUserDetails()
+      .then(async (res) => {
+        const isNewUser = getAdditionalUserInfo(res)
+
+        if (isNewUser && isNewUser.isNewUser) {
+          const name = res.user.displayName
+          const email = res.user.email
+          dispatch(updateActive(true))
+          dispatch(updateRole("owner"))
+          dispatch(updateRoleCheck({role: "owner", value: true}))
+          navigate("/pricing")
+          dispatch(updateUser({
+            displayName: name ?? email,
+          })).unwrap().catch()
+        }
+        else {
+          getUserDetails()
+        }
       })
       .catch((err) => {
         _handleMFA(err)
+      })
+      .finally(() => {
         stopLoader()
       })
   }
@@ -336,6 +365,11 @@ export function Login() {
                   </a>
                 </small>
               </form>
+              {/* <GoogleAuthButton
+                handleClick={_loginWithGoogle} 
+                type={"login"}
+                buttonText={"Login with Google"}    
+              /> */}
               <div id='authenticate'></div>
             </div>
             <footer className="flex justify-between">
