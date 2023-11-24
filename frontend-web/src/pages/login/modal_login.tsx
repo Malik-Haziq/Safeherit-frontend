@@ -117,7 +117,7 @@ function LoggedUser(_props: {
   _handleUserRolesSubmit: Function
 }) {
   return (
-    <div className="flex items-center justify-between items-end py-1 mx-14 my-4 border-b-[1px] ">
+    <div className="flex justify-between items-end py-1 mx-14 my-4 border-b-[1px] ">
       <div className="flex flex-col gap-2">
         <div className="flex flex-col items-start w-[428px]">
           <p className="font-medium text-[#bbb] text-sm mb-2">

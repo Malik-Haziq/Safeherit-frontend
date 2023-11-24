@@ -87,7 +87,7 @@ export default function TwoFAAuth(_props:{
   }
 
   return (
-    <div className={styles.AppView}>
+    <div className={styles.AppView + " relative"}>
       <button onClick={returnToAccountView} className=" mb-4 mt-2 p-2 hover:opacity-75 rounded-lg shadow-md my-[5px] w-[200px] mx-2">← Back to My Account</button>
       <>
         {
@@ -132,20 +132,21 @@ function PhoneRegistration({getPhoneNumber}: {
   }
 
   return (
-    <div className='flex sm:justify-center items-center px-4 sm:px-0'>
-      <div className="bg-white flex flex-col p-5 md:p-6  border-2 shadow-md shadow-gray-100/10  border-palladium rounded-xl w-full sm:max-w-[440px]">
+    <div className='flex sm:justify-center items-center px-4 sm:px-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+      <div className="bg-white flex flex-col p-5 md:p-6 border-2 shadow-md shadow-gray-100/10 border-palladium rounded-xl w-full sm:max-w-[540px]">
         <div className="flex flex-col justify-between">
           <h1 className='font-medium text-[22px] leading-[130%] md:mr-8'>Provide your phone</h1>
           <p className='text-slate-500 mt-2 text-base'>Fill in your phone number to receive the code</p>
         </div>
         <div className="space-y-4 my-6">
-          <div className="relative flex items-center">
+          <div className="relative">
             <PhoneNumField
               name="phone_number"
-              placeholder=""
+              placeholder="Phone Number"
               selectFieldStyles=""
               inputStyles=""
               inputContainerStyles=""
+              selectFieldMenuWidth={432}
               _handleChange={_handleChange}
               value={phoneNumber?.split(' ')[1]}
               code={phoneNumber?.split(' ')[0]}
@@ -155,9 +156,9 @@ function PhoneRegistration({getPhoneNumber}: {
         <div className="flex justify-between mt-4 gap-x-4">
           <button
             onClick={handleClick}
-            className="bg-black rounded-xl flex h-11 w-1/2 items-center justify-center px-6">
+            className="bg-safe-blue-tint rounded-xl flex h-11 w-1/2 items-center justify-center px-6">
             <span
-              className="text-base font-light text-white">
+              className="text-base text-white">
               Send SMS
             </span>
             </button>
