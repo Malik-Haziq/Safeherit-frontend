@@ -164,9 +164,11 @@ export function Login() {
     else {
       toast(response?.code, "error")
     }
+    stopLoader()
   }
 
   const _handleMFASubmit = () => {
+    startLoader()
     const finalCode = code.reduce((previousValue, currentValue) => {
       return previousValue.concat(currentValue);
     })
@@ -179,6 +181,7 @@ export function Login() {
   }
 
   const _loginWithGoogle = () => {
+    startLoader()
     dispatch(loginWithGoogle({}))
       .unwrap()
       .then((res) => {
