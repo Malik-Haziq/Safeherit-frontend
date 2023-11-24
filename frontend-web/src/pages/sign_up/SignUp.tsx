@@ -6,15 +6,19 @@ import signupImg from '@images/signup-pic.png'
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { signup, updateUser } from "@redux/actions"
+import { loginWithGoogle, signup, updateUser } from "@redux/actions"
 import { useAppDispatch } from "@redux/hooks"
 import { updateProfile } from "firebase/auth"
-import { toast } from "@/components"
+import { GoogleAuthButton, toast } from "@/components"
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
+import { updateActive, updateRole, updateRoleCheck } from "@/redux/reducers/UserSlice"
 
 export function SignUp() {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const startLoader = () => dispatch(setLoaderVisibility(true))
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
 
   const [formControl, setFormControl] = useState({
     name: "",
@@ -50,6 +54,7 @@ export function SignUp() {
       if (formControl.password !== formControl.confirm_password) {
         toast("password must match", "error")
       } else {
+        startLoader()
         toast("signing up", "info")
         dispatch(signup({ email: formControl.email, password: formControl.password }))
           .unwrap()
@@ -61,6 +66,7 @@ export function SignUp() {
               toast(err?.code, "error")
             })
             .finally(() => {
+              stopLoader()
               navigate("/pricing")
               dispatch(updateUser({
                 displayName: formControl.name
@@ -69,9 +75,32 @@ export function SignUp() {
           })
           .catch((err) => {
             toast(err?.code, "error")
+            stopLoader()
           })
       }
     }
+  }
+
+  const _signupWithGoogle = () => {
+    startLoader()
+    dispatch(loginWithGoogle({}))
+      .unwrap()
+      .then((res) => {
+        stopLoader()
+        const name = res.user.displayName
+        const email = res.user.email
+        dispatch(updateActive(true))
+        dispatch(updateRole("owner"))
+        dispatch(updateRoleCheck({role: "owner", value: true}))
+        navigate("/pricing")
+        dispatch(updateUser({
+          displayName: name ?? email,
+        })).unwrap().catch()
+      })
+      .catch((err) => {
+        toast(err?.code, "error")
+        stopLoader()
+      })
   }
 
   return (
@@ -172,7 +201,12 @@ export function SignUp() {
             Sign up
           </button>
         </form>
-        <small className="text-sm text-safe-text-dark-gray my-8">
+        <GoogleAuthButton
+          handleClick={_signupWithGoogle} 
+          type={"signup"}
+          buttonText={"Continue with Google"}    
+        />
+        <small className="text-sm text-safe-text-dark-gray">
           Already have an account?&nbsp;
           <a href="/login" className="text-safe-text-dark-link-blue font-bold">
             Login

@@ -95,6 +95,32 @@ export const slice = createSlice({
     updateRole: (state, action) => {
       state.role = action.payload
     },
+    updateRoleCheck: (state, action) => {
+      switch (action.payload.role)
+      {
+        case "owner": {
+          state.isOwner = action.payload.value
+          break;
+        }
+        case "beneficiary": {
+          state.isBeneficiary = action.payload.value
+          break;
+        }
+        case "validator": {
+          state.isValidator = action.payload.value
+          break;
+        }
+        case "admin": {
+          state.isAdmin = action.payload.value
+          break;
+        }
+        case "super-admin": {
+          state.isSuperAdmin = action.payload.value
+          break;
+        }
+      }
+      state.role = action.payload
+    },
     updatePhone: (state, action) => {
       state.phone = action.payload
     },
@@ -243,6 +269,6 @@ export const slice = createSlice({
   },
 })
 
-export const { updateName, updateActive, setToken, updateRole, updatePhone, updateRoleUser, resetMapper, resetBeneficiaryOf, resetValidatorOf, setCredentials } = slice.actions
+export const { updateName, updateActive, setToken, updateRole, updatePhone, updateRoleUser, resetMapper, resetBeneficiaryOf, resetValidatorOf, setCredentials, updateRoleCheck } = slice.actions
 
 export default slice.reducer
