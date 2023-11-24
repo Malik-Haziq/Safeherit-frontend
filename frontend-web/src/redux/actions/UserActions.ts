@@ -80,6 +80,7 @@ export const logout = createAsyncThunk(
     try {
       let response = await signOut(auth)
       sessionStorage.clear()
+      localStorage.clear()
       return response
     } catch (error) {
       return rejectWithValue(error)
