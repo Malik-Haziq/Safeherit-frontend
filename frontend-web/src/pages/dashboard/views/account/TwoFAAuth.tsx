@@ -4,7 +4,7 @@ import { auth } from "@/firebase";
 import { toast } from "@/components";
 import {User} from "@firebase/auth";
 import { useRecaptcha, verifyPhoneNumber, enrollUser, isValidPhoneWithRegion } from "@/common";
-import { PhoneNumField } from "@/components";
+import { PhoneNumField, VerificationCode } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice";
 
@@ -16,9 +16,42 @@ export default function TwoFAAuth(_props:{
   const recaptcha = useRecaptcha('authenticate');
   const [verificationCodeId, setVerificationCodeId] = useState<string | null>(null);
   const [confirmationCodeVisibility, setConfirmationCodeVisibility] = useState<boolean>(false);
+  let code = new Array<string>(6).fill('');
 
   const startLoader = () => dispatch(setLoaderVisibility(true))
   const stopLoader = () => dispatch(setLoaderVisibility(false))
+
+  async function getCode(code: string) {
+    if(auth.currentUser && verificationCodeId) {
+      const response = await enrollUser(
+        auth.currentUser,
+        verificationCodeId,
+        code
+        );
+        
+      if (response) {
+        toast("Number verified", "success")
+        returnToAccountView()
+      }
+      else {
+        toast("Number not verified", "error")
+        _handleMFACancel()
+      }
+    }
+    else {
+      toast('Something went wrong. Please try again.', 'error');
+    }
+
+    setVerificationCodeId('')
+  }
+
+  function _handleMFASubmit() {
+    const finalCode = code.reduce((previousValue, currentValue) => {
+      return previousValue.concat(currentValue);
+    })
+    getCode(finalCode);
+  }
+  
 
   async function getPhoneNumber(phoneNumber: string) {
     startLoader()
@@ -43,13 +76,13 @@ export default function TwoFAAuth(_props:{
     stopLoader()
   }
 
-  const _cancelConfirmationCode = () => {
+  const _handleMFACancel = () => {
     setConfirmationCodeVisibility(false)
     setVerificationCodeId(null)
   }
 
   const returnToAccountView = () => {
-    _cancelConfirmationCode()
+    _handleMFACancel()
     _props.hideTwoFA()
   }
 
@@ -67,11 +100,10 @@ export default function TwoFAAuth(_props:{
           verificationCodeId &&
           auth.currentUser &&
           confirmationCodeVisibility &&
-          <CodeSignup
-            currentUser={auth.currentUser}
-            verificationCodeId={verificationCodeId}
-            _cancelConfirmationCode={_cancelConfirmationCode}
-            returnToAccountView={returnToAccountView}
+          <VerificationCode
+            _handleMFASubmit={_handleMFASubmit}
+            _handleMFACancel={_handleMFACancel}
+            code={code}
           />
         }
         <div id='authenticate'></div>
@@ -132,111 +164,5 @@ function PhoneRegistration({getPhoneNumber}: {
         </div>
       </div>
     </div>
-  )
-}
-
-function CodeSignup({currentUser, verificationCodeId, _cancelConfirmationCode, returnToAccountView}: {
-  currentUser: User,
-  verificationCodeId: string
-  _cancelConfirmationCode: Function
-  returnToAccountView: Function
-}) {
-
-  let code = new Array<string>(6).fill('');
-
-  function handleClick() {
-    const finalCode = code.reduce((previousValue, currentValue) => {
-      return previousValue.concat(currentValue);
-    })
-    getCode(finalCode);
-  }
-  
-  async function getCode(code: string) {
-    const response = await enrollUser(
-      currentUser,
-      verificationCodeId,
-      code
-    );
-
-    if (response) {
-      toast("Number verified", "success")
-      returnToAccountView()
-    }
-    else {
-      toast("Number not verified", "error")
-      _cancelConfirmationCode()
-    }
-  }
-
-  return (
-    <div className='flex sm:justify-center items-center px-4 sm:px-0'>
-      <div className="bg-white flex flex-col p-5 md:p-6  border-2 border-palladium rounded-xl w-full sm:max-w-[440px]">
-        <div className="flex justify-between">
-          <div>
-            <h1 className='font-medium text-[22px] leading-[130%] md:mr-8'>Verify your phone</h1>
-            <p className='text-slate-500 mt-2 text-base'>We sent you an SMS code to your phone number</p>
-          </div>
-        </div>
-        <div className='flex gap-x-4 mt-6 md:mt-8 pb-4'>
-          {
-            code.map((value, index) => {
-              return (
-                <Input
-                  key={index}
-                  index={index}
-                  getValue={(value, index) => {
-                    code[index] = value;
-                  }}
-                />
-              )
-            })
-          }
-        </div>
-        <div className="flex mt-4 gap-x-4">
-          <button
-            onClick={() => _cancelConfirmationCode()}
-            className='rounded-xl flex gap-x-4 mb-8 text-black h-11 w-1/2 items-center justify-center px-6 border border-gray-500'>
-            Cancel
-          </button>
-          <button
-            onClick={handleClick}
-            className="bg-black rounded-xl flex h-11 w-1/2 items-center justify-center px-6">
-            <span
-              className="text-base font-light text-white">
-              Submit
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function Input({index, getValue}: {
-  index: number,
-  getValue: (value: string, index: number) => void
-}) {
-  const [value, setValue] = useState<string>('');
-
-  function checkValue(event: ChangeEvent<HTMLInputElement>) {
-    const currentValue = event.currentTarget.value.slice(-1);
-    setValue(currentValue);
-    getValue(currentValue, index);
-
-    const nextElement = event.currentTarget.nextSibling;
-    if (nextElement instanceof HTMLInputElement) {
-      nextElement.disabled = false;
-      nextElement.focus();
-    }
-  }
-
-  return (
-    <input
-      value={value}
-      disabled={index > 0}
-      onChange={checkValue}
-      className="transition ease-in-out duration-300 flex flex-1 items-center disabled:cursor-not-allowed border-2 outline-none focus:outline-none focus:shadow-[0_0_0_4px_rgba(209,213,218,0.45)] focus:border-2 h-[44px] md:h-[52px] w-full px-5 rounded-xl"
-      type="text"
-    />
   )
 }
