@@ -7,6 +7,7 @@ import {
 } from "@firebase/auth";
 import { auth } from '@/firebase';
 import { ApplicationVerifier, PhoneAuthProvider, PhoneMultiFactorGenerator, User } from 'firebase/auth';
+import { toast } from '@/components';
 
 const storage = getStorage();
 
@@ -52,6 +53,13 @@ export async function verifyPhoneNumber(
     return await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
   }
   catch (e) {
+    const errorWithCode = e as { code?: string };
+
+    if (errorWithCode && errorWithCode.code) {
+      toast(errorWithCode.code, "error");
+    } else {
+      toast('Unable to verify User, please login again to proceed.', 'error');
+    }
     return false;
   }
 }

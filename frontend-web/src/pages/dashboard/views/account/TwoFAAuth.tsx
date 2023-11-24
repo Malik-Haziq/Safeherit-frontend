@@ -5,16 +5,23 @@ import { toast } from "@/components";
 import {User} from "@firebase/auth";
 import { useRecaptcha, verifyPhoneNumber, enrollUser, isValidPhoneWithRegion } from "@/common";
 import { PhoneNumField } from "@/components";
+import { useAppDispatch } from "@/redux/hooks";
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice";
 
 export default function TwoFAAuth(_props:{
   hideTwoFA: Function
 }) {
-
+  
+  const dispatch = useAppDispatch()
   const recaptcha = useRecaptcha('authenticate');
   const [verificationCodeId, setVerificationCodeId] = useState<string | null>(null);
   const [confirmationCodeVisibility, setConfirmationCodeVisibility] = useState<boolean>(false);
 
+  const startLoader = () => dispatch(setLoaderVisibility(true))
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
+
   async function getPhoneNumber(phoneNumber: string) {
+    startLoader()
     if (!auth.currentUser || !recaptcha) {
       return;
     }
@@ -26,12 +33,14 @@ export default function TwoFAAuth(_props:{
     );
 
     if (!verificationId) {
-      toast('Unable to verify User, please login again to proceed.', 'error');
+      setConfirmationCodeVisibility(false)
+      setVerificationCodeId(null)
     }
     else {
       setVerificationCodeId(verificationId);
       setConfirmationCodeVisibility(true)
     }
+    stopLoader()
   }
 
   const _cancelConfirmationCode = () => {
