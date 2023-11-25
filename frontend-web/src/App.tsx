@@ -61,20 +61,26 @@ function AppRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<NavBarLayout />}>
+
+          <Route path={''} element={<Home />} />
+          
+          <Route path={ROUTE_CONSTANTS.ABOUT} element={<About />} />
+          <Route path={ROUTE_CONSTANTS.CONTACT} element={<Contact />} />
+
           <Route element={<ProtectedRoute />}>
             <Route element={<ProtectedPricingRoute />}>
               <Route path={ROUTE_CONSTANTS.PRICING} element={<Pricing />} />
             </Route>
+
             <Route element={<ProtectedRegisterKeyRoute />}>
               <Route path={ROUTE_CONSTANTS.REGISTER_KEY} element={<RegisterKey />} />
             </Route>
           </Route>
+
           <Route element={<ProtectedRegisterationRoute />}>
             <Route path={ROUTE_CONSTANTS.SIGN_UP} element={<SignUp />} />
           </Route>
-          <Route path={ROUTE_CONSTANTS.ABOUT} element={<About />} />
-          <Route path={ROUTE_CONSTANTS.CONTACT} element={<Contact />} />
-          <Route path={''} element={<Home />} />
+          
           <Route path="*" element={<Navigate to={ROUTE_CONSTANTS.HOME} replace />} />
         </Route>
 
