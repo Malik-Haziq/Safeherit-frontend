@@ -10,19 +10,30 @@ export const ProtectedRoute = () => {
   return ifActive ? <Outlet /> : <Navigate to={redirectTo} replace />
 }
 
-// export const ProtectedPricingRoute = () => {
-//   const active = useAppSelector(state => state.user.active)
-//   const ifActive: boolean = active ? true : false
-//   const redirectTo: string = ROUTE_CONSTANTS.LOGIN
-//   return ifActive ? <Outlet /> : <Navigate to={redirectTo} replace />
-// }
+export const ProtectedRegisterationRoute = () => {
+  const active = useAppSelector(state => state.user.active)
+  const role = useAppSelector(state => state.user.role)
+  const ifActive: boolean = active ? true : false
+  const redirectTo: string = ROUTE_CONSTANTS.DASHBOARD
+  return !ifActive && (!role || role == "none")? <Outlet /> : <Navigate to={redirectTo} replace />
+}
 
-// export const ProtectedRegisterKeyRoute = () => {
-//   const active = useAppSelector(state => state.user.active)
-//   const ifActive: boolean = active ? true : false
-//   const redirectTo: string = ROUTE_CONSTANTS.LOGIN
-//   return ifActive ? <Outlet /> : <Navigate to={redirectTo} replace />
-// }
+export const ProtectedPricingRoute = () => {
+  const active = useAppSelector(state => state.user.active)
+  const role = useAppSelector(state => state.user.role)
+  const ifActive: boolean = active ? true : false
+  const redirectTo: string = ROUTE_CONSTANTS.DASHBOARD
+  return ifActive && role !== "beneficiary" && role !== "validator" ? <Outlet /> : <Navigate to={redirectTo} replace />
+}
+
+export const ProtectedRegisterKeyRoute = () => {
+  const privateKey = sessionStorage.getItem("privateKey") || ''
+  const active = useAppSelector(state => state.user.active)
+  const role = useAppSelector(state => state.user.role)
+  const ifActive: boolean = active ? true : false
+  const redirectTo: string = ROUTE_CONSTANTS.DASHBOARD
+  return ifActive && role != "validator" && privateKey == '' ? <Outlet /> : <Navigate to={redirectTo} replace />
+}
 
 export const ProtectedEncryptionRoute = () => {
   const privateKey = sessionStorage.getItem("privateKey") || ''

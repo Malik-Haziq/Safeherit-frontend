@@ -7,7 +7,6 @@ type PulseDetails = {
 }
 interface UserState {
   email: string
-  name: string
   photo: string
   phone: string
   access: string
@@ -37,7 +36,6 @@ interface UserState {
 }
 const initialState: UserState = {
   email: "",
-  name: "",
   photo: "",
   phone: "",
   access: "",
@@ -87,7 +85,7 @@ export const slice = createSlice({
   initialState,
   reducers: {
     updateName: (state, action) => {
-      state.name = action.payload
+      state.displayName = action.payload
     },
     updateActive: (state, action) => {
       state.active = action.payload
@@ -127,11 +125,7 @@ export const slice = createSlice({
       if (action.payload.role == "beneficiary") {
         state.publicKey = action.payload.public_key
       }
-      state.selectedRoleUser = {
-        "ownerEmail": action.payload.ownerEmail,
-        "beneficiaryId": action.payload.beneficiaryId,
-        "ownerName": action.payload.ownerName,
-      }
+      state.selectedRoleUser = action.payload
     },
     resetMapper: (state) => {
       state.userMap = {}
@@ -168,7 +162,7 @@ export const slice = createSlice({
     })
     builder.addCase(signup.fulfilled, (state, action) => {
       state.email = action.payload.user.email || ""
-      state.name = action.payload.user.displayName || ""
+      state.displayName = action.payload.user.displayName || ""
       state.photo = action.payload.user.photoURL || ""
       state.phone = action.payload.user.phoneNumber || ""
       state.active = true
@@ -204,9 +198,9 @@ export const slice = createSlice({
       state.pulseCheckActive = action.payload.data.data.pulseCheckActive
       state.pulseCheckDays = action.payload.data.data.pulseCheckDays
       state.pulseCheckValidationRequired = action.payload.data.data.pulseCheckValidationRequired
-      state.displayName = action.payload.data.data.displayName
+      state.displayName = action.payload.data.data.displayName || state.displayName
       state.language = action.payload.data.data.language
-      state.profile_image = action.payload.data.data.profile_image
+      state.profile_image = action.payload.data.data.profile_image || state.profile_image
       state.isBeneficiary = action.payload.data.data.isBeneficiary
       state.isOwner = action.payload.data.data.isOwner
       state.isSuperAdmin = action.payload.data.data.isSuperAdmin
@@ -257,7 +251,7 @@ export const slice = createSlice({
       }
     })
     builder.addCase(updateUser.fulfilled, (state, action) => {
-      state.displayName = action.payload.data.data.displayName
+      state.displayName = action.payload.data.data.displayName || state.displayName
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image
       state.active = true
