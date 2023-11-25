@@ -72,6 +72,9 @@ function AppRoutes() {
           <Route element={<ProtectedRegisterationRoute />}>
             <Route path={ROUTE_CONSTANTS.SIGN_UP} element={<SignUp />} />
           </Route>
+          <Route path={ROUTE_CONSTANTS.ABOUT} element={<About />} />
+          <Route path={ROUTE_CONSTANTS.CONTACT} element={<Contact />} />
+          <Route path={''} element={<Home />} />
           <Route path="*" element={<Navigate to={ROUTE_CONSTANTS.HOME} replace />} />
         </Route>
 
