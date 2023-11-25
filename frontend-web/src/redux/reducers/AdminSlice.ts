@@ -17,8 +17,7 @@ export const slice = createSlice({
   name: "admin",
   initialState,
   reducers: {
-    updateName: (state, action) => {
-    },
+
   },
   extraReducers(builder) {
     builder.addCase(getUsers.fulfilled, (state, action) => {
@@ -49,6 +48,6 @@ export const slice = createSlice({
   },
 })
 
-export const { updateName } = slice.actions
+export const { } = slice.actions
 
 export default slice.reducer
