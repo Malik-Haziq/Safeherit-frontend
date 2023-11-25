@@ -184,6 +184,8 @@ export const Modal = (_props: {
             closeModal={_props.closeModal}
             title={_props.modalTitle}
             closeIconVisibility={_props.closeIconVisibility}
+            arrayLength={_props.arrayLength}
+            showPreviousModal={_props.showPreviousModal}
           />
           <RenderModal elements={elements} />
         </div>

@@ -53,13 +53,13 @@ export const UserDetailsModal = (_props: {
                   <img
                     src={_props.imageUpload || userImage}
                     alt="validator image"
-                    className="w-[88px] h-[88px] rounded-full mx-auto"
+                    className="w-[88px] h-[88px] rounded-full mx-auto object-contain"
                   />
                 ) : (
                   <img
                     src={userImage}
                     alt="validator image"
-                    className="w-[88px] h-[88px] rounded-full mx-auto"
+                    className="w-[88px] h-[88px] rounded-full mx-auto object-contain"
                   />
                 )}
                 <section className="flex justify-between gap-[45px]">
@@ -230,12 +230,13 @@ export const UserDetailsModal = (_props: {
                           {_props.modalControl.personalized_message}
                         </div>
                       </div>
+                      { _props.videoUpload ? 
+                      
                       <div className="flex flex-col items-end gap-1">
                         <TextView
                           text="Testament Video"
                           textStyles="text-[#00192B] font-bold"
                         />
-                        {_props.videoUpload ? (
                           <video
                             controls
                             className="max-h-[186px] max-w-[446px]"
@@ -243,14 +244,9 @@ export const UserDetailsModal = (_props: {
                             <source src={_props.videoUpload} type="video/mp4" />
                             Your browser does not support the video tag.
                           </video>
-                        ) : (
-                          <img
-                            src={testimentVideo}
-                            alt="validator video"
-                            className="h-[186px] w-[446px] mx-auto"
-                          />
-                        )}
-                      </div>
+                          </div>
+                        : <div></div> 
+                      }
                       <div className="flex flex-col gap-1">
                         <div className="flex justify-between">
                           <p className="flex cursor-pointer">

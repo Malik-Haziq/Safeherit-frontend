@@ -15,7 +15,7 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom"
-import { Login, SignUp } from "./pages"
+import { Login, SignUp, Home, About, Contact } from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar, Spinner } from "./components"
 import { lazy } from "react"

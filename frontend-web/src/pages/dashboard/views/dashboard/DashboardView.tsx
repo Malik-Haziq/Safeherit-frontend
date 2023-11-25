@@ -30,7 +30,7 @@ export default function DashboardView() {
       numberOfItems: dashboardData.validatorCount,
       title: "Validators",
     },
-    { img: heart, numberOfItems: "22 Days", title: "Total Assets" },
+    { img: heart, numberOfItems: "22 Days", title: "Check due in" },
     { img: privateKeysIcon, numberOfItems: "Medium", title: "Security Score" },
   ]
   const assets = [
@@ -98,7 +98,7 @@ function DetailsCard(_props: {
   return (
     <div className="h-full min-w-[200px] p-3 flex flex-col gap-8 bg-white rounded-xl shadow-lg">
       <div className="bg-safe-light-blue-tint-1 flex items-center justify-center py-7 rounded-xl">
-        <img src={_props.img} alt="" />
+        <img src={_props.img} alt="icon" />
       </div>
       <div className="flex items-center justify-center flex-col">
         <p className="text-[28px] font-bold">{_props.numberOfItems}</p>
@@ -145,7 +145,7 @@ function Cards(_props: {
             )
           })
         ) : (
-          <div>No {_props.title} registered</div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">No&nbsp;{_props.title}&nbsp;registered</div>
         )}
       </div>
     </div>
@@ -165,7 +165,7 @@ function Row(_props: { img: any; title: string; subTitle: string }) {
   }, [_props.img])
   return (
     <div className="p-4 flex gap-4 border-b-[.5px] ">
-      <img src={image || users} alt="" className="w-11 h-11 rounded-full" />
+      <img src={image || users} alt="" className="w-11 h-11 rounded-full object-contain" />
       <div>
         <h4 className="font-semibold">{_props.title}</h4>
         <small className="text-safe-text-light-gray-1 text-sm">

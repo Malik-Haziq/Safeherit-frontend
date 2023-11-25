@@ -6,11 +6,6 @@ export function isValidEmail(email: string) {
   return emailRegex.test(email);
 }
 
-export function isValidPhone(phone: string) {
-  const phoneRegex = /^\+?\d+$/;
-  return phoneRegex.test(phone);
-}
-
 export function isValidPhoneWithRegion(phone: string) {
   try {
     const countryCode = phoneUtil.getRegionCodeForNumber(phoneUtil.parse(phone));

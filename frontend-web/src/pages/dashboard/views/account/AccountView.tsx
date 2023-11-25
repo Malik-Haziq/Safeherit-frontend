@@ -5,11 +5,10 @@ import editIcon from "@images/edit.svg"
 import viewIcon from "@images/view-icon.svg"
 import languageIcon from "@images/language.svg"
 import warningIcon from "@images/warning.svg"
-
-import { useState, useEffect } from "react"
+import { useState, useEffect, ChangeEvent, MouseEvent } from "react"
 import styles from "../../Dashboard.module.css"
 import MembershipPlanView from "./MembershipPlanView"
-import { EditUserModal } from "./modal_account"
+import { EditUserModal, ViewPrivateKey } from "./modal_account"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { getUser, updateUser, deleteUser, logout } from "@redux/actions"
 import { getFileFromFirebase, verifyIfUserIsEnrolled } from "@/common"
@@ -21,6 +20,8 @@ const initialState = {
   displayName: "",
   language: "",
   profile_image: "",
+  privateKey: "",
+  publicKey: "",
 }
 
 export default function AccountView() {
@@ -35,6 +36,11 @@ export default function AccountView() {
   const [userImage, setUserImage] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
   const [auth2FAEnabled, setAuth2FAEnabled] = useState(false)
+  
+  useEffect(()=>{
+    const key = sessionStorage.getItem("privateKey")
+    setModalControl({ ...modalControl, privateKey: key || "" })
+  }, [modalControl.privateKey])
 
   useEffect(() => {
     getUserDetails()
@@ -128,6 +134,10 @@ export default function AccountView() {
     setModalVisibility("delete-user")
   }
 
+  const _handleKeysView = ()=>{
+    setModalVisibility('show-keys')
+  }
+
   return (
     <>
       {
@@ -138,6 +148,12 @@ export default function AccountView() {
           <MembershipPlanView hidePlanView={hidePlanView} />
         ) : (
         <>
+          <ViewPrivateKey 
+            openModal={modalVisibility == 'show-keys'}
+            closeModal={closeModal}
+            closeModalOnOverlayClick={false} 
+            closeIconVisibility={true} 
+            modalControl={modalControl}/>
           <EditUserModal
             openModal={modalVisibility == "edit-user"}
             closeModal={closeModal}
@@ -178,6 +194,7 @@ export default function AccountView() {
                   userName={user.displayName}
                   userEmail={user.email}
                   userLanguage="English"
+                  handleKeysView={_handleKeysView}
                   verified={auth2FAEnabled}
                   enable2FA={showTwoFA}
                 />
@@ -224,7 +241,7 @@ function UserProfile(_props: {
             <img
               src={_props.userImg}
               alt="User Image"
-              className="w-[90px] h-[90px] rounded-full "
+              className="w-[90px] h-[90px] rounded-full object-contain"
             />
           </div>
           <div className="ml-28">
@@ -248,6 +265,7 @@ function UserProfileDetails(_props: {
   userEmail: string
   userLanguage: string
   verified: boolean
+  handleKeysView: any
   enable2FA: React.MouseEventHandler<HTMLButtonElement>
 }) {
   return (
@@ -269,8 +287,8 @@ function UserProfileDetails(_props: {
           My Public / Private Keys
         </p>
         <div className="flex gap-1">
-          <img src={viewIcon} alt="View icon" />
-          <img src={editIcon} alt="Edit icon" />
+          <img src={viewIcon} alt="View icon" onClick={_props.handleKeysView} className="cursor-pointer"/>
+          <img src={editIcon} alt="Edit icon" className="cursor-pointer"/>
         </div>
       </div>
       <div>

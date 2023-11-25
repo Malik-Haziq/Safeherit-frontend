@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import headerImg from '@images/header-img.png'
 import infoImg1 from '@images/infographic-1.png'
 import infoImg2 from '@images/infographic-2.png'
@@ -6,15 +7,21 @@ import screenShot1 from '@images/screenshot-1.png'
 import screenShot2 from '@images/screenshot-2.png'
 import screenShot3 from '@images/screenshot-3.png'
 import user from '@images/user.svg'
-import testUser from '@images/sign-up-img.jpg'
+import testUser from '@images/signup-pic.png'
 import logo from '@images/safeherit_logo.svg'
+import { useNavigate } from "react-router-dom"
+
 export function Home(){
+    const navigate = useNavigate()
+
+    const slides = [<CarouselElement/>,<CarouselElement/>,<CarouselElement/>]
+
     return <main className='m-w-[1280px] mx-auto font-safe-font-default'>
         <header style={{backgroundImage: "url('../../../assets/images/home-bg.png')"}} className='flex justify-between items-center 2xl:px-[140px] xl:px-[60px] lg:px-[40px] bg-cover h-[776px] mb-24'>
             <aside className='basis-3/5 flex flex-col gap-3'>
                 <h1 className='text-[58px] font-bold leading-tight' >Your Legacy, Secured for the Digital Age with SafeHerit</h1>
                 <p className='text-xl mb-5'>From your hard-earned savings in the bank to yourprecious memories stored digitally, SafeHeritensures your online treasures aren't lost in theether. Keep control of your digital life,even in the afterlife.</p>
-                <a href="#" className='text-[#04477B] bg-white rounded-2xl px-8 py-5 w-fit font-bold'>Register the Generated Public Key</a>
+                <a className='text-[#04477B] bg-white rounded-2xl px-8 py-5 w-fit font-bold' onClick={()=>navigate("/register")}>Register the Generated Public Key</a>
             </aside>
             <aside className=''>
                 <img src={headerImg} alt="a couple looking at laptop" />
@@ -79,7 +86,7 @@ export function Home(){
                     </div>
                     <div>
                         <div className='flex items-center gap-3'> 
-                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full ' />
+                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full object-contain ' />
                             <div>
                                 <h3 className='font-semibold'>Jane Cooper</h3>
                                 <small className='text-[#848484] text-sm'>Jane@gmail.com</small>
@@ -104,7 +111,7 @@ export function Home(){
                     </div>
                     <div>
                         <div className='flex items-center gap-3'> 
-                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full ' />
+                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full object-contain' />
                             <div>
                                 <h3 className='font-semibold'>Jane Cooper</h3>
                                 <small className='text-[#848484] text-sm'>Jane@gmail.com</small>
@@ -129,7 +136,7 @@ export function Home(){
                     </div>
                     <div>
                         <div className='flex items-center gap-3'> 
-                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full ' />
+                            <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full object-contain' />
                             <div>
                                 <h3 className='font-semibold'>Jane Cooper</h3>
                                 <small className='text-[#848484] text-sm'>Jane@gmail.com</small>
@@ -144,27 +151,8 @@ export function Home(){
             </section>
         </section>
 
-        <section className=' max-w-[1180px] mx-auto mb-24 px-5'>
-            <div className='flex justify-between items-center gap-10 mb-20'>
-                <aside className='basis-1/2'>
-                    <img src={testUser} alt="reviewer's image" className='w-[590px] rounded-3xl'/>
-                </aside>
-                <aside className='basis-1/2'>
-                    <p className='text-[22px] mb-4'>"Testimonial Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt."</p>
-                    <div className='flex items-center gap-3'> 
-                        <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full ' />
-                        <div>
-                            <h3 className='font-semibold'>Jane Cooper</h3>
-                            <small className='text-[#848484] text-sm'>Jane@gmail.com</small>
-                        </div>
-                    </div>
-                </aside>
-            </div>
-            <div className='flex gap-2 justify-center'>
-                <div className='w-2 h-2 bg-[#5CEAD2] rounded-full cursor-pointer'></div>
-                <div className='w-2 h-2 bg-[#D9D9D9] rounded-full cursor-pointer'></div>
-                <div className='w-2 h-2 bg-[#D9D9D9] rounded-full cursor-pointer'></div>
-            </div>
+        <section className='mb-24 px-5 w-[calc(100vw-17vw)] m-auto'>
+            <Carousel slides={slides} />
         </section>
 
         <section className='mx-auto px-5 flex gap-3 items-center flex-col justify-center mb-24'>
@@ -176,4 +164,66 @@ export function Home(){
             </div>
         </section>
     </main>
+}
+
+function CarouselElement(){
+    return (
+        <div className='flex justify-between items-center gap-10 mb-20 w-[calc(100vw-20vw)]'>
+            <aside className='basis-1/2'>
+                <img src={testUser} alt="reviewer's image" className='w-[590px] rounded-3xl'/>
+            </aside>
+            <aside className='basis-1/2'>
+                <p className='text-[22px] mb-4'>"Testimonial Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt."</p>
+                <div className='flex items-center gap-3'> 
+                    <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full object-contain' />
+                    <div>
+                        <h3 className='font-semibold'>Jane Cooper</h3>
+                        <small className='text-[#848484] text-sm'>Jane@gmail.com</small>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    )
+}
+
+function Carousel(_props: { slides: React.ReactNode[] }) {
+    const [current, setCurrent] = useState(0);
+  
+    const previousSlide = () => {
+      if (current === 0) setCurrent(_props.slides.length - 1);
+      else setCurrent(current - 1);
+    };
+  
+    const nextSlide = () => {
+      if (current === _props.slides.length - 1) setCurrent(0);
+      else setCurrent(current + 1);
+    };
+  
+    return (
+      <div className="overflow-hidden relative">
+        <div
+          className={`flex transition ease-out duration-700 w-[calc(100vw-20vw)]`}
+          style={{
+            transform: `translateX(-${current * 100}%)`,
+          }}
+        >
+          {_props.slides.map((slide, i) => (
+            <div key={i}>{slide}</div>
+          ))}
+        </div>
+          <div className="absolute bottom-0 py-4 flex justify-center gap-3 w-full">
+            {_props.slides.map((_, i) => (
+              <div
+                onClick={() => {
+                  setCurrent(i);
+                }}
+                key={"circle" + i}
+                className={`w-2 h-2 rounded-full cursor-pointer  ${
+                  i === current ? 'bg-[#5CEAD2]' : "bg-[#D9D9D9]"
+                }`}
+              ></div>
+            ))}
+        </div>
+      </div>
+    );
 }

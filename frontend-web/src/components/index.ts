@@ -7,6 +7,7 @@ export * from "./spinner/Spinner"
 export * from "./inputField/index"
 export * from "./phoneNumberField"
 export * from "./GoogleAuthButton/GoogleAuthButton"
+export * from "./verificationCode/VerificationCode"
 
 export * from "./modal/index"
 export * from "./modal/ConfirmationModal"

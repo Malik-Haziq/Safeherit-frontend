@@ -133,8 +133,7 @@ export default function BeneficiariesView() {
       (!isValidEmail(modalControl.primary_email) &&
         !isValidEmail(modalControl.backup_email2) &&
         !isValidEmail(modalControl.backup_email)) ||
-      (modalControl.primary_email &&
-        !isValidEmail(modalControl.primary_email)) ||
+      (modalControl.primary_email && !isValidEmail(modalControl.primary_email)) ||
       (modalControl.backup_email && !isValidEmail(modalControl.backup_email)) ||
       (modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2))
     ) {
@@ -165,6 +164,7 @@ export default function BeneficiariesView() {
       setModalVisibility("Step-3")
     }
   }
+
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
       toast("Personalized message cannot be empty", "error")
@@ -606,14 +606,14 @@ function Beneficiaries(_props: {
               <p className="text-sm">Name</p>
             </li>
             <li className="text-safe-text-gray-shade text-sm">Email</li>
-            <li className="text-safe-text-gray-shade text-sm">Phone Number</li>
+            <li className="text-safe-text-gray-shade text-sm">Phone&nbsp;Number</li>
             <li className="text-safe-text-gray-shade text-sm relative w-[140px]">
               <p className="w-36 absolute right-20 -top-3">
-                Backup Phone Number
+                Backup&nbsp;Phone&nbsp;Number
               </p>
             </li>
             <li className="text-safe-text-gray-shade text-sm relative -top-3">
-              <p className="absolute right-14  w-24">Social Media</p>
+              <p className="absolute right-14  w-24">Social&nbsp;Media</p>
             </li>
           </ul>
 
@@ -675,13 +675,13 @@ function Beneficiary(_props: {
             <img
               src={image || userImg}
               alt="user image"
-              className="rounded-full h-11 w-11"
+              className="rounded-full h-11 w-11 object-contain"
             />
           ) : (
             <img
               src={userImg}
               alt="user image"
-              className="rounded-full h-11 w-11"
+              className="rounded-full h-11 w-11 object-contain"
             />
           )
           // TODO add loading view

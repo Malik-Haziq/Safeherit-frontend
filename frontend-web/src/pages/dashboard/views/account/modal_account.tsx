@@ -76,12 +76,12 @@ export function EditUserModal(_props: {
                           <img
                             src={_props.imageUpload || _props.userImage || userImg}
                             alt=""
-                            className="w-[124px] h-[124px] rounded-full"
+                            className="w-[124px] h-[124px] rounded-full object-contain"
                           />
                           <img
                             src={uploadIcon}
                             alt=""
-                            className="h-10 w-10 absolute bottom-0 right-0 rounded-full"
+                            className="h-10 w-10 absolute bottom-0 right-0 rounded-full object-contain"
                           />
                         </>
                       ) : (
@@ -89,12 +89,12 @@ export function EditUserModal(_props: {
                           <img
                             src={userImg}
                             alt=""
-                            className="w-[124px] h-[124px] rounded-full"
+                            className="w-[124px] h-[124px] rounded-full object-contain"
                           />
                           <img
                             src={uploadIcon}
                             alt=""
-                            className="h-10 w-10 absolute bottom-0 right-0 rounded-full"
+                            className="h-10 w-10 absolute bottom-0 right-0 rounded-full object-contain"
                           />
                         </>
                       )}
@@ -173,6 +173,74 @@ export function EditUserModal(_props: {
             onclick: _props._submitModal,
             buttonStyle: "",
             buttonContainer: "mx-48 mb-10 mt-10",
+          },
+        },
+      ]}
+    />
+  )
+}
+
+export function ViewPrivateKey(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  closeIconVisibility: boolean
+  modalControl: any
+}) {
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={"Public/Private Key Pair"}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "customView",
+          props: {
+            customViewContainer: "mx-6 my-2",
+            CustomView: () => {
+              return (
+                <div className="flex justify-between items-center">
+                  <p className="text-[#00192B] font-semibold ">Public Key:</p>
+                </div>
+              )
+            },
+          },
+        },
+        {
+          type: "TextAreaField",
+          props: {
+            textAreaContainerStyles: "flex justify-between items-center",
+            name:"publicKey",
+            inputStyles:"min-h-[200px] w-[502px] mx-6 p-2 border-[1px] border-[#858992] rounded-[5px] resize-none scrollbar",
+            value:_props.modalControl.publicKey,
+            isDisabled: true
+          },
+        },
+        {
+          type: "customView",
+          props: {
+            customViewContainer: "mx-6 mb-2",
+            CustomView: () => {
+              return (
+                <div className="flex justify-between items-center">
+                  <p className="text-[#00192B] font-semibold ">
+                    Secret Phrase (Private Key):
+                  </p>
+                </div>
+              )
+            },
+          },
+        },
+        {
+          type: "TextAreaField",
+          props: {
+            textAreaContainerStyles: "flex justify-between items-center",
+            name:"privateKey",
+            inputStyles:"min-h-[200px] w-[502px] mx-6 p-2 resize-none border-[1px] border-[#858992] rounded-[5px] mb-10 scrollbar",
+            value:_props.modalControl.privateKey,
+            isDisabled: true
           },
         },
       ]}

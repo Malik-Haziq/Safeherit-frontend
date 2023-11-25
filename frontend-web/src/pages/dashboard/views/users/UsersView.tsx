@@ -282,7 +282,7 @@ function User(_props: {
         <img
           src={_props.userImg || userImg}
           alt="user image"
-          className="w-9 h-9 rounded-full"
+          className="w-9 h-9 rounded-full object-contain"
         />
         <p className="text-[#00192B] text-lg font-semibold">
           {_props.userName}
