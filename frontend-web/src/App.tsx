@@ -3,7 +3,10 @@ import {
   ProtectedOwnerRoutes,
   ProtectedOwnerAndBeneficiaryRoutes,
   ProtectedAdminRoutes,
-  ProtectedEncryptionRoute
+  ProtectedEncryptionRoute,
+  ProtectedPricingRoute,
+  ProtectedRegisterKeyRoute,
+  ProtectedRegisterationRoute
 } from "./common"
 import {
   BrowserRouter,
@@ -59,16 +62,22 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<NavBarLayout />}>
           <Route element={<ProtectedRoute />}>
-            {/* TODO validator should not be able to see this page*/}
-            <Route path={ROUTE_CONSTANTS.PRICING} element={<Pricing />} />
-            {/* TODO validator & beneficiary should not be able to see this page*/}
-            <Route path={ROUTE_CONSTANTS.REGISTER_KEY} element={<RegisterKey />} />
+            <Route element={<ProtectedPricingRoute />}>
+              <Route path={ROUTE_CONSTANTS.PRICING} element={<Pricing />} />
+            </Route>
+            <Route element={<ProtectedRegisterKeyRoute />}>
+              <Route path={ROUTE_CONSTANTS.REGISTER_KEY} element={<RegisterKey />} />
+            </Route>
           </Route>
-          <Route path={ROUTE_CONSTANTS.SIGN_UP} element={<SignUp />} />
+          <Route element={<ProtectedRegisterationRoute />}>
+            <Route path={ROUTE_CONSTANTS.SIGN_UP} element={<SignUp />} />
+          </Route>
           <Route path="*" element={<Navigate to={ROUTE_CONSTANTS.HOME} replace />} />
         </Route>
 
-        <Route path={ROUTE_CONSTANTS.LOGIN} element={<Login />} />
+        <Route element={<ProtectedRegisterationRoute />}>
+          <Route path={ROUTE_CONSTANTS.LOGIN} element={<Login />} />
+        </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route element={<ProtectedEncryptionRoute />}>

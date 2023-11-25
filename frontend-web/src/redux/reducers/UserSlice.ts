@@ -127,11 +127,7 @@ export const slice = createSlice({
       if (action.payload.role == "beneficiary") {
         state.publicKey = action.payload.public_key
       }
-      state.selectedRoleUser = {
-        "ownerEmail": action.payload.ownerEmail,
-        "beneficiaryId": action.payload.beneficiaryId,
-        "ownerName": action.payload.ownerName,
-      }
+      state.selectedRoleUser = action.payload
     },
     resetMapper: (state) => {
       state.userMap = {}
