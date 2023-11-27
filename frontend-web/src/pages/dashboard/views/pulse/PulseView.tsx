@@ -20,7 +20,7 @@ import {
 import { isValidEmail, isValidPhoneWithRegion, useArray } from "@/common"
 import { toast } from "@/components"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { getUser, updatePulse } from "@/redux/actions"
+import { getUser, updatePulse, validateOwner } from "@/redux/actions"
 import { useNavigate } from "react-router-dom"
 
 const initialState = {
@@ -55,7 +55,7 @@ export default function PulseView() {
     modalHistoryPopAll,
   ] = useArray()
 
-  const checkPulsePeriodArr = ["30", "60", "90", "0"]
+  const checkPulsePeriodArr = ["30", "60", "90", (user.pulseCheckDays == "30") || (user.pulseCheckDays == "60") || (user.pulseCheckDays == "90") ? "0" :  user.pulseCheckDays]
   const checkPUlseDateArr = {
     lastPulseCheck: "April 12th, 2023",
     nextPulseCheck: "22 days",
@@ -66,7 +66,7 @@ export default function PulseView() {
     modalHistoryPopAll()
     getUserDetails()
   }, [])
-
+  console.log(user)
   const getUserDetails = () => {
     dispatch(getUser({}))
       .unwrap()
@@ -262,7 +262,7 @@ function PulseCheckView(_props: {
                 <CheckPulsePeriod
                   key={index}
                   days={value}
-                  selected={_props.pulseCheckDays == value ? true : false}
+                  pulseCheckDays={_props.pulseCheckDays}
                 />
               )
             })}
@@ -316,18 +316,18 @@ function PulseCheckView(_props: {
     </div>
   )
 }
-function CheckPulsePeriod(_props: { days: string; selected: boolean }) {
+function CheckPulsePeriod(_props: { pulseCheckDays: any, days: string}) {
   return (
     <div
       className={
-        _props.selected
+        _props.pulseCheckDays == _props.days
           ? "flex items-center justify-center flex-col py-6 px-11 bg-[#F6F6F6] rounded-xl cursor-pointer border-[1px] border-[#0C8AC1] relative"
           : "flex items-center justify-center flex-col py-6 px-11 bg-[#F6F6F6] rounded-xl cursor-pointer"
       }
     >
       <h3 className="text-xl font-bold ">{_props.days}</h3>
       <small className="text-[#666] text-sm ">days</small>
-      {_props.selected && (
+      {_props.pulseCheckDays == _props.days && (
         <img
           src={tickIcon}
           alt="Tick icon"
