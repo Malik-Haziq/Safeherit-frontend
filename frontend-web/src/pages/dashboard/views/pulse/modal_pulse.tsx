@@ -98,6 +98,7 @@ export function StepTwoModal(_props: {
   const [customDays, setCustomDays] = useState("")
 
   function handleDays(days: string) {
+    setCustomDays('')
     setSelectedDays(days)
     const customEvent: CustomChangeEvent = {
       target: {
@@ -108,20 +109,17 @@ export function StepTwoModal(_props: {
     _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
   }
 
-  // useEffect(() => {
-  //   // console.log(customDays)
-  //   // customDaysRef?.current?.focus()
-  // }, [customDays])
 
   function handleCustomDays(event: { target: { name: any; value: any } }) {
-    // setCustomDays(event.target.value)
-    // const customEvent: CustomChangeEvent = {
-    //   target: {
-    //     name: "pulseCheckDays",
-    //     value: event.target.value,
-    //   },
-    // }
-    // _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+    setSelectedDays('')
+    setCustomDays(event.target.value)
+    const customEvent: CustomChangeEvent = {
+      target: {
+        name: "pulseCheckDays",
+        value: event.target.value,
+      },
+    }
+    _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
   }
 
   return (
@@ -149,78 +147,110 @@ export function StepTwoModal(_props: {
             textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
           },
         },
+
         {
-          type: "customView",
+          type: 'multiFields',
+          containerStyles: "flex ",
           props: {
-            customViewContainer: "mx-7",
-            CustomView: () => {
-              return (
-                <div className="grid grid-cols-2 grid-rows-2 gap-2 mb-5">
-                  <div
-                    className={
-                      selectedDays == "30"
-                        ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
-                        : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
-                    }
-                    onClick={() => handleDays("30")}
-                  >
-                    <p className="text-[#00192B] font-semibold">
-                      30 <span className=" font-medium text-sm">Days</span>
-                    </p>
-                    {selectedDays == "30" ? (
-                      <img src={radioBlueIcon} alt="radio icon" />
-                    ) : (
-                      <img src={radioGrayIcon} alt="radio icon" />
-                    )}
-                  </div>
-                  <div
-                    className={
-                      selectedDays == "60"
-                        ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
-                        : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
-                    }
-                    onClick={() => handleDays("60")}
-                  >
-                    <p className="text-[#00192B] font-semibold">
-                      60 <span className=" font-medium text-sm">Days</span>
-                    </p>
-                    {selectedDays == "60" ? (
-                      <img src={radioBlueIcon} alt="radio icon" />
-                    ) : (
-                      <img src={radioGrayIcon} alt="radio icon" />
-                    )}
-                  </div>
-                  <div
-                    className={
-                      selectedDays == "90"
-                        ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
-                        : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
-                    }
-                    onClick={() => handleDays("90")}
-                  >
-                    <p className="text-[#00192B] font-semibold">
-                      90 <span className=" font-medium text-sm">Days</span>
-                    </p>
-                    {selectedDays == "90" ? (
-                      <img src={radioBlueIcon} alt="radio icon" />
-                    ) : (
-                      <img src={radioGrayIcon} alt="radio icon" />
-                    )}
-                  </div>
-                  <div className="">
-                    <input
-                      disabled={true}
-                      type="text"
-                      placeholder="Custom"
-                      className="w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl focus:outline-none placeholder:text-[#00192B] placeholder:font-semibold"
-                      onChange={handleCustomDays}
-                      value={customDays}
-                    />
-                  </div>
-                </div>
-              )
-            },
-          },
+            fields: [
+                {
+                    type: "customView",
+                    props: {
+                      customViewContainer: "mx-7 mb-3",
+                      CustomView: () => {
+                        return (
+                          <div className="flex gap-2">
+                            <div
+                              className={
+                                selectedDays == "30"
+                                  ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
+                                  : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
+                              }
+                              onClick={() => handleDays("30")}
+                            >
+                              <p className="text-[#00192B] font-semibold">
+                                30 <span className=" font-medium text-sm">Days</span>
+                              </p>
+                              {selectedDays == "30" ? (
+                                <img src={radioBlueIcon} alt="radio icon" />
+                              ) : (
+                                <img src={radioGrayIcon} alt="radio icon" />
+                              )}
+                            </div>
+                            <div
+                              className={
+                                selectedDays == "60"
+                                  ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
+                                  : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
+                              }
+                              onClick={() => handleDays("60")}
+                            >
+                              <p className="text-[#00192B] font-semibold">
+                                60 <span className=" font-medium text-sm">Days</span>
+                              </p>
+                              {selectedDays == "60" ? (
+                                <img src={radioBlueIcon} alt="radio icon" />
+                              ) : (
+                                <img src={radioGrayIcon} alt="radio icon" />
+                              )}
+                            </div>
+                          </div>
+                        )
+                    },
+                  },
+                  
+                },       
+            ]
+          }
+        },
+        {
+          type: 'multiFields',
+          containerStyles: "flex items-center gap-2 mx-7",
+          props: {
+            fields: [
+              {
+                type: "customView",
+                props: {
+                  customViewContainer: "",
+                  CustomView: () => {
+                    return (
+                      <div
+                        className={
+                          selectedDays == "90"
+                            ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
+                            : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
+                        }
+                        onClick={() => handleDays("90")}
+                      >
+                        <p className="text-[#00192B] font-semibold">
+                          90 <span className=" font-medium text-sm">Days</span>
+                        </p>
+                        {selectedDays == "90" ? (
+                          <img src={radioBlueIcon} alt="radio icon" />
+                        ) : (
+                          <img src={radioGrayIcon} alt="radio icon" />
+                        )}
+                      </div>
+                    )
+                  },
+                }
+              },
+              {
+                type: "inputView",
+                props: {
+                  name: "pulseCheckDays",
+                  type: "number",
+                  placeholder: "Custom",
+                  value: customDays,
+                  _handleChange: handleCustomDays,
+                  required: false,
+                  inputStyles: "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 rounded-2xl focus:outline-none placeholder:text-[#00192B] placeholder:font-semibold",
+                  inputContainerStyles: "",
+                  hasRightIcon: false,
+                },
+              },
+            ]
+          }
         },
         {
           type: "textView",
