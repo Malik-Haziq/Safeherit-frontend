@@ -9,6 +9,7 @@ import stepOne from "@images/step_1_of_4.svg"
 import stepTwo from "@images/step_2_of_4.svg"
 import stepThree from "@images/step_3_of_4.svg"
 import stepFour from "@images/step_4_of_4.svg"
+import { IoMdCloseCircle } from "react-icons/io"
 
 import { Modal } from "@/components"
 
@@ -554,6 +555,7 @@ export function StepThreeModal(_props: {
     personalized_message: string
     personalized_video: string
   }
+  _handleDiscard: Function
   _submitModal: Function
   arrayLength: any
   showPreviousModal: any
@@ -644,10 +646,21 @@ export function StepThreeModal(_props: {
                       Click to upload <br /> a video →
                     </span>
                     {_props.videoUpload ? (
-                      <video controls className="w-20 h-20 rounded-full">
-                        <source src={_props.videoUpload} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
+                      <div className="relative ">
+                        <video controls className="w-20 h-20 rounded-full">
+                          <source src={_props.videoUpload} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                        <span
+                          className="absolute top-0 right-0 text-red-900 cursor-pointer"
+                          onClick={() => {
+                            _props.setVideoUpload("")
+                            _props._handleDiscard("personalized_video", "");
+                          }}
+                        >
+                          <IoMdCloseCircle size={"20px"} />
+                        </span>
+                      </div>
                     ) : (
                       <img
                         src={uploadVideoIcon}
