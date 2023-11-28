@@ -27,13 +27,13 @@ export default function RegisterKey() {
   
   const [modalVisibility, setModalVisibility] = useState('none')
   const [modalControl, setModalControl] = useState(initialState)
-  const [doHaveFile, setDoHaveFile] = useState(false)
+  const [filePresent, setFilePresent] = useState(false)
   const [fileName, setFileName] = useState('')
 
   const closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
-    setDoHaveFile(false)
+    setFilePresent(false)
     setFileName('')
   }, [])
 
@@ -135,8 +135,8 @@ export default function RegisterKey() {
         closeIconVisibility={true}
         _handleChange={_handleChange}
         _handleRegisterPK={_handleRegisterPK}
-        doHaveFile={doHaveFile}
-        setDoHaveFile={setDoHaveFile}
+        filePresent={filePresent}
+        setFilePresent={setFilePresent}
         fileName={fileName}
         setFileName={setFileName}
       />

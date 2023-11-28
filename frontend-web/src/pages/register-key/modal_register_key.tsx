@@ -17,8 +17,8 @@ export function PrivateKeyModal(_props: {
   closeIconVisibility: boolean
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   _handleRegisterPK: React.MouseEventHandler<HTMLButtonElement>
-  doHaveFile: any
-  setDoHaveFile:any
+  filePresent: any
+  setFilePresent:any
   fileName: any
   setFileName: any
 }) {
@@ -40,7 +40,7 @@ export function PrivateKeyModal(_props: {
               },
             }
             _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
-            _props.setDoHaveFile(true)
+            _props.setFilePresent(true)
             _props.setFileName(file.name)
             toast("File uploaded", "success")
           }
@@ -109,7 +109,7 @@ export function PrivateKeyModal(_props: {
                     <input type="text" className="text-[#74777E] border-2 border-[#aab4b9] py-2 px-2 bg-white w-[150px]" placeholder="Choose File" value={_props.fileName}  disabled />
                     <button className="bg-[#DDE3E8] py-2 px-3 border-2 border-[#aab4b9] border-l-0 font-bold text-[#515D66]">Browse File</button>
                   </div>
-                  {_props.doHaveFile ? <img src={jsonFile} alt="json file icon" className="mx-auto w-28 mb-3"/> : <img src={uploadImg} alt="upload file" className="mx-auto" />}
+                  {_props.filePresent ? <img src={jsonFile} alt="json file icon" className="mx-auto w-28 mb-3"/> : <img src={uploadImg} alt="upload file" className="mx-auto" />}
                 </div>
               )
             },
