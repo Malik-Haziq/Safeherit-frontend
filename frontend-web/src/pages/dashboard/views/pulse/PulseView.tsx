@@ -65,6 +65,8 @@ export default function PulseView() {
   useEffect(() => {
     modalHistoryPopAll()
     getUserDetails()
+    initialState.pulseCheckEmail1 = user.email
+    setModalControl(initialState)
   }, [])
 
   const getUserDetails = () => {
