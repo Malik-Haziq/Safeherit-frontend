@@ -66,7 +66,7 @@ export default function PulseView() {
     modalHistoryPopAll()
     getUserDetails()
   }, [])
-  console.log(user)
+
   const getUserDetails = () => {
     dispatch(getUser({}))
       .unwrap()
@@ -92,7 +92,7 @@ export default function PulseView() {
   const _submitStepTwoModal = () => {
 
     if (!modalControl.pulseCheckDays) {
-      toast("please enter a valid name", "error")
+      toast("please select valid pulse check days", "error")
     } else if (
       (!isValidEmail(modalControl.pulseCheckEmail1) &&
         !isValidEmail(modalControl.pulseCheckEmail2) &&
