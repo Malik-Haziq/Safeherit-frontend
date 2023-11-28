@@ -77,7 +77,7 @@ export default function BeneficiariesView() {
   const [videoUpload, setVideoUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
-  const [doHaveFile, setDoHaveFile] = useState(false)
+  const [filePresent, setFilePresent] = useState(false)
   const [fileName, setFileName] = useState('')
   const [
     modalHistory,
@@ -122,7 +122,7 @@ export default function BeneficiariesView() {
     setImageUpload("")
     setVideoUpload("")
     modalHistoryPopAll()
-    setDoHaveFile(false)
+    setFilePresent(false)
     setFileName('')
   }, [])
 
@@ -402,8 +402,8 @@ export default function BeneficiariesView() {
         closeIconVisibility={true}
         _handleChange={_handleEncryptionKeyChange}
         _handleRegisterPK={_handleRegisterPK}
-        doHaveFile={doHaveFile}
-        setDoHaveFile={setDoHaveFile}
+        filePresent={filePresent}
+        setFilePresent={setFilePresent}
         fileName={fileName}
         setFileName={setFileName}
       />
