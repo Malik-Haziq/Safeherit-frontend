@@ -27,10 +27,14 @@ export default function RegisterKey() {
   
   const [modalVisibility, setModalVisibility] = useState('none')
   const [modalControl, setModalControl] = useState(initialState)
+  const [filePresent, setFilePresent] = useState(false)
+  const [fileName, setFileName] = useState('')
 
   const closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
+    setFilePresent(false)
+    setFileName('')
   }, [])
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
@@ -131,6 +135,10 @@ export default function RegisterKey() {
         closeIconVisibility={true}
         _handleChange={_handleChange}
         _handleRegisterPK={_handleRegisterPK}
+        filePresent={filePresent}
+        setFilePresent={setFilePresent}
+        fileName={fileName}
+        setFileName={setFileName}
       />
       <GeneratePrivateKey
         openModal={modalVisibility == "Generate-PK"}
