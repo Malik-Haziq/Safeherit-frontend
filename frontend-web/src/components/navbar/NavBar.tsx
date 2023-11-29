@@ -89,17 +89,20 @@ export function NavBar() {
           <button className="primary-btn " onClick={_handleLoginPress}>
             Login / Register
           </button> : 
-          <DropDownButton
-            className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer "
-            onClick={_handleLogout}
-            title={USER_NAME}
-            arrowIcon={arrowDown}
-            arrowDownClassName={"ml-1"}
-            userIcon={userImage || userImg}
-            userIconClassName={"sm:w-8 sm:h-8 rounded-full object-contain"}
-            optionText={"Logout"}
-            options={["Logout"]}
-          />}
+          <div className="z-0" >
+            <DropDownButton
+              className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
+              onClick={_handleLogout}
+              title={USER_NAME}
+              titleClassName={"text-sm sm:text-base"}
+              arrowIcon={arrowDown}
+              arrowDownClassName={"ml-1"}
+              userIcon={userImage || userImg}
+              userIconClassName={"sm:w-8 sm:h-8 rounded-full object-contain"}
+              options={["Logout"]}
+            />
+          </div>
+          }
       </nav>
     </div>
   )

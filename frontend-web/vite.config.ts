@@ -24,8 +24,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
       "@pages": path.resolve(__dirname, "./src/pages"),
       "@redux": path.resolve(__dirname, "./src/redux"),
-      "@assets": `${path.resolve(__dirname, "./assets")}`,
-      "@images": `${path.resolve(__dirname, "./assets/images")}`,
+      "@assets": `${path.resolve(__dirname, "./src/assets")}`,
+      "@images": `${path.resolve(__dirname, "./src/assets/images")}`,
     },
   },
 })
