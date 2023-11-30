@@ -3,11 +3,15 @@ import tick from "@images/tick.svg"
 
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
+import { useAppDispatch } from "@redux/hooks"
 
 export default function Pricing() {
   const [selectedPlan, setSelectedPlan] = useState("Yearly")
-  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const startLoader = () => dispatch(setLoaderVisibility(true))
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
   
   const packagePlans = [
     { plan: "Monthly", price: "19.99", priceTime: "month" },
@@ -16,16 +20,16 @@ export default function Pricing() {
   ]
 
   function _handlePlanSelect(selectedPlan: string) {
-    setIsLoading(true)
     setSelectedPlan(selectedPlan)
+    startLoader()
     setTimeout(() => {
       navigate("/register")
+      stopLoader()
     }, 2000);
   }
 
   return (
     <main className="font-safe-font-default relative">
-      {isLoading && <Spinner withOverlay={true} />}
       <section className="bg-safe-blue-tint text-safe-text-white flex justify-center items-center flex-col py-[74px]">
         <h1 className="text-safe-text-white text-2xl sm:text-3xl font-bold mb-4 text-center">
           Get Started Now Pick a Plan
