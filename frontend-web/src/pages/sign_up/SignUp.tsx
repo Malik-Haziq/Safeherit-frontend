@@ -1,6 +1,7 @@
 import logo from "@images/safeherit_logo.svg"
 import userIcon from "@images/UserIcon.png"
 import emailIcon from "@images/EmailIcon.png"
+import signupBg from "@images/signup-bg.svg"
 import passwordVisibilityIcon from "@images/PasswordVisibilityIcon.png"
 import signupImg from '@images/signup-pic.png'
 import { useState } from "react"
@@ -215,7 +216,7 @@ export function SignUp() {
           </a>
         </small>
       </section>
-      <section className="bg-safe-blue hidden lg:flex lg:items-center lg:justify-center lg:w-3/5 relative" style={{background: 'url("../../../assets/images/signup-bg.svg")', backgroundRepeat: 'no-repeat',backgroundPosition: 'center', backgroundSize: 'cover'}}>
+      <section className="bg-safe-blue hidden lg:flex lg:items-center lg:justify-center lg:w-3/5 relative" style={{background: `url(${signupBg})`, backgroundRepeat: 'no-repeat',backgroundPosition: 'center', backgroundSize: 'cover'}}>
         <img src={signupImg} alt="sign up image" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       </section>
     </main>
