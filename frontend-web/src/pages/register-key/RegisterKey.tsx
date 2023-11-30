@@ -70,7 +70,7 @@ export default function RegisterKey() {
         navigate('/dashboard')
       }
       else {
-        dispatch(updatePK({publicKey: modalControl.publicKey})).unwrap()
+        dispatch(updatePK({publicKey: modalControl.publicKey, assetKeysEncByOwner: JSON.stringify({})})).unwrap()
         .then(res => {
           toast("Keys Registered", "success")
           sessionStorage.setItem("privateKey", modalControl.privateKey)
