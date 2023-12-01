@@ -40,7 +40,7 @@ export default function DashboardNavbar(_props: {
         </p>
       </div>
       <div className="flex items-center gap-3 md:gap-10">
-        <Notifications />
+        {/* <Notifications /> */}
 
         <DropDownButton
           className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
