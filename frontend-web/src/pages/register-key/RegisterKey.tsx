@@ -47,9 +47,9 @@ export default function RegisterKey() {
   }, [])
 
   const _handleGenerate = useCallback(() => {
-    if (user.role == "beneficiary") {
+    if (user.role == "beneficiary" || user.publicKey) {
       setModalVisibility("Load-PK")
-    }
+    } 
     else {
       setModalVisibility("Generate-PK")
     }
@@ -70,7 +70,7 @@ export default function RegisterKey() {
         navigate('/dashboard')
       }
       else {
-        dispatch(updatePK({publicKey: modalControl.publicKey})).unwrap()
+        dispatch(updatePK({publicKey: modalControl.publicKey, assetKeysEncByOwner: JSON.stringify({})})).unwrap()
         .then(res => {
           toast("Keys Registered", "success")
           sessionStorage.setItem("privateKey", modalControl.privateKey)

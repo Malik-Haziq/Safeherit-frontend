@@ -272,6 +272,7 @@ export function StepTwoModal(_props: {
             inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
             inputContainerStyles: "mx-7 mb-2",
             hasRightIcon: false,
+            disabled: true
           },
         },
         {
