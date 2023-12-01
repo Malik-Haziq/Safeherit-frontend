@@ -34,10 +34,6 @@ const initialState = {
   pulseCheckNonValidationMonths: "0",
 }
 
-type YourObjectType = {
-  [key: string]: { heading: string; subHeading: string }[]
-}
-
 export default function PulseView() {
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.user)
@@ -324,6 +320,7 @@ function PulseCheckView(_props: {
     </div>
   )
 }
+
 function CheckPulsePeriod(_props: { pulseCheckDays: any, days: string}) {
   return (
     <div
