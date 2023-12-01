@@ -18,7 +18,7 @@ import {
   SuccessModal,
 } from "./modal_pulse"
 import { isValidEmail, isValidPhoneWithRegion, useArray } from "@/common"
-import { toast } from "@/components"
+import { Spinner, toast } from "@/components"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getUser, updatePulse, validateOwner } from "@/redux/actions"
 import { useNavigate } from "react-router-dom"
@@ -34,16 +34,12 @@ const initialState = {
   pulseCheckNonValidationMonths: "0",
 }
 
-type YourObjectType = {
-  [key: string]: { heading: string; subHeading: string }[]
-}
-
 export default function PulseView() {
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.user)
   const navigate = useNavigate()
 
-  const [pulseCheck, setPulseCheck] = useState(false)
+  const [pulseCheck, setPulseCheck] = useState<boolean | null>(null)
   const [modalVisibility, setModalVisibility] = useState("none")
   const [confirmationDetails, setConfirmationDetails] = useState("Email")
   const [modalControl, setModalControl] = useState(initialState)
@@ -65,6 +61,8 @@ export default function PulseView() {
   useEffect(() => {
     modalHistoryPopAll()
     getUserDetails()
+    initialState.pulseCheckEmail1 = user.email
+    setModalControl(initialState)
   }, [])
 
   const getUserDetails = () => {
@@ -208,7 +206,13 @@ export default function PulseView() {
         action={""}
         _submitModal={_submitSuccessModal}
       />
-      {pulseCheck ? (
+      {pulseCheck === null ? (
+        <div className={styles.AppView}>
+          <div className="relative h-[80vh]">
+            <Spinner />
+          </div>
+        </div>
+      ) : pulseCheck ? (
         <PulseCheckView
           checkPulsePeriodArr={checkPulsePeriodArr}
           checkPUlseDateArr={checkPUlseDateArr}
@@ -316,6 +320,7 @@ function PulseCheckView(_props: {
     </div>
   )
 }
+
 function CheckPulsePeriod(_props: { pulseCheckDays: any, days: string}) {
   return (
     <div
