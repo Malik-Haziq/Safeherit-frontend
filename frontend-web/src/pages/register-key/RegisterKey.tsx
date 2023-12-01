@@ -47,9 +47,9 @@ export default function RegisterKey() {
   }, [])
 
   const _handleGenerate = useCallback(() => {
-    if (user.role == "beneficiary") {
+    if (user.role == "beneficiary" || user.publicKey) {
       setModalVisibility("Load-PK")
-    }
+    } 
     else {
       setModalVisibility("Generate-PK")
     }
