@@ -10,6 +10,7 @@ import shieldIcon from "@images/Shield-done.svg"
 import tickIcon from "@images/tick-blue.svg"
 import editIcon from "@images/edit-icon.svg"
 import pulseImg from "@images/pulse-check-img.svg"
+import introVideo from '@videos/pulse-video.mp4'
 import {
   StepOneModal,
   StepTwoModal,
@@ -310,7 +311,7 @@ function PulseCheckView(_props: {
         </section>
         <section className="basis-1/2 flex mt-36 items-center flex-col gap-8 ">
           <video
-            src="#"
+            src={introVideo}
             controls
             className="w-[450px] h-[300px] rounded-xl"
           ></video>
