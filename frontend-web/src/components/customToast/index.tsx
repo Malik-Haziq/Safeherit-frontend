@@ -3,7 +3,7 @@ import { SnackbarProvider, enqueueSnackbar } from 'notistack'
 export const CustomToast = () => {
   return (
     <SnackbarProvider
-      autoHideDuration={4000}
+      autoHideDuration={5000}
       preventDuplicate={true}
       maxSnack={3}
       disableWindowBlurListener={true}
