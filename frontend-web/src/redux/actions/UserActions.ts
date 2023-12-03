@@ -212,7 +212,7 @@ export const updatePayment = createAsyncThunk(
     const { user } = getState() as { user: { token: any } }
     const params = { ROUTE: CREATE_PAYMENT_SESSION_PORTAL, Body: {}, token: user.token }
     try {
-      let response = await GET(params)
+      let response = await POST(params)
       return response
     } catch (error) {
       return rejectWithValue(error)
