@@ -15,6 +15,7 @@ import { getFileFromFirebase, verifyIfUserIsEnrolled } from "@/common"
 import { ConfirmationModal, Spinner, toast } from "@/components"
 import { useNavigate } from "react-router-dom"
 import TwoFAAuth from "./TwoFAAuth"
+import AuthenticateUser from "./AuthenticateUser"
 
 const initialState = {
   displayName: "",
@@ -29,8 +30,10 @@ export default function AccountView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
+
   const [showMemberShipPlan, setShowMemberShipPlan] = useState(false)
   const [showTwoFAAuth, setShowTwoFAAuth] = useState(false)
+  const [showAuthenticateUser, setShowAuthenticateUser] = useState(false)
   const [modalControl, setModalControl] = useState(initialState)
   const [imageUpload, setImageUpload] = useState("")
   const [userImage, setUserImage] = useState("")
@@ -66,6 +69,11 @@ export default function AccountView() {
   const hideTwoFA = () => {
     setShowTwoFAAuth(false)
     setAuth2FAEnabled(verifyIfUserIsEnrolled())
+  }
+
+  const showUserAuthenticate = () => setShowAuthenticateUser(true)
+  const hideUserAuthenticate = () => {
+    setShowAuthenticateUser(false)
   }
 
   const getUserDetails = () => {
@@ -141,6 +149,9 @@ export default function AccountView() {
   return (
     <>
       {
+        showAuthenticateUser ? (
+          <AuthenticateUser hideUserAuthenticate={hideUserAuthenticate} showTwoFA={showTwoFA} />
+        ) :
         showTwoFAAuth ? (
           <TwoFAAuth hideTwoFA={hideTwoFA} />
         ) :
@@ -196,7 +207,7 @@ export default function AccountView() {
                   userLanguage="English"
                   handleKeysView={_handleKeysView}
                   verified={auth2FAEnabled}
-                  enable2FA={showTwoFA}
+                  reauthenticateUser={showUserAuthenticate}
                 />
                 <MembershipPlan
                   plan={"Monthly"}
@@ -266,7 +277,7 @@ function UserProfileDetails(_props: {
   userLanguage: string
   verified: boolean
   handleKeysView: any
-  enable2FA: React.MouseEventHandler<HTMLButtonElement>
+  reauthenticateUser: React.MouseEventHandler<HTMLButtonElement>
 }) {
   return (
     <section className="rounded-2xl shadow-md mb-4">
@@ -305,7 +316,7 @@ function UserProfileDetails(_props: {
             </small>
           </div>
           <button
-            onClick={_props.verified ? () => {} : _props.enable2FA}
+            onClick={_props.verified ? () => {} : _props.reauthenticateUser}
             className={
               _props.verified
                 ? "primary-btn bg-[#0AB64E] cursor-pointer rounded-full py-2 px-6 text-sm"

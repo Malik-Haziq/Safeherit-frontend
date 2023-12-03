@@ -138,7 +138,8 @@ export const slice = createSlice({
     },
     setToken: (state, action) => {
       state.token = action.payload;
-    },
+    },  
+
     setCredentials: (state, action) => {
       state.token = action.payload.token
       state.email = action.payload.email
