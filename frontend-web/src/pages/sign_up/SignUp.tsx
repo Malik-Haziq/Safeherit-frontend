@@ -13,6 +13,7 @@ import { updateProfile } from "firebase/auth"
 import { GoogleAuthButton, toast } from "@/components"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { updateActive, updateRole, updateRoleCheck } from "@/redux/reducers/UserSlice"
+import { sendEmailVerificationEmail } from "@/common"
 
 export function SignUp() {
   const { t } = useTranslation()
@@ -63,15 +64,23 @@ export function SignUp() {
             updateProfile(res.user, {
               displayName: formControl.name,
             })
+            .then()
             .catch((err) => {
               toast(err?.code, "error")
             })
-            .finally(() => {
-              stopLoader()
-              navigate("/pricing")
-              dispatch(updateUser({
-                displayName: formControl.name
-              })).unwrap().catch()
+            .finally(async () => {
+              const emailSent = await sendEmailVerificationEmail()
+              if (emailSent) {
+                toast("Verification Email Sent", "info")
+                setTimeout(() => {
+                  toast("Please verify your email to login", "info")
+                  stopLoader()
+                  navigate("/login")
+                }, 500);
+              }
+              else {
+                navigate("/login")
+              }
             })
           })
           .catch((err) => {
@@ -86,17 +95,14 @@ export function SignUp() {
     startLoader()
     dispatch(loginWithGoogle({}))
       .unwrap()
-      .then((res) => {
-        stopLoader()
-        const name = res.user.displayName
-        const email = res.user.email
+      .then(() => {
         dispatch(updateActive(true))
         dispatch(updateRole("owner"))
         dispatch(updateRoleCheck({role: "owner", value: true}))
-        navigate("/pricing")
-        dispatch(updateUser({
-          displayName: name ?? email,
-        })).unwrap().catch()
+        setTimeout(() => {
+          stopLoader()
+          navigate("/pricing")
+        }, 1000);
       })
       .catch((err) => {
         toast(err?.code, "error")

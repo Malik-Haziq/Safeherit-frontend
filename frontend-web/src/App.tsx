@@ -1,13 +1,4 @@
-import {
-  ProtectedRoute,
-  ProtectedOwnerRoutes,
-  ProtectedOwnerAndBeneficiaryRoutes,
-  ProtectedAdminRoutes,
-  ProtectedEncryptionRoute,
-  ProtectedPricingRoute,
-  ProtectedRegisterKeyRoute,
-  ProtectedRegisterationRoute
-} from "./common"
+import { ProtectedRoutes } from "./common"
 import {
   BrowserRouter,
   Route,
@@ -67,67 +58,49 @@ function AppRoutes() {
           <Route path={ROUTE_CONSTANTS.ABOUT} element={<About />} />
           <Route path={ROUTE_CONSTANTS.CONTACT} element={<Contact />} />
 
-          <Route element={<ProtectedRoute />}>
-            <Route element={<ProtectedPricingRoute />}>
-              <Route path={ROUTE_CONSTANTS.PRICING} element={<Pricing />} />
-            </Route>
-
-            <Route element={<ProtectedRegisterKeyRoute />}>
-              <Route path={ROUTE_CONSTANTS.REGISTER_KEY} element={<RegisterKey />} />
-            </Route>
+          <Route element={<ProtectedRoutes page="price" />}>
+            <Route path={ROUTE_CONSTANTS.PRICING} element={<Pricing />} />
           </Route>
 
-          <Route element={<ProtectedRegisterationRoute />}>
+          <Route element={<ProtectedRoutes page="register-pk" />}>
+            <Route path={ROUTE_CONSTANTS.REGISTER_KEY} element={<RegisterKey />} />
+          </Route>
+
+          <Route element={<ProtectedRoutes page="registration" />}>
             <Route path={ROUTE_CONSTANTS.SIGN_UP} element={<SignUp />} />
           </Route>
           
           <Route path="*" element={<Navigate to={ROUTE_CONSTANTS.HOME} replace />} />
         </Route>
 
-        <Route element={<ProtectedRegisterationRoute />}>
+        <Route element={<ProtectedRoutes page="registration" />}>
           <Route path={ROUTE_CONSTANTS.LOGIN} element={<Login />} />
         </Route>
 
-        <Route element={<ProtectedRoute />}>
-          <Route element={<ProtectedEncryptionRoute />}>
-            <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<Dashboard />}>
-              <Route path="" element={<DashboardControl />} />
-              <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_HELP}
-                element={<HelpView />}
-              />
-              <Route element={<ProtectedOwnerRoutes />}>
-                <Route
-                  path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}
-                  element={<BeneficiariesView />}
-                />
-                <Route
-                  path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}
-                  element={<ValidatorsView />}
-                />
-                <Route
-                  path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
-                  element={<PulseView />}
-                />
-                <Route
-                  path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT}
-                  element={<AccountView />}
-                />
-              </Route>
-              <Route element={<ProtectedOwnerAndBeneficiaryRoutes />}>
-                <Route
-                  path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
-                  element={<AssetsView />}
-                />
-              </Route>
-              <Route element={<ProtectedAdminRoutes />}>
-                <Route
-                  path={ROUTE_CONSTANTS.DASHBOARD_SETTINGS}
-                  element={<SettingView />}
-                />
-              </Route>
+        <Route element={<ProtectedRoutes page="dashboard" />}>
+
+          <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<Dashboard />}>
+
+            <Route path="" element={<DashboardControl />} />
+            <Route path={ROUTE_CONSTANTS.DASHBOARD_HELP} element={<HelpView />}/>
+
+            <Route element={<ProtectedRoutes page="dashboard-owner" />}>
+              <Route path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES} element={<BeneficiariesView />}/>
+              <Route path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS} element={<ValidatorsView />}/>
+              <Route path={ROUTE_CONSTANTS.DASHBOARD_PULSE} element={<PulseView />}/>
+              <Route path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT} element={<AccountView />}/>
             </Route>
+
+            <Route element={<ProtectedRoutes page="dashboard-beneficiary" />}>
+              <Route path={ROUTE_CONSTANTS.DASHBOARD_ASSETS} element={<AssetsView />}/>
+            </Route>
+
+            <Route element={<ProtectedRoutes page="dashboard-admin" />}>
+              <Route path={ROUTE_CONSTANTS.DASHBOARD_SETTINGS} element={<SettingView />}/>
+            </Route>
+
           </Route>
+
         </Route>
       </Routes>
     </BrowserRouter>

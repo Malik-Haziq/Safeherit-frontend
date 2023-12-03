@@ -10,11 +10,12 @@ import styles from "../../Dashboard.module.css"
 import MembershipPlanView from "./MembershipPlanView"
 import { EditUserModal, ViewPrivateKey } from "./modal_account"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
-import { getUser, updateUser, deleteUser, logout } from "@redux/actions"
+import { getUser, updateUser, deleteUser, logout, updatePayment } from "@redux/actions"
 import { getFileFromFirebase, verifyIfUserIsEnrolled } from "@/common"
 import { ConfirmationModal, Spinner, toast } from "@/components"
 import { useNavigate } from "react-router-dom"
 import TwoFAAuth from "./TwoFAAuth"
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 
 const initialState = {
   displayName: "",
@@ -61,6 +62,8 @@ export default function AccountView() {
 
   const showPlanView = () => setShowMemberShipPlan(true)
   const hidePlanView = () => setShowMemberShipPlan(false)
+  const startLoader = () => dispatch(setLoaderVisibility(true))
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
 
   const showTwoFA = () => setShowTwoFAAuth(true)
   const hideTwoFA = () => {
@@ -138,6 +141,20 @@ export default function AccountView() {
     setModalVisibility('show-keys')
   }
 
+  const updatePlan = () => {
+
+    startLoader()
+    dispatch(updatePayment({})).unwrap().catch()
+    .then((res) => {
+      if (res.data.data.sessionUrl) {
+        window.open(res.data.data.sessionUrl, '_blank')
+      }
+    })
+    .finally(() => {
+      stopLoader()
+    })
+  }
+
   return (
     <>
       {
@@ -202,7 +219,7 @@ export default function AccountView() {
                   plan={"Monthly"}
                   duration={"1 Month"}
                   date={"May 18, 2023"}
-                  showPlanView={showPlanView}
+                  showPlanView={updatePlan}
                 />
                 <section className="rounded-2xl shadow-md mb-4 ">
                   <div className="p-5 flex justify-between items-center border-b-[1px]">

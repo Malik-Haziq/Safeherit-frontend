@@ -3,77 +3,60 @@ import { ROUTE_CONSTANTS } from ".."
 import { useAppSelector } from "@redux/hooks"
 import Encryption from "../encryption/encryption"
 
-export const ProtectedRoute = () => {
-  const active = useAppSelector(state => state.user.active)
-  const ifActive: boolean = active ? true : false
-  const redirectTo: string = ROUTE_CONSTANTS.LOGIN
-  return ifActive ? <Outlet /> : <Navigate to={redirectTo} replace />
-}
+export const ProtectedRoutes = (_props: {
+  page: string
+}) => {
 
-export const ProtectedRegisterationRoute = () => {
-  const active = useAppSelector(state => state.user.active)
-  const role = useAppSelector(state => state.user.role)
-  const ifActive: boolean = active ? true : false
-  const redirectTo: string = ROUTE_CONSTANTS.DASHBOARD
-  return !ifActive && (!role || role == "none")? <Outlet /> : <Navigate to={redirectTo} replace />
-}
-
-export const ProtectedPricingRoute = () => {
-  const active = useAppSelector(state => state.user.active)
-  const role = useAppSelector(state => state.user.role)
-  const ifActive: boolean = active ? true : false
-  const redirectTo: string = ROUTE_CONSTANTS.DASHBOARD
-  return ifActive && role !== "beneficiary" && role !== "validator" ? <Outlet /> : <Navigate to={redirectTo} replace />
-}
-
-export const ProtectedRegisterKeyRoute = () => {
-  const privateKey = sessionStorage.getItem("privateKey") || ''
-  const active = useAppSelector(state => state.user.active)
-  const role = useAppSelector(state => state.user.role)
-  const ifActive: boolean = active ? true : false
-  const redirectTo: string = ROUTE_CONSTANTS.DASHBOARD
-  return ifActive && role != "validator" && privateKey == '' ? <Outlet /> : <Navigate to={redirectTo} replace />
-}
-
-export const ProtectedEncryptionRoute = () => {
-  const privateKey = sessionStorage.getItem("privateKey") || ''
-  const publicKey = useAppSelector(state => state.user.publicKey)
-  const userRole = useAppSelector(state => state.user.role)
-  let redirectTo: string = ROUTE_CONSTANTS.REGISTER_KEY
   const encryptionService = new Encryption()
-  const isValidKey = encryptionService.validateKeyPair(publicKey, privateKey)
-  return isValidKey || userRole == "validator" ? <Outlet /> : <Navigate to={redirectTo} replace />
-}
+  const user = useAppSelector(state => state.user)
 
-export const ProtectedOwnerRoutes = () => {
-  const role = useAppSelector(state => state.user.role)
-  const redirectTo: string = ROUTE_CONSTANTS.DASHBOARD
-  if (role == "owner") {
-    return <Outlet />
-  }
-  else {
-    return <Navigate to={redirectTo} replace />
-  }
-}
+  const active = user.active
+  const role = user.role
+  const paymentStatus = user.paymentStatus
+  const publicKey = user.publicKey
+  const privateKey = sessionStorage.getItem("privateKey") || ''
 
-export const ProtectedOwnerAndBeneficiaryRoutes = () => {
-  const role = useAppSelector(state => state.user.role)
-  const redirectTo: string = ROUTE_CONSTANTS.DASHBOARD
-  if (role == "owner" || role == "beneficiary") {
-    return <Outlet />
-  }
-  else {
-    return <Navigate to={redirectTo} replace />
-  }
-}
+  let redirectTo: string = ROUTE_CONSTANTS.LOGIN
 
-export const ProtectedAdminRoutes = () => {
-  const role = useAppSelector(state => state.user.role)
-  const redirectTo: string = ROUTE_CONSTANTS.DASHBOARD
-  if (role == "admin" || role == "super-admin") {
-    return <Outlet />
-  }
-  else {
-    return <Navigate to={redirectTo} replace />
+  switch (_props.page) {
+    case "price": {
+      redirectTo = ROUTE_CONSTANTS.LOGIN
+      return active && role == "owner" && (!paymentStatus || paymentStatus == "Pending") ? <Outlet /> : <Navigate to={redirectTo} replace />
+      break;
+    }
+    case "register-pk": {
+      redirectTo = ROUTE_CONSTANTS.LOGIN
+      return active && role != "validator" && role != "super-admin" && role != "admin" && privateKey == '' && paymentStatus !== "Pending" ? <Outlet /> : <Navigate to={redirectTo} replace />
+      break;
+    }
+    case "registration": {
+      redirectTo = ROUTE_CONSTANTS.DASHBOARD
+      return !active && (!role || role == "none") ? <Outlet /> : <Navigate to={redirectTo} replace />
+      break;
+    }
+    case "dashboard": {
+      redirectTo = (!paymentStatus || paymentStatus == "Pending") ? ROUTE_CONSTANTS.PRICING : ROUTE_CONSTANTS.REGISTER_KEY
+      const isValidKey = encryptionService.validateKeyPair(publicKey, privateKey)
+      return isValidKey || role == "validator" || role == "admin" || role == "super-admin" ? <Outlet /> : <Navigate to={redirectTo} replace />
+      break;
+    }
+    case "dashboard-owner": {
+      redirectTo = ROUTE_CONSTANTS.DASHBOARD
+      return role == "owner" ? <Outlet /> : <Navigate to={redirectTo} replace />
+      break;
+    }
+    case "dashboard-beneficiary": {
+      redirectTo = ROUTE_CONSTANTS.DASHBOARD
+      return role == "owner" || role == "beneficiary" ? <Outlet /> : <Navigate to={redirectTo} replace />
+      break;
+    }
+    case "dashboard-admin": {
+      redirectTo = ROUTE_CONSTANTS.DASHBOARD
+      return role == "admin" || role == "super-admin" ? <Outlet /> : <Navigate to={redirectTo} replace />
+      break;
+    }
+    default: {
+      return <Navigate to={redirectTo} replace />
+    }
   }
 }

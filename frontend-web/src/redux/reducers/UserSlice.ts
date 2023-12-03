@@ -33,6 +33,7 @@ interface UserState {
   pulseCheckActive: string
   pulseCheckValidationRequired: string
   publicKey: string
+  paymentStatus: string
 }
 const initialState: UserState = {
   email: "",
@@ -78,6 +79,7 @@ const initialState: UserState = {
   pulseCheckActive: '',
   pulseCheckValidationRequired: '',
   publicKey: '',
+  paymentStatus: ''
 }
 
 export const slice = createSlice({
@@ -160,15 +162,7 @@ export const slice = createSlice({
       state.photo = action.payload.user.photoURL || ""
       state.phone = action.payload.user.phoneNumber || ""
     })
-    builder.addCase(signup.fulfilled, (state, action) => {
-      state.email = action.payload.user.email || ""
-      state.displayName = action.payload.user.displayName || ""
-      state.photo = action.payload.user.photoURL || ""
-      state.phone = action.payload.user.phoneNumber || ""
-      state.active = true
-      state.role = "owner"
-      state.isOwner = true
-    })
+    builder.addCase(signup.fulfilled, (state, action) => {})
     builder.addCase(logout.fulfilled, (state, action) => {
       return initialState
     })
@@ -208,6 +202,7 @@ export const slice = createSlice({
       state.isValidator = action.payload.data.data.isValidator
       state.beneficiaryOf = action.payload.data.data._beneficiaryOf
       state.publicKey = action.payload.data.data?.publicKey || ""
+      state.paymentStatus = action.payload.data.data?.paymentStatus || ""
 
       let beneficiaryOfArray: SelectOption[] = []
       const beneficiaryMapper: {[key: string]: any} = {};

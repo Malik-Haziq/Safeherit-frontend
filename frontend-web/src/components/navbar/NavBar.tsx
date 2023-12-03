@@ -89,7 +89,7 @@ export function NavBar() {
           <button className="primary-btn " onClick={_handleLoginPress}>
             Login / Register
           </button> : 
-          <div className="z-0" >
+          <div className="z-10" >
             <DropDownButton
               className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
               onClick={_handleLogout}
