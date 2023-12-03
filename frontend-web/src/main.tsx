@@ -4,7 +4,7 @@ import { Provider } from "react-redux"
 import { store } from "./redux"
 import App from "./App"
 import "./index.css"
-import "./i18n"
+import "./assets/i18n/en.json"
 import "./firebase"
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor } from "./redux"

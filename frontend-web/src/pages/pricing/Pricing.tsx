@@ -1,36 +1,79 @@
 import { Spinner } from "@/components"
 import tick from "@images/tick.svg"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
-import { useAppDispatch } from "@redux/hooks"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
+import { createPayment, getUser, updateUser } from "@/redux/actions"
 
 export default function Pricing() {
-  const [selectedPlan, setSelectedPlan] = useState("Yearly")
-  const navigate = useNavigate()
+
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const user = useAppSelector(state => state.user)
+  const [selectedPlan, setSelectedPlan] = useState("Yearly")
+
   const startLoader = () => dispatch(setLoaderVisibility(true))
   const stopLoader = () => dispatch(setLoaderVisibility(false))
-  
+ 
   const packagePlans = [
     { plan: "Monthly", price: "19.99", priceTime: "month" },
     { plan: "Yearly", price: "199", priceTime: "year" },
     { plan: "Life time", price: "1,999", priceTime: "" },
   ]
+  const planMapper = {
+    "Monthly": "monthly",
+    "Yearly": "yearly",
+    "Life time": "lifetime",
+  }
 
-  function _handlePlanSelect(selectedPlan: string) {
-    setSelectedPlan(selectedPlan)
+  useEffect(() => {
     startLoader()
-    setTimeout(() => {
-      navigate("/register")
+    getUserDetails()
+  }, [])
+
+  const getUserDetails = async () => {
+
+    dispatch(getUser({})).unwrap()
+    .then((res) => {
+      if (!res.data.data.displayName) {
+        dispatch(updateUser({
+          displayName: user.displayName || user.email
+        })).unwrap().catch()
+      }
+      if (res.data.data.paymentStatus != "Pending") {
+        navigate("/register")
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    .finally(() => {
       stopLoader()
-    }, 2000);
+    })
+  }
+
+  const _handlePlanTransition = (selectedPlan: string) => setSelectedPlan(selectedPlan)
+
+  function _handlePlanSelect(selectedPlan: "Monthly" | "Yearly" | "Life time") {
+    _handlePlanTransition(selectedPlan)
+    startLoader()
+    dispatch(createPayment({subscriptionType: planMapper[selectedPlan]})).unwrap()
+    .catch()
+    .then((res) => {
+      if (res.data.data.sessionUrl) {
+        window.location.href = res.data.data.sessionUrl;
+      }
+    })
+    .finally(() => {
+      stopLoader()
+    })
   }
 
   return (
     <main className="font-safe-font-default relative">
-      <section className="bg-safe-blue-tint text-safe-text-white flex justify-center items-center flex-col py-[74px]">
+      <section className="bg-safe-blue-tint text-safe-text-white flex justify-center items-center flex-col py-[74px] z-0">
         <h1 className="text-safe-text-white text-2xl sm:text-3xl font-bold mb-4 text-center">
           Get Started Now Pick a Plan
         </h1>
@@ -45,7 +88,7 @@ export default function Pricing() {
                 key={i}
                 paymentPlan={item.plan}
                 selectedPlan={selectedPlan}
-                onclick={_handlePlanSelect}
+                onclick={_handlePlanTransition}
               />
             )
           })}

@@ -19,6 +19,8 @@ import {
   CREATE_USER,
   PULSE_CHECK,
   PUBLIC_KEY,
+  CREATE_PAYMENT_SESSION,
+  CREATE_PAYMENT_SESSION_PORTAL,
 } from "@/common"
 
 export const login = createAsyncThunk(
@@ -182,6 +184,35 @@ export const updatePK = createAsyncThunk(
     const params = { ROUTE: PUBLIC_KEY, Body: formData, token: user.token }
     try {
       let response = await PUT(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const createPayment = createAsyncThunk(
+  "createPayment",
+  async (Data: {subscriptionType: string}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: { token: any } }
+    let formData = jsonToFormData(Data)
+    const params = { ROUTE: CREATE_PAYMENT_SESSION, Body: formData, token: user.token }
+    try {
+      let response = await POST(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const updatePayment = createAsyncThunk(
+  "updatePayment",
+  async (Data: {}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: { token: any } }
+    const params = { ROUTE: CREATE_PAYMENT_SESSION_PORTAL, Body: {}, token: user.token }
+    try {
+      let response = await GET(params)
       return response
     } catch (error) {
       return rejectWithValue(error)

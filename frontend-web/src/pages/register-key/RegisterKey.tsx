@@ -16,10 +16,9 @@ const initialState = {
 }
 
 export default function RegisterKey() {
-  const location = useLocation();
+  
   const dispatch = useAppDispatch()
   const navigate = useNavigate();
-  const { state } = location;
 
   const encryptionService = new Encryption();
   
