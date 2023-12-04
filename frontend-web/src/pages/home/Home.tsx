@@ -9,6 +9,7 @@ import screenShot3 from '@images/screenshot-3.png'
 import user from '@images/user.svg'
 import testUser from '@images/signup-pic.png'
 import logo from '@images/safeherit_logo.svg'
+import homeBg from '@images/home-bg.png'
 import { useNavigate } from "react-router-dom"
 
 export function Home(){
@@ -17,10 +18,10 @@ export function Home(){
     const slides = [<CarouselElement/>,<CarouselElement/>,<CarouselElement/>]
 
     return <main className='m-w-[1280px] mx-auto font-safe-font-default'>
-        <header style={{backgroundImage: "url('../../../assets/images/home-bg.png')"}} className='flex justify-between items-center 2xl:px-[140px] xl:px-[60px] lg:px-[40px] bg-cover h-[776px] mb-24'>
+        <header style={{backgroundImage: `url(${homeBg})`}} className='flex justify-between items-center 2xl:px-[140px] xl:px-[60px] lg:px-[40px] bg-cover h-[776px] mb-24'>
             <aside className='basis-3/5 flex flex-col gap-3'>
                 <h1 className='text-[58px] font-bold leading-tight' >Your Legacy, Secured for the Digital Age with SafeHerit</h1>
-                <p className='text-xl mb-5'>From your hard-earned savings in the bank to yourprecious memories stored digitally, SafeHeritensures your online treasures aren't lost in theether. Keep control of your digital life,even in the afterlife.</p>
+                <p className='text-xl mb-5'>From your hard-earned savings in the bank to your precious memories stored digitally, SafeHerit ensures your online treasures aren't lost in theether. Keep control of your digital life, even in the afterlife.</p>
                 <a className='text-[#04477B] bg-white rounded-2xl px-8 py-5 w-fit font-bold' onClick={()=>navigate("/register")}>Register the Generated Public Key</a>
             </aside>
             <aside className=''>

@@ -99,6 +99,8 @@ export function Login() {
   const closeModal = useCallback(() => {
     setModalVisibility("none")
     setResetEmail("")
+    sessionStorage.clear()
+    localStorage.clear()
   }, [])
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
@@ -119,8 +121,14 @@ export function Login() {
         setModalVisibility("none")
         dispatch(updateActive(true))
         dispatch(updateRole("owner"))
-        navigate("/dashboard", { state: { from: 'login' } });
-      } else {
+        if (res.data.data.paymentStatus != "Pending") {
+          navigate("/register")
+        }
+        else {
+          navigate("/pricing");
+        }
+      }
+      else {
         setModalVisibility("user-roles")
       }
     })
@@ -197,15 +205,10 @@ export function Login() {
         const isNewUser = getAdditionalUserInfo(res)
 
         if (isNewUser && isNewUser.isNewUser) {
-          const name = res.user.displayName
-          const email = res.user.email
           dispatch(updateActive(true))
           dispatch(updateRole("owner"))
           dispatch(updateRoleCheck({role: "owner", value: true}))
           navigate("/pricing")
-          dispatch(updateUser({
-            displayName: name ?? email,
-          })).unwrap().catch()
         }
         else {
           getUserDetails()
@@ -236,7 +239,12 @@ export function Login() {
       dispatch(resetMapper())
       dispatch(resetValidatorOf())
       dispatch(resetBeneficiaryOf())
-      navigate("/dashboard", { state: { from: 'login' } });
+      if (user.paymentStatus != "Pending") {
+        navigate("/register")
+      }
+      else {
+        navigate("/pricing");
+      }
     }
   }
 
@@ -365,11 +373,11 @@ export function Login() {
                   </a>
                 </small>
               </form>
-              {/* <GoogleAuthButton
+              <GoogleAuthButton
                 handleClick={_loginWithGoogle} 
                 type={"login"}
                 buttonText={"Login with Google"}    
-              /> */}
+              />
               <div id='authenticate'></div>
             </div>
             <footer className="flex justify-between">

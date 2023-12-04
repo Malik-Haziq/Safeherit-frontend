@@ -20,8 +20,8 @@
       "@/*": ["./src/*", "./dist/*", ""],
       "@pages/*": ["src/pages/*"],
       "@redux/*": ["src/redux/*"],
-      "@assets/*": ["assets/*"],
-      "@images/*": ["./assets/images/*"],
+      "@assets/*": ["src/assets/*"],
+      "@images/*": ["./src/assets/images/*"],
     }
   },
   "include": ["src"],
