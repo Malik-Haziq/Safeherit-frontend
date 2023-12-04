@@ -22,13 +22,13 @@ export default function TwoFAAuth(_props:{
   const stopLoader = () => dispatch(setLoaderVisibility(false))
 
   async function getCode(code: string) {
-    if(auth.currentUser && verificationCodeId) {
+    if (auth.currentUser && verificationCodeId) {
       const response = await enrollUser(
         auth.currentUser,
         verificationCodeId,
         code
-        );
-        
+      );
+
       if (response) {
         toast("Number verified", "success")
         returnToAccountView()
@@ -112,7 +112,7 @@ export default function TwoFAAuth(_props:{
   )
 }
 
-function PhoneRegistration({getPhoneNumber}: {
+function PhoneRegistration({ getPhoneNumber }: {
   getPhoneNumber: (phoneNumber: string) => void
 }) {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -138,7 +138,7 @@ function PhoneRegistration({getPhoneNumber}: {
           <h1 className='font-medium text-[22px] leading-[130%] md:mr-8'>Provide your phone</h1>
           <p className='text-slate-500 mt-2 text-base'>Fill in your phone number to receive the code</p>
         </div>
-        <div className="space-y-4 my-6">
+        <div className="mt-6">
           <div className="relative">
             <PhoneNumField
               name="phone_number"
@@ -161,7 +161,7 @@ function PhoneRegistration({getPhoneNumber}: {
               className="text-base text-white">
               Send SMS
             </span>
-            </button>
+          </button>
         </div>
       </div>
     </div>
