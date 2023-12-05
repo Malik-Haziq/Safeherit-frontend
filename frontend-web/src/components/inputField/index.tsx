@@ -66,7 +66,7 @@ export function InputField(_props: {
 
             formattedString = formattedString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             formattedString = formattedString.trim();
-            console.log(formattedString)
+           
             const customEvent = {
               target: {
                 name: e.target.name,

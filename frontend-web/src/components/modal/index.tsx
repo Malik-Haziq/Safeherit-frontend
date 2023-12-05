@@ -87,6 +87,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
         selectFieldStyles={element?.props?.selectFieldStyles}
         inputStyles={element?.props?.inputStyles}
         inputContainerStyles={element?.props?.inputContainerStyles}
+        containerStyles="mx-7"
         _handleChange={element?.props?._handleChange}
       />
     )
@@ -191,8 +192,8 @@ export const Modal = (_props: {
         </div>
       </div> </div>
       )
-}
-  </>
+      }
+    </>
   )
 }
 

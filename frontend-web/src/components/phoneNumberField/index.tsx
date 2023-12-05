@@ -12,6 +12,7 @@ export function PhoneNumField(_props: {
   selectFieldStyles?: string
   inputStyles?: string
   inputContainerStyles?: string
+  containerStyles?: string
   _handleChange: (event: { target: { name: any; value: any } }) => void
 }) {
   const _handleChange = (name: string, value: string, code?: SelectOption) => {
@@ -38,7 +39,7 @@ export function PhoneNumField(_props: {
   }
 
   return (
-    <div className="flex mx-7 border-2 bg-safe-gray placeholder:text-[#6F767B] outline-none rounded-[22px] mb-4 ">
+    <div className={_props.containerStyles + " flex border-2 bg-safe-gray placeholder:text-[#6F767B] outline-none rounded-[22px] mb-4"} >
       <SelectField
         data={countryCodes}
         value={
