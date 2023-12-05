@@ -3,7 +3,7 @@ import userIcon from "@images/UserIcon.png"
 import emailIcon from "@images/EmailIcon.png"
 import signupBg from "@images/signup-bg.svg"
 import passwordVisibilityIcon from "@images/PasswordVisibilityIcon.png"
-import signupImg from '@images/signup-pic.png'
+import signupImg from "@images/signup-pic.png"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
@@ -58,7 +58,9 @@ export function SignUp() {
       } else {
         startLoader()
         toast("signing up", "info")
-        dispatch(signup({ email: formControl.email, password: formControl.password }))
+        dispatch(
+          signup({ email: formControl.email, password: formControl.password }),
+        )
           .unwrap()
           .then((res) => {
             updateProfile(res.user, {

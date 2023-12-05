@@ -246,11 +246,15 @@ export const slice = createSlice({
         state._validatorOf = validatorOfArray
       }
     })
+    builder.addCase(updateUser.pending, (state, action) => {
+    })
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.displayName = action.payload.data.data.displayName || state.displayName
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image
       state.active = true
+    })
+    builder.addCase(updateUser.rejected, (state, action) => {
     })
     builder.addCase(updatePK.fulfilled, (state, action) => {
       state.publicKey = action.payload.data.data.publicKey

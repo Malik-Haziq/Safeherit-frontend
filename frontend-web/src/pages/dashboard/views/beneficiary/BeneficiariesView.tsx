@@ -247,6 +247,11 @@ export default function BeneficiariesView() {
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
   }
+
+  const _handleDiscard = (name: string, value: any) => {
+    setModalControl({...modalControl, [name]: value});
+  }
+
   const _handleEncryptionKeyChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     setModalEncryptionKeyControl({ ...modalEncryptionKeyControl, [name]: value })
@@ -469,6 +474,7 @@ export default function BeneficiariesView() {
         videoUpload={videoUpload}
         setVideoUpload={setVideoUpload}
         modalControl={modalControl}
+        _handleDiscard={_handleDiscard}
         _submitModal={_submitStepThreeModal}
         arrayLength={modalHistoryLength}
         showPreviousModal={showPreviousModal}

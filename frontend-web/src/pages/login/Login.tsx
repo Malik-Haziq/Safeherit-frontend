@@ -224,7 +224,9 @@ export function Login() {
 
   const _handleUserRolesSubmit = (selectedRole: string) => {
     if (
-      selectedRole == "owner" || selectedRole == "super-admin" || selectedRole == "admin" ||
+      selectedRole == "owner" ||
+      selectedRole == "super-admin" ||
+      selectedRole == "admin" ||
       (selectedRole == "beneficiary" && selectedBeneficiary) ||
       (selectedRole == "validator" && selectedValidator)
     ) {
@@ -263,6 +265,7 @@ export function Login() {
         })
     }
   }
+
 
   return (
     <main className="flex flex-row justify-center lg:justify-between font-safe-font-default w-screen h-screen">
