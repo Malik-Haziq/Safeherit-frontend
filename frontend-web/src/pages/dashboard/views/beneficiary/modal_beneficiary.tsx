@@ -381,6 +381,7 @@ export function StepTwoModal(_props: {
     profile_image: string
   }
   _submitModal: Function
+  _handleDiscard: Function
   imageUpload: string
   setImageUpload: Function
   arrayLength: any
@@ -510,11 +511,22 @@ export function StepTwoModal(_props: {
                       Click to upload <br /> a profile picture →
                     </span>
                     {_props.imageUpload ? (
-                      <img
-                        src={_props.imageUpload || profilePic}
-                        alt="user image"
-                        className="w-20 h-20 rounded-full object-contain"
-                      />
+                      <div className="relative">
+                        <img
+                          src={_props.imageUpload || profilePic}
+                          alt="user image"
+                          className="w-20 h-20 rounded-full object-contain"
+                        />
+                        <span
+                            className="absolute top-0 right-0 text-red-900 cursor-pointer"
+                            onClick={() => {
+                              _props.setImageUpload("")
+                              _props._handleDiscard("profile_image", "");
+                            }}
+                          >
+                            <IoMdCloseCircle size={"20px"} />
+                        </span>
+                      </div>
                     ) : (
                       <img
                         src={profilePic}
