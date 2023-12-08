@@ -8,6 +8,7 @@ import stepTwo from "@images/step_2_of_3.svg"
 import stepThree from "@images/step_3_of_3.svg"
 
 import { Modal } from "@/components"
+import { IoMdCloseCircle } from "react-icons/io"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
@@ -286,6 +287,7 @@ export function StepTwoModal(_props: {
     profile_image: string
   }
   _submitModal: Function
+  _handleDiscard: Function
   imageUpload: string
   setImageUpload: Function
   arrayLength: any
@@ -411,11 +413,22 @@ export function StepTwoModal(_props: {
                       Click to upload <br /> a profile picture →
                     </span>
                     {_props.imageUpload ? (
-                      <img
-                        src={_props.imageUpload || profilePic}
-                        alt="user image"
-                        className="w-20 h-20"
-                      />
+                      <div className="relative">
+                        <img
+                          src={_props.imageUpload || profilePic}
+                          alt="user image"
+                          className="w-20 h-20"
+                        />
+                        <span
+                            className="absolute top-0 right-0 text-red-900 cursor-pointer"
+                            onClick={() => {
+                              _props.setImageUpload("")
+                              _props._handleDiscard("profile_image", "");
+                            }}
+                          >
+                          <IoMdCloseCircle size={"20px"} />
+                        </span>
+                      </div>
                     ) : (
                       <img
                         src={profilePic}

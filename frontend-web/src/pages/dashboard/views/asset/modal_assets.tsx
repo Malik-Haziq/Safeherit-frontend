@@ -344,13 +344,17 @@ export function StepTwoModal(_props: {
                 <div className="relative">
                   <input
                     type="file"
+                    accept="image/*"
                     name="asset_file"
                     onChange={handleFileInputChange}
                     className="opacity-0 absolute top-0 right-0 h-20 w-20"
                     multiple={false}
                   />
                   <div className="flex items-center justify-between gap-2 mb-8">
-                    <span className="text-black font-medium">Upload files</span>
+                    <div className="flex flex-col">
+                      <span className="text-safe-text-gray-shade font-medium text-sm" >Max file size should be less than 10MBs</span>
+                      <span className="text-gray text-safe-text-gray-shade text-sm">png/jpg/webp/jpeg</span>
+                    </div>
                     <p>{_props.assetFile?.name || _props.assetFile}</p>
                     <img
                       src={uploadVideoIcon}
