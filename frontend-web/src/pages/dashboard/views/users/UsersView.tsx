@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getUsers } from "@/redux/actions/AdminAction"
 import { toast, Spinner } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 
 const initialState = {
   email: "",
@@ -37,6 +38,9 @@ const userInitialState = {
 export default function UsersView() {
   const dispatch = useAppDispatch()
   const admin = useAppSelector((state) => state.admin)
+  const startLoader = () => dispatch(setLoaderVisibility(true))
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
+
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(true)
   const [modalControl, setModalControl] = useState(initialState)
@@ -72,6 +76,7 @@ export default function UsersView() {
         .unwrap()
         .catch()
         .then((res) => {
+          startLoader()
           fetchUsers()
           setNewUserCredentials({
             "Email": modalControl.email,
@@ -81,6 +86,9 @@ export default function UsersView() {
           })
           setModalVisibility('view-new-user')
           toast("User Created", "success")
+        })
+        .finally(()=>{
+          stopLoader()
         })
     } else {
       toast("All fields are required", "warning")

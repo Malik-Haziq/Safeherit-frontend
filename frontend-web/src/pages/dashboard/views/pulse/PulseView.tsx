@@ -23,6 +23,7 @@ import { Spinner, toast } from "@/components"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getUser, updatePulse, validateOwner } from "@/redux/actions"
 import { useNavigate } from "react-router-dom"
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 
 const initialState = {
   pulseCheckDays: "30",
@@ -39,6 +40,8 @@ export default function PulseView() {
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.user)
   const navigate = useNavigate()
+  const startLoader = () => dispatch(setLoaderVisibility(true))
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
 
   const [pulseCheck, setPulseCheck] = useState<boolean | null>(null)
   const [modalVisibility, setModalVisibility] = useState("none")
@@ -124,6 +127,7 @@ export default function PulseView() {
   }
 
   const _submitStepFourModal = () => {
+    startLoader()
     toast("creating pulse check ", "info")
     dispatch(updatePulse(modalControl))
       .unwrap()
@@ -132,6 +136,9 @@ export default function PulseView() {
         modalHistoryPush("Step-4")
         setModalVisibility("success-modal")
         getUserDetails()
+      })
+      .finally(()=>{
+        stopLoader()
       })
   }
 

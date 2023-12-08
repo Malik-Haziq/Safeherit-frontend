@@ -100,6 +100,7 @@ export default function AccountView() {
   }
   
   const _submitEditUserModal = () => {
+    startLoader()
     toast("Updating user information", "info")
     dispatch(updateUser(modalControl))
       .unwrap()
@@ -107,6 +108,7 @@ export default function AccountView() {
         toast("User updated", "success")
       })
       .finally(() => {
+        stopLoader()
         closeModal()
       })
   }
@@ -128,6 +130,7 @@ export default function AccountView() {
   }
 
   const _submitUserDeletionRequest = () => {
+    startLoader()
     toast("Deleting user", "info")
     dispatch(deleteUser({}))
       .unwrap()
@@ -137,6 +140,7 @@ export default function AccountView() {
         _handleLogout()
       })
       .finally(() => {
+        stopLoader()
         closeModal()
       })
   }
@@ -150,7 +154,6 @@ export default function AccountView() {
   }
 
   const updatePlan = () => {
-
     startLoader()
     dispatch(updatePayment({})).unwrap().catch()
     .then((res) => {

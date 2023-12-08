@@ -36,6 +36,7 @@ import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
 import { assetData, getRequiredFields } from "./data"
 import { AxiosResponse } from "axios"
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 
 interface ModalControl {
   [key: string]: any // This index signature allows string keys with any value
@@ -49,6 +50,8 @@ export default function AssetsView() {
   const asset = useAppSelector((state) => state.asset)
   const user = useAppSelector((state) => state.user)
   const beneficiary = useAppSelector((state) => state.beneficiary)
+  const startLoader = () => dispatch(setLoaderVisibility(true))
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
 
   const [hasAssets, setHasAssets] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
@@ -257,6 +260,7 @@ export default function AssetsView() {
       asset_file: assetFile,
     }
     if (validateRequiredFields(modalControl, 1)) {
+      startLoader()
       if (modalAction == "edit") {
         toast("Updating Asset", "info")
         Data.id = selectedAsset
@@ -271,6 +275,9 @@ export default function AssetsView() {
               })
           })
           .catch(() => {})
+          .finally(()=>{
+            stopLoader()
+          })
       } else if (modalAction == "create") {
         toast("Creating Asset", "info")
         dispatch(createAsset(Data))
@@ -285,6 +292,9 @@ export default function AssetsView() {
               })
           })
           .catch(() => {})
+          .finally(()=>{
+            stopLoader()
+          })
       }
     }
   }

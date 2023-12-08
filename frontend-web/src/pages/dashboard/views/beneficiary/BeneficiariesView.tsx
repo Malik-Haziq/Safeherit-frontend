@@ -42,6 +42,7 @@ import {
 } from "@/common"
 import { PrivateKeyModal, GeneratePrivateKey } from "@/pages/register-key/modal_register_key"
 import Encryption from "@/common/encryption/encryption"
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 
 const initialState = {
   id: "",
@@ -69,6 +70,8 @@ export default function BeneficiariesView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const encryptionService = new Encryption();
+  const startLoader = () => dispatch(setLoaderVisibility(true))
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
 
   const [hasBeneficiaries, setHasBeneficiaries] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
@@ -174,6 +177,8 @@ export default function BeneficiariesView() {
       toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
+        startLoader()
+        toast("Updating beneficiary", "info")
         dispatch(updateBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
           .unwrap()
           .then((res) => {
@@ -192,7 +197,11 @@ export default function BeneficiariesView() {
             console.log(err)
             // TODO: show fallback page
           })
+          .finally(()=>{
+            stopLoader()
+          })
       } else if (modalAction == "create") {
+        startLoader()
         toast("creating beneficiary", "info")
         dispatch(createBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
           .unwrap()
@@ -212,12 +221,17 @@ export default function BeneficiariesView() {
             console.log(err)
             // TODO: show fallback page
           })
+          .finally(()=>{
+            stopLoader()
+          })
       }
     }
   }
+
   const _submitSuccessModal = () => {
     closeModal()
   }
+
   const _submitRegisterPKModal = (registerKeyModalType?: string) => {
     modalHistoryPush("Step-pk")
     registerKeyModalType == "generate-key" ? setModalVisibility("Generate-PK") : setModalVisibility("Load-PK")

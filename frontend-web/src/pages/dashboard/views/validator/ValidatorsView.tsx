@@ -37,6 +37,7 @@ import {
   isValidPhoneWithRegion,
   useArray,
 } from "@/common"
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 
 const initialState = {
   id: "",
@@ -56,6 +57,9 @@ const initialState = {
 export default function ValidatorsView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+
+  const startLoader = () => dispatch(setLoaderVisibility(true))
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
 
   const [hasValidators, setHasValidators] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
@@ -151,7 +155,8 @@ export default function ValidatorsView() {
       toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
-        toast("updating validator", "info")
+        startLoader()
+        toast("Updating validator", "info")
         dispatch(updateValidator(modalControl))
           .unwrap()
           .then((res) => {
@@ -169,8 +174,12 @@ export default function ValidatorsView() {
             console.log(err)
             // TODO: show fallback page
           })
+          .finally(()=>{
+            stopLoader()
+          })
       } else if (modalAction == "create") {
-        toast("creating validator", "info")
+        startLoader()
+        toast("Creating validator", "info")
         dispatch(createValidator(modalControl))
           .unwrap()
           .then((res) => {
@@ -188,6 +197,9 @@ export default function ValidatorsView() {
           .catch((err) => {
             console.log(err)
             // TODO: show fallback page
+          })
+          .finally(()=>{
+            stopLoader()
           })
       }
     }
