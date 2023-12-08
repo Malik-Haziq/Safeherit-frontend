@@ -459,6 +459,7 @@ export default function BeneficiariesView() {
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
+        _handleDiscard={_handleDiscard}
         setImageUpload={setImageUpload}
         imageUpload={imageUpload}
         arrayLength={modalHistoryLength}

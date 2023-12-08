@@ -276,6 +276,11 @@ export default function ValidatorsView() {
     modalHistoryPop()
     setModalVisibility(lastEl)
   }
+
+  const _handleDiscard = (name: string, value: any) => {
+    setModalControl({...modalControl, [name]: value});
+  }
+  
   return (
     <>
       <UserDetailsModal
@@ -333,6 +338,7 @@ export default function ValidatorsView() {
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
+        _handleDiscard={_handleDiscard}
         imageUpload={imageUpload}
         setImageUpload={setImageUpload}
         arrayLength={modalHistoryLength}
