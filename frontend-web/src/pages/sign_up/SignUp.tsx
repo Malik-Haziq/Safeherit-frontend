@@ -46,6 +46,10 @@ export function SignUp() {
   }
 
   const _handleSubmit = () => {
+    const isStrongPassword = (password: any) => {
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
+      return regex.test(password);
+    };
     if (
       formControl.name &&
       formControl.email &&
@@ -55,7 +59,11 @@ export function SignUp() {
     ) {
       if (formControl.password !== formControl.confirm_password) {
         toast("password must match", "error")
-      } else {
+      }
+      else if(!isStrongPassword(formControl.password)){
+        toast('password must contain minimum 8 characters including uppercase, lowercase, number and symbol.', 'error')
+      }
+      else {
         startLoader()
         toast("signing up", "info")
         dispatch(
