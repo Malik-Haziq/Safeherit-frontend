@@ -61,7 +61,7 @@ export function SignUp() {
         toast("password must match", "error")
       }
       else if(!isStrongPassword(formControl.password)){
-        toast('password must contain minimum 8 characters including uppercase, lowercase, number and symbol.', 'error')
+        toast('Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special symbol.', 'error');
       }
       else {
         startLoader()
