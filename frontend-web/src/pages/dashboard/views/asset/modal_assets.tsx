@@ -334,6 +334,14 @@ export function StepTwoModal(_props: {
             imageContainerStyles: "my-7",
           },
         },
+        {
+          type: "textView",
+          props: {
+            text: "Online banking credentials",
+            textStyles:
+              "text-[#00192B] font-medium mb-4 px-7",
+          },
+        },
         ...conditionalElements,
         {
           type: "customView",
@@ -352,7 +360,7 @@ export function StepTwoModal(_props: {
                   />
                   <div className="flex items-center justify-between gap-2 mb-8">
                     <div className="flex flex-col">
-                      <span className="text-safe-text-gray-shade font-medium text-sm" >Max file size should be less than 10MBs</span>
+                      <span className="text-safe-text-gray-shade font-medium text-sm" >File size should be less than 10MBs</span>
                       <span className="text-gray text-safe-text-gray-shade text-sm">png/jpg/webp/jpeg</span>
                     </div>
                     <p>{_props.assetFile?.name || _props.assetFile}</p>
@@ -410,10 +418,9 @@ export function SuccessModal(_props: {
           props: {
             text: "You successfully registered a new asset!",
             textStyles:
-              "text=[#082A44] text-2xl font-bold text-center mb-32 px-12",
+              "text-[#082A44] text-2xl font-bold text-center mb-32 px-12",
           },
         },
-
         {
           type: "customView",
           props: {
