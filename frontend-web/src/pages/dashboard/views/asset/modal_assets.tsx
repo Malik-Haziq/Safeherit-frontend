@@ -410,7 +410,7 @@ export function SuccessModal(_props: {
           props: {
             text: "You successfully registered a new asset!",
             textStyles:
-              "text=[#082A44] text-2xl font-bold text-center mb-32 px-12",
+              "text-[#082A44] text-2xl font-bold text-center mb-32 px-12",
           },
         },
 
