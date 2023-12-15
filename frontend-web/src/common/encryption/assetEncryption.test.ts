@@ -86,6 +86,9 @@ describe("AssetEncryption", () => {
       ownerKeyPair.privateKey,
       encAssetData,
     )
+
+    delete decrData.privateKeyEncByOwner
+
     expect(assetData).toEqual(decrData) // data should be decrypted
   })
 
