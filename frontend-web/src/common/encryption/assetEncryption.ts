@@ -18,7 +18,7 @@ class AssetEncryption {
      */
     data = JSON.parse(JSON.stringify(data)) // deep copy
 
-    let assetPrivateKey = null
+    let assetPrivateKey: string
     if (!data.publicKey) {
       const { publicKey, privateKey } = this.encryption.generateKeyPair()
       data.publicKey = publicKey
@@ -32,24 +32,19 @@ class AssetEncryption {
       )
     }
 
-    let assignedBeneficiaryPublicKey = null
-    if (data.assignedBeneficiaryId) {
-      assignedBeneficiaryPublicKey = data.assignedBeneficiaryPublicKey
-      if (!assignedBeneficiaryPublicKey) {
-        throw new Error("assignedBeneficiaryPublicKey is missing")
-      }
-    }
-
     // Add encrypted keys for beneficiary and owner in asset data.
     data.privateKeyEncByOwner = this.encryption.encrypt(
       ownerPublicKey,
       assetPrivateKey,
     )
-    if (assignedBeneficiaryPublicKey) {
-      data.privateKeyEncByBeneficiary = this.encryption.encrypt(
-        assignedBeneficiaryPublicKey,
-        assetPrivateKey,
-      )
+
+    if (data.assignedBeneficiaryIds?.length > 0) {
+      data.privateKeysEncByBeneficiary = {}
+      
+      data.assignedBeneficiaryIds.forEach((id: string) => {
+        const beneficiaryPublicKey = data.beneficirayPublicKeys[id].public_key
+        data.privateKeysEncByBeneficiary[id] = this.encryption.encrypt(beneficiaryPublicKey, assetPrivateKey)
+      })
     }
 
     // encrypt the sensitive fields in the asset data
@@ -65,7 +60,7 @@ class AssetEncryption {
     )
 
     // delete all fields related to encryption
-    delete data.privateKeyEncByOwner
+    // delete data.privateKeyEncByOwner
     delete data.privateKeyEncByBeneficiary
     delete data.publicKey
 
@@ -76,17 +71,18 @@ class AssetEncryption {
 
   public decryptAssetDataForBeneficiary(
     beneficiaryPrivateKey: string,
+    beneficiaryId: string,
     data: any,
   ): any {
     data = JSON.parse(JSON.stringify(data)) // deep copy
     const assetPrivateKey = this.encryption.decrypt(
       beneficiaryPrivateKey,
-      data.privateKeyEncByBeneficiary,
+      data.privateKeysEncByBeneficiary[beneficiaryId],
     )
 
     // delete all fields related to encryption
     delete data.privateKeyEncByOwner
-    delete data.privateKeyEncByBeneficiary
+    delete data.privateKeysEncByBeneficiary
     delete data.publicKey
 
     // decrypt the sensitive fields in the asset data

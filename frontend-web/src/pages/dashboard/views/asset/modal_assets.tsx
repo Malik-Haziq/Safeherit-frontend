@@ -83,6 +83,7 @@ const generateSelectFieldProps = (
   placeholder: string,
   value: any,
   name: string,
+  isMulti: boolean,
   _handleChange: Function,
 ) => {
   return {
@@ -92,12 +93,50 @@ const generateSelectFieldProps = (
       value: value,
       selectProps: {
         placeholder: placeholder,
+        isMulti: isMulti
       },
       setSelectedValue: (value: any) => {
         const customEvent = {
           target: {
             name: name,
             value: value.value,
+          },
+        }
+        _handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+      },
+      hasRightIcon: true,
+      rightIcon: arrowDown,
+      rightIconAlt: "rightIcon",
+      // selectFieldWidth: 490,
+      selectContainer: "mx-7 mb-4 relative",
+      selectFieldStyles: selectFieldStyles,
+      rightIconStyles: selectFieldRightIconStyles,
+    },
+  }
+}
+
+const generateMultiSelectFieldProps = (
+  assetTypes: any,
+  placeholder: string,
+  value: any,
+  name: string,
+  isMulti: boolean,
+  _handleChange: Function,
+) => {
+  return {
+    type: "selectView",
+    props: {
+      data: assetTypes,
+      value: value,
+      selectProps: {
+        placeholder: placeholder,
+        isMulti: isMulti
+      },
+      setSelectedValue: (value: any) => {
+        const customEvent = {
+          target: {
+            name: name,
+            value: value,
           },
         }
         _handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
@@ -172,6 +211,7 @@ export function StepOneModal(_props: {
                 }
               : "",
             Asset.name,
+            Asset.isMulti || false,
             _props._handleChange,
           )
         }
@@ -276,19 +316,12 @@ export function StepTwoModal(_props: {
           )
         } else if (Asset.type === "Select") {
           if (Asset.name == "Beneficiary") {
-            return generateSelectFieldProps(
+            return generateMultiSelectFieldProps(
               beneficiary.beneficiary_list, //send beneficiary list here
               Asset.placeholder,
-              _props.modalControl?.[Asset?.name]
-                ? {
-                    value: _props.modalControl?.[`${Asset?.name}`],
-                    label: getValueOfObjectFromArray(
-                      beneficiary.beneficiary_list,
-                      _props.modalControl?.[`${Asset?.name}`],
-                    ),
-                  }
-                : "",
+              _props.modalControl?.[Asset?.name],
               Asset.name,
+              Asset.isMulti || false,
               _props._handleChange,
             )
           } else {
@@ -302,6 +335,7 @@ export function StepTwoModal(_props: {
                   }
                 : "",
               Asset.name,
+              Asset.isMulti || false,
               _props._handleChange,
             )
           }
@@ -461,12 +495,13 @@ export function AssetDetail(_props: {
   closeIconVisibility: boolean
   action: string
   modalControl: ModalControl
-  delete: Function
-  edit: Function
+  // delete: Function
+  // edit: Function
   assetId: string
   arrayLength: any
   showPreviousModal: any
   role: string
+  userName: string
 }) {
   const headings = Object.keys(_props.modalControl)
   const values = Object.values(_props.modalControl)
@@ -494,17 +529,24 @@ export function AssetDetail(_props: {
                           key={index}
                           className="flex gap-6 items-center pb-6"
                         >
-                          <h2 className="text-[#292929] font-sm font-medium basis-2/5 text-right">
-                            {heading}
-                          </h2>
-                          <p className="text-[#585858] basis-3/5">
-                            {values[index]}
-                          </p>
+                          {
+                            heading == "Beneficiary" ?
+                            <></>
+                            :
+                            <>
+                              <h2 className="text-[#292929] font-sm font-medium basis-2/5 text-right">
+                                {heading}
+                              </h2>
+                              <p className="text-[#585858] basis-3/5">
+                                {values[index]}
+                              </p>
+                            </>
+                          }
                         </div>
                       )
                     })}
                   </div>
-                  {
+                  {/* {
                     _props.role != "beneficiary" ?
                     <div className="flex justify-end gap-2 w-full py-4 px-5 border-t-2 border-[#F0F0F0]">
                       <button
@@ -525,7 +567,7 @@ export function AssetDetail(_props: {
                       </button>
                     </div>
                     : <></>
-                  }
+                  } */}
                 </section>
               )
             },

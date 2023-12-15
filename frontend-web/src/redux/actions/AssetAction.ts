@@ -56,6 +56,7 @@ export const getAllBeneficiaryAsset = createAsyncThunk(
       response.data.data = response.data.data.map((asset: any) => {
         return assetEnc.decryptAssetDataForBeneficiary(
           beneficiaryPrivateKey,
+          beneficiary_id,
           asset,
         )
       })
@@ -68,13 +69,18 @@ export const getAllBeneficiaryAsset = createAsyncThunk(
 
 export const createAsset = createAsyncThunk(
   "createAsset",
-  async (Data: {}, { getState, rejectWithValue }) => {
+  async (Data: any, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: ""; publicKey: "" } }
     const ownerPrivateKey = sessionStorage.getItem("privateKey") || ""
     const ownerPublicKey = user.publicKey
+    
     Data = assetEnc.encryptAssetData(ownerPrivateKey, ownerPublicKey, Data)
 
+    Data.assignedBeneficiaryIds = JSON.stringify(Data.assignedBeneficiaryIds)
+    Data.privateKeysEncByBeneficiary = JSON.stringify(Data.privateKeysEncByBeneficiary)
+
     const formData = jsonToFormData(Data)
+
     const params = { ROUTE: ASSETS, Body: formData, token: user.token }
     try {
       let response = await POST(params)
@@ -126,6 +132,7 @@ export const findBeneficiaryAsset = createAsyncThunk(
       let response = await GET(params)
       response.data.data = assetEnc.decryptAssetDataForBeneficiary(
         beneficiaryPrivateKey,
+        Data.beneficiary_id,
         response.data.data,
       )
       return response
@@ -137,11 +144,16 @@ export const findBeneficiaryAsset = createAsyncThunk(
 
 export const updateAsset = createAsyncThunk(
   "updateAsset",
-  async (Data: {}, { getState, rejectWithValue }) => {
+  async (Data: any, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: ""; publicKey: "" } }
     const ownerPrivateKey = sessionStorage.getItem("privateKey") || ""
     const ownerPublicKey = user.publicKey
+
     Data = assetEnc.encryptAssetData(ownerPrivateKey, ownerPublicKey, Data)
+
+    Data.assignedBeneficiaryIds = JSON.stringify(Data.assignedBeneficiaryIds)
+    Data.privateKeysEncByBeneficiary = JSON.stringify(Data.privateKeysEncByBeneficiary)
+
     const formData = jsonToFormData(Data)
     const params = { ROUTE: ASSETS, Body: formData, token: user.token }
     try {
