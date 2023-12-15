@@ -29,7 +29,7 @@ export function verifyIfUserIsEnrolled() {
   } else {
     toast("User not found", "error")
     return false
-  }
+  } 
 }
 
 export async function verifyUserEnrolled(

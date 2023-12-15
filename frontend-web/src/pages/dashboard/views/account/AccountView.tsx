@@ -10,8 +10,21 @@ import styles from "../../Dashboard.module.css"
 import MembershipPlanView from "./MembershipPlanView"
 import { EditUserModal, ViewPrivateKey } from "./modal_account"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
-import { getUser, updateUser, deleteUser, logout, updatePayment, getAllAsset, updatePK } from "@redux/actions"
-import { copyToClipboard, downloadJson, getFileFromFirebase, verifyIfUserIsEnrolled } from "@/common"
+import {
+  getUser,
+  updateUser,
+  deleteUser,
+  logout,
+  updatePayment,
+  getAllAsset,
+  updatePK,
+} from "@redux/actions"
+import {
+  copyToClipboard,
+  downloadJson,
+  getFileFromFirebase,
+  verifyIfUserIsEnrolled,
+} from "@/common"
 import { ConfirmationModal, Spinner, toast } from "@/components"
 import { useNavigate } from "react-router-dom"
 import TwoFAAuth from "./TwoFAAuth"
@@ -39,7 +52,7 @@ export default function AccountView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const encryptionService = new Encryption();
+  const encryptionService = new Encryption()
 
   const [showMemberShipPlan, setShowMemberShipPlan] = useState(false)
   const [showTwoFAAuth, setShowTwoFAAuth] = useState(false)
@@ -51,15 +64,14 @@ export default function AccountView() {
   const [modalVisibility, setModalVisibility] = useState("none")
   // const [modalVisibility, setModalVisibility] = useState("none")
   const [auth2FAEnabled, setAuth2FAEnabled] = useState(false)
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     const key = sessionStorage.getItem("privateKey")
     setModalControl({ ...modalControl, privateKey: key || "" })
   }, [modalControl.privateKey])
 
   useEffect(() => {
     getUserDetails()
-    setAuth2FAEnabled(verifyIfUserIsEnrolled())
   }, [])
 
   useEffect(() => {
@@ -94,6 +106,7 @@ export default function AccountView() {
     dispatch(getUser({}))
       .unwrap()
       .then((res) => {
+        setAuth2FAEnabled(verifyIfUserIsEnrolled())
         setModalControl(res.data.data)
       })
       .catch(() => {
@@ -107,10 +120,10 @@ export default function AccountView() {
 
   const closeModal = () => {
     setModalVisibility("none")
-    setImageUpload('')
+    setImageUpload("")
     setPKEditModalControl(initialPKState)
   }
-  
+
   const _submitEditUserModal = () => {
     startLoader()
     toast("Updating user information", "info")
@@ -161,25 +174,27 @@ export default function AccountView() {
     setModalVisibility("delete-user")
   }
 
-  const _handleKeysView = ()=> {
-    setModalVisibility('show-keys')
+  const _handleKeysView = () => {
+    setModalVisibility("show-keys")
   }
 
-  const _handleKeysEdit = ()=> {
-    setModalVisibility('Generate-PK')
+  const _handleKeysEdit = () => {
+    setModalVisibility("Generate-PK")
   }
 
   const updatePlan = () => {
     startLoader()
-    dispatch(updatePayment({})).unwrap().catch()
-    .then((res) => {
-      if (res.data.data.sessionUrl) {
-        window.open(res.data.data.sessionUrl, '_blank')
-      }
-    })
-    .finally(() => {
-      stopLoader()
-    })
+    dispatch(updatePayment({}))
+      .unwrap()
+      .catch()
+      .then((res) => {
+        if (res.data.data.sessionUrl) {
+          window.open(res.data.data.sessionUrl, "_blank")
+        }
+      })
+      .finally(() => {
+        stopLoader()
+      })
   }
 
   const _handleGeneratePKPair = useCallback(() => {
@@ -187,53 +202,69 @@ export default function AccountView() {
     setTimeout(() => {
       setPKEditModalControl(encryptionService.generateKeyPair())
       toast("Keys Generated", "success")
-    }, 1000);
+    }, 1000)
   }, [])
 
   const _handleRegisterPK = () => {
     startLoader()
-    if (encryptionService.validateKeyPair(PKEditModalControl.publicKey, PKEditModalControl.privateKey)) {
+    if (
+      encryptionService.validateKeyPair(
+        PKEditModalControl.publicKey,
+        PKEditModalControl.privateKey,
+      )
+    ) {
       dispatch(getAllAsset({}))
-      .unwrap()
-      .then((res) => {
-
-        let data: any = {}
-
-        res.data.data.forEach((asset: any) => {
-          let key = encryptionService.decrypt(modalControl.privateKey, asset.privateKeyEncByOwner)
-          let newKey = encryptionService.encrypt(PKEditModalControl.publicKey, key)
-          data[`${asset.id}`] = newKey
-        })
-
-        dispatch(updatePK({publicKey: PKEditModalControl.publicKey, assetKeysEncByOwner: JSON.stringify(data)}))
         .unwrap()
-        .then(res => {
-          toast("Keys Registered", "success")
-          closeModal()
-          sessionStorage.setItem("privateKey", PKEditModalControl.privateKey)
+        .then((res) => {
+          let data: any = {}
+
+          res.data.data.forEach((asset: any) => {
+            let key = encryptionService.decrypt(
+              modalControl.privateKey,
+              asset.privateKeyEncByOwner,
+            )
+            let newKey = encryptionService.encrypt(
+              PKEditModalControl.publicKey,
+              key,
+            )
+            data[`${asset.id}`] = newKey
+          })
+
+          dispatch(
+            updatePK({
+              publicKey: PKEditModalControl.publicKey,
+              assetKeysEncByOwner: JSON.stringify(data),
+            }),
+          )
+            .unwrap()
+            .then((res) => {
+              toast("Keys Registered", "success")
+              closeModal()
+              sessionStorage.setItem(
+                "privateKey",
+                PKEditModalControl.privateKey,
+              )
+            })
+            .catch()
+            .finally(() => {
+              stopLoader()
+            })
         })
         .catch()
         .finally(() => {
           stopLoader()
         })
-      })
-      .catch()
-      .finally(() => {
-        stopLoader()
-      })
-    }
-    else {
+    } else {
       toast("Unable to verify keys", "error")
     }
   }
 
   const downloadPrivateKey = useCallback(() => {
     if (PKEditModalControl.privateKey) {
-      const KEY = {privateKey: PKEditModalControl.privateKey}
-      downloadJson(KEY, 'privateKey.json')
+      const KEY = { privateKey: PKEditModalControl.privateKey }
+      downloadJson(KEY, "privateKey.json")
       toast("Download Complete", "success")
-    }
-    else {
+    } else {
       toast("Kindly Generate Private Key", "error")
     }
   }, [PKEditModalControl.privateKey])
@@ -241,59 +272,56 @@ export default function AccountView() {
   const copyPrivateKey = useCallback(() => {
     if (PKEditModalControl.privateKey) {
       copyToClipboard(PKEditModalControl.privateKey)
-    }
-    else {
+    } else {
       toast("Kindly Generate Private Key", "error")
     }
   }, [PKEditModalControl.privateKey])
 
   const downloadPublicKey = useCallback(() => {
     if (PKEditModalControl.publicKey) {
-      const KEY = {publicKey: PKEditModalControl.publicKey}
-      downloadJson(KEY, 'publicKey.json')
+      const KEY = { publicKey: PKEditModalControl.publicKey }
+      downloadJson(KEY, "publicKey.json")
       toast("Download Complete", "success")
-    }
-    else {
+    } else {
       toast("Kindly Generate Public Key", "error")
     }
   }, [PKEditModalControl.publicKey])
-  
+
   const copyPublicKey = useCallback(() => {
     if (PKEditModalControl.publicKey) {
       copyToClipboard(PKEditModalControl.publicKey)
-    }
-    else {
+    } else {
       toast("Kindly Generate Public Key", "error")
     }
   }, [PKEditModalControl.publicKey])
 
   return (
     <>
-      {
-        showAuthenticateUser ? (
-          <AuthenticateUser hideUserAuthenticate={hideUserAuthenticate} showTwoFA={showTwoFA} />
-        ) :
-        showTwoFAAuth ? (
-          <TwoFAAuth hideTwoFA={hideTwoFA} />
-        ) :
-        showMemberShipPlan ? (
-          <MembershipPlanView hidePlanView={hidePlanView} />
-        ) : (
+      {showAuthenticateUser ? (
+        <AuthenticateUser
+          hideUserAuthenticate={hideUserAuthenticate}
+          showTwoFA={showTwoFA}
+        />
+      ) : showTwoFAAuth ? (
+        <TwoFAAuth hideTwoFA={hideTwoFA} />
+      ) : showMemberShipPlan ? (
+        <MembershipPlanView hidePlanView={hidePlanView} />
+      ) : (
         <>
-          <ViewPrivateKey 
-            openModal={modalVisibility == 'show-keys'}
+          <ViewPrivateKey
+            openModal={modalVisibility == "show-keys"}
             closeModal={closeModal}
-            closeModalOnOverlayClick={false} 
-            closeIconVisibility={true} 
+            closeModalOnOverlayClick={false}
+            closeIconVisibility={true}
             modalControl={modalControl}
           />
           <GeneratePrivateKey
             openModal={modalVisibility == "Generate-PK"}
-            closeModal= {closeModal}
-            closeModalOnOverlayClick= {false}
-            closeIconVisibility= {true}
+            closeModal={closeModal}
+            closeModalOnOverlayClick={false}
+            closeIconVisibility={true}
             modalControl={PKEditModalControl}
-            _handleChange={()=>{}}
+            _handleChange={() => {}}
             _handleGeneratePKPair={_handleGeneratePKPair}
             _handleRegisterPK={_handleRegisterPK}
             downloadPrivateKey={downloadPrivateKey}
@@ -436,8 +464,18 @@ function UserProfileDetails(_props: {
           My Public / Private Keys
         </p>
         <div className="flex gap-1">
-          <img src={viewIcon} alt="View icon" onClick={_props.handleKeysView} className="cursor-pointer"/>
-          <img src={editIcon} alt="Edit icon" onClick={_props.handleKeysEdit} className="cursor-pointer"/>
+          <img
+            src={viewIcon}
+            alt="View icon"
+            onClick={_props.handleKeysView}
+            className="cursor-pointer"
+          />
+          <img
+            src={editIcon}
+            alt="Edit icon"
+            onClick={_props.handleKeysEdit}
+            className="cursor-pointer"
+          />
         </div>
       </div>
       <div>
