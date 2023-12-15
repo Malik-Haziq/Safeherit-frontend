@@ -41,8 +41,8 @@ describe("AssetEncryption", () => {
     const assetData = {
       category: "Real Estate",
       data: JSON.stringify({ body: "body test" }),
-      assignedBeneficiaryId: "1",
-      assignedBeneficiaryPublicKey: beneficiaryKeyPair.publicKey,
+      assignedBeneficiaryIds: ["1"],
+      beneficirayPublicKeys: {"1": {public_key: beneficiaryKeyPair.publicKey}},
     }
 
     const encAssetData = assetEnc.encryptAssetData(
@@ -52,15 +52,15 @@ describe("AssetEncryption", () => {
     )
     expect(encAssetData).toHaveProperty("publicKey")
     expect(encAssetData).toHaveProperty("privateKeyEncByOwner")
-    expect(encAssetData).toHaveProperty("privateKeyEncByBeneficiary")
+    expect(encAssetData).toHaveProperty("privateKeysEncByBeneficiary")
     expect(encAssetData).toHaveProperty("data")
-    expect(encAssetData).toHaveProperty("assignedBeneficiaryId")
+    expect(encAssetData).toHaveProperty("assignedBeneficiaryIds")
 
     // privateKeyEncByBeneficiary should be encrypted by beneficiary's public
     // key, so it should decrypt.
     const assetPrivateKey = enc.decrypt(
       beneficiaryKeyPair.privateKey,
-      encAssetData.privateKeyEncByBeneficiary,
+      encAssetData.privateKeysEncByBeneficiary['1'],
     )
     expect(assetPrivateKey).toBeDefined()
 
@@ -86,6 +86,9 @@ describe("AssetEncryption", () => {
       ownerKeyPair.privateKey,
       encAssetData,
     )
+
+    delete decrData.privateKeyEncByOwner
+
     expect(assetData).toEqual(decrData) // data should be decrypted
   })
 
@@ -96,8 +99,8 @@ describe("AssetEncryption", () => {
     const assetData = {
       category: "Real Estate",
       data: JSON.stringify({ body: "body test" }),
-      assignedBeneficiaryId: "1",
-      assignedBeneficiaryPublicKey: beneficiaryKeyPair.publicKey,
+      assignedBeneficiaryIds: ["1"],
+      beneficirayPublicKeys: {"1": {public_key: beneficiaryKeyPair.publicKey}},
     }
 
     const encAssetData = assetEnc.encryptAssetData(
@@ -108,6 +111,7 @@ describe("AssetEncryption", () => {
 
     const decrData = assetEnc.decryptAssetDataForBeneficiary(
       beneficiaryKeyPair.privateKey,
+      '1',
       encAssetData,
     )
     expect(assetData).toEqual(decrData) // data should be decrypted

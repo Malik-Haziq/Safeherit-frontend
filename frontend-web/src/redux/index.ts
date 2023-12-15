@@ -19,8 +19,8 @@ const sessionPersistConfig = {
   storage: sessionStorage,
 }
 const rootReducer = combineReducers({ 
-  user: persistReducer(sessionPersistConfig, user),
-  loader: persistReducer(sessionPersistConfig, loader),
+  user: persistReducer(rootPersistConfig, user),
+  loader: persistReducer(rootPersistConfig, loader),
   validator: persistReducer(rootPersistConfig, validator),
   beneficiary: persistReducer(rootPersistConfig, beneficiary),
   asset: persistReducer(rootPersistConfig, asset),

@@ -37,6 +37,7 @@ import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
 import { assetData, getRequiredFields } from "./data"
 import { AxiosResponse } from "axios"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
+import { SelectOption, Asset, Beneficiary } from "@/types"
 
 interface ModalControl {
   [key: string]: any // This index signature allows string keys with any value
@@ -93,7 +94,8 @@ export default function AssetsView() {
               // TODO: show fallback page
             })
         })
-    } else if (user.role == "beneficiary") {
+    }
+    else if (user.role == "beneficiary") {
       dispatch(getAllBeneficiaryAsset({}))
         .unwrap()
         .then((res) => {
@@ -205,7 +207,7 @@ export default function AssetsView() {
   ]
 
   const updateAssetArrayCount = (res: AxiosResponse<any, any>) => {
-    if (res.data.data && res.data.data.length > 0) {
+    if (res.data.data && res.data.data.length > 0 || user.role == "beneficiary") {
       setHasAssets(1)
     } else if (res.data.data && res.data.data.length == 0) {
       setHasAssets(0)
@@ -243,21 +245,23 @@ export default function AssetsView() {
   }
   const _submitStepTwoModal = () => {
     // TODO validate fields
+    const beneficiaryIds = modalControl?.Beneficiary?.map((value: SelectOption) => {
+      return value?.value
+    })
+
     const Data: {
       id?: string
       category: string
-      assignedBeneficiaryId: string
-      assignedBeneficiaryPublicKey: string
+      assignedBeneficiaryIds: string[]
       data: string
       asset_file: any
+      beneficirayPublicKeys: any
     } = {
       category: modalControl.category,
-      assignedBeneficiaryId: modalControl.Beneficiary || "",
-      assignedBeneficiaryPublicKey: modalControl.Beneficiary
-        ? beneficiary.beneficiary_mapper[modalControl.Beneficiary].public_key
-        : "",
+      assignedBeneficiaryIds: beneficiaryIds,
       data: JSON.stringify(modalControl),
       asset_file: assetFile,
+      beneficirayPublicKeys: beneficiary.beneficiary_mapper
     }
     if (validateRequiredFields(modalControl, 1)) {
       startLoader()
@@ -442,12 +446,13 @@ export default function AssetsView() {
         closeIconVisibility={true}
         action={modalAction}
         modalControl={modalControl}
-        delete={destroyAsset}
-        edit={editAsset}
+        // delete={destroyAsset}
+        // edit={editAsset}
         assetId={selectedAsset}
         arrayLength={modalHistoryLength}
         showPreviousModal={showPreviousModal}
         role={user.role}
+        userName={user.displayName}
       />
       {hasAssets > 0 ? (
         <Assets
@@ -506,17 +511,7 @@ function Assets(_props: {
   assetCatagories: string[]
   selected: string
   setSelected: Function
-  assetDetailsArr: {
-    data?: {
-      category?: string
-      Beneficiary?: string
-      value?: string
-      id: string
-    }
-    assignedBeneficiaryName?: string
-    id?: string
-    category?: string
-  }[]
+  assetDetailsArr: Asset[]
   destroyAsset: Function
   editAsset: Function
   viewAsset: Function
@@ -563,23 +558,25 @@ function Assets(_props: {
                 <p className="font-medium text-sm uppercase">Value</p>
               </div>
               <div className="flex flex-grow justify-between">
-                <p className="font-medium text-sm uppercase ">
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Beneficiary
-                </p>
+                {
+                  _props.userRole != "beneficiary" ?
+                    <p className="font-medium text-sm uppercase ">
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Beneficiary
+                    </p>
+                  :
+                  <></>
+                }
                 <p className="font-medium text-sm uppercase">Action</p>
               </div>
             </div>
-            {_props.assetDetailsArr.map((asset, index) => {
+            {_props.assetDetailsArr.map((asset: Asset, index) => {
               return (
                 <AssetDetails
                   key={index}
                   assetId={asset?.id || ""}
                   assetName={asset?.category || ""}
-                  assetImg={realEstate}
                   assetValue={asset?.data?.value || "No value found"}
-                  beneficiaryImg={user}
-                  assignedBeneficiaryName={`${asset?.assignedBeneficiaryName}`}
-                  beneficiaryId={`${asset?.data?.Beneficiary}`}
+                  beneficiaries={asset?.beneficiaries}
                   destroyAsset={_props.destroyAsset}
                   editAsset={_props.editAsset}
                   viewAsset={_props.viewAsset}
@@ -639,13 +636,11 @@ function AssetCategory(_props: {
 }
 
 function AssetDetails(_props: {
-  assetName: string
+  key: number
   assetId: string
-  assetImg: any
-  assetValue: any
-  beneficiaryImg: any
-  assignedBeneficiaryName: string
-  beneficiaryId: string
+  assetName: string
+  assetValue: string
+  beneficiaries: Beneficiary[]
   destroyAsset: Function
   editAsset: Function
   viewAsset: Function
@@ -655,7 +650,7 @@ function AssetDetails(_props: {
     <div className="flex justify-between gap-24 px-5 py-3">
       <div className="flex justify-between items-center w-[268px] flex-grow">
         <div className="flex gap-4 items-center">
-          <img src={_props.assetImg} alt="real estate icon" />
+          <img src={realEstate} alt="real estate icon" />
           <p className="text-[#00192B] text-sm font-semibold">
             {_props.assetName}
           </p>
@@ -665,14 +660,20 @@ function AssetDetails(_props: {
         </p>
       </div>
       <div className="flex justify-between items-center flex-grow w-[278px]">
-        <div className="flex justify-between items-center gap-3">
-          <img
-            src={_props.beneficiaryImg}
-            alt="beneficiary image"
-            className="h-11 w-11"
-          />
-          <p className="font-semibold">{_props.assignedBeneficiaryName}</p>
-        </div>
+        {
+          _props.userRole != "beneficiary" ?
+          <div className="flex justify-between items-center gap-3">
+            <img
+              src={user}
+              alt="beneficiary image"
+              className="h-11 w-11"
+            />
+            <button>View</button> 
+            {/* TODO ADD Beneficiray listing modal */}
+          </div>
+          :
+          <></>
+        }
         <div className="flex gap-1 ">
           <img
             src={eye}

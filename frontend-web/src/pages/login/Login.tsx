@@ -159,7 +159,6 @@ export function Login() {
         })
         .catch((err) => {
           _handleMFA(err)
-          stopLoader()
         })
     }
   }
