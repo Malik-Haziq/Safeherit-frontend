@@ -20,3 +20,8 @@ export function isValidFacebook(phone: string) {
   const phoneRegex = /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9.]+\/?$/;
   return phoneRegex.test(phone);
 }
+
+export function isStrongPassword (password: any) {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
+  return regex.test(password);
+};

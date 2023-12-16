@@ -13,7 +13,7 @@ import { updateProfile } from "firebase/auth"
 import { GoogleAuthButton, toast } from "@/components"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { updateActive, updateRole, updateRoleCheck } from "@/redux/reducers/UserSlice"
-import { sendEmailVerificationEmail } from "@/common"
+import { sendEmailVerificationEmail, isStrongPassword } from "@/common"
 
 export function SignUp() {
   const { t } = useTranslation()
@@ -46,10 +46,7 @@ export function SignUp() {
   }
 
   const _handleSubmit = () => {
-    const isStrongPassword = (password: any) => {
-      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
-      return regex.test(password);
-    };
+
     if (
       formControl.name &&
       formControl.email &&
