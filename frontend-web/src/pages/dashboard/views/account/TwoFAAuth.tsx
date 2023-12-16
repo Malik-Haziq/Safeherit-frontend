@@ -1,5 +1,5 @@
 import styles from "../../Dashboard.module.css"
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useRef } from "react";
 import { auth } from "@/firebase";
 import { toast } from "@/components";
 import {User} from "@firebase/auth";
@@ -13,6 +13,7 @@ export default function TwoFAAuth(_props:{
 }) {
   
   const dispatch = useAppDispatch()
+  const authAttempts = useRef(0)
   const recaptcha = useRecaptcha('authenticate');
   const [verificationCodeId, setVerificationCodeId] = useState<string | null>(null);
   const [confirmationCodeVisibility, setConfirmationCodeVisibility] = useState<boolean>(false);
@@ -32,17 +33,21 @@ export default function TwoFAAuth(_props:{
       if (response) {
         toast("Number verified", "success")
         returnToAccountView()
+        setVerificationCodeId('')
       }
       else {
         toast("Number not verified", "error")
-        _handleMFACancel()
+        authAttempts.current += 1
+        if (authAttempts.current > 2) {
+          _handleMFACancel()
+          setVerificationCodeId('')
+        }
       }
     }
     else {
       toast('Something went wrong. Please try again.', 'error');
+      setVerificationCodeId('')
     }
-
-    setVerificationCodeId('')
   }
 
   function _handleMFASubmit() {

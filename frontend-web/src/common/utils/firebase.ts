@@ -27,7 +27,7 @@ export function verifyIfUserIsEnrolled() {
     const enrolledFactors = multiFactor(auth.currentUser).enrolledFactors
     return enrolledFactors.length > 0
   } else {
-    toast("User not found", "error")
+    // toast("User not found", "error")
     return false
   } 
 }
