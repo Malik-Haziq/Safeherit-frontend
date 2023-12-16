@@ -137,7 +137,7 @@ export function SuccessModal(_props: {
                 ? "You successfully registered a new beneficiary!"
                 : "The details of your beneficiary have been successfully updated!",
             textStyles:
-              "text=[#082A44] text-2xl font-bold text-center mb-32 px-12",
+              "text-[#082A44] text-2xl font-bold text-center mb-32 px-12",
           },
         },
 
@@ -431,7 +431,7 @@ export function StepTwoModal(_props: {
           type: "textView",
           props: {
             text: "Social media links",
-            textStyles: "text=[#00192B] font-semibold pl-7 mb-3",
+            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
           },
         },
         {
@@ -489,7 +489,7 @@ export function StepTwoModal(_props: {
           type: "textView",
           props: {
             text: "Profile Picture",
-            textStyles: "text=[#00192B] font-medium pl-7 mb-5",
+            textStyles: "text-[#00192B] font-medium pl-7 mb-5",
           },
         },
         {
@@ -624,7 +624,7 @@ export function StepThreeModal(_props: {
           type: "textView",
           props: {
             text: "Send a personalized message to your beneficiary once your passing is confirmed.",
-            textStyles: "text=[#00192B] font-semibold pl-7 mb-3",
+            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
           },
         },
         {
@@ -644,7 +644,7 @@ export function StepThreeModal(_props: {
           type: "textView",
           props: {
             text: "Upload a video testament for this beneficiary. This will only be shared once we confirm your passing. ",
-            textStyles: "text=[#00192B] font-medium pl-7 mb-5",
+            textStyles: "text-[#00192B] font-medium pl-7 mb-5",
           },
         },
         {
@@ -745,14 +745,14 @@ export function RegisterPKModal(_props: {
           type: "textView",
           props: {
             text: "Register a Public Key for this Beneficiary",
-            textStyles: "text=[#00192B] font-semibold pl-7 mb-3 text-lg",
+            textStyles: "text-[#00192B] font-semibold pl-7 mb-3 text-lg",
           },
         },
         {
           type: "textView",
           props: {
             text: "If you already have a Public/Private key pair, click on “I have a Private Key”. If not click on “Generate a Key pair” and we will generate one for you. ",
-            textStyles: "text=[#858992] px-7 mb-9",
+            textStyles: "text-[#858992] px-7 mb-9",
           },
         },
         {
@@ -783,7 +783,7 @@ export function RegisterPKModal(_props: {
           type: "textView",
           props: {
             text: "Why do you need to set a private key?  ",
-            textStyles: "text=[#00192B] px-7 mb-3 font-medium",
+            textStyles: "text-[#00192B] px-7 mb-3 font-medium",
           },
         },
         {

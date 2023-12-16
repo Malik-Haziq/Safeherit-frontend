@@ -13,7 +13,7 @@ import { updateProfile } from "firebase/auth"
 import { GoogleAuthButton, toast } from "@/components"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { updateActive, updateRole, updateRoleCheck } from "@/redux/reducers/UserSlice"
-import { sendEmailVerificationEmail } from "@/common"
+import { sendEmailVerificationEmail, isStrongPassword } from "@/common"
 
 export function SignUp() {
   const { t } = useTranslation()
@@ -46,6 +46,7 @@ export function SignUp() {
   }
 
   const _handleSubmit = () => {
+
     if (
       formControl.name &&
       formControl.email &&
@@ -55,7 +56,11 @@ export function SignUp() {
     ) {
       if (formControl.password !== formControl.confirm_password) {
         toast("password must match", "error")
-      } else {
+      }
+      else if(!isStrongPassword(formControl.password)){
+        toast('Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special symbol.', 'error');
+      }
+      else {
         startLoader()
         toast("signing up", "info")
         dispatch(

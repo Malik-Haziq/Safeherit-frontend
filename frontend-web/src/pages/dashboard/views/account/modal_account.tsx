@@ -106,6 +106,14 @@ export function EditUserModal(_props: {
           },
         },
         {
+          type: "textView",
+          props: {
+            text: "Name",
+            textStyles:
+              "text-[#00192B] font-medium mb-1 mx-7",
+          },
+        },
+        {
           type: "inputView",
           props: {
             name: "displayName",
@@ -116,7 +124,15 @@ export function EditUserModal(_props: {
             required: true,
             inputStyles: "rounded-3xl w-full",
             hasRightIcon: false,
-            inputContainerStyles: "mx-7 mb-4 relative",
+            inputContainerStyles: "mx-7 mb-6 relative",
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "Email",
+            textStyles:
+              "text-[#00192B] font-medium mb-1 mx-7",
           },
         },
         {
@@ -131,7 +147,15 @@ export function EditUserModal(_props: {
             disabled: true,
             inputStyles: "rounded-3xl w-full",
             hasRightIcon: false,
-            inputContainerStyles: "mx-7 mb-4 relative",
+            inputContainerStyles: "mx-7 mb-6 relative",
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "Language",
+            textStyles:
+              "text-[#00192B] font-medium mb-1 mx-7",
           },
         },
         {

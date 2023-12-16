@@ -145,7 +145,7 @@ export function StepOneModal(_props: {
           type: "textView",
           props: {
             text: "Personal info",
-            textStyles: "text=[#00192B] font-semibold pl-7 mb-3",
+            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
           },
         },
         {
@@ -333,7 +333,7 @@ export function StepTwoModal(_props: {
           type: "textView",
           props: {
             text: "Social media links",
-            textStyles: "text=[#00192B] font-semibold pl-7 mb-3",
+            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
           },
         },
         {
@@ -391,7 +391,7 @@ export function StepTwoModal(_props: {
           type: "textView",
           props: {
             text: "Profile Picture",
-            textStyles: "text=[#00192B] font-medium pl-7 mb-5",
+            textStyles: "text-[#00192B] font-medium pl-7 mb-5",
           },
         },
         {
@@ -492,7 +492,7 @@ export function StepThreeModal(_props: {
           type: "textView",
           props: {
             text: "Send a personalized message to your validator once your passing is confirmed.",
-            textStyles: "text=[#00192B] font-semibold pl-7 mb-3",
+            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
           },
         },
         {
@@ -551,7 +551,7 @@ export function StepFourSuccessModal(_props: {
           type: "textView",
           props: {
             text: "You successfully registered a new validator",
-            textStyles: "text=[#082A44] text-2xl font-bold text-center mb-32",
+            textStyles: "text-[#082A44] text-2xl font-bold text-center mb-32",
           },
         },
         {

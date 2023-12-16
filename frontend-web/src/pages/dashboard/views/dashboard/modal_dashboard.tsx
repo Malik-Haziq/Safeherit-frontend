@@ -26,7 +26,7 @@ export function DashboardModal() {
           props: {
             text: "Before you start, watch this shortvideo about how SafeHerit works:",
             onclick: () => {},
-            textStyles: "text=[#082A44] text-2xl font-bold px-16 text-center",
+            textStyles: "text-[#082A44] text-2xl font-bold px-16 text-center",
           },
         },
         {
@@ -44,7 +44,7 @@ export function DashboardModal() {
             text: "Now let’s get you started by registering your first beneficiary.",
             onclick: () => {},
             textStyles:
-              "text=[#082A44] text-2xl font-bold px-16 text-center mb-9",
+              "text-[#082A44] text-2xl font-bold px-16 text-center mb-9",
           },
         },
         {
