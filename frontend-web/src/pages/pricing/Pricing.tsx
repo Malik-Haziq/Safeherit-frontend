@@ -63,7 +63,7 @@ export default function Pricing() {
     .catch()
     .then((res) => {
       if (res.data.data.sessionUrl) {
-        window.location.href = res.data.data.sessionUrl;
+        window.open(res.data.data.sessionUrl, "_blank");
       }
     })
     .finally(() => {
