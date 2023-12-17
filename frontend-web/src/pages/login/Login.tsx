@@ -2,9 +2,9 @@ import logo from "@images/safeherit_logo.svg"
 import loginImg from "@images/login-img.png"
 import star from "@images/star.svg"
 
-import { ChangeEvent, useCallback, useState } from "react"
+import { ChangeEvent, useCallback, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { getUser, login, loginWithGoogle, resetPassword, updateUser } from "@redux/actions"
 import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
@@ -23,7 +23,7 @@ import {
   updateRoleUser,
 } from "@/redux/reducers/UserSlice"
 import { SelectOption } from "@/types"
-import { isEmailVerified, sendEmailVerificationEmail, useRecaptcha, verifyUserEnrolled, verifyUserMFA } from "@/common"
+import { isEmailVerified, sendEmailVerificationEmail, useRecaptcha, verifyEmail, verifyUserEnrolled, verifyUserMFA } from "@/common"
 import { MultiFactorResolver, getAdditionalUserInfo } from "@firebase/auth"
 import { auth } from "@/firebase"
 
@@ -31,8 +31,14 @@ export function Login() {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+
   const recaptcha = useRecaptcha('authenticate')
+
   const user = useAppSelector((state) => state.user)
+
   const startLoader = () => dispatch(setLoaderVisibility(true))
   const stopLoader = () => dispatch(setLoaderVisibility(false))
 
@@ -49,6 +55,31 @@ export function Login() {
   const [resolver, setResolver] = useState<MultiFactorResolver | null>();
 
   let code = new Array<string>(6).fill('');
+
+  // verify email
+  useEffect(() => {
+    const verifyUserEmail = async () => {
+      if (queryParams.size) {
+        startLoader()
+        const mode = queryParams.get('mode');
+        if (mode == "verifyEmail") {
+          toast("Verifying Email", "info")
+          const oobCode = queryParams.get('oobCode') || '';
+          const apiKey = queryParams.get('apiKey') || '';     
+          let response = await verifyEmail(oobCode, apiKey)
+          if (response) {
+            toast("Email Verified", "success")
+          }
+          if (!response) {
+            toast("Unable to verify your email", "error")
+          }
+          navigate('/login')
+          stopLoader()
+        }
+      }
+    };
+    verifyUserEmail();
+  }, [])
 
   async function getCode(code: string) {
     if (verificationId && resolver) {

@@ -14,6 +14,7 @@ import {
   User,
 } from "firebase/auth"
 import { toast } from "@/components"
+import { API } from ".."
 
 const storage = getStorage()
 
@@ -146,6 +147,23 @@ export async function sendEmailVerificationEmail(): Promise<boolean> {
 
 export function isEmailVerified() {
   if (auth.currentUser) return auth.currentUser.emailVerified
+}
+
+export async function verifyEmail(oobCode: string, apiKey: string) {
+  const body = {
+    "oobCode": oobCode
+  }
+  const params = { ROUTE: `${import.meta.env.VITE_REACT_APP_GOOGLE_API_ACCOUNT_INFO}?key=${apiKey}`, Body: body}
+  try {
+    let response = await API.post(params.ROUTE, params.Body, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response
+  } catch (error) {
+    return false
+  }
 }
 
 function toastError(e: any) {
