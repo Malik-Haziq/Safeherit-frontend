@@ -8,7 +8,7 @@ import deleteIcon from "@images/delete.svg"
 import { NewUserDetail, NewUserModal, UserDetail } from "../users/modal_admin"
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { getUsers } from "@/redux/actions/AdminAction"
+import { deleteUserRequest, getUsers } from "@/redux/actions/AdminAction"
 import { toast, Spinner } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
@@ -113,8 +113,25 @@ export default function UsersView() {
     _changePage(currentPage + 1)
   }
 
-  const deleteUser = (id: string) => {
-    toast("functionality not implemented", "error")
+  const deleteUser = (email: string) => {
+    let reason: string | null = ''
+    while(!reason) {
+      reason = prompt("Please enter reason for user deletion")
+      if (reason) {
+        startLoader()
+        const data = {
+          email: email,
+          reason: reason
+        }
+        dispatch(deleteUserRequest(data)).unwrap().catch()
+        .then((res) => {
+          toast("User deletion request submitted", "success")
+        })
+        .finally(() => {
+          stopLoader()
+        })
+      }
+    }
   }
   const editUser = (id: string) => {
     toast("functionality not implemented", "error")
@@ -386,7 +403,7 @@ function UserView(_props: {
             className="cy-del-asset-btn cursor-pointer"
             id="cy-del-asset-btn"
             onClick={() => {
-              _props.deleteUser(_props.id)
+              _props.deleteUser(_props.email)
             }}
           />
         </div>
