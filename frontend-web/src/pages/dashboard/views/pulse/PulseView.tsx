@@ -10,7 +10,7 @@ import shieldIcon from "@images/Shield-done.svg"
 import tickIcon from "@images/tick-blue.svg"
 import editIcon from "@images/edit-icon.svg"
 import pulseImg from "@images/pulse-check-img.svg"
-import introVideo from '@videos/pulse-video.mp4'
+import introVideo from "@videos/pulse-video.mp4"
 import {
   StepOneModal,
   StepTwoModal,
@@ -18,7 +18,12 @@ import {
   StepFourModal,
   SuccessModal,
 } from "./modal_pulse"
-import { isValidEmail, isValidPhoneWithRegion, useArray } from "@/common"
+import {
+  convertToCamelCase,
+  isValidEmail,
+  isValidPhoneWithRegion,
+  useArray,
+} from "@/common"
 import { Spinner, toast } from "@/components"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getUser, updatePulse, validateOwner } from "@/redux/actions"
@@ -47,6 +52,7 @@ export default function PulseView() {
   const [modalVisibility, setModalVisibility] = useState("none")
   const [confirmationDetails, setConfirmationDetails] = useState("Email")
   const [modalControl, setModalControl] = useState(initialState)
+  const [editDetailInput, setEditDetailInput] = useState("")
   const [
     modalHistory,
     modalHistoryLength,
@@ -55,7 +61,16 @@ export default function PulseView() {
     modalHistoryPopAll,
   ] = useArray()
 
-  const checkPulsePeriodArr = ["30", "60", "90", (user.pulseCheckDays == "30") || (user.pulseCheckDays == "60") || (user.pulseCheckDays == "90") ? "0" :  user.pulseCheckDays]
+  const checkPulsePeriodArr = [
+    "30",
+    "60",
+    "90",
+    user.pulseCheckDays == "30" ||
+    user.pulseCheckDays == "60" ||
+    user.pulseCheckDays == "90"
+      ? "0"
+      : user.pulseCheckDays,
+  ]
   const checkPUlseDateArr = {
     lastPulseCheck: "April 12th, 2023",
     nextPulseCheck: "22 days",
@@ -68,6 +83,10 @@ export default function PulseView() {
     initialState.pulseCheckEmail1 = user.email
     setModalControl(initialState)
   }, [])
+
+  useEffect(() => {
+    setEditDetailInput("")
+  }, [confirmationDetails])
 
   const getUserDetails = () => {
     dispatch(getUser({}))
@@ -92,7 +111,6 @@ export default function PulseView() {
   }
 
   const _submitStepTwoModal = () => {
-
     if (!modalControl.pulseCheckDays) {
       toast("please select valid pulse check days", "error")
     } else if (
@@ -101,8 +119,10 @@ export default function PulseView() {
         !isValidEmail(modalControl.pulseCheckEmail3)) ||
       (modalControl.pulseCheckEmail1 &&
         !isValidEmail(modalControl.pulseCheckEmail1)) ||
-      (modalControl.pulseCheckEmail2 && !isValidEmail(modalControl.pulseCheckEmail2)) ||
-      (modalControl.pulseCheckEmail3 && !isValidEmail(modalControl.pulseCheckEmail3))
+      (modalControl.pulseCheckEmail2 &&
+        !isValidEmail(modalControl.pulseCheckEmail2)) ||
+      (modalControl.pulseCheckEmail3 &&
+        !isValidEmail(modalControl.pulseCheckEmail3))
     ) {
       toast("please enter a valid Email address", "error")
     } else if (
@@ -118,7 +138,6 @@ export default function PulseView() {
       modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
     }
-
   }
 
   const _submitStepThreeModal = () => {
@@ -137,7 +156,7 @@ export default function PulseView() {
         setModalVisibility("success-modal")
         getUserDetails()
       })
-      .finally(()=>{
+      .finally(() => {
         stopLoader()
       })
   }
@@ -155,9 +174,40 @@ export default function PulseView() {
   }, [])
 
   const showPreviousModal = () => {
-    const lastEl = modalHistory[modalHistoryLength - 1] || 'none'
+    const lastEl = modalHistory[modalHistoryLength - 1] || "none"
     modalHistoryPop()
     setModalVisibility(lastEl)
+  }
+
+  const submitUpdatedValue = ({
+    propertyName,
+    value,
+  }: {
+    propertyName: string
+    value: string
+  }) => {
+    startLoader()
+    const updatedData = {
+      [propertyName === "primaryPhone"
+        ? "pulseCheckPhone1"
+        : propertyName === "backupPhone1"
+        ? "pulseCheckPhone2"
+        : propertyName]: value,
+      pulseCheckDays: user.pulseCheckDays,
+      pulseCheckValidationRequired: user.pulseCheckValidationRequired,
+      pulseCheckNonValidationMonths: user.pulseCheckNonValidationMonths,
+    }
+
+    dispatch(updatePulse(updatedData))
+      .unwrap()
+      .catch()
+      .then((res) => {
+        toast("Pulse check data updated successfully", "info")
+        getUserDetails()
+      })
+      .finally(() => {
+        stopLoader()
+      })
   }
 
   return (
@@ -228,7 +278,10 @@ export default function PulseView() {
           methodArr={user.pulseDetail[confirmationDetails]}
           confirmationDetails={confirmationDetails}
           setConfirmationDetails={setConfirmationDetails}
+          editDetailInput={editDetailInput}
+          setEditDetailInput={setEditDetailInput}
           pulseCheckDays={user.pulseCheckDays}
+          submitUpdatedValue={submitUpdatedValue}
         />
       ) : (
         <SetUpPulseCheck
@@ -248,7 +301,10 @@ function PulseCheckView(_props: {
   methodArr: { heading: string; subHeading: string }[]
   confirmationDetails: string
   setConfirmationDetails: any
+  editDetailInput: string
+  setEditDetailInput: any
   pulseCheckDays: string
+  submitUpdatedValue: Function
 }) {
   return (
     <div className="px-8 py-4">
@@ -309,6 +365,9 @@ function PulseCheckView(_props: {
                   <MethodRow
                     heading={value.heading}
                     subHeading={value.subHeading}
+                    editDetailInput={_props.editDetailInput}
+                    setEditDetailInput={_props.setEditDetailInput}
+                    submitUpdatedValue={_props.submitUpdatedValue}
                     key={i}
                   />
                 )
@@ -329,7 +388,7 @@ function PulseCheckView(_props: {
   )
 }
 
-function CheckPulsePeriod(_props: { pulseCheckDays: any, days: string}) {
+function CheckPulsePeriod(_props: { pulseCheckDays: any; days: string }) {
   return (
     <div
       className={
@@ -397,12 +456,59 @@ function CheckAliveMethod(_props: {
   )
 }
 
-function MethodRow(_props: { heading: string; subHeading: string }) {
+function MethodRow(_props: {
+  heading: string
+  subHeading: string
+  editDetailInput: string
+  setEditDetailInput: any
+  submitUpdatedValue: Function
+}) {
+  const [_inputValue, _setInputValue] = useState<string>("")
+
+  useEffect(() => {
+    _setInputValue(_props.subHeading || "")
+  }, [_props.editDetailInput])
+
+  function _handleUpdate() {
+    const data = {
+      propertyName: _props.editDetailInput,
+      value: _inputValue,
+    }
+    _props.submitUpdatedValue(data)
+    _props.setEditDetailInput("")
+  }
+
   return (
     <div className="py-3 px-2 flex items-center justify-between rounded-lg bg-white  border-[1px] border-[#E3E3E3] text-[#4E4F50]">
       <p>{_props.heading}</p>
-      <p>{_props.subHeading}</p>
-      <img src={editIcon} alt="edit icon" className="w-5 h-5 cursor-pointer" />
+      {_props.editDetailInput === convertToCamelCase(_props.heading) ? (
+        <>
+          <input
+            type="text"
+            value={_inputValue}
+            onChange={(e) => _setInputValue(e.target.value)}
+            className="border-[1px] border-[#E3E3E3] outline-none px-1"
+          />
+          <img
+            src={tickIcon}
+            onClick={_handleUpdate}
+            alt="save icon"
+            className="w-5 h-5 cursor-pointer"
+          />
+        </>
+      ) : (
+        <>
+          <p>{_props.subHeading}</p>
+          <img
+            src={editIcon}
+            onClick={() =>
+              _props.setEditDetailInput(convertToCamelCase(_props.heading))
+            }
+            alt="edit icon"
+            className="w-5 h-5 cursor-pointer"
+          />
+        </>
+      )}
     </div>
   )
 }
