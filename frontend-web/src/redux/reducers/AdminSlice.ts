@@ -34,7 +34,7 @@ export const slice = createSlice({
             email: item.email || "example@example.com",
             name: item.displayName || "Username not Set",
             id: item.uid,
-            image: item.image,
+            image: item.profile_image,
             joining_date: dateString,
             plan: item.plan || "Plan not Selected",
             payment_status: item.paymentStatus || "Status not found",

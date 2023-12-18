@@ -12,6 +12,7 @@ import { getUsers } from "@/redux/actions/AdminAction"
 import { toast, Spinner } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
+import { getFileFromFirebase } from "@/common"
 
 const initialState = {
   email: "",
@@ -201,7 +202,7 @@ export default function UsersView() {
                   return (
                     <User
                       key={index}
-                      userImg={""}
+                      userImg={user.image}
                       userName={user.name}
                       userId={user.id}
                       userEmail={user.email}
@@ -284,11 +285,21 @@ function User(_props: {
   editUser: Function
   deleteUser: Function
 }) {
+  const [userImage, setUserImage] = useState('')
+  if (_props.userImg) {
+    getFileFromFirebase(_props.userImg)
+    .then((res) => {
+      setUserImage(res)
+    })
+    .catch(() => {
+      setUserImage("")
+    })
+  }
   return (
     <tr className="border-b-[1px] border-x-[1px] border-[#E5E5E5] h-16 rounded-2xl">
       <td className="w-[220px] pl-5 flex items-center gap-3 content-center h-16">
         <img
-          src={_props.userImg || userImg}
+          src={userImage || userImg}
           alt="user image"
           className="w-9 h-9 rounded-full object-contain"
         />
