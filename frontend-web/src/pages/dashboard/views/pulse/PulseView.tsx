@@ -145,7 +145,6 @@ export default function PulseView() {
   const _submitSuccessModal = () => {
     setModalVisibility("none")
     getUserDetails()
-    navigate("/dashboard/assets")
   }
 
   const _closeModal = useCallback(() => {
@@ -212,7 +211,7 @@ export default function PulseView() {
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
         action={""}
-        _submitModal={_closeModal}
+        _submitModal={_submitSuccessModal}
       />
       {pulseCheck === null ? (
         <div className={styles.AppView}>
