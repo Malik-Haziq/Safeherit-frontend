@@ -160,16 +160,8 @@ export default function BeneficiariesView() {
     }
   }
   const _submitStepTwoModal = () => {
-    if (
-      !modalControl.facebook_link &&
-      !modalControl.instagram_username &&
-      !modalControl.twitter_username
-    ) {
-      toast("Atleast 1 social media accounts is compulsory", "error")
-    } else {
       modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
-    }
   }
 
   const _submitStepThreeModal = () => {
