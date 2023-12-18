@@ -1,8 +1,8 @@
 
 export interface User {
   id: string
-  name: string
-  image: string
+  displayName: string
+  profile_image: string
   joining_date: string
   plan: string
   payment_status: string
