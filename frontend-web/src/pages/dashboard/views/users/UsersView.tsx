@@ -19,13 +19,9 @@ const initialState = {
   email: "",
   phoneNumber: "",
   displayName: "",
+  password: ""
 }
-const initialNewUserState = {
-  "Email": "",
-  "Phone Number": "",
-  "Display Name": "",
-  "Password": "",
-}
+
 const userInitialState = {
   displayName: "",
   id: "",
@@ -48,7 +44,6 @@ export default function UsersView() {
   const [loading, setLoading] = useState(true)
   const [modalControl, setModalControl] = useState(initialState)
   const [userViewControl, setViewControl] = useState(userInitialState)
-  const [newUserCredentials, setNewUserCredentials] = useState(initialNewUserState)
   const [modalVisibility, setModalVisibility] = useState("none")
 
   useEffect(() => {
@@ -65,7 +60,6 @@ export default function UsersView() {
   }, [])
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
-    // debugger
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
   }
@@ -82,11 +76,11 @@ export default function UsersView() {
         .then((res) => {
           startLoader()
           fetchUsers()
-          setNewUserCredentials({
-            "Email": modalControl.email,
-            "Phone Number": modalControl.phoneNumber,
-            "Display Name": modalControl.displayName,
-            "Password": res.data.data.password
+          setModalControl({
+            email: modalControl.email,
+            phoneNumber: modalControl.phoneNumber,
+            displayName: modalControl.displayName,
+            password: res.data.data.password
           })
           setModalVisibility('view-new-user')
           toast("User Created", "success")
@@ -166,7 +160,7 @@ export default function UsersView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
-        modalControl={newUserCredentials}
+        modalControl={modalControl}
       />
       <main className="p-5 mx-auto w-[1101px]">
         <button onClick={createAccount} className="mt-10 flex justify-end mb-8">

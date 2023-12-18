@@ -8,7 +8,12 @@ export function NewUserModal(_props: {
   closeIconVisibility: boolean
   _handleChange: Function
   _submitModal: Function
-  modalControl: any
+  modalControl: {
+    email: string,
+    phoneNumber: string,
+    displayName: string,
+    password: string,
+  }
 }) {
   return (
     <Modal
@@ -142,14 +147,20 @@ export function NewUserDetail(_props: {
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   modalControl: {
-    "Email": string,
-    "Phone Number": string,
-    "Display Name": string,
-    "Password": string,
+    email: string,
+    phoneNumber: string,
+    displayName: string,
+    password: string,
   }
 }) {
   const headings = Object.keys(_props.modalControl)
   const values = Object.values(_props.modalControl)
+  const USER_HEADINGS: {[key: string]: string; } = {
+    "email": "Email",
+    "phoneNumber": "Phone Number",
+    "displayName": "Display Name",
+    "password": "Password",
+  }
   return (
     <Modal
       openModal={_props.openModal}
@@ -166,14 +177,14 @@ export function NewUserDetail(_props: {
               return (
                 <section>
                   <div className="pt-6">
-                    {headings.map((heading, index) => {
+                    {headings.map((key, index) => {
                       return (
                         <div
                           key={index}
                           className="flex gap-6 items-center pb-6"
                         >
                           <h2 className="text-[#292929] font-sm font-medium basis-2/5 text-right">
-                            {heading}
+                            {USER_HEADINGS[`${key}`]}
                           </h2>
                           <p className="text-[#585858] basis-3/5">
                             {values[index]}
