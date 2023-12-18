@@ -212,7 +212,7 @@ export default function PulseView() {
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
         action={""}
-        _submitModal={_submitSuccessModal}
+        _submitModal={_closeModal}
       />
       {pulseCheck === null ? (
         <div className={styles.AppView}>
