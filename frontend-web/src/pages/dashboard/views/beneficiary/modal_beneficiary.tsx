@@ -167,10 +167,10 @@ export function SuccessModal(_props: {
                           done registering beneficiaries.
                         </p>
                         <button
-                          onClick={_props.gotoValidators}
+                          onClick={_props._submitModal}
                           className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl"
                         >
-                          Register Validators
+                          Done 
                         </button>
                       </div>
                     </div>
