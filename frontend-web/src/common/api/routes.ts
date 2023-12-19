@@ -20,6 +20,7 @@ export const PUBLIC_KEY = "/api-auth/public-key"
 
 export const GET_USERS = "/api-admin/users"
 export const CREATE_USER = "/api-admin/create-user"
+export const DELETE_USER_REQUEST = "/api-admin/delete-user-request"
 
 export const PULSE_CHECK = "/api-pulseCheck"
 

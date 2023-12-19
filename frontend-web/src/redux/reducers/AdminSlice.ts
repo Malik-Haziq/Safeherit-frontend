@@ -32,9 +32,9 @@ export const slice = createSlice({
           let dateString = date.toDateString()
           temporary_array.push({
             email: item.email || "example@example.com",
-            name: item.displayName || "Username not Set",
+            displayName: item.displayName || "Username not Set",
             id: item.uid,
-            image: item.image,
+            profile_image: item.profile_image,
             joining_date: dateString,
             plan: item.plan || "Plan not Selected",
             payment_status: item.paymentStatus || "Status not found",
