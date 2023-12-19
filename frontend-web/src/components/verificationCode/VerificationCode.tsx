@@ -1,4 +1,5 @@
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
     _handleMFASubmit: Function
@@ -6,6 +7,31 @@ type Props = {
     code:  Array<string>
 }
 export function VerificationCode({_handleMFASubmit,  _handleMFACancel, code}: Props) {
+  const [isTimeoutExpired, setIsTimeoutExpired] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(1 * 60);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setRemainingTime(prevTime => prevTime - 1);
+
+      if (remainingTime <= 0) {
+        clearInterval(intervalId);
+        setIsTimeoutExpired(true);
+        navigate('/dashboard/account')
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [remainingTime]);
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
+  };
 
     return (
       <div className='flex sm:justify-center items-center px-4 sm:px-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
@@ -30,6 +56,9 @@ export function VerificationCode({_handleMFASubmit,  _handleMFACancel, code}: Pr
                 )
               })
             }
+          </div>
+          <div>
+          {!isTimeoutExpired && <p>This code will expire in: {formatTime(remainingTime)}</p>}
           </div>
           <div className="flex mt-4 gap-x-4">
             <button
