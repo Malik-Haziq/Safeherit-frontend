@@ -42,8 +42,8 @@ export function NewUserModal(_props: {
           props: {
             name: "phone_number",
             placeholder: "Phone Number",
-            value: _props?.modalControl?.phone_number?.split(" ")[1],
-            code: _props?.modalControl?.phone_number?.split(" ")[0],
+            value: _props?.modalControl?.phoneNumber?.split(" ")[1],
+            code: _props?.modalControl?.phoneNumber?.split(" ")[0],
             inputStyles: "",
             inputContainerStyles: "",
             selectFieldStyles: "",
