@@ -357,10 +357,12 @@ export default function BeneficiariesView() {
   }
 
   const _handleGeneratePKPair = useCallback(() => {
+    startLoader()
     toast("Generating Public/Private Key", "info")
     setTimeout(() => {
       setModalEncryptionKeyControl(encryptionService.generateKeyPair())
       toast("Keys Generated", "success")
+      stopLoader()
     }, 1000);
   }, [])
 
