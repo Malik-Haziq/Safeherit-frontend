@@ -1,3 +1,4 @@
+import React from 'react'
 import tick from "@images/tick.svg"
 import creditCardImg from "@images/credit-card.svg"
 import cancelIcon from "@images/cancel.svg"

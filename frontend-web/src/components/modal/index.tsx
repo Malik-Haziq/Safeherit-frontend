@@ -1,8 +1,7 @@
+import React from 'react'
 import defaultIcon from "@images/safeherit_logo.svg"
 import closeIcon from "@images/close-icon.svg"
 import arrowLeft from "@images/left-arrow.png"
-import { Dialog, Transition } from "@headlessui/react"
-import { Fragment } from "react"
 import styles from "./Modal.module.css"
 import { SelectField, InputField, PhoneNumField } from ".."
 

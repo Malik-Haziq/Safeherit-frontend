@@ -1,3 +1,4 @@
+import React from 'react'
 import facebook from "@images/facebook.svg"
 import instagram from "@images/insta.svg"
 import twitter from "@images/twitter.svg"
@@ -15,10 +16,10 @@ import { Modal, toast } from "@/components"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
-  closeModal: Function
+  closeModal: () => void
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
-  _submitModal: Function
+  _submitModal: () => void
   action: string
 }) {
   return (
@@ -195,7 +196,7 @@ export function SuccessModal(_props: {
 
 export function StepOneModal(_props: {
   openModal: boolean
-  closeModal: any
+  closeModal: () => void
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   action: string
@@ -208,9 +209,9 @@ export function StepOneModal(_props: {
     phone_number: string
     backup_phone_number: string
   }
-  _submitModal: Function
+  _submitModal: () => void
   arrayLength: any
-  showPreviousModal: any
+  showPreviousModal: () => void
 }) {
   return (
     <Modal
@@ -369,7 +370,7 @@ interface CustomChangeEvent {
 
 export function StepTwoModal(_props: {
   openModal: boolean
-  closeModal: any
+  closeModal: () => void
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   action: string
@@ -380,12 +381,12 @@ export function StepTwoModal(_props: {
     twitter_username: string
     profile_image: string
   }
-  _submitModal: Function
-  _handleDiscard: Function
+  _submitModal: () => void
+  _handleDiscard: (name: string, value: any) => void
   imageUpload: string
-  setImageUpload: Function
+  setImageUpload: any
   arrayLength: any
-  showPreviousModal: any
+  showPreviousModal: () => void
 }) {
   const handleImageInputChange = (event: any) => {
     const file = event.target.files[0]
@@ -561,16 +562,16 @@ export function StepThreeModal(_props: {
   closeIconVisibility: boolean
   action: string
   videoUpload: string
-  setVideoUpload: Function
+  setVideoUpload: any
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   modalControl: {
     personalized_message: string
     personalized_video: string
   }
-  _handleDiscard: Function
-  _submitModal: Function
+  _handleDiscard: (name: string, value: any) => void
+  _submitModal: () => void
   arrayLength: any
-  showPreviousModal: any
+  showPreviousModal: () => void
 }) {
   const handleImageInputChange = (event: any) => {
     const maxSize = 100 * 1024 * 1024;

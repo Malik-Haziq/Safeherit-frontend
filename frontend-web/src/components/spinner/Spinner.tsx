@@ -1,3 +1,5 @@
+import React from 'react'
+
 export function Spinner(_props: { withOverlay?: boolean }) {
     return {
       ...(_props.withOverlay ? (

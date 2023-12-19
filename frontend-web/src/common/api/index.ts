@@ -10,7 +10,7 @@ export const API = axios.create({
   },
 })
 
-const GET = async (DATA: { ROUTE: string; Body: {}, token: string }) => {
+const GET = async (DATA: { ROUTE: string; Body: object, token: string }) => {
   const { ROUTE, Body, token } = DATA
   API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   try {
@@ -22,7 +22,7 @@ const GET = async (DATA: { ROUTE: string; Body: {}, token: string }) => {
   }
 }
 
-const POST = async (DATA: { ROUTE: string; Body: {}, token: string }) => {
+const POST = async (DATA: { ROUTE: string; Body: object, token: string }) => {
   const { ROUTE, Body, token } = DATA
   API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   try {
@@ -34,7 +34,7 @@ const POST = async (DATA: { ROUTE: string; Body: {}, token: string }) => {
   }
 }
 
-const PUT = async (DATA: { ROUTE: string; Body: {}, token: string }) => {
+const PUT = async (DATA: { ROUTE: string; Body: object, token: string }) => {
   const { ROUTE, Body, token } = DATA
   API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   try {
@@ -47,14 +47,13 @@ const PUT = async (DATA: { ROUTE: string; Body: {}, token: string }) => {
 }
 
 const PATCH = () => {
-  try {
-  } catch (error) {
+  try { /* empty */ } catch (error) {
     _handleErrors(error)
     throw error
   }
 }
 
-const DELETE = async (DATA: { ROUTE: string; Body: {}, token: string }) => {
+const DELETE = async (DATA: { ROUTE: string; Body: object, token: string }) => {
   const { ROUTE, Body, token } = DATA
   API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   try {

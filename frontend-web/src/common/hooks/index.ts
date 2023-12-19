@@ -15,8 +15,8 @@ export const useArray = () => {
   }
 
   const pop = () => {
-    let lastValue = array[array.length - 1]
-    let newArr = array.filter((value) => value !== lastValue)
+    const lastValue = array[array.length - 1]
+    const newArr = array.filter((value) => value !== lastValue)
 
     setArray(newArr)
   }

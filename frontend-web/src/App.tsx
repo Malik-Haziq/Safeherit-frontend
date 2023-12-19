@@ -1,3 +1,4 @@
+import React from 'react'
 import { ProtectedRoutes } from "./common"
 import {
   BrowserRouter,

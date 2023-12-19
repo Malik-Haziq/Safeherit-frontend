@@ -33,7 +33,7 @@ export const slice = createSlice({
   extraReducers(builder) {
     builder.addCase(getAllBeneficiary.fulfilled, (state, action) => {
       state.beneficiary_array = action?.payload?.data?.data || []
-      let beneficiary_list: SelectOption[] = []
+      const beneficiary_list: SelectOption[] = []
       const beneficiaryMapper: { [key: string]: any } = {}
 
       action.payload.data.data.map((item: any) => {

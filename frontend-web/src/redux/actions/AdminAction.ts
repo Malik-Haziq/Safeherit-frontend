@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { GET, PUT, jsonToFormData, GET_USERS, DELETE_USER_REQUEST } from "@/common"
+import { GET, PUT, GET_USERS, DELETE_USER_REQUEST } from "@/common"
 
 export const getUsers = createAsyncThunk(
   "getUsers",
@@ -7,7 +7,7 @@ export const getUsers = createAsyncThunk(
     const { user } = getState() as { user: {token: any} };
     const params = { ROUTE: `${GET_USERS}?page=${Data.page}&pageSize=8`, Body: {}, token: user.token }
     try {
-      let response = await GET(params)
+      const response = await GET(params)
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -32,11 +32,11 @@ export const getUsers = createAsyncThunk(
 
 export const deleteUserRequest = createAsyncThunk(
   "deleteUserRequest",
-  async (Data: {}, {getState, rejectWithValue }) => {
+  async (Data: object, {getState, rejectWithValue }) => {
     const { user } = getState() as { user: {token: any} };
     const params = { ROUTE: DELETE_USER_REQUEST, Body: Data, token: user.token }
     try {
-      let response = await PUT(params)
+      const response = await PUT(params)
       return response
     } catch (error) {
       return rejectWithValue(error)

@@ -1,3 +1,4 @@
+import React from 'react'
 import dashboardIcon from "@images/dashboard.svg"
 import assets from "@images/assets.svg"
 import beneficiaries from "@images/beneeficiaries.svg"
@@ -285,7 +286,7 @@ export default function Dashboard() {
   ] : []
   // TODO manually terminate the session on catch
   const _handleLogout = () => {
-    dispatch(logout({}))
+    dispatch<any>(logout({}))
       .unwrap()
       .catch()
       .finally(() => {

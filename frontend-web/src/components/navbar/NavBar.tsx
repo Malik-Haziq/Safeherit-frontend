@@ -1,9 +1,10 @@
+import React from 'react'
 import logo from "@images/safeherit_logo.svg";
 import userImg from "@images/user.svg"
 import arrowDown from "@images/chevron-down.svg"
 
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector} from "@redux/hooks"
 import { logout } from "@redux/actions"
 import { DropDownButton, toast } from "@/components"
@@ -15,8 +16,6 @@ export function NavBar() {
   const USER_NAME = user.displayName || "Profile"
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const currentPath = useLocation()
-  const registerBtn = ["/signup", "/"]
 
   const [userImage, setUserImage] = useState('')
 
@@ -35,9 +34,9 @@ export function NavBar() {
   // TODO manually terminate the use session on logout failiure (browser storage etc)
   // Do the above commented change for all _handleLogout methods
   const _handleLogout = () => {
-    dispatch(logout({}))
+    dispatch<any>(logout({}))
       .unwrap()
-      .catch((err) => {
+      .catch((err: { code: string; }) => {
         toast(err?.code, "error")
       })
       .finally(() => {

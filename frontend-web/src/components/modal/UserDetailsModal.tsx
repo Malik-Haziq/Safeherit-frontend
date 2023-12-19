@@ -1,10 +1,10 @@
+import React from 'react'
 import userImage from "@images/user.svg"
 import closeIcon from "@images/close-icon.svg"
 import facebookIcon from "@images/facebook.svg"
 import instagramIcon from "@images/insta.svg"
 import twitterIcon from "@images/twitter.svg"
 import copy from "@images/copy-icon.svg"
-import testimentVideo from "@images/register_page_video.png"
 
 import styles from "./Modal.module.css"
 

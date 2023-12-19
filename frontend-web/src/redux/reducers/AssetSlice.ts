@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getAllAsset, getAllBeneficiaryAsset, findAsset } from "../actions/AssetAction"
+import { getAllAsset, getAllBeneficiaryAsset } from "../actions/AssetAction"
 import { Asset } from "@/types"
 
 interface AssetState {
@@ -20,13 +20,10 @@ const initialState: AssetState = {
 export const slice = createSlice({
   name: "asset",
   initialState,
-  reducers: {
-    addAsset: (state, action) => {
-    }
-  },
+  reducers: {},
   extraReducers(builder) {
     builder.addCase(getAllAsset.fulfilled, (state, action) => {
-      let array: Asset[] = []
+      const array: Asset[] = []
       action?.payload?.data?.data.map((data: Asset) => {
         array.push(
           {
@@ -44,7 +41,7 @@ export const slice = createSlice({
       state.Asset_array = array
     })
     builder.addCase(getAllBeneficiaryAsset.fulfilled, (state, action) => {
-      let array: Asset[] = []
+      const array: Asset[] = []
       action?.payload?.data?.data.map((data: Asset) => {
         array.push(
           {
@@ -61,12 +58,7 @@ export const slice = createSlice({
       })
       state.Asset_array = action?.payload?.data?.data
     })
-    builder.addCase(findAsset.fulfilled, (state, action) => {
-
-    })
   },
 })
-
-export const {addAsset} = slice.actions
 
 export default slice.reducer

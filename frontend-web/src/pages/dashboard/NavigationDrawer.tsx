@@ -1,3 +1,4 @@
+import React from 'react'
 import logo from "@images/safeherit_log_white.svg"
 import logoutIcon from "@images/Logout.svg"
 
@@ -7,7 +8,7 @@ import { CONSTANT } from "@/common"
 export default function NavigationDrawer(_props: {
   DRAWER_MENU: any[]
   DRAWER_SETTINGS: any[]
-  _handleLogout: Function
+  _handleLogout: () => void
   selectedOption: string
 }) {
   return (
@@ -58,7 +59,7 @@ export default function NavigationDrawer(_props: {
 function IconView(_props: {
   icon: string
   option: string
-  navigate: Function
+  navigate: () => void
   selectedOption: string
 }) {
   return (

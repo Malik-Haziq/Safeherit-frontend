@@ -1,3 +1,4 @@
+import React from 'react'
 import dollar from "@images/dollar.svg"
 import realEstate from "@images/real-estate.svg"
 import bank from "@images/bank.svg"
@@ -34,7 +35,7 @@ import {
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
-import { assetData, getRequiredFields } from "./data"
+import { getRequiredFields } from "./data"
 import { AxiosResponse } from "axios"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { SelectOption, Asset, Beneficiary } from "@/types"
@@ -51,8 +52,8 @@ export default function AssetsView() {
   const asset = useAppSelector((state) => state.asset)
   const user = useAppSelector((state) => state.user)
   const beneficiary = useAppSelector((state) => state.beneficiary)
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [hasAssets, setHasAssets] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
@@ -79,15 +80,15 @@ export default function AssetsView() {
   useEffect(() => {
     //Get Beneficiaries
     if (user.role == "owner") {
-      dispatch(getAllBeneficiary({}))
+      dispatch<any>(getAllBeneficiary({}))
         .unwrap()
         .catch(() => {
           // TODO: show fallback page
         })
         .finally(() => {
-          dispatch(getAllAsset({}))
+          dispatch<any>(getAllAsset({}))
             .unwrap()
-            .then((res) => {
+            .then((res: any) => {
               updateAssetArrayCount(res)
             })
             .catch(() => {
@@ -96,12 +97,12 @@ export default function AssetsView() {
         })
     }
     else if (user.role == "beneficiary") {
-      dispatch(getAllBeneficiaryAsset({}))
+      dispatch<any>(getAllBeneficiaryAsset({}))
         .unwrap()
-        .then((res) => {
+        .then((res: any) => {
           updateAssetArrayCount(res)
         })
-        .catch(() => {})
+        .catch()
     }
   }, [])
 
@@ -268,34 +269,34 @@ export default function AssetsView() {
       if (modalAction == "edit") {
         toast("Updating Asset", "info")
         Data.id = selectedAsset
-        dispatch(updateAsset(Data))
+        dispatch<any>(updateAsset(Data))
           .unwrap()
           .then(() => {
-            dispatch(getAllAsset({}))
+            dispatch<any>(getAllAsset({}))
               .unwrap()
-              .then((res) => {
+              .then((res: any) => {
                 updateAssetArrayCount(res)
                 closeModal()
               })
           })
-          .catch(() => {})
+          .catch()
           .finally(()=>{
             stopLoader()
           })
       } else if (modalAction == "create") {
         toast("Creating Asset", "info")
-        dispatch(createAsset(Data))
+        dispatch<any>(createAsset(Data))
           .unwrap()
           .then(() => {
-            dispatch(getAllAsset({}))
+            dispatch<any>(getAllAsset({}))
               .unwrap()
-              .then((res) => {
+              .then((res: any) => {
                 updateAssetArrayCount(res)
                 modalHistoryPush("Step-2")
                 setModalVisibility("Step-Success")
               })
           })
-          .catch(() => {})
+          .catch()
           .finally(()=>{
             stopLoader()
           })
@@ -308,12 +309,12 @@ export default function AssetsView() {
     navigate(ROUTE_CONSTANTS.DASHBOARD)
   }
   const _submitDeleteModal = () => {
-    dispatch(deleteAsset({ id: selectedAsset }))
+    dispatch<any>(deleteAsset({ id: selectedAsset }))
       .unwrap()
       .then(() => {
-        dispatch(getAllAsset({}))
+        dispatch<any>(getAllAsset({}))
           .unwrap()
-          .then((res) => {
+          .then((res: any) => {
             updateAssetArrayCount(res)
             closeModal()
           })
@@ -337,9 +338,9 @@ export default function AssetsView() {
     setModalVisibility("Step-0")
   }
   const editAsset = (assetId: string) => {
-    dispatch(findAsset({ id: assetId }))
+    dispatch<any>(findAsset({ id: assetId }))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         isEditingAsset.current = true
         setSelectedAsset(assetId)
         setModalControl(JSON.parse(res.data.data.data))
@@ -355,9 +356,9 @@ export default function AssetsView() {
   }
   const viewAsset = (assetId: string) => {
     if (user.role == "owner") {
-      dispatch(findAsset({ id: assetId }))
+      dispatch<any>(findAsset({ id: assetId }))
         .unwrap()
-        .then((res) => {
+        .then((res: { data: { data: { data: string } } }) => {
           isEditingAsset.current = true //TODO look into this why is this here
           setSelectedAsset(assetId)
           setModalControl(JSON.parse(res.data.data.data))
@@ -367,7 +368,7 @@ export default function AssetsView() {
     } else if (user.role == "beneficiary") {
       const owner_email = user.selectedRoleUser?.ownerEmail
       const beneficiary_id = user.selectedRoleUser?.beneficiaryId
-      dispatch(findBeneficiaryAsset(
+      dispatch<any>(findBeneficiaryAsset(
         { 
           id: assetId,
           owner_email: owner_email,
@@ -375,7 +376,7 @@ export default function AssetsView() {
         }
       ))
         .unwrap()
-        .then((res) => {
+        .then((res: { data: { data: { data: string } } }) => {
           isEditingAsset.current = true //TODO look into this why is this here
           setSelectedAsset(assetId)
           setModalControl(JSON.parse(res.data.data.data))
@@ -510,11 +511,11 @@ function Assets(_props: {
   }[]
   assetCatagories: string[]
   selected: string
-  setSelected: Function
+  setSelected: React.Dispatch<React.SetStateAction<string>>
   assetDetailsArr: Asset[]
-  destroyAsset: Function
-  editAsset: Function
-  viewAsset: Function
+  destroyAsset: (assetId: string) => void
+  editAsset: (assetId: string) => void
+  viewAsset: (assetId: string) => void
   userRole: string
 }) {
   return (
@@ -615,7 +616,7 @@ function AssetDetailsCard(_props: {
 
 function AssetCategory(_props: {
   category: string
-  // onClick: Function
+  // onClick: any
   selected: any
   setSelected: any
 }) {
@@ -641,9 +642,9 @@ function AssetDetails(_props: {
   assetName: string
   assetValue: string
   beneficiaries: Beneficiary[]
-  destroyAsset: Function
-  editAsset: Function
-  viewAsset: Function
+  destroyAsset: (assetId: string) => void
+  editAsset: (assetId: string) => void
+  viewAsset: (assetId: string) => void
   userRole: string
 }) {
   return (

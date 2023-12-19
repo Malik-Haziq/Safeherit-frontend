@@ -28,8 +28,8 @@ export const slice = createSlice({
       const temporary_array: User[] = []
       action.payload.data.data?.users?.map((item: any) => {
         if (!item.isValidator && !item.isBeneficiary) {
-          let date = new Date(item?.createdAt?._seconds * 1000)
-          let dateString = date.toDateString()
+          const date = new Date(item?.createdAt?._seconds * 1000)
+          const dateString = date.toDateString()
           temporary_array.push({
             email: item.email || "example@example.com",
             displayName: item.displayName || "Username not Set",
@@ -47,7 +47,5 @@ export const slice = createSlice({
     })
   },
 })
-
-export const { } = slice.actions
 
 export default slice.reducer

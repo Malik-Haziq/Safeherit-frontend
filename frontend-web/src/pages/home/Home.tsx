@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState } from 'react'
 import headerImg from '@images/header-img.png'
 import infoImg1 from '@images/infographic-1.png'
@@ -15,13 +16,14 @@ import { useNavigate } from "react-router-dom"
 export function Home(){
     const navigate = useNavigate()
 
+    // eslint-disable-next-line react/jsx-key
     const slides = [<CarouselElement/>,<CarouselElement/>,<CarouselElement/>]
 
     return <main className='m-w-[1280px] mx-auto font-safe-font-default'>
         <header style={{backgroundImage: `url(${homeBg})`}} className='flex justify-between items-center 2xl:px-[140px] xl:px-[60px] lg:px-[40px] bg-cover h-[776px] mb-24'>
             <aside className='basis-3/5 flex flex-col gap-3'>
                 <h1 className='text-[58px] font-bold leading-tight' >Your Legacy, Secured for the Digital Age with SafeHerit</h1>
-                <p className='text-xl mb-5'>From your hard-earned savings in the bank to your precious memories stored digitally, SafeHerit ensures your online treasures aren't lost in theether. Keep control of your digital life, even in the afterlife.</p>
+                <p className='text-xl mb-5'>From your hard-earned savings in the bank to your precious memories stored digitally, SafeHerit ensures your online treasures aren&rsquo;t lost in theether. Keep control of your digital life, even in the afterlife.</p>
                 <a className='text-[#04477B] bg-white rounded-2xl px-8 py-5 w-fit font-bold' onClick={()=>navigate("/register")}>Register the Generated Public Key</a>
             </aside>
             <aside className=''>
@@ -30,7 +32,7 @@ export function Home(){
         </header>
 
         <section className='max-w-[941px] mx-auto mb-24 px-5'>
-            <h2 className='text-[32px] font-semibold mb-5 text-center'>Did you know that up to an astonishing 50% of people's assets never reach their intended heirs or beneficiaries?</h2>
+            <h2 className='text-[32px] font-semibold mb-5 text-center'>Did you know that up to an astonishing 50% of people&rsquo;s assets never reach their intended heirs or beneficiaries?</h2>
             <section className='flex justify-around items-center flex-wrap'>
                 <article className='flex flex-col justify-center items-center max-w-[270px]'>
                     <h3 className='text-[#04477B] text-[27px] font-semibold '>Over $70 billion</h3>
@@ -57,8 +59,8 @@ export function Home(){
                 <h2 className='text-[32px] font-semibold'>Why does this happen?</h2>
                 <p className='text-[22px]'>In the digital age, assets - from bank accounts to cryptocurrency addresses - can be created in a few clicks. But with this convenience comes the risk of assets getting lost or forgotten.</p>
                 <p className='text-[22px]'>Not to mention that updating your will to reflect these accounts and credentials can be expensive and time-consuming.</p>
-                <p className='text-[22px]'>You might think it's enough to share this information with your spouse or close family members. However, they may be involved in the same incident that leaves your assets unclaimed.</p>
-                <p className='text-[22px]'>And let's not forget that many people prefer to keep their financial information private until it's absolutely necessary to share it.</p>
+                <p className='text-[22px]'>You might think it&rsquo;s enough to share this information with your spouse or close family members. However, they may be involved in the same incident that leaves your assets unclaimed.</p>
+                <p className='text-[22px]'>And let&rsquo;s not forget that many people prefer to keep their financial information private until it&rsquo;s absolutely necessary to share it.</p>
                 <p className='text-[22px]'>Some attempt to navigate this complex landscape with intricate schemes involving vaults andcomplex instructions to relatives.</p>
                 <p className='text-[22px]'>But this can quickly turn into a logistical nightmare, especially when changes are needed.</p>
                 <p className='text-[22px]'>The reality is clear: the traditional ways of managing your digital legacy are no longer sufficient.</p>
@@ -174,7 +176,7 @@ function CarouselElement(){
                 <img src={testUser} alt="reviewer's image" className='w-[590px] rounded-3xl'/>
             </aside>
             <aside className='basis-1/2'>
-                <p className='text-[22px] mb-4'>"Testimonial Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt."</p>
+                <p className='text-[22px] mb-4'><code>Testimonial Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</code></p>
                 <div className='flex items-center gap-3'> 
                     <img src={user} alt="user image" className='w-[44px] h-[44px] rounded-full object-contain' />
                     <div>
@@ -190,15 +192,15 @@ function CarouselElement(){
 function Carousel(_props: { slides: React.ReactNode[] }) {
     const [current, setCurrent] = useState(0);
   
-    const previousSlide = () => {
-      if (current === 0) setCurrent(_props.slides.length - 1);
-      else setCurrent(current - 1);
-    };
+    // const previousSlide = () => {
+    //   if (current === 0) setCurrent(_props.slides.length - 1);
+    //   else setCurrent(current - 1);
+    // };
   
-    const nextSlide = () => {
-      if (current === _props.slides.length - 1) setCurrent(0);
-      else setCurrent(current + 1);
-    };
+    // const nextSlide = () => {
+    //   if (current === _props.slides.length - 1) setCurrent(0);
+    //   else setCurrent(current + 1);
+    // };
   
     return (
       <div className="overflow-hidden relative">

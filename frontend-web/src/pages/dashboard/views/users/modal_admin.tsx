@@ -1,3 +1,4 @@
+import React from 'react'
 import { Modal } from "@/components"
 import { User } from "@/types"
 
@@ -6,8 +7,8 @@ export function NewUserModal(_props: {
   closeModal: any
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
-  _handleChange: Function
-  _submitModal: Function
+  _handleChange: (event: { target: { name: any; value: any } }) => void
+  _submitModal: () => void
   modalControl: {
     email: string,
     phoneNumber: string,

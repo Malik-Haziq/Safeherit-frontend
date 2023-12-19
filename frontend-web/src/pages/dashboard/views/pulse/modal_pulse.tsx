@@ -1,10 +1,10 @@
+import React from 'react'
 import { Modal } from "@/components"
 import stepOne from "@images/step_1_of_4.svg"
 import stepTwo from "@images/step_2_of_4.svg"
 import stepThree from "@images/step_3_of_4.svg"
 import stepFour from "@images/step_4_of_4.svg"
 import videoImg from "@images/register_page_video.png"
-import radioIcon from "@images/radio-icon.svg"
 import radioBlueIcon from "@images/radio-icon-blue.svg"
 import radioGreenIcon from "@images/radio-icon-green.svg"
 import radioGrayIcon from "@images/radio-icon-gray.svg"
@@ -12,7 +12,7 @@ import linkFacebook from "@images/link-facebook.svg"
 import linkTwitter from "@images/link-twitter.svg"
 import linkInsta from "@images/link-insta.svg"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 interface CustomChangeEvent {
   target: {
     name: string
@@ -27,7 +27,7 @@ export function StepOneModal(_props: {
   closeIconVisibility: boolean
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
-  _submitModal: Function
+  _submitModal: () => void
 }) {
   return (
     <Modal
@@ -90,7 +90,7 @@ export function StepTwoModal(_props: {
     pulseCheckPhone1: string
     pulseCheckPhone2: string
   }
-  _submitModal: Function
+  _submitModal: () => void
   arrayLength: any
   showPreviousModal: any
 }) {
@@ -358,7 +358,7 @@ export function StepThreeModal(_props: {
   closeIconVisibility: boolean
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
-  _submitModal: Function
+  _submitModal: () => void
   arrayLength: any
   showPreviousModal: any
 }) {
@@ -458,7 +458,7 @@ export function StepFourModal(_props: {
     pulseCheckValidationRequired: string
     pulseCheckNonValidationMonths: string
   }
-  _submitModal: Function
+  _submitModal: () => void
   arrayLength: any
   showPreviousModal: any
 }) {

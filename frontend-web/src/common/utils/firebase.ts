@@ -155,7 +155,7 @@ export async function verifyEmail(oobCode: string, apiKey: string) {
   }
   const params = { ROUTE: `${import.meta.env.VITE_REACT_APP_GOOGLE_API_ACCOUNT_INFO}?key=${apiKey}`, Body: body}
   try {
-    let response = await API.post(params.ROUTE, params.Body, {
+    const response = await API.post(params.ROUTE, params.Body, {
       headers: {
         'Content-Type': 'application/json',
       },

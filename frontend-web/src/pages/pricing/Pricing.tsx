@@ -1,4 +1,4 @@
-import { Spinner } from "@/components"
+import React from 'react'
 import tick from "@images/tick.svg"
 
 import { useEffect, useState } from "react"
@@ -14,15 +14,15 @@ export default function Pricing() {
   const user = useAppSelector(state => state.user)
   const [selectedPlan, setSelectedPlan] = useState("Yearly")
 
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
  
   const packagePlans = [
     { plan: "Monthly", price: "19.99", priceTime: "month" },
     { plan: "Yearly", price: "199", priceTime: "year" },
     { plan: "Life time", price: "1,999", priceTime: "" },
   ]
-  const planMapper = {
+  const planMapper: { [key: string]: string } = {
     "Monthly": "monthly",
     "Yearly": "yearly",
     "Life time": "lifetime",
@@ -35,10 +35,10 @@ export default function Pricing() {
 
   const getUserDetails = async () => {
 
-    dispatch(getUser({})).unwrap()
-    .then((res) => {
+    dispatch<any>(getUser({})).unwrap()
+    .then((res: { data: { data: { displayName: any; paymentStatus: string } } }) => {
       if (!res.data.data.displayName) {
-        dispatch(updateUser({
+        dispatch<any>(updateUser({
           displayName: user.displayName || user.email
         })).unwrap().catch()
       }
@@ -46,7 +46,7 @@ export default function Pricing() {
         navigate("/register")
       }
     })
-    .catch((err) => {
+    .catch((err: any) => {
       console.log(err)
     })
     .finally(() => {
@@ -56,12 +56,12 @@ export default function Pricing() {
 
   const _handlePlanTransition = (selectedPlan: string) => setSelectedPlan(selectedPlan)
 
-  function _handlePlanSelect(selectedPlan: "Monthly" | "Yearly" | "Life time") {
+  function _handlePlanSelect(selectedPlan: string) {
     _handlePlanTransition(selectedPlan)
     startLoader()
-    dispatch(createPayment({subscriptionType: planMapper[selectedPlan]})).unwrap()
+    dispatch<any>(createPayment({subscriptionType: planMapper[selectedPlan]})).unwrap()
     .catch()
-    .then((res) => {
+    .then((res: { data: { data: { sessionUrl: string } } }) => {
       if (res.data.data.sessionUrl) {
         window.location.href = res.data.data.sessionUrl;
       }
@@ -115,7 +115,7 @@ export default function Pricing() {
 function PricingButtons(_props: {
   paymentPlan: string
   selectedPlan: string
-  onclick: Function
+  onclick: (paymentPlan: string) => void
 }) {
   return (
     <div>
@@ -147,7 +147,7 @@ function PricingCards(_props: {
   price: any
   priceTime: string
   selectedPlan: string
-  onclick: Function
+  onclick: (paymentPlan: string) => void
 }) {
   return (
     <div className="card w-[256px] p-5 mb-5 rounded-xl -translate-y-7 bg-safe-white shadow-md">

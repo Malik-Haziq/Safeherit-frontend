@@ -1,3 +1,4 @@
+import React from 'react'
 import userIcon from "@images/user-icon.svg"
 import addIcon from "@images/add-icon.svg"
 import facebook from "@images/facebook.svg"
@@ -5,7 +6,6 @@ import instagram from "@images/insta.svg"
 import twitter from "@images/twitter.svg"
 import userImg from "@images/user.svg"
 import beneficiaryImg from "@images/beneficiaryScreen.svg"
-import { PhoneNumField } from "@/components/phoneNumberField"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styles from "../../Dashboard.module.css"
@@ -70,8 +70,8 @@ export default function BeneficiariesView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const encryptionService = new Encryption();
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [hasBeneficiaries, setHasBeneficiaries] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
@@ -101,9 +101,9 @@ export default function BeneficiariesView() {
     }
   }
   useEffect(() => {
-    dispatch(getAllBeneficiary({}))
+    dispatch<any>(getAllBeneficiary({}))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         updateBeneficiaryArrayCount(res)
       })
       .catch(() => {
@@ -171,12 +171,12 @@ export default function BeneficiariesView() {
       if (modalAction == "edit") {
         startLoader()
         toast("Updating beneficiary", "info")
-        dispatch(updateBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
+        dispatch<any>(updateBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
           .unwrap()
-          .then((res) => {
-            dispatch(getAllBeneficiary({}))
+          .then(() => {
+            dispatch<any>(getAllBeneficiary({}))
               .unwrap()
-              .then((res) => {
+              .then((res: any) => {
                 modalHistoryPush("Step-3")
                 setModalVisibility("Step-success")
                 updateBeneficiaryArrayCount(res)
@@ -185,7 +185,7 @@ export default function BeneficiariesView() {
                 // TODO: show fallback page
               })
           })
-          .catch((err) => {
+          .catch((err: any) => {
             console.log(err)
             // TODO: show fallback page
           })
@@ -195,12 +195,12 @@ export default function BeneficiariesView() {
       } else if (modalAction == "create") {
         startLoader()
         toast("creating beneficiary", "info")
-        dispatch(createBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
+        dispatch<any>(createBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
           .unwrap()
-          .then((res) => {
-            dispatch(getAllBeneficiary({}))
+          .then(() => {
+            dispatch<any>(getAllBeneficiary({}))
               .unwrap()
-              .then((res) => {
+              .then((res: any) => {
                 modalHistoryPush("Step-3")
                 setModalVisibility("Step-success")
                 updateBeneficiaryArrayCount(res)
@@ -209,7 +209,7 @@ export default function BeneficiariesView() {
                 // TODO: show fallback page
               })
           })
-          .catch((err) => {
+          .catch((err: any) => {
             console.log(err)
             // TODO: show fallback page
           })
@@ -230,12 +230,12 @@ export default function BeneficiariesView() {
   }
   const _submitDeleteModal = () => {
     toast("deleting Beneficiary " + modalControl.name, "info")
-    dispatch(deleteBeneficiary({ id: modalControl.id }))
+    dispatch<any>(deleteBeneficiary({ id: modalControl.id }))
       .unwrap()
-      .then((res) => {
-        dispatch(getAllBeneficiary({}))
+      .then(() => {
+        dispatch<any>(getAllBeneficiary({}))
           .unwrap()
-          .then((res) => {
+          .then((res: any) => {
             setModalVisibility("none")
             updateBeneficiaryArrayCount(res)
           })
@@ -271,9 +271,9 @@ export default function BeneficiariesView() {
     setModalVisibility("Step-pk")
   }
   const editBeneficiary = (id: string) => {
-    dispatch(findBeneficiary({ id: id }))
+    dispatch<any>(findBeneficiary({ id: id }))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         setModalAction("edit")
         setModalControl(res?.data?.data)
         getFileFromFirebase(res?.data?.data?.profile_image)
@@ -295,9 +295,9 @@ export default function BeneficiariesView() {
       })
   }
   const destroyBeneficiary = (id: string) => {
-    dispatch(findBeneficiary({ id: id }))
+    dispatch<any>(findBeneficiary({ id: id }))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         setModalAction("delete")
         setModalControl(res?.data?.data)
         setModalVisibility("Step-delete")
@@ -311,9 +311,9 @@ export default function BeneficiariesView() {
   }
   const viewBeneficiary = (id: string) => {
     toast("showing user data", "info")
-    dispatch(findBeneficiary({ id: id }))
+    dispatch<any>(findBeneficiary({ id: id }))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         setModalAction("view")
         setModalControl(res?.data?.data)
         getFileFromFirebase(res?.data?.data?.profile_image)
@@ -580,9 +580,9 @@ function AddBeneficiary(_props: {
 function Beneficiaries(_props: {
   beneficiaryArray: any
   createBeneficiary: React.MouseEventHandler<HTMLImageElement>
-  editBeneficiary: Function
-  deleteBeneficiary: Function
-  viewBeneficiary: Function
+  editBeneficiary: (id: string) => void
+  deleteBeneficiary: (id: string) => void
+  viewBeneficiary: (id: string) => void
 }) {
   return (
     <div className={styles.AppView}>
@@ -673,9 +673,9 @@ function Beneficiary(_props: {
   instagram_username: string
   twitter_username: string
   id: string
-  editBeneficiary: Function
-  deleteBeneficiary: Function
-  viewBeneficiary: Function
+  editBeneficiary: (id: string) => void
+  deleteBeneficiary: (id: string) => void
+  viewBeneficiary: (id: string) => void
 }) {
   const [image, setImage] = useState<string>("")
   useEffect(() => {

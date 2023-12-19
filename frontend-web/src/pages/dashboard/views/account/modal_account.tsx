@@ -1,3 +1,4 @@
+import React from 'react'
 import userImg from "@images/user.svg"
 import uploadIcon from "@images/upload-icon.svg"
 import arrowDown from "@images/arrow-down.svg"
@@ -22,10 +23,10 @@ export function EditUserModal(_props: {
     language: string
     profile_image: string
   }
-  _submitModal: Function
+  _submitModal: () => void
   imageUpload: string
   userImage: string
-  setImageUpload: Function
+  setImageUpload: any
   email: string
 }) {
   const Languages = [{ value: "en", label: "en" }]

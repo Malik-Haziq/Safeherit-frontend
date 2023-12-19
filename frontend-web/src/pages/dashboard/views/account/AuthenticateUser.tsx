@@ -1,3 +1,4 @@
+import React from 'react'
 import styles from "../../Dashboard.module.css"
 import { toast, InputField } from "@/components"
 import { auth } from "@/firebase"
@@ -11,15 +12,15 @@ import { useAppDispatch } from "@/redux/hooks";
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice";
 
 export default function AuthenticateUser(_props: {
-  hideUserAuthenticate: Function,
-  showTwoFA: Function,
+  hideUserAuthenticate: () => void,
+  showTwoFA: () => void,
 }) {
   const dispatch = useAppDispatch()
 
   const [password, setPassword] = useState("")
 
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const _handleChange = (event: { target: { value: any } }) => {
     const { value } = event.target
@@ -33,7 +34,7 @@ export default function AuthenticateUser(_props: {
   function handleAuthentication() {
     startLoader()
     const user: User = auth.currentUser!
-    const email: string = user?.email!
+    const email: string = user?.email || ""
     const credential = EmailAuthProvider.credential(email, password)
 
     reauthenticateWithCredential(user, credential)

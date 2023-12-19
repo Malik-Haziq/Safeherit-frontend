@@ -1,3 +1,4 @@
+import React from 'react'
 import userIcon from "@images/user-icon.svg"
 import addIcon from "@images/add-icon.svg"
 import facebook from "@images/facebook.svg"
@@ -58,8 +59,8 @@ export default function ValidatorsView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [hasValidators, setHasValidators] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
@@ -85,9 +86,9 @@ export default function ValidatorsView() {
     }
   }
   useEffect(() => {
-    dispatch(getAllValidator({}))
+    dispatch<any>(getAllValidator({}))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         updateValidatorArrayCount(res)
       })
       .catch(() => {
@@ -157,12 +158,12 @@ export default function ValidatorsView() {
       if (modalAction == "edit") {
         startLoader()
         toast("Updating validator", "info")
-        dispatch(updateValidator(modalControl))
+        dispatch<any>(updateValidator(modalControl))
           .unwrap()
-          .then((res) => {
-            dispatch(getAllValidator({}))
+          .then(() => {
+            dispatch<any>(getAllValidator({}))
               .unwrap()
-              .then((res) => {
+              .then((res: any) => {
                 closeModal()
                 updateValidatorArrayCount(res)
               })
@@ -170,7 +171,7 @@ export default function ValidatorsView() {
                 // TODO: show fallback page
               })
           })
-          .catch((err) => {
+          .catch((err: any) => {
             console.log(err)
             // TODO: show fallback page
           })
@@ -180,12 +181,12 @@ export default function ValidatorsView() {
       } else if (modalAction == "create") {
         startLoader()
         toast("Creating validator", "info")
-        dispatch(createValidator(modalControl))
+        dispatch<any>(createValidator(modalControl))
           .unwrap()
-          .then((res) => {
-            dispatch(getAllValidator({}))
+          .then(() => {
+            dispatch<any>(getAllValidator({}))
               .unwrap()
-              .then((res) => {
+              .then((res: any) => {
                 modalHistoryPush("Step-3")
                 setModalVisibility("Step-4")
                 updateValidatorArrayCount(res)
@@ -194,7 +195,7 @@ export default function ValidatorsView() {
                 // TODO: show fallback page
               })
           })
-          .catch((err) => {
+          .catch((err: any) => {
             console.log(err)
             // TODO: show fallback page
           })
@@ -205,12 +206,12 @@ export default function ValidatorsView() {
     }
   }
   const _submitDeleteModal = () => {
-    dispatch(deleteValidator({ id: modalControl.id }))
+    dispatch<any>(deleteValidator({ id: modalControl.id }))
       .unwrap()
-      .then((res) => {
-        dispatch(getAllValidator({}))
+      .then(() => {
+        dispatch<any>(getAllValidator({}))
           .unwrap()
-          .then((res) => {
+          .then((res: any) => {
             closeModal()
             updateValidatorArrayCount(res)
           })
@@ -235,9 +236,9 @@ export default function ValidatorsView() {
     setModalVisibility("Step-1")
   }
   const editValidator = (id: string) => {
-    dispatch(findValidator({ id: id }))
+    dispatch<any>(findValidator({ id: id }))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         setModalAction("edit")
         setModalControl(res?.data?.data)
         getFileFromFirebase(res?.data?.data?.profile_image)
@@ -251,9 +252,9 @@ export default function ValidatorsView() {
       })
   }
   const destroyValidator = (id: string) => {
-    dispatch(findValidator({ id: id }))
+    dispatch<any>(findValidator({ id: id }))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         setModalAction("delete")
         setModalControl(res?.data?.data)
         setModalVisibility("Step-delete")
@@ -267,9 +268,9 @@ export default function ValidatorsView() {
   }
   const viewValidator = (id: string) => {
     toast("showing user data", "info")
-    dispatch(findValidator({ id: id }))
+    dispatch<any>(findValidator({ id: id }))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         setModalAction("view")
         setModalControl(res?.data?.data)
         getFileFromFirebase(res?.data?.data?.profile_image)
@@ -418,9 +419,9 @@ function AddValidators(_props: {
 function Validators(_props: {
   validatorArray: any
   createValidator: React.MouseEventHandler<HTMLImageElement>
-  editValidator: Function
-  deleteValidator: Function
-  viewValidator: Function
+  editValidator: (id: string) => void
+  deleteValidator: (id: string) => void
+  viewValidator: (id: string) => void
 }) {
   return (
     <div className={styles.AppView}>
@@ -511,9 +512,9 @@ function Validator(_props: {
   instagram_username: string
   twitter_username: string
   id: string
-  editValidator: Function
-  deleteValidator: Function
-  viewValidator: Function
+  editValidator: (id: string) => void
+  deleteValidator: (id: string) => void
+  viewValidator: (id: string) => void
 }) {
   const [image, setImage] = useState<string>("")
   useEffect(() => {

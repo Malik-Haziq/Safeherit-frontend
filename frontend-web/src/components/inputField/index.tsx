@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 
 export function InputField(_props: {
   name: string
@@ -57,6 +57,7 @@ export function InputField(_props: {
               value: formatted, // Update the value with formatted value
             },
           })
+          break;
         }
 
         case "currency": {
@@ -75,11 +76,12 @@ export function InputField(_props: {
             };
           
             _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
-          } 
+          }
+          break;
         }
 
         case "tel":{
-          let formattedString = inputValue;
+          const formattedString = inputValue;
 
           if (/^\d+$/.test(formattedString) || formattedString == "") {
             const customEvent = {
@@ -90,6 +92,7 @@ export function InputField(_props: {
             };
             _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
           }
+          break;
         }
       }
     } else {

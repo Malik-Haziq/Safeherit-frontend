@@ -1,3 +1,4 @@
+// eslint-disable
 import { PhoneNumberUtil } from 'google-libphonenumber';
 const phoneUtil = PhoneNumberUtil.getInstance();
 
@@ -21,7 +22,7 @@ export function isValidFacebook(phone: string) {
   return phoneRegex.test(phone);
 }
 
-export function isStrongPassword (password: any) {
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
+export function isStrongPassword(password: any) {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/;
   return regex.test(password);
-};
+}

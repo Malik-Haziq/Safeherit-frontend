@@ -1,10 +1,11 @@
+import React from 'react'
 import { useAppSelector } from "@/redux/hooks"
 import DashboardView from "../dashboard/DashboardView"
 import TestamentView from "../testament/TestamentView"
 import ValidationView from "../validation/ValidationView"
 import UsersView from "../users/UsersView"
 
-export default function () {
+export default function DashboardControl () {
   const user = useAppSelector((state) => state.user)
 
   return (

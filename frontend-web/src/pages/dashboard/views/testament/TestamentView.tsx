@@ -1,3 +1,4 @@
+import React from 'react'
 import { useEffect, useState } from "react"
 import styles from "../../Dashboard.module.css"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
@@ -12,13 +13,13 @@ export default function TestamentView() {
   const [videoUrl, setVideoUrl] = useState("")
 
   useEffect(() => {
-    dispatch(findTestment({})).unwrap()
-    .then((res) => {
+    dispatch<any>(findTestment({})).unwrap()
+    .then((res: { data: { data: { personalized_video: string } } }) => {
       getFileFromFirebase(res.data.data.personalized_video)
       .then((response) => {
         setVideoUrl(response)
       })
-      .catch(() => {})
+      .catch()
     })
   }, [])
 

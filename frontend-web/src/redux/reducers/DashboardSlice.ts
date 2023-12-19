@@ -17,7 +17,7 @@ export const slice = createSlice({
   reducers: {
   },
   extraReducers(builder) {
-    builder.addCase(getData.pending, (state, action) => {
+    builder.addCase(getData.pending, (state) => {
       state.loading = true
     })
     builder.addCase(getData.fulfilled, (state, action) => {
@@ -27,7 +27,7 @@ export const slice = createSlice({
       state.validatorCount = action.payload?.data?.data?.validatorCount
 
       state.assets = action.payload?.data?.data?.assets?.map((asset: any) => {
-        let data = JSON.parse(asset.data)
+        const data = JSON.parse(asset.data)
         return {
           // img: asset?.profile_image,
           title: asset?.category,
@@ -51,7 +51,5 @@ export const slice = createSlice({
     })
   },
 })
-
-export const { } = slice.actions
 
 export default slice.reducer

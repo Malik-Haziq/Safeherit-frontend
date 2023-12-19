@@ -1,3 +1,4 @@
+import React from 'react'
 import uploadImg from "@images/upload.png"
 import copyIcon from "@images/copy-icon.svg"
 import downloadIcon from "@images/download.svg"
@@ -147,8 +148,8 @@ export function GeneratePrivateKey(_props: {
     publicKey: string,
     privateKey: string
   }
-  _handleGeneratePKPair: Function
-  _handleRegisterPK: Function
+  _handleGeneratePKPair: () => void
+  _handleRegisterPK: () => void
   _handleChange: React.ChangeEventHandler<HTMLTextAreaElement>
   downloadPrivateKey: React.MouseEventHandler<HTMLDivElement>
   downloadPublicKey: React.MouseEventHandler<HTMLDivElement>

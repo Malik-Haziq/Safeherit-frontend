@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react"
+import React from 'react'
+import { SetStateAction, useEffect, useState } from "react"
 import styles from "../../Dashboard.module.css"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useNavigate } from "react-router-dom"
 import { getOwnerValidation, logout, validateOwner } from "@/redux/actions"
-import { toast } from "@/components"
 
 export default function ValidationView() {
 
@@ -20,8 +20,8 @@ export default function ValidationView() {
   }, [])
   
   const getOwnerValidationData = async () => {
-    dispatch(getOwnerValidation({})).unwrap()
-    .then((res) => {
+    dispatch<any>(getOwnerValidation({})).unwrap()
+    .then((res: { data: { data: { personalized_message: SetStateAction<string>; canMarkPassing: SetStateAction<any> } } }) => {
       setPersonalized_message(res.data.data.personalized_message)
       setCanMarkPassing(res.data.data.canMarkPassing)
       setLoadingData(true)
@@ -29,7 +29,7 @@ export default function ValidationView() {
     .catch()
   }
   const _handleLogout = () => {
-    dispatch(logout({}))
+    dispatch<any>(logout({}))
       .unwrap().catch()
       .finally(() => {
         navigate("/login")
@@ -37,8 +37,8 @@ export default function ValidationView() {
   }
   
   const _handlePassedAway = (confirmation: boolean) => {
-    dispatch(validateOwner({passedAway: confirmation})).unwrap().catch()
-    .then((res) => {
+    dispatch<any>(validateOwner({passedAway: confirmation})).unwrap().catch()
+    .then(() => {
       getOwnerValidationData()
     })
   }

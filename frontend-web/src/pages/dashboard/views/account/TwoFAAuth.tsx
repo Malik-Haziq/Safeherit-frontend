@@ -1,15 +1,15 @@
+import React from 'react'
 import styles from "../../Dashboard.module.css"
-import { useState, ChangeEvent, useRef } from "react";
+import { useState, useRef } from "react";
 import { auth } from "@/firebase";
 import { toast } from "@/components";
-import {User} from "@firebase/auth";
 import { useRecaptcha, verifyPhoneNumber, enrollUser, isValidPhoneWithRegion } from "@/common";
 import { PhoneNumField, VerificationCode } from "@/components";
 import { useAppDispatch } from "@/redux/hooks";
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice";
 
 export default function TwoFAAuth(_props:{
-  hideTwoFA: Function
+  hideTwoFA: () => void
 }) {
   
   const dispatch = useAppDispatch()
@@ -17,10 +17,10 @@ export default function TwoFAAuth(_props:{
   const recaptcha = useRecaptcha('authenticate');
   const [verificationCodeId, setVerificationCodeId] = useState<string | null>(null);
   const [confirmationCodeVisibility, setConfirmationCodeVisibility] = useState<boolean>(false);
-  let code = new Array<string>(6).fill('');
+  const code = new Array<string>(6).fill('');
 
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   async function getCode(code: string) {
     if (auth.currentUser && verificationCodeId) {
@@ -133,6 +133,7 @@ function PhoneRegistration({ getPhoneNumber }: {
   
   const _handleChange = (event: { target: { name: any, value: any}}) => {
     const {name, value} = event.target
+    name
     setPhoneNumber(value)
   }
 

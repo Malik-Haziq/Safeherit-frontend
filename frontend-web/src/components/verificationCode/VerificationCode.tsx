@@ -1,8 +1,9 @@
+import React from 'react'
 import { ChangeEvent, useState } from "react"
 
 type Props = {
-    _handleMFASubmit: Function
-    _handleMFACancel: Function
+    _handleMFASubmit: any
+    _handleMFACancel: any
     code:  Array<string>
 }
 export function VerificationCode({_handleMFASubmit,  _handleMFACancel, code}: Props) {

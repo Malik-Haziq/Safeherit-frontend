@@ -1,3 +1,4 @@
+import React from 'react'
 import styles from "../../Dashboard.module.css"
 import eye from "@images/eye.svg"
 import userImg from "@images/user.svg"
@@ -37,8 +38,8 @@ const userInitialState = {
 export default function UsersView() {
   const dispatch = useAppDispatch()
   const admin = useAppSelector((state) => state.admin)
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(true)
@@ -70,10 +71,10 @@ export default function UsersView() {
       modalControl.email &&
       modalControl.phoneNumber
     ) {
-      dispatch(createUser(modalControl))
+      dispatch<any>(createUser(modalControl))
         .unwrap()
         .catch()
-        .then((res) => {
+        .then((res: { data: { data: { password: any } } }) => {
           startLoader()
           fetchUsers()
           setModalControl({
@@ -95,7 +96,7 @@ export default function UsersView() {
 
   const fetchUsers = () => {
     setLoading(true)
-    dispatch(getUsers({ page: currentPage }))
+    dispatch<any>(getUsers({ page: currentPage }))
       .unwrap()
       .finally(() => {
         setLoading(false)
@@ -123,8 +124,8 @@ export default function UsersView() {
           email: email,
           reason: reason
         }
-        dispatch(deleteUserRequest(data)).unwrap().catch()
-        .then((res) => {
+        dispatch<any>(deleteUserRequest(data)).unwrap().catch()
+        .then(() => {
           toast("User deletion request submitted", "success")
         })
         .finally(() => {
@@ -134,6 +135,7 @@ export default function UsersView() {
     }
   }
   const editUser = (id: string) => {
+    id
     toast("functionality not implemented", "error")
   }
   const viewUser = (_props: User) => {
@@ -296,9 +298,9 @@ function UserView(_props: {
   account_status: string
   pulse_status: string
   pulseStatusSubtile: string
-  viewUser: Function
-  editUser: Function
-  deleteUser: Function
+  viewUser: (_props: User) => void
+  editUser: (id: string) => void
+  deleteUser: (id: string) => void
 }) {
   const [userImage, setUserImage] = useState('')
   if (_props.profile_image) {
@@ -344,6 +346,7 @@ function UserView(_props: {
         className={
           _props.account_status.toLowerCase() === "active"
             ? "w-[80px] text-[#27AE60] font-medium text-sm"
+            // eslint-disable-next-line no-constant-condition
             : _props.payment_status.toLowerCase() === "blocked" || "deleted"
             ? "w-[80px] text-[#F44336] font-medium text-sm"
             : "w-[80px] text-[#000] font-medium text-sm"

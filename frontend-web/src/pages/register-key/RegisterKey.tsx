@@ -1,8 +1,9 @@
+import React from 'react'
 import arrowRight from "@images/Arrow - Right.svg"
 import registerPageVideo from "@images/register_page_video.png"
 import safepal from "@images/Safepal.svg"
-import { useLocation, useNavigate } from "react-router-dom"
-import { useCallback, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useCallback, useState } from "react"
 import { GeneratePrivateKey, PrivateKeyModal } from "./modal_register_key"
 import Encryption from "@/common/encryption/encryption"
 import { toast } from "@/components"
@@ -69,13 +70,13 @@ export default function RegisterKey() {
         navigate('/dashboard')
       }
       else {
-        dispatch(updatePK({publicKey: modalControl.publicKey, assetKeysEncByOwner: JSON.stringify({})})).unwrap()
-        .then(res => {
+        dispatch<any>(updatePK({publicKey: modalControl.publicKey, assetKeysEncByOwner: JSON.stringify({})})).unwrap()
+        .then(() => {
           toast("Keys Registered", "success")
           sessionStorage.setItem("privateKey", modalControl.privateKey)
           navigate('/dashboard')
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.log(err)
         })
       }

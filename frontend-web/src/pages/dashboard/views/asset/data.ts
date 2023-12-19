@@ -3,7 +3,7 @@ export interface AssetData {
         name: string;
         type: any;
         placeholder: string;
-        value?: {}[];
+        value?: object[];
         required: boolean;
         isMulti?: boolean;
         allFields: "";
@@ -2396,11 +2396,11 @@ export const assetData: AssetData = {
 }
 
 export const getRequiredFields = (assetType: string, modal: number) => {
-    let requiredFields: string[] = [];
-    let optionalFields: string[]  = [];
-    let allFields: string[]  = [];
-    let fields = assetData[assetType];
-    fields[modal].map((f, i) => {
+    const requiredFields: string[] = [];
+    const optionalFields: string[]  = [];
+    const allFields: string[]  = [];
+    const fields = assetData[assetType];
+    fields[modal].map((f) => {
         if(f.required) {
             requiredFields.push(f.name);
         } else {

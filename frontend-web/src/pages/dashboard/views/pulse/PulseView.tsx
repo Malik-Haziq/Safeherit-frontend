@@ -1,6 +1,5 @@
+import React from 'react'
 import {
-  ChangeEvent,
-  MouseEvent,
   useState,
   useCallback,
   useEffect,
@@ -21,8 +20,7 @@ import {
 import { isValidEmail, isValidPhoneWithRegion, useArray } from "@/common"
 import { Spinner, toast } from "@/components"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { getUser, updatePulse, validateOwner } from "@/redux/actions"
-import { useNavigate } from "react-router-dom"
+import { getUser, updatePulse } from "@/redux/actions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 
 const initialState = {
@@ -39,9 +37,8 @@ const initialState = {
 export default function PulseView() {
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.user)
-  const navigate = useNavigate()
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [pulseCheck, setPulseCheck] = useState<boolean | null>(null)
   const [modalVisibility, setModalVisibility] = useState("none")
@@ -70,10 +67,10 @@ export default function PulseView() {
   }, [])
 
   const getUserDetails = () => {
-    dispatch(getUser({}))
+    dispatch<any>(getUser({}))
       .unwrap()
       .catch()
-      .then((res) => {
+      .then((res: { data: { data: { pulseCheckActive: string } } }) => {
         if (JSON.parse(res.data.data.pulseCheckActive)) {
           setPulseCheck(true)
         } else {
@@ -129,10 +126,10 @@ export default function PulseView() {
   const _submitStepFourModal = () => {
     startLoader()
     toast("creating pulse check ", "info")
-    dispatch(updatePulse(modalControl))
+    dispatch<any>(updatePulse(modalControl))
       .unwrap()
       .catch()
-      .then((res) => {
+      .then(() => {
         modalHistoryPush("Step-4")
         setModalVisibility("success-modal")
         getUserDetails()

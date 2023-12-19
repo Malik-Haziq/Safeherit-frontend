@@ -1,11 +1,11 @@
+import React from 'react'
 import logo from "@images/safeherit_logo.svg"
 import loginImg from "@images/login-img.png"
 import star from "@images/star.svg"
 
-import { ChangeEvent, useCallback, useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
+import { useCallback, useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { getUser, login, loginWithGoogle, resetPassword, updateUser } from "@redux/actions"
+import { getUser, login, loginWithGoogle, resetPassword } from "@redux/actions"
 import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { ForgotPasswordModal, toast, GoogleAuthButton , VerificationCode } from "@/components"
@@ -26,9 +26,9 @@ import { SelectOption } from "@/types"
 import { isEmailVerified, sendEmailVerificationEmail, useRecaptcha, verifyEmail, verifyUserEnrolled, verifyUserMFA } from "@/common"
 import { MultiFactorResolver, getAdditionalUserInfo } from "@firebase/auth"
 import { auth } from "@/firebase"
+import { UserCredential } from 'firebase/auth'
 
 export function Login() {
-  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation();
@@ -39,8 +39,8 @@ export function Login() {
 
   const user = useAppSelector((state) => state.user)
 
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [formControl, setFormControl] = useState({
     email: "",
@@ -54,7 +54,7 @@ export function Login() {
   const [verificationId, setVerificationId] = useState<string>();
   const [resolver, setResolver] = useState<MultiFactorResolver | null>();
 
-  let code = new Array<string>(6).fill('');
+  const code = new Array<string>(6).fill('');
 
   // verify email
   useEffect(() => {
@@ -66,7 +66,7 @@ export function Login() {
           toast("Verifying Email", "info")
           const oobCode = queryParams.get('oobCode') || '';
           const apiKey = queryParams.get('apiKey') || '';     
-          let response = await verifyEmail(oobCode, apiKey)
+          const response = await verifyEmail(oobCode, apiKey)
           if (response) {
             toast("Email Verified", "success")
           }
@@ -96,10 +96,10 @@ export function Login() {
           if (currentUser) {
             currentUser.getIdToken()
             .then((idToken) => {
-              dispatch(setCredentials({token: idToken, displayName: currentUser.displayName, phone: currentUser.phoneNumber, photo: currentUser.photoURL, email: currentUser.email}))
+              dispatch<any>(setCredentials({token: idToken, displayName: currentUser.displayName, phone: currentUser.phoneNumber, photo: currentUser.photoURL, email: currentUser.email}))
               getUserDetails()
             })
-            .catch((error) => {
+            .catch(() => {
               toast("Unable to obtain token from server, Please login again.", 'error')
             });
           }
@@ -144,14 +144,14 @@ export function Login() {
   }
 
   const getUserDetails = () => {
-    dispatch(getUser({}))
+    dispatch<any>(getUser({}))
     .unwrap()
     .catch()
-    .then((res) => {
+    .then((res: { data: { data: { isOwner: any; isBeneficiary: any; isValidator: any; isAdmin: any; isSuperAdmin: any; paymentStatus: string } } }) => {
       if (res.data.data.isOwner && !res.data.data.isBeneficiary && !res.data.data.isValidator && !res.data.data.isAdmin && !res.data.data.isSuperAdmin) {
         setModalVisibility("none")
-        dispatch(updateActive(true))
-        dispatch(updateRole("owner"))
+        dispatch<any>(updateActive(true))
+        dispatch<any>(updateRole("owner"))
         if (res.data.data.paymentStatus != "Pending") {
           navigate("/register")
         }
@@ -172,9 +172,9 @@ export function Login() {
     toast("logging in", "info")
     if (formControl.email && formControl.password) {
       startLoader()
-      dispatch(login({ email: formControl.email, password: formControl.password }))
+      dispatch<any>(login({ email: formControl.email, password: formControl.password }))
         .unwrap()
-        .then(async (res) => {
+        .then(async () => {
           const verifiedEmail = isEmailVerified();
           if (verifiedEmail) {      
             getUserDetails()
@@ -188,7 +188,7 @@ export function Login() {
             stopLoader()
           }
         })
-        .catch((err) => {
+        .catch((err: any) => {
           _handleMFA(err)
         })
     }
@@ -229,22 +229,22 @@ export function Login() {
 
   const _loginWithGoogle = () => {
     startLoader()
-    dispatch(loginWithGoogle({}))
+    dispatch<any>(loginWithGoogle({}))
       .unwrap()
-      .then(async (res) => {
+      .then(async (res: UserCredential) => {
         const isNewUser = getAdditionalUserInfo(res)
 
         if (isNewUser && isNewUser.isNewUser) {
-          dispatch(updateActive(true))
-          dispatch(updateRole("owner"))
-          dispatch(updateRoleCheck({role: "owner", value: true}))
+          dispatch<any>(updateActive(true))
+          dispatch<any>(updateRole("owner"))
+          dispatch<any>(updateRoleCheck({role: "owner", value: true}))
           navigate("/pricing")
         }
         else {
           getUserDetails()
         }
       })
-      .catch((err) => {
+      .catch((err: any) => {
         _handleMFA(err)
       })
       .finally(() => {
@@ -261,16 +261,16 @@ export function Login() {
       (selectedRole == "validator" && selectedValidator)
     ) {
       if (selectedRole == "beneficiary") {
-        dispatch(updateRoleUser(user.userMap[selectedBeneficiary?.value || 0]))
+        dispatch<any>(updateRoleUser(user.userMap[selectedBeneficiary?.value || 0]))
       } else if (selectedRole == "validator") {
-        dispatch(updateRoleUser(user.userMap[selectedValidator?.value || 0]))
+        dispatch<any>(updateRoleUser(user.userMap[selectedValidator?.value || 0]))
       }
       setModalVisibility("none")
-      dispatch(updateActive(true))
-      dispatch(updateRole(selectedRole))
-      dispatch(resetMapper())
-      dispatch(resetValidatorOf())
-      dispatch(resetBeneficiaryOf())
+      dispatch<any>(updateActive(true))
+      dispatch<any>(updateRole(selectedRole))
+      dispatch<any>(resetMapper())
+      dispatch<any>(resetValidatorOf())
+      dispatch<any>(resetBeneficiaryOf())
       if (user.paymentStatus != "Pending") {
         navigate("/register")
       }
@@ -283,10 +283,10 @@ export function Login() {
   const _handleForgotPassword = () => {
     if (resetEmail) {
       startLoader()
-      dispatch(resetPassword({ email: resetEmail }))
+      dispatch<any>(resetPassword({ email: resetEmail }))
         .unwrap()
         .catch()
-        .then((res) => {
+        .then(() => {
           toast("Email Sent", "info")
         })
         .finally(() => {
@@ -397,7 +397,7 @@ export function Login() {
                   Login
                 </button>
                 <small className="text-sm text-safe-text-black font-medium mx-auto">
-                  Don't have an account?&nbsp;
+                  Don&apos;t have an account?&nbsp;
                   <a
                     href="/signup"
                     className="text-safe-text-dark-link-blue font-bold"

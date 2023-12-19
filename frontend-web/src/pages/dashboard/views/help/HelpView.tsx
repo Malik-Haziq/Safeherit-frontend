@@ -1,3 +1,4 @@
+import React from 'react'
 import styles from "../../Dashboard.module.css"
 import addIcon from "@images/add.svg"
 import crossIcon from "@images/cross.svg"
@@ -9,7 +10,7 @@ import { useState } from "react"
 import { SelectField } from "@/components/selectField"
 import { SelectOption } from "@/types"
 
-export default function () {
+export default function HelpView () {
   const [openSection, setOpenSection] = useState("faq")
   const [selectedCategory, setSelectedCategory] = useState<SelectOption>()
 
@@ -73,7 +74,7 @@ function FAQ() {
       <QuestionBox question={"What data does SafeHerit have access to?"}>
         <div className="text-[#969696]">
           <p>
-            At SafeHerit, your privacy is our top priority. Here's a breakdown
+            At SafeHerit, your privacy is our top priority. Here&rsquo;s a breakdown
             of what we can see and what remains private:
           </p>
           <p className="mb-2">
@@ -211,8 +212,8 @@ function FAQ() {
             beneficiaries to access the encrypted data stored on SafeHerit.{" "}
           </p>
           <p className="mb-2">
-            SafeHerit does not store or transfer these private keys: it's the
-            user's responsibility to ensure that each beneficiary gets their
+            SafeHerit does not store or transfer these private keys: it&rsquo;s the
+            user&rsquo;s responsibility to ensure that each beneficiary gets their
             designated private key.{" "}
           </p>
           <p className="mb-2">
@@ -273,7 +274,7 @@ function FAQ() {
                 Informing Beneficiaries Later:
               </span>
               <p className="mb-2">
-                f you'd rather your beneficiaries only learn about SafeHerit and
+                f you&rsquo;d rather your beneficiaries only learn about SafeHerit and
                 the fact that they will be receiving this information through it
                 after your passing, here are some examples of how you could
                 proceed:
@@ -283,7 +284,7 @@ function FAQ() {
                   <span className="font-semibold text-[#747474]">
                     Letter of Instruction:
                   </span>{" "}
-                  Create a letter of instruction that's stored with your will or
+                  Create a letter of instruction that&rsquo;s stored with your will or
                   estate planning documents. While not legally binding, it acts
                   as a guide for beneficiaries and can contain the recovery
                   phrase for the Private Key.
@@ -293,7 +294,7 @@ function FAQ() {
                     Trusted Third Party:
                   </span>{" "}
                   You might also consider using a trusted third party like a
-                  lawyer or a bank's safety deposit box service, where you store
+                  lawyer or a bank&rsquo;s safety deposit box service, where you store
                   the recovery phrase for the Private Key, and instructions are
                   given to release it to the beneficiary upon certain conditions
                   (like your passing). .
@@ -316,7 +317,7 @@ function FAQ() {
           <p>
             Regardless of the method chosen, please make sure that the Private
             Key remains confidential and secure at all times. Without it,
-            beneficiaries won't be able to access the encrypted data, and we
+            beneficiaries won&rsquo;t be able to access the encrypted data, and we
             will not be able to help as we do not store it.
           </p>
         </div>
@@ -461,7 +462,7 @@ function FAQ() {
           <p className="mb-2">
             Validators are trusted individuals you select within SafeHerit whose
             role is to act as a safety net by confirming your well-being. If the
-            system doesn't get a response from you during the Pulse Check
+            system doesn&rsquo;t get a response from you during the Pulse Check
             process, your validators are contacted to confirm your status.
           </p>
           <p className="mb-2">Having validators serves a dual purpose:</p>
@@ -567,8 +568,8 @@ function FAQ() {
         <div className="text-[#969696]">
           <p className="mb-2">
             You don’t need to take our word on it: our encryption process is
-            transparent. The website's code, which handles encryption, is openly
-            accessible to anyone with technical know-how. If you're not
+            transparent. The website&rsquo;s code, which handles encryption, is openly
+            accessible to anyone with technical know-how. If you&rsquo;re not
             tech-savvy but still want to verify it, we suggest having a
             knowledgeable friend inspect it on your behalf.{" "}
           </p>
@@ -585,8 +586,8 @@ function FAQ() {
             You are free to put as much or as little details about your assets
             as you wish. All that matters is that it enables your beneficiaries
             to know about them or at least know where to look for them. It could
-            be as simple as "There's an envelope under my mattress, give it to
-            uncle Ben", all the way to detailed instructions including account
+            be as simple as <code>There&rsquo;s an envelope under my mattress, give it to
+            uncle Ben</code>, all the way to detailed instructions including account
             credentials. You can choose how much detail you want to put in, just
             make sure it makes sense for whoever will be reading it: Many assets
             are lost because their owners left treasure hunt instructions that

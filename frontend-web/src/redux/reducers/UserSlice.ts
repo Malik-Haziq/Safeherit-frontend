@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { login, loginWithGoogle, logout, signup, getUser, updateUser, updatePK } from "../actions/UserActions"
+import { login, loginWithGoogle, logout, getUser, updateUser, updatePK } from "../actions/UserActions"
 import { SelectOption } from "@/types"
 
 type PulseDetails = {
@@ -16,7 +16,7 @@ interface UserState {
   language: string
   profile_image: string
   loading: boolean
-  beneficiaryOf: {}[]
+  beneficiaryOf: object[]
   _beneficiaryOf: SelectOption[]
   _validatorOf: SelectOption[]
   isBeneficiary: boolean
@@ -163,11 +163,10 @@ export const slice = createSlice({
       state.photo = action.payload.user.photoURL || ""
       state.phone = action.payload.user.phoneNumber || ""
     })
-    builder.addCase(signup.fulfilled, (state, action) => {})
-    builder.addCase(logout.fulfilled, (state, action) => {
+    builder.addCase(logout.fulfilled, () => {
       return initialState
     })
-    builder.addCase(getUser.pending, (state, action) => {
+    builder.addCase(getUser.pending, (state) => {
       state.loading = true
     })
     builder.addCase(getUser.fulfilled, (state, action) => {
@@ -205,7 +204,7 @@ export const slice = createSlice({
       state.publicKey = action.payload.data.data?.publicKey || ""
       state.paymentStatus = action.payload.data.data?.paymentStatus || ""
 
-      let beneficiaryOfArray: SelectOption[] = []
+      const beneficiaryOfArray: SelectOption[] = []
       const beneficiaryMapper: {[key: string]: any} = {};
 
       if (action.payload.data.data._beneficiaryOf) {
@@ -226,7 +225,7 @@ export const slice = createSlice({
         state._beneficiaryOf = beneficiaryOfArray
       }
 
-      let validatorOfArray: SelectOption[] = []
+      const validatorOfArray: SelectOption[] = []
       const validatorMapper: {[key: string]: any} = {};
 
       if (action.payload.data.data._validatorOf) {
@@ -246,15 +245,11 @@ export const slice = createSlice({
         state._validatorOf = validatorOfArray
       }
     })
-    builder.addCase(updateUser.pending, (state, action) => {
-    })
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.displayName = action.payload.data.data.displayName || state.displayName
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image
       state.active = true
-    })
-    builder.addCase(updateUser.rejected, (state, action) => {
     })
     builder.addCase(updatePK.fulfilled, (state, action) => {
       state.publicKey = action.payload.data.data.publicKey

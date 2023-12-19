@@ -1,3 +1,4 @@
+import React from 'react'
 import diamond from "@images/diamond.svg"
 import shield from "@images/Shield-done.svg"
 import heart from "@images/heart.svg"
@@ -52,7 +53,7 @@ export default function DashboardView() {
   ]
 
   useEffect(() => {
-    dispatch(getData({}))
+    dispatch<any>(getData({}))
       .unwrap()
       .catch(() => {
         // TODO: show fallback page
