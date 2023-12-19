@@ -145,7 +145,6 @@ export default function PulseView() {
   const _submitSuccessModal = () => {
     setModalVisibility("none")
     getUserDetails()
-    navigate("/dashboard/assets")
   }
 
   const _closeModal = useCallback(() => {

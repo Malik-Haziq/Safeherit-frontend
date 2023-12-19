@@ -644,7 +644,7 @@ export function SuccessModal(_props: {
         {
           type: "buttonView",
           props: {
-            title: "Register Assets",
+            title: "Done",
             onclick: _props._submitModal,
             buttonStyle:
               "bg-[#0971AA] font-bold text-white px-8 py-4 w-[225px] rounded-2xl mx-auto",
