@@ -24,7 +24,7 @@ import {
   isValidPhoneWithRegion,
   useArray,
 } from "@/common"
-import { Spinner, toast } from "@/components"
+import { InputField, PhoneNumField, Spinner, toast } from "@/components"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getUser, updatePulse, validateOwner } from "@/redux/actions"
 import { useNavigate } from "react-router-dom"
@@ -47,12 +47,13 @@ export default function PulseView() {
   const navigate = useNavigate()
   const startLoader = () => dispatch(setLoaderVisibility(true))
   const stopLoader = () => dispatch(setLoaderVisibility(false))
-
   const [pulseCheck, setPulseCheck] = useState<boolean | null>(null)
   const [modalVisibility, setModalVisibility] = useState("none")
   const [confirmationDetails, setConfirmationDetails] = useState("Email")
   const [modalControl, setModalControl] = useState(initialState)
   const [editDetailInput, setEditDetailInput] = useState("")
+  const [newPulseCheckDays, setNewPulseCheckDays] = useState<string>("")
+  const [pulseCheckCustomDays, setPulseCheckCustomDays] = useState<string>("")
   const [
     modalHistory,
     modalHistoryLength,
@@ -126,8 +127,6 @@ export default function PulseView() {
     ) {
       toast("please enter a valid Email address", "error")
     } else if (
-      (!isValidPhoneWithRegion(modalControl.pulseCheckPhone1) &&
-        !isValidPhoneWithRegion(modalControl.pulseCheckPhone2)) ||
       (modalControl.pulseCheckPhone1 &&
         !isValidPhoneWithRegion(modalControl.pulseCheckPhone1)) ||
       (modalControl.pulseCheckPhone2 &&
@@ -185,6 +184,10 @@ export default function PulseView() {
     propertyName: string
     value: string
   }) => {
+    if (value === "0") {
+      toast("Please enter valid days", "error")
+      return
+    }
     startLoader()
     const updatedData = {
       [propertyName === "primaryPhone"
@@ -192,9 +195,11 @@ export default function PulseView() {
         : propertyName === "backupPhone1"
         ? "pulseCheckPhone2"
         : propertyName]: value,
-      pulseCheckDays: user.pulseCheckDays,
       pulseCheckValidationRequired: user.pulseCheckValidationRequired,
       pulseCheckNonValidationMonths: user.pulseCheckNonValidationMonths,
+    }
+    if (!newPulseCheckDays) {
+      updatedData["pulseCheckDays"] = user.pulseCheckDays
     }
 
     dispatch(updatePulse(updatedData))
@@ -280,6 +285,10 @@ export default function PulseView() {
           editDetailInput={editDetailInput}
           setEditDetailInput={setEditDetailInput}
           pulseCheckDays={user.pulseCheckDays}
+          newPulseCheckDays={newPulseCheckDays}
+          setNewPulseCheckDays={setNewPulseCheckDays}
+          pulseCheckCustomDays={pulseCheckCustomDays}
+          setPulseCheckCustomDays={setPulseCheckCustomDays}
           submitUpdatedValue={submitUpdatedValue}
         />
       ) : (
@@ -303,6 +312,10 @@ function PulseCheckView(_props: {
   editDetailInput: string
   setEditDetailInput: any
   pulseCheckDays: string
+  newPulseCheckDays: string
+  setNewPulseCheckDays: Function
+  pulseCheckCustomDays: string
+  setPulseCheckCustomDays: Function
   submitUpdatedValue: Function
 }) {
   return (
@@ -323,16 +336,39 @@ function PulseCheckView(_props: {
             activity on your registered social media for the following number of
             days:
           </p>
-          <div className="flex justify-between mb-6 gap-3">
-            {_props.checkPulsePeriodArr.map((value: any, index: string) => {
-              return (
-                <CheckPulsePeriod
-                  key={index}
-                  days={value}
-                  pulseCheckDays={_props.pulseCheckDays}
-                />
-              )
-            })}
+          <div className="flex flex-col justify-center items-center mb-4">
+            <div className="flex justify-between mb-6 gap-3">
+              {_props.checkPulsePeriodArr.map((value: any, index: string) => {
+                return (
+                  <CheckPulsePeriod
+                    key={index}
+                    days={value}
+                    pulseCheckDays={_props.pulseCheckDays}
+                    newPulseCheckDays={_props.newPulseCheckDays}
+                    setNewPulseCheckDays={_props.setNewPulseCheckDays}
+                    pulseCheckCustomDays={_props.pulseCheckCustomDays}
+                    setPulseCheckCustomDays={_props.setPulseCheckCustomDays}
+                  />
+                )
+              })}
+            </div>
+            {_props.newPulseCheckDays &&
+              Number(_props.newPulseCheckDays) !==
+                Number(_props.pulseCheckDays) && (
+                <button
+                  className="primary-btn text-[12px] rounded-2xl bg-[#0971AA]"
+                  onClick={() => {
+                    _props.submitUpdatedValue({
+                      propertyName: "pulseCheckDays",
+                      value: (_props.newPulseCheckDays === "0" && _props.pulseCheckCustomDays) ? _props.pulseCheckCustomDays : _props.newPulseCheckDays,
+                    })
+                    _props.setNewPulseCheckDays("")
+                    _props.setPulseCheckCustomDays("")
+                  }}
+                >
+                  Update
+                </button>
+              )}
           </div>
           <div className="bg-[#ECF6FA] text-[#0C8AC1] flex flex-col gap-2 py-3 pl-5 text-sm rounded-xl mb-6">
             <CheckPulseDates
@@ -387,17 +423,39 @@ function PulseCheckView(_props: {
   )
 }
 
-function CheckPulsePeriod(_props: { pulseCheckDays: any; days: string }) {
+function CheckPulsePeriod(_props: {
+  pulseCheckDays: any
+  days: string
+  newPulseCheckDays: string
+  setNewPulseCheckDays: Function
+  pulseCheckCustomDays: string
+  setPulseCheckCustomDays: Function
+}) {
   return (
     <div
       className={
-        _props.pulseCheckDays == _props.days
+        _props.pulseCheckDays == _props.days ||
+        _props.newPulseCheckDays == _props.days
           ? "flex items-center justify-center flex-col py-6 px-11 bg-[#F6F6F6] rounded-xl cursor-pointer border-[1px] border-[#0C8AC1] relative"
           : "flex items-center justify-center flex-col py-6 px-11 bg-[#F6F6F6] rounded-xl cursor-pointer"
       }
+      onClick={() => _props.setNewPulseCheckDays(_props.days)}
     >
-      <h3 className="text-xl font-bold ">{_props.days}</h3>
-      <small className="text-[#666] text-sm ">days</small>
+      {_props.newPulseCheckDays == _props.days &&
+      _props.newPulseCheckDays == "0" ? (
+        <input
+          type="number"
+          placeholder="0"
+          value={_props.pulseCheckCustomDays}
+          onChange={(e) => _props.setPulseCheckCustomDays(e.target.value)}
+          className="w-[100%] outline-none border-0 text-xl font-bold bg-[#F6F6F6]"
+        />
+      ) : (
+        <>
+          <h3 className="text-xl font-bold ">{_props.days}</h3>
+          <small className="text-[#666] text-sm ">days</small>
+        </>
+      )}
       {_props.pulseCheckDays == _props.days && (
         <img
           src={tickIcon}
@@ -469,24 +527,66 @@ function MethodRow(_props: {
   }, [_props.editDetailInput])
 
   function _handleUpdate() {
-    const data = {
-      propertyName: _props.editDetailInput,
-      value: _inputValue,
+    if (
+      (_props.editDetailInput === "pulseCheckEmail1" ||
+        _props.editDetailInput === "pulseCheckEmail2" ||
+        _props.editDetailInput === "pulseCheckEmail3") &&
+      !isValidEmail(_inputValue)
+    ) {
+      toast("please enter a valid Email address", "error")
+    } else if (
+      (_props.editDetailInput === "primaryPhone" ||
+        _props.editDetailInput === "backupPhone1") &&
+      !isValidPhoneWithRegion(_inputValue)
+    ) {
+      toast("please enter a valid Phone number", "error")
+    } else {
+      const data = {
+        propertyName: _props.editDetailInput,
+        value: _inputValue,
+      }
+      _props.submitUpdatedValue(data)
+      _props.setEditDetailInput("")
     }
-    _props.submitUpdatedValue(data)
-    _props.setEditDetailInput("")
   }
 
   return (
     <div className="py-3 px-2 flex items-center justify-between rounded-lg bg-white  border-[1px] border-[#E3E3E3] text-[#4E4F50]">
       <p>{_props.heading}</p>
-      {_props.editDetailInput === convertToCamelCase(_props.heading) ? (
+      {_props.editDetailInput === convertToCamelCase(_props.heading) &&
+      (_props.editDetailInput === "primaryPhone" ||
+        _props.editDetailInput === "backupPhone1") ? (
         <>
-          <input
-            type="text"
+          <PhoneNumField
+            name="phone_number"
+            placeholder="Phone Number"
+            selectFieldStyles="w-[90px] justify-between bg-[#F5FAFD] rounded-tl-[22px] rounded-bl-[22px] flex relative after:absolute after:content-[''] after:w-[1px] after:h-[22px] after:bg-[#B4B4B4] after:-right-3 after:top-4"
+            inputStyles=""
+            inputContainerStyles="w-[170px]"
+            containerStyles="mb-0"
+            selectFieldMenuWidth={242}
+            _handleChange={(e) => _setInputValue(e.target.value)}
+            value={_inputValue?.split(" ")[1]}
+            code={_inputValue?.split(" ")[0]}
+          />
+          <img
+            src={tickIcon}
+            onClick={_handleUpdate}
+            alt="save icon"
+            className="w-5 h-5 cursor-pointer"
+          />
+        </>
+      ) : _props.editDetailInput === convertToCamelCase(_props.heading) ? (
+        <>
+          <InputField
+            name="email"
+            type="email"
+            placeholder="Email Address"
+            required={true}
             value={_inputValue}
-            onChange={(e) => _setInputValue(e.target.value)}
-            className="border-[1px] border-[#E3E3E3] outline-none px-1"
+            inputStyles="border-0 bg-safe-gray w-[250px] py-4 px-4  placeholder:text-[#6F767B] outline-none rounded-[22px]"
+            inputContainerStyles=""
+            _handleChange={(e: any) => _setInputValue(e.target.value)}
           />
           <img
             src={tickIcon}
