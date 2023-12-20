@@ -1,15 +1,11 @@
-import React from 'react'
-import {
-  useState,
-  useCallback,
-  useEffect,
-} from "react"
+import React from "react"
+import { useState, useCallback, useEffect } from "react"
 import styles from "../../Dashboard.module.css"
 import shieldIcon from "@images/Shield-done.svg"
 import tickIcon from "@images/tick-blue.svg"
 import editIcon from "@images/edit-icon.svg"
 import pulseImg from "@images/pulse-check-img.svg"
-import introVideo from '@videos/pulse-video.mp4'
+import introVideo from "@videos/pulse-video.mp4"
 import {
   StepOneModal,
   StepTwoModal,
@@ -52,7 +48,16 @@ export default function PulseView() {
     modalHistoryPopAll,
   ] = useArray()
 
-  const checkPulsePeriodArr = ["30", "60", "90", (user.pulseCheckDays == "30") || (user.pulseCheckDays == "60") || (user.pulseCheckDays == "90") ? "0" :  user.pulseCheckDays]
+  const checkPulsePeriodArr = [
+    "30",
+    "60",
+    "90",
+    user.pulseCheckDays == "30" ||
+    user.pulseCheckDays == "60" ||
+    user.pulseCheckDays == "90"
+      ? "0"
+      : user.pulseCheckDays,
+  ]
   const checkPUlseDateArr = {
     lastPulseCheck: "April 12th, 2023",
     nextPulseCheck: "22 days",
@@ -89,7 +94,6 @@ export default function PulseView() {
   }
 
   const _submitStepTwoModal = () => {
-
     if (!modalControl.pulseCheckDays) {
       toast("please select valid pulse check days", "error")
     } else if (
@@ -98,8 +102,10 @@ export default function PulseView() {
         !isValidEmail(modalControl.pulseCheckEmail3)) ||
       (modalControl.pulseCheckEmail1 &&
         !isValidEmail(modalControl.pulseCheckEmail1)) ||
-      (modalControl.pulseCheckEmail2 && !isValidEmail(modalControl.pulseCheckEmail2)) ||
-      (modalControl.pulseCheckEmail3 && !isValidEmail(modalControl.pulseCheckEmail3))
+      (modalControl.pulseCheckEmail2 &&
+        !isValidEmail(modalControl.pulseCheckEmail2)) ||
+      (modalControl.pulseCheckEmail3 &&
+        !isValidEmail(modalControl.pulseCheckEmail3))
     ) {
       toast("please enter a valid Email address", "error")
     } else if (
@@ -115,7 +121,6 @@ export default function PulseView() {
       modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
     }
-
   }
 
   const _submitStepThreeModal = () => {
@@ -134,7 +139,7 @@ export default function PulseView() {
         setModalVisibility("success-modal")
         getUserDetails()
       })
-      .finally(()=>{
+      .finally(() => {
         stopLoader()
       })
   }
@@ -151,7 +156,7 @@ export default function PulseView() {
   }, [])
 
   const showPreviousModal = () => {
-    const lastEl = modalHistory[modalHistoryLength - 1] || 'none'
+    const lastEl = modalHistory[modalHistoryLength - 1] || "none"
     modalHistoryPop()
     setModalVisibility(lastEl)
   }
@@ -325,7 +330,7 @@ function PulseCheckView(_props: {
   )
 }
 
-function CheckPulsePeriod(_props: { pulseCheckDays: any, days: string}) {
+function CheckPulsePeriod(_props: { pulseCheckDays: any; days: string }) {
   return (
     <div
       className={

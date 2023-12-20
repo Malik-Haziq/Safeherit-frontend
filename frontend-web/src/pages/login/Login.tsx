@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import logo from "@images/safeherit_logo.svg"
 import loginImg from "@images/login-img.png"
 import star from "@images/star.svg"
@@ -8,10 +8,13 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { getUser, login, loginWithGoogle, resetPassword } from "@redux/actions"
 import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
-import { ForgotPasswordModal, toast, GoogleAuthButton , VerificationCode } from "@/components"
 import {
-  UserRolesModal,
-} from "./modal_login"
+  ForgotPasswordModal,
+  toast,
+  GoogleAuthButton,
+  VerificationCode,
+} from "@/components"
+import { UserRolesModal } from "./modal_login"
 import {
   resetBeneficiaryOf,
   resetMapper,
@@ -23,19 +26,26 @@ import {
   updateRoleUser,
 } from "@/redux/reducers/UserSlice"
 import { SelectOption } from "@/types"
-import { isEmailVerified, sendEmailVerificationEmail, useRecaptcha, verifyEmail, verifyUserEnrolled, verifyUserMFA } from "@/common"
+import {
+  isEmailVerified,
+  sendEmailVerificationEmail,
+  useRecaptcha,
+  verifyEmail,
+  verifyUserEnrolled,
+  verifyUserMFA,
+} from "@/common"
 import { MultiFactorResolver, getAdditionalUserInfo } from "@firebase/auth"
 import { auth } from "@/firebase"
-import { UserCredential } from 'firebase/auth'
+import { UserCredential } from "firebase/auth"
 
 export function Login() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const location = useLocation();
+  const location = useLocation()
 
-  const queryParams = new URLSearchParams(location.search);
+  const queryParams = new URLSearchParams(location.search)
 
-  const recaptcha = useRecaptcha('authenticate')
+  const recaptcha = useRecaptcha("authenticate")
 
   const user = useAppSelector((state) => state.user)
 
@@ -51,21 +61,21 @@ export function Login() {
   const [selectedBeneficiary, setSelectedBeneficiary] = useState<SelectOption>()
   const [selectedValidator, setSelectedValidator] = useState<SelectOption>()
   const [resetEmail, setResetEmail] = useState("")
-  const [verificationId, setVerificationId] = useState<string>();
-  const [resolver, setResolver] = useState<MultiFactorResolver | null>();
+  const [verificationId, setVerificationId] = useState<string>()
+  const [resolver, setResolver] = useState<MultiFactorResolver | null>()
 
-  const code = new Array<string>(6).fill('');
+  const code = new Array<string>(6).fill("")
 
   // verify email
   useEffect(() => {
     const verifyUserEmail = async () => {
       if (queryParams.size) {
         startLoader()
-        const mode = queryParams.get('mode');
+        const mode = queryParams.get("mode")
         if (mode == "verifyEmail") {
           toast("Verifying Email", "info")
-          const oobCode = queryParams.get('oobCode') || '';
-          const apiKey = queryParams.get('apiKey') || '';     
+          const oobCode = queryParams.get("oobCode") || ""
+          const apiKey = queryParams.get("apiKey") || ""
           const response = await verifyEmail(oobCode, apiKey)
           if (response) {
             toast("Email Verified", "success")
@@ -73,12 +83,12 @@ export function Login() {
           if (!response) {
             toast("Unable to verify your email", "error")
           }
-          navigate('/login')
+          navigate("/login")
           stopLoader()
         }
       }
-    };
-    verifyUserEmail();
+    }
+    verifyUserEmail()
   }, [])
 
   async function getCode(code: string) {
@@ -87,43 +97,54 @@ export function Login() {
         const response = await verifyUserEnrolled(
           {
             verificationId,
-            resolver
+            resolver,
           },
-          code
-        );
+          code,
+        )
         if (response) {
-          const currentUser = auth.currentUser;
+          const currentUser = auth.currentUser
           if (currentUser) {
-            currentUser.getIdToken()
-            .then((idToken) => {
-              dispatch<any>(setCredentials({token: idToken, displayName: currentUser.displayName, phone: currentUser.phoneNumber, photo: currentUser.photoURL, email: currentUser.email}))
-              getUserDetails()
-            })
-            .catch(() => {
-              toast("Unable to obtain token from server, Please login again.", 'error')
-            });
+            currentUser
+              .getIdToken()
+              .then((idToken) => {
+                dispatch<any>(
+                  setCredentials({
+                    token: idToken,
+                    displayName: currentUser.displayName,
+                    phone: currentUser.phoneNumber,
+                    photo: currentUser.photoURL,
+                    email: currentUser.email,
+                  }),
+                )
+                getUserDetails()
+              })
+              .catch(() => {
+                toast(
+                  "Unable to obtain token from server, Please login again.",
+                  "error",
+                )
+              })
+          } else {
+            toast(
+              "Unable to obtain token from server, Please login again.",
+              "error",
+            )
           }
-          else {
-            toast("Unable to obtain token from server, Please login again.", 'error')
-          }
-        }
-        else {
-          toast('Something went wrong while verifing code.', 'error');
-        }
-      }
-      catch(err) {
-        const errorWithCode = err as { code?: string };
-        if (errorWithCode && errorWithCode.code) {
-          toast(errorWithCode.code, "error");
         } else {
-          toast('Something went wrong while verifing code.', 'error');
+          toast("Something went wrong while verifing code.", "error")
+        }
+      } catch (err) {
+        const errorWithCode = err as { code?: string }
+        if (errorWithCode && errorWithCode.code) {
+          toast(errorWithCode.code, "error")
+        } else {
+          toast("Something went wrong while verifing code.", "error")
         }
       }
+    } else {
+      toast("Something went wrong. Please try again.", "error")
     }
-    else {
-      toast('Something went wrong. Please try again.', 'error');
-    }
-    setVerificationId('')
+    setVerificationId("")
     setResolver(null)
   }
 
@@ -145,42 +166,60 @@ export function Login() {
 
   const getUserDetails = () => {
     dispatch<any>(getUser({}))
-    .unwrap()
-    .catch()
-    .then((res: { data: { data: { isOwner: any; isBeneficiary: any; isValidator: any; isAdmin: any; isSuperAdmin: any; paymentStatus: string } } }) => {
-      if (res.data.data.isOwner && !res.data.data.isBeneficiary && !res.data.data.isValidator && !res.data.data.isAdmin && !res.data.data.isSuperAdmin) {
-        setModalVisibility("none")
-        dispatch<any>(updateActive(true))
-        dispatch<any>(updateRole("owner"))
-        if (res.data.data.paymentStatus != "Pending") {
-          navigate("/register")
-        }
-        else {
-          navigate("/pricing");
-        }
-      }
-      else {
-        setModalVisibility("user-roles")
-      }
-    })
-    .finally(() => {
-      stopLoader()
-    })
+      .unwrap()
+      .catch()
+      .then(
+        (res: {
+          data: {
+            data: {
+              isOwner: any
+              isBeneficiary: any
+              isValidator: any
+              isAdmin: any
+              isSuperAdmin: any
+              paymentStatus: string
+            }
+          }
+        }) => {
+          if (
+            res.data.data.isOwner &&
+            !res.data.data.isBeneficiary &&
+            !res.data.data.isValidator &&
+            !res.data.data.isAdmin &&
+            !res.data.data.isSuperAdmin
+          ) {
+            setModalVisibility("none")
+            dispatch<any>(updateActive(true))
+            dispatch<any>(updateRole("owner"))
+            if (res.data.data.paymentStatus != "Pending") {
+              navigate("/register")
+            } else {
+              navigate("/pricing")
+            }
+          } else {
+            setModalVisibility("user-roles")
+          }
+        },
+      )
+      .finally(() => {
+        stopLoader()
+      })
   }
 
   const _handleSubmit = () => {
     toast("logging in", "info")
     if (formControl.email && formControl.password) {
       startLoader()
-      dispatch<any>(login({ email: formControl.email, password: formControl.password }))
+      dispatch<any>(
+        login({ email: formControl.email, password: formControl.password }),
+      )
         .unwrap()
         .then(async () => {
-          const verifiedEmail = isEmailVerified();
-          if (verifiedEmail) {      
+          const verifiedEmail = isEmailVerified()
+          if (verifiedEmail) {
             getUserDetails()
-          }
-          else {
-            toast("Please verify your email", 'error')
+          } else {
+            toast("Please verify your email", "error")
             const emailSent = await sendEmailVerificationEmail()
             if (emailSent) {
               toast("Verification Email Sent", "info")
@@ -195,20 +234,15 @@ export function Login() {
   }
 
   const _handleMFA = async (response: any) => {
-    if (response.code === 'auth/multi-factor-auth-required' && recaptcha) {
-      const data = await verifyUserMFA(
-        response,
-        recaptcha,
-        0
-      )
+    if (response.code === "auth/multi-factor-auth-required" && recaptcha) {
+      const data = await verifyUserMFA(response, recaptcha, 0)
 
       if (data) {
-        const {verificationId, resolver} = data;
-        setVerificationId(verificationId);
-        setResolver(resolver);
+        const { verificationId, resolver } = data
+        setVerificationId(verificationId)
+        setResolver(resolver)
       }
-    }
-    else {
+    } else {
       toast(response?.code, "error")
     }
     stopLoader()
@@ -217,13 +251,13 @@ export function Login() {
   const _handleMFASubmit = () => {
     startLoader()
     const finalCode = code.reduce((previousValue, currentValue) => {
-      return previousValue.concat(currentValue);
+      return previousValue.concat(currentValue)
     })
-    getCode(finalCode);
+    getCode(finalCode)
   }
 
   const _handleMFACancel = () => {
-    setVerificationId('')
+    setVerificationId("")
     setResolver(null)
   }
 
@@ -237,10 +271,9 @@ export function Login() {
         if (isNewUser && isNewUser.isNewUser) {
           dispatch<any>(updateActive(true))
           dispatch<any>(updateRole("owner"))
-          dispatch<any>(updateRoleCheck({role: "owner", value: true}))
+          dispatch<any>(updateRoleCheck({ role: "owner", value: true }))
           navigate("/pricing")
-        }
-        else {
+        } else {
           getUserDetails()
         }
       })
@@ -261,9 +294,13 @@ export function Login() {
       (selectedRole == "validator" && selectedValidator)
     ) {
       if (selectedRole == "beneficiary") {
-        dispatch<any>(updateRoleUser(user.userMap[selectedBeneficiary?.value || 0]))
+        dispatch<any>(
+          updateRoleUser(user.userMap[selectedBeneficiary?.value || 0]),
+        )
       } else if (selectedRole == "validator") {
-        dispatch<any>(updateRoleUser(user.userMap[selectedValidator?.value || 0]))
+        dispatch<any>(
+          updateRoleUser(user.userMap[selectedValidator?.value || 0]),
+        )
       }
       setModalVisibility("none")
       dispatch<any>(updateActive(true))
@@ -273,9 +310,8 @@ export function Login() {
       dispatch<any>(resetBeneficiaryOf())
       if (user.paymentStatus != "Pending") {
         navigate("/register")
-      }
-      else {
-        navigate("/pricing");
+      } else {
+        navigate("/pricing")
       }
     }
   }
@@ -296,21 +332,16 @@ export function Login() {
     }
   }
 
-
   return (
     <main className="flex flex-row justify-center lg:justify-between font-safe-font-default w-screen h-screen">
-      {
-        verificationId &&
-        resolver &&
+      {verificationId && resolver && (
         <VerificationCode
           _handleMFASubmit={_handleMFASubmit}
           _handleMFACancel={_handleMFACancel}
           code={code}
         />
-      }
-      {
-        !verificationId &&
-        !resolver &&
+      )}
+      {!verificationId && !resolver && (
         <>
           <UserRolesModal
             openModal={modalVisibility == "user-roles"}
@@ -407,11 +438,11 @@ export function Login() {
                 </small>
               </form>
               <GoogleAuthButton
-                handleClick={_loginWithGoogle} 
+                handleClick={_loginWithGoogle}
                 type={"login"}
-                buttonText={"Login with Google"}    
+                buttonText={"Login with Google"}
               />
-              <div id='authenticate'></div>
+              <div id="authenticate"></div>
             </div>
             <footer className="flex justify-between">
               <small>© 2023 SafeHerit.com</small>
@@ -446,7 +477,7 @@ export function Login() {
             />
           </section>
         </>
-      }
+      )}
     </main>
   )
 }

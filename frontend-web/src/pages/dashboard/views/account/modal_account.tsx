@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import userImg from "@images/user.svg"
 import uploadIcon from "@images/upload-icon.svg"
 import arrowDown from "@images/arrow-down.svg"
@@ -75,7 +75,9 @@ export function EditUserModal(_props: {
                       {_props.imageUpload || _props.userImage ? (
                         <>
                           <img
-                            src={_props.imageUpload || _props.userImage || userImg}
+                            src={
+                              _props.imageUpload || _props.userImage || userImg
+                            }
                             alt=""
                             className="w-[124px] h-[124px] rounded-full object-contain"
                           />
@@ -110,8 +112,7 @@ export function EditUserModal(_props: {
           type: "textView",
           props: {
             text: "Name",
-            textStyles:
-              "text-[#00192B] font-medium mb-1 mx-7",
+            textStyles: "text-[#00192B] font-medium mb-1 mx-7",
           },
         },
         {
@@ -132,8 +133,7 @@ export function EditUserModal(_props: {
           type: "textView",
           props: {
             text: "Email",
-            textStyles:
-              "text-[#00192B] font-medium mb-1 mx-7",
+            textStyles: "text-[#00192B] font-medium mb-1 mx-7",
           },
         },
         {
@@ -155,8 +155,7 @@ export function EditUserModal(_props: {
           type: "textView",
           props: {
             text: "Language",
-            textStyles:
-              "text-[#00192B] font-medium mb-1 mx-7",
+            textStyles: "text-[#00192B] font-medium mb-1 mx-7",
           },
         },
         {
@@ -237,10 +236,11 @@ export function ViewPrivateKey(_props: {
           type: "TextAreaField",
           props: {
             textAreaContainerStyles: "flex justify-between items-center",
-            name:"publicKey",
-            inputStyles:"min-h-[200px] w-[502px] mx-6 p-2 border-[1px] border-[#858992] rounded-[5px] resize-none scrollbar",
-            value:_props.modalControl.publicKey,
-            isDisabled: true
+            name: "publicKey",
+            inputStyles:
+              "min-h-[200px] w-[502px] mx-6 p-2 border-[1px] border-[#858992] rounded-[5px] resize-none scrollbar",
+            value: _props.modalControl.publicKey,
+            isDisabled: true,
           },
         },
         {
@@ -262,10 +262,11 @@ export function ViewPrivateKey(_props: {
           type: "TextAreaField",
           props: {
             textAreaContainerStyles: "flex justify-between items-center",
-            name:"privateKey",
-            inputStyles:"min-h-[200px] w-[502px] mx-6 p-2 resize-none border-[1px] border-[#858992] rounded-[5px] mb-10 scrollbar",
-            value:_props.modalControl.privateKey,
-            isDisabled: true
+            name: "privateKey",
+            inputStyles:
+              "min-h-[200px] w-[502px] mx-6 p-2 resize-none border-[1px] border-[#858992] rounded-[5px] mb-10 scrollbar",
+            value: _props.modalControl.privateKey,
+            isDisabled: true,
           },
         },
       ]}

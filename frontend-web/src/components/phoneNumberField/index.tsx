@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import { InputField, SelectField } from ".."
 import { countryCodes } from "@/common/data"
 import { SelectOption } from "@/types"
@@ -40,7 +40,12 @@ export function PhoneNumField(_props: {
   }
 
   return (
-    <div className={_props.containerStyles + " flex border-2 bg-safe-gray placeholder:text-[#6F767B] outline-none rounded-[22px] mb-4"} >
+    <div
+      className={
+        _props.containerStyles +
+        " flex border-2 bg-safe-gray placeholder:text-[#6F767B] outline-none rounded-[22px] mb-4"
+      }
+    >
       <SelectField
         data={countryCodes}
         value={

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import userImage from "@images/user.svg"
 import closeIcon from "@images/close-icon.svg"
 import facebookIcon from "@images/facebook.svg"
@@ -230,13 +230,12 @@ export const UserDetailsModal = (_props: {
                           {_props.modalControl.personalized_message}
                         </div>
                       </div>
-                      { _props.videoUpload ? 
-                      
-                      <div className="flex flex-col items-end gap-1">
-                        <TextView
-                          text="Testament Video"
-                          textStyles="text-[#00192B] font-bold"
-                        />
+                      {_props.videoUpload ? (
+                        <div className="flex flex-col items-end gap-1">
+                          <TextView
+                            text="Testament Video"
+                            textStyles="text-[#00192B] font-bold"
+                          />
                           <video
                             controls
                             className="max-h-[186px] max-w-[446px]"
@@ -244,9 +243,10 @@ export const UserDetailsModal = (_props: {
                             <source src={_props.videoUpload} type="video/mp4" />
                             Your browser does not support the video tag.
                           </video>
-                          </div>
-                        : <div></div> 
-                      }
+                        </div>
+                      ) : (
+                        <div></div>
+                      )}
                       <div className="flex flex-col gap-1">
                         <div className="flex justify-between">
                           <p className="flex cursor-pointer">

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import logo from "@images/vertical_Logo.png"
 import video from "@images/register_page_video.png"
 

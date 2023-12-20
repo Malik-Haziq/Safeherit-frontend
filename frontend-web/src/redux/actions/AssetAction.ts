@@ -73,11 +73,13 @@ export const createAsset = createAsyncThunk(
     const { user } = getState() as { user: { token: ""; publicKey: "" } }
     const ownerPrivateKey = sessionStorage.getItem("privateKey") || ""
     const ownerPublicKey = user.publicKey
-    
+
     Data = assetEnc.encryptAssetData(ownerPrivateKey, ownerPublicKey, Data)
 
     Data.assignedBeneficiaryIds = JSON.stringify(Data.assignedBeneficiaryIds)
-    Data.privateKeysEncByBeneficiary = JSON.stringify(Data.privateKeysEncByBeneficiary)
+    Data.privateKeysEncByBeneficiary = JSON.stringify(
+      Data.privateKeysEncByBeneficiary,
+    )
 
     const formData = jsonToFormData(Data)
 
@@ -120,7 +122,10 @@ export const findAsset = createAsyncThunk(
 
 export const findBeneficiaryAsset = createAsyncThunk(
   "findAsset",
-  async (Data: { id: string, owner_email: string, beneficiary_id: string }, { getState, rejectWithValue }) => {
+  async (
+    Data: { id: string; owner_email: string; beneficiary_id: string },
+    { getState, rejectWithValue },
+  ) => {
     const { user } = getState() as { user: { token: "" } }
     const params = {
       ROUTE: `${BENEFICIARY_ASSET_BY_ID}?id=${Data.id}&beneficiary_id=${Data.beneficiary_id}&owner_email=${Data.owner_email}`,
@@ -152,7 +157,9 @@ export const updateAsset = createAsyncThunk(
     Data = assetEnc.encryptAssetData(ownerPrivateKey, ownerPublicKey, Data)
 
     Data.assignedBeneficiaryIds = JSON.stringify(Data.assignedBeneficiaryIds)
-    Data.privateKeysEncByBeneficiary = JSON.stringify(Data.privateKeysEncByBeneficiary)
+    Data.privateKeysEncByBeneficiary = JSON.stringify(
+      Data.privateKeysEncByBeneficiary,
+    )
 
     const formData = jsonToFormData(Data)
     const params = { ROUTE: ASSETS, Body: formData, token: user.token }

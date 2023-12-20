@@ -1,1 +1,1 @@
-export * from './ValidationView'
+export * from "./ValidationView"

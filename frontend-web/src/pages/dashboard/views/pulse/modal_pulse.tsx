@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import { Modal } from "@/components"
 import stepOne from "@images/step_1_of_4.svg"
 import stepTwo from "@images/step_2_of_4.svg"
@@ -98,7 +98,7 @@ export function StepTwoModal(_props: {
   const [customDays, setCustomDays] = useState("")
 
   function handleDays(days: string) {
-    setCustomDays('')
+    setCustomDays("")
     setSelectedDays(days)
     const customEvent: CustomChangeEvent = {
       target: {
@@ -109,9 +109,8 @@ export function StepTwoModal(_props: {
     _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
   }
 
-
   function handleCustomDays(event: { target: { name: any; value: any } }) {
-    setSelectedDays('')
+    setSelectedDays("")
     setCustomDays(event.target.value)
     const customEvent: CustomChangeEvent = {
       target: {
@@ -149,62 +148,63 @@ export function StepTwoModal(_props: {
         },
 
         {
-          type: 'multiFields',
+          type: "multiFields",
           containerStyles: "flex ",
           props: {
             fields: [
-                {
-                    type: "customView",
-                    props: {
-                      customViewContainer: "mx-7 mb-3",
-                      CustomView: () => {
-                        return (
-                          <div className="flex gap-2">
-                            <div
-                              className={
-                                selectedDays == "30"
-                                  ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
-                                  : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
-                              }
-                              onClick={() => handleDays("30")}
-                            >
-                              <p className="text-[#00192B] font-semibold">
-                                30 <span className=" font-medium text-sm">Days</span>
-                              </p>
-                              {selectedDays == "30" ? (
-                                <img src={radioBlueIcon} alt="radio icon" />
-                              ) : (
-                                <img src={radioGrayIcon} alt="radio icon" />
-                              )}
-                            </div>
-                            <div
-                              className={
-                                selectedDays == "60"
-                                  ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
-                                  : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
-                              }
-                              onClick={() => handleDays("60")}
-                            >
-                              <p className="text-[#00192B] font-semibold">
-                                60 <span className=" font-medium text-sm">Days</span>
-                              </p>
-                              {selectedDays == "60" ? (
-                                <img src={radioBlueIcon} alt="radio icon" />
-                              ) : (
-                                <img src={radioGrayIcon} alt="radio icon" />
-                              )}
-                            </div>
-                          </div>
-                        )
-                    },
+              {
+                type: "customView",
+                props: {
+                  customViewContainer: "mx-7 mb-3",
+                  CustomView: () => {
+                    return (
+                      <div className="flex gap-2">
+                        <div
+                          className={
+                            selectedDays == "30"
+                              ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
+                              : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
+                          }
+                          onClick={() => handleDays("30")}
+                        >
+                          <p className="text-[#00192B] font-semibold">
+                            30{" "}
+                            <span className=" font-medium text-sm">Days</span>
+                          </p>
+                          {selectedDays == "30" ? (
+                            <img src={radioBlueIcon} alt="radio icon" />
+                          ) : (
+                            <img src={radioGrayIcon} alt="radio icon" />
+                          )}
+                        </div>
+                        <div
+                          className={
+                            selectedDays == "60"
+                              ? "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl cursor-pointer border-[1px] border-[#0C8AC1]"
+                              : "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 px-5 rounded-2xl border-[1px] cursor-pointer"
+                          }
+                          onClick={() => handleDays("60")}
+                        >
+                          <p className="text-[#00192B] font-semibold">
+                            60{" "}
+                            <span className=" font-medium text-sm">Days</span>
+                          </p>
+                          {selectedDays == "60" ? (
+                            <img src={radioBlueIcon} alt="radio icon" />
+                          ) : (
+                            <img src={radioGrayIcon} alt="radio icon" />
+                          )}
+                        </div>
+                      </div>
+                    )
                   },
-                  
-                },       
-            ]
-          }
+                },
+              },
+            ],
+          },
         },
         {
-          type: 'multiFields',
+          type: "multiFields",
           containerStyles: "flex items-center gap-2 mx-7",
           props: {
             fields: [
@@ -233,7 +233,7 @@ export function StepTwoModal(_props: {
                       </div>
                     )
                   },
-                }
+                },
               },
               {
                 type: "inputView",
@@ -244,13 +244,14 @@ export function StepTwoModal(_props: {
                   value: customDays,
                   _handleChange: handleCustomDays,
                   required: false,
-                  inputStyles: "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 rounded-2xl focus:outline-none placeholder:text-[#00192B] placeholder:font-semibold",
+                  inputStyles:
+                    "w-[240px] bg-[#F6F6F6] flex items-center justify-between py-4 rounded-2xl focus:outline-none placeholder:text-[#00192B] placeholder:font-semibold",
                   inputContainerStyles: "",
                   hasRightIcon: false,
                 },
               },
-            ]
-          }
+            ],
+          },
         },
         {
           type: "textView",
@@ -272,7 +273,7 @@ export function StepTwoModal(_props: {
             inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
             inputContainerStyles: "mx-7 mb-2",
             hasRightIcon: false,
-            disabled: true
+            disabled: true,
           },
         },
         {

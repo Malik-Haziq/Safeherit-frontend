@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import facebook from "@images/facebook.svg"
 import twitter from "@images/twitter.svg"
 import instagram from "@images/insta.svg"
@@ -421,12 +421,12 @@ export function StepTwoModal(_props: {
                           className="w-20 h-20"
                         />
                         <span
-                            className="absolute top-0 right-0 text-red-900 cursor-pointer"
-                            onClick={() => {
-                              _props.setImageUpload("")
-                              _props._handleDiscard("profile_image", "");
-                            }}
-                          >
+                          className="absolute top-0 right-0 text-red-900 cursor-pointer"
+                          onClick={() => {
+                            _props.setImageUpload("")
+                            _props._handleDiscard("profile_image", "")
+                          }}
+                        >
                           <IoMdCloseCircle size={"20px"} />
                         </span>
                       </div>

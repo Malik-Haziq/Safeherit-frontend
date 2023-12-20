@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import defaultIcon from "@images/safeherit_logo.svg"
 import closeIcon from "@images/close-icon.svg"
 import arrowLeft from "@images/left-arrow.png"
@@ -176,22 +176,21 @@ export const Modal = (_props: {
   return (
     <>
       {_props.openModal && (
-        <div
-          className={styles.backDrop}
-        ><div className={styles.modalContainer}>
-        <div className={styles.modal}>
-          <ModalHeader
-            closeModal={_props.closeModal}
-            title={_props.modalTitle}
-            closeIconVisibility={_props.closeIconVisibility}
-            arrayLength={_props.arrayLength}
-            showPreviousModal={_props.showPreviousModal}
-          />
-          <RenderModal elements={elements} />
+        <div className={styles.backDrop}>
+          <div className={styles.modalContainer}>
+            <div className={styles.modal}>
+              <ModalHeader
+                closeModal={_props.closeModal}
+                title={_props.modalTitle}
+                closeIconVisibility={_props.closeIconVisibility}
+                arrayLength={_props.arrayLength}
+                showPreviousModal={_props.showPreviousModal}
+              />
+              <RenderModal elements={elements} />
+            </div>
+          </div>{" "}
         </div>
-      </div> </div>
-      )
-      }
+      )}
     </>
   )
 }

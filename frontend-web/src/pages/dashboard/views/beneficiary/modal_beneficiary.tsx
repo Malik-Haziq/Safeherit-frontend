@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import facebook from "@images/facebook.svg"
 import instagram from "@images/insta.svg"
 import twitter from "@images/twitter.svg"
@@ -171,7 +171,7 @@ export function SuccessModal(_props: {
                           onClick={_props._submitModal}
                           className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl"
                         >
-                          Done 
+                          Done
                         </button>
                       </div>
                     </div>
@@ -519,13 +519,13 @@ export function StepTwoModal(_props: {
                           className="w-20 h-20 rounded-full object-contain"
                         />
                         <span
-                            className="absolute top-0 right-0 text-red-900 cursor-pointer"
-                            onClick={() => {
-                              _props.setImageUpload("")
-                              _props._handleDiscard("profile_image", "");
-                            }}
-                          >
-                            <IoMdCloseCircle size={"20px"} />
+                          className="absolute top-0 right-0 text-red-900 cursor-pointer"
+                          onClick={() => {
+                            _props.setImageUpload("")
+                            _props._handleDiscard("profile_image", "")
+                          }}
+                        >
+                          <IoMdCloseCircle size={"20px"} />
                         </span>
                       </div>
                     ) : (
@@ -574,25 +574,26 @@ export function StepThreeModal(_props: {
   showPreviousModal: () => void
 }) {
   const handleImageInputChange = (event: any) => {
-    const maxSize = 100 * 1024 * 1024;
+    const maxSize = 100 * 1024 * 1024
     const file = event.target.files[0]
-    
+
     if (file) {
-      if(file.size > maxSize){
+      if (file.size > maxSize) {
         toast("Video's size should be less than 100MBs", "error")
-      } 
-      else {
+      } else {
         const reader = new FileReader()
-        reader.onload = (e) => { 
-        const dataURL = e.target?.result
-        _props.setVideoUpload(dataURL)
-        const customEvent: CustomChangeEvent = {
-          target: {
-            name: "personalized_video",
-            value: file,
-          },
-        }
-        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+        reader.onload = (e) => {
+          const dataURL = e.target?.result
+          _props.setVideoUpload(dataURL)
+          const customEvent: CustomChangeEvent = {
+            target: {
+              name: "personalized_video",
+              value: file,
+            },
+          }
+          _props._handleChange(
+            customEvent as React.ChangeEvent<HTMLInputElement>,
+          )
         }
         reader.readAsDataURL(file)
       }
@@ -676,7 +677,7 @@ export function StepThreeModal(_props: {
                           className="absolute top-0 right-0 text-red-900 cursor-pointer"
                           onClick={() => {
                             _props.setVideoUpload("")
-                            _props._handleDiscard("personalized_video", "");
+                            _props._handleDiscard("personalized_video", "")
                           }}
                         >
                           <IoMdCloseCircle size={"20px"} />

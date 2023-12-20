@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import tick from "@images/tick.svg"
 
 import { useEffect, useState } from "react"
@@ -8,23 +8,22 @@ import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { createPayment, getUser, updateUser } from "@/redux/actions"
 
 export default function Pricing() {
-
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const user = useAppSelector(state => state.user)
+  const user = useAppSelector((state) => state.user)
   const [selectedPlan, setSelectedPlan] = useState("Yearly")
 
   const startLoader = () => dispatch<any>(setLoaderVisibility(true))
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
- 
+
   const packagePlans = [
     { plan: "Monthly", price: "19.99", priceTime: "month" },
     { plan: "Yearly", price: "199", priceTime: "year" },
     { plan: "Life time", price: "1,999", priceTime: "" },
   ]
   const planMapper: { [key: string]: string } = {
-    "Monthly": "monthly",
-    "Yearly": "yearly",
+    Monthly: "monthly",
+    Yearly: "yearly",
     "Life time": "lifetime",
   }
 
@@ -34,41 +33,52 @@ export default function Pricing() {
   }, [])
 
   const getUserDetails = async () => {
-
-    dispatch<any>(getUser({})).unwrap()
-    .then((res: { data: { data: { displayName: any; paymentStatus: string } } }) => {
-      if (!res.data.data.displayName) {
-        dispatch<any>(updateUser({
-          displayName: user.displayName || user.email
-        })).unwrap().catch()
-      }
-      if (res.data.data.paymentStatus != "Pending") {
-        navigate("/register")
-      }
-    })
-    .catch((err: any) => {
-      console.log(err)
-    })
-    .finally(() => {
-      stopLoader()
-    })
+    dispatch<any>(getUser({}))
+      .unwrap()
+      .then(
+        (res: {
+          data: { data: { displayName: any; paymentStatus: string } }
+        }) => {
+          if (!res.data.data.displayName) {
+            dispatch<any>(
+              updateUser({
+                displayName: user.displayName || user.email,
+              }),
+            )
+              .unwrap()
+              .catch()
+          }
+          if (res.data.data.paymentStatus != "Pending") {
+            navigate("/register")
+          }
+        },
+      )
+      .catch((err: any) => {
+        console.log(err)
+      })
+      .finally(() => {
+        stopLoader()
+      })
   }
 
-  const _handlePlanTransition = (selectedPlan: string) => setSelectedPlan(selectedPlan)
+  const _handlePlanTransition = (selectedPlan: string) => {
+    setSelectedPlan(selectedPlan)
+  }
 
   function _handlePlanSelect(selectedPlan: string) {
     _handlePlanTransition(selectedPlan)
     startLoader()
-    dispatch<any>(createPayment({subscriptionType: planMapper[selectedPlan]})).unwrap()
-    .catch()
-    .then((res: { data: { data: { sessionUrl: string } } }) => {
-      if (res.data.data.sessionUrl) {
-        window.location.href = res.data.data.sessionUrl;
-      }
-    })
-    .finally(() => {
-      stopLoader()
-    })
+    dispatch<any>(createPayment({ subscriptionType: planMapper[selectedPlan] }))
+      .unwrap()
+      .catch()
+      .then((res: { data: { data: { sessionUrl: string } } }) => {
+        if (res.data.data.sessionUrl) {
+          window.location.href = res.data.data.sessionUrl
+        }
+      })
+      .finally(() => {
+        stopLoader()
+      })
   }
 
   return (

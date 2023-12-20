@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import registerAssetsImg from "@images/register-assets.svg"
 import stepOne from "@images/step-1.svg"
 import stepTwo from "@images/step-2.svg"
@@ -93,7 +93,7 @@ const generateSelectFieldProps = (
       value: value,
       selectProps: {
         placeholder: placeholder,
-        isMulti: isMulti
+        isMulti: isMulti,
       },
       setSelectedValue: (value: any) => {
         const customEvent = {
@@ -130,7 +130,7 @@ const generateMultiSelectFieldProps = (
       value: value,
       selectProps: {
         placeholder: placeholder,
-        isMulti: isMulti
+        isMulti: isMulti,
       },
       setSelectedValue: (value: any) => {
         const customEvent = {
@@ -372,8 +372,7 @@ export function StepTwoModal(_props: {
           type: "textView",
           props: {
             text: "Online banking credentials",
-            textStyles:
-              "text-[#00192B] font-medium mb-4 px-7",
+            textStyles: "text-[#00192B] font-medium mb-4 px-7",
           },
         },
         ...conditionalElements,
@@ -394,8 +393,12 @@ export function StepTwoModal(_props: {
                   />
                   <div className="flex items-center justify-between gap-2 mb-8">
                     <div className="flex flex-col">
-                      <span className="text-safe-text-gray-shade font-medium text-sm" >File size should be less than 10MBs</span>
-                      <span className="text-gray text-safe-text-gray-shade text-sm">png/jpg/webp/jpeg</span>
+                      <span className="text-safe-text-gray-shade font-medium text-sm">
+                        File size should be less than 10MBs
+                      </span>
+                      <span className="text-gray text-safe-text-gray-shade text-sm">
+                        png/jpg/webp/jpeg
+                      </span>
                     </div>
                     <p>{_props.assetFile?.name || _props.assetFile}</p>
                     <img
@@ -536,10 +539,9 @@ export function AssetDetail(_props: {
                           key={index}
                           className="flex gap-6 items-center pb-6"
                         >
-                          {
-                            heading == "Beneficiary" ?
+                          {heading == "Beneficiary" ? (
                             <></>
-                            :
+                          ) : (
                             <>
                               <h2 className="text-[#292929] font-sm font-medium basis-2/5 text-right">
                                 {heading}
@@ -548,7 +550,7 @@ export function AssetDetail(_props: {
                                 {values[index]}
                               </p>
                             </>
-                          }
+                          )}
                         </div>
                       )
                     })}

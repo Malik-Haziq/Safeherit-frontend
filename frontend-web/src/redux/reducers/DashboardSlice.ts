@@ -14,8 +14,7 @@ const initialState = {
 export const slice = createSlice({
   name: "dashboard",
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers(builder) {
     builder.addCase(getData.pending, (state) => {
       state.loading = true
@@ -31,23 +30,33 @@ export const slice = createSlice({
         return {
           // img: asset?.profile_image,
           title: asset?.category,
-          subTitle: data?.Notes
+          subTitle: data?.Notes,
         }
       })
-      state.beneficiaries = action.payload?.data?.data?.beneficiaries?.map((beneficiary: any) => {
-        return {
-          img: beneficiary?.profile_image,
-          title: beneficiary?.name,
-          subTitle: beneficiary?.primary_email || beneficiary?.backup_email || beneficiary?.primary_backup_email2,
-        }
-      })
-      state.validators = action.payload?.data?.data?.validators?.map((validator: any) => {
-        return {
-          img: validator?.profile_image,
-          title: validator?.name,
-          subTitle: validator?.primary_email || validator?.backup_email || validator?.primary_backup_email2,
-        }
-      })
+      state.beneficiaries = action.payload?.data?.data?.beneficiaries?.map(
+        (beneficiary: any) => {
+          return {
+            img: beneficiary?.profile_image,
+            title: beneficiary?.name,
+            subTitle:
+              beneficiary?.primary_email ||
+              beneficiary?.backup_email ||
+              beneficiary?.primary_backup_email2,
+          }
+        },
+      )
+      state.validators = action.payload?.data?.data?.validators?.map(
+        (validator: any) => {
+          return {
+            img: validator?.profile_image,
+            title: validator?.name,
+            subTitle:
+              validator?.primary_email ||
+              validator?.backup_email ||
+              validator?.primary_backup_email2,
+          }
+        },
+      )
     })
   },
 })

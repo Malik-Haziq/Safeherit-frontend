@@ -1,42 +1,41 @@
-import React from 'react'
-import logo from "@images/safeherit_logo.svg";
+import React from "react"
+import logo from "@images/safeherit_logo.svg"
 import userImg from "@images/user.svg"
 import arrowDown from "@images/chevron-down.svg"
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAppDispatch, useAppSelector} from "@redux/hooks"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { logout } from "@redux/actions"
 import { DropDownButton, toast } from "@/components"
-import { getFileFromFirebase } from "@/common";
+import { getFileFromFirebase } from "@/common"
 
 export function NavBar() {
-
-  const user = useAppSelector(state => state.user)
+  const user = useAppSelector((state) => state.user)
   const USER_NAME = user.displayName || "Profile"
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const [userImage, setUserImage] = useState('')
+  const [userImage, setUserImage] = useState("")
 
   useEffect(() => {
     if (user.profile_image) {
       getFileFromFirebase(user.profile_image)
-          .then((res) => {
-            setUserImage(res)
-          })
-          .catch(() => {
-            setUserImage("")
-          })
+        .then((res) => {
+          setUserImage(res)
+        })
+        .catch(() => {
+          setUserImage("")
+        })
     }
-  }, [user.profile_image ])
-  
+  }, [user.profile_image])
+
   // TODO manually terminate the use session on logout failiure (browser storage etc)
   // Do the above commented change for all _handleLogout methods
   const _handleLogout = () => {
     dispatch<any>(logout({}))
       .unwrap()
-      .catch((err: { code: string; }) => {
+      .catch((err: { code: string }) => {
         toast(err?.code, "error")
       })
       .finally(() => {
@@ -84,11 +83,12 @@ export function NavBar() {
           </ul>
         </div>
 
-        {!user.active ? 
+        {!user.active ? (
           <button className="primary-btn " onClick={_handleLoginPress}>
             Login / Register
-          </button> : 
-          <div className="z-10" >
+          </button>
+        ) : (
+          <div className="z-10">
             <DropDownButton
               className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
               onClick={_handleLogout}
@@ -101,7 +101,7 @@ export function NavBar() {
               options={["Logout"]}
             />
           </div>
-          }
+        )}
       </nav>
     </div>
   )

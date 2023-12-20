@@ -27,23 +27,22 @@ export function InputField(_props: {
           let formattedString = inputValue.replaceAll(" ", "")
 
           if (/^\d+$/.test(formattedString) || formattedString == "") {
-
             formattedString = formattedString.replace(/(\d{4}(?=\d))/g, "$1 ")
-            formattedString = formattedString.trim() 
+            formattedString = formattedString.trim()
 
             const customEvent = {
               target: {
                 name: e.target.name,
                 value: formattedString,
-              }, 
+              },
             }
             _props._handleChange(
               customEvent as React.ChangeEvent<HTMLInputElement>,
             )
           }
-          break;
+          break
         }
-        
+
         case "time": {
           formatted = inputValue
             .replace(/(\d{2})(\d{2})/, "$1:$2") // Format as HH:MM
@@ -57,31 +56,35 @@ export function InputField(_props: {
               value: formatted, // Update the value with formatted value
             },
           })
-          break;
+          break
         }
 
         case "currency": {
-          let formattedString = inputValue.replaceAll(",", "");
-          
-          if (/^\d+$/.test(formattedString) || formattedString == "") {
+          let formattedString = inputValue.replaceAll(",", "")
 
-            formattedString = formattedString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            formattedString = formattedString.trim();
-           
+          if (/^\d+$/.test(formattedString) || formattedString == "") {
+            formattedString = formattedString.replace(
+              /\B(?=(\d{3})+(?!\d))/g,
+              ",",
+            )
+            formattedString = formattedString.trim()
+
             const customEvent = {
               target: {
                 name: e.target.name,
                 value: formattedString,
               },
-            };
-          
-            _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+            }
+
+            _props._handleChange(
+              customEvent as React.ChangeEvent<HTMLInputElement>,
+            )
           }
-          break;
+          break
         }
 
-        case "tel":{
-          const formattedString = inputValue;
+        case "tel": {
+          const formattedString = inputValue
 
           if (/^\d+$/.test(formattedString) || formattedString == "") {
             const customEvent = {
@@ -89,10 +92,12 @@ export function InputField(_props: {
                 name: e.target.name,
                 value: formattedString,
               },
-            };
-            _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>);
+            }
+            _props._handleChange(
+              customEvent as React.ChangeEvent<HTMLInputElement>,
+            )
           }
-          break;
+          break
         }
       }
     } else {
@@ -103,8 +108,8 @@ export function InputField(_props: {
     <div className={_props.inputContainerStyles}>
       <input
         name={_props.name || ""}
-        type={  _props.type || "text" }
-        placeholder={ _props.placeholder || "input field"}
+        type={_props.type || "text"}
+        placeholder={_props.placeholder || "input field"}
         value={_props.value}
         onChange={_handleInputChange}
         required={_props.required || false}

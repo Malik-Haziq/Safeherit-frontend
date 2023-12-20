@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import styles from "../../Dashboard.module.css"
 import eye from "@images/eye.svg"
 import userImg from "@images/user.svg"
@@ -20,7 +20,7 @@ const initialState = {
   email: "",
   phoneNumber: "",
   displayName: "",
-  password: ""
+  password: "",
 }
 
 const userInitialState = {
@@ -32,7 +32,7 @@ const userInitialState = {
   payment_status: "",
   account_status: "",
   pulse_status: "",
-  profile_image: ""
+  profile_image: "",
 }
 
 export default function UsersView() {
@@ -81,12 +81,12 @@ export default function UsersView() {
             email: modalControl.email,
             phoneNumber: modalControl.phoneNumber,
             displayName: modalControl.displayName,
-            password: res.data.data.password
+            password: res.data.data.password,
           })
-          setModalVisibility('view-new-user')
+          setModalVisibility("view-new-user")
           toast("User Created", "success")
         })
-        .finally(()=>{
+        .finally(() => {
           stopLoader()
         })
     } else {
@@ -115,22 +115,24 @@ export default function UsersView() {
   }
 
   const deleteUser = (email: string) => {
-    let reason: string | null = ''
-    while(!reason) {
+    let reason: string | null = ""
+    while (!reason) {
       reason = prompt("Please enter reason for user deletion")
       if (reason) {
         startLoader()
         const data = {
           email: email,
-          reason: reason
+          reason: reason,
         }
-        dispatch<any>(deleteUserRequest(data)).unwrap().catch()
-        .then(() => {
-          toast("User deletion request submitted", "success")
-        })
-        .finally(() => {
-          stopLoader()
-        })
+        dispatch<any>(deleteUserRequest(data))
+          .unwrap()
+          .catch()
+          .then(() => {
+            toast("User deletion request submitted", "success")
+          })
+          .finally(() => {
+            stopLoader()
+          })
       }
     }
   }
@@ -148,9 +150,9 @@ export default function UsersView() {
       payment_status: _props.payment_status,
       account_status: _props.account_status,
       pulse_status: _props.pulse_status,
-      profile_image: _props.profile_image
+      profile_image: _props.profile_image,
     })
-    setModalVisibility('view-user')
+    setModalVisibility("view-user")
   }
   const createAccount = () => {
     setModalVisibility("create-user")
@@ -302,15 +304,15 @@ function UserView(_props: {
   editUser: (id: string) => void
   deleteUser: (id: string) => void
 }) {
-  const [userImage, setUserImage] = useState('')
+  const [userImage, setUserImage] = useState("")
   if (_props.profile_image) {
     getFileFromFirebase(_props.profile_image)
-    .then((res) => {
-      setUserImage(res)
-    })
-    .catch(() => {
-      setUserImage("")
-    })
+      .then((res) => {
+        setUserImage(res)
+      })
+      .catch(() => {
+        setUserImage("")
+      })
   }
   return (
     <tr className="border-b-[1px] border-x-[1px] border-[#E5E5E5] h-16 rounded-2xl">
@@ -346,8 +348,8 @@ function UserView(_props: {
         className={
           _props.account_status.toLowerCase() === "active"
             ? "w-[80px] text-[#27AE60] font-medium text-sm"
-            // eslint-disable-next-line no-constant-condition
-            : _props.payment_status.toLowerCase() === "blocked" || "deleted"
+            : // eslint-disable-next-line no-constant-condition
+            _props.payment_status.toLowerCase() === "blocked" || "deleted"
             ? "w-[80px] text-[#F44336] font-medium text-sm"
             : "w-[80px] text-[#000] font-medium text-sm"
         }
@@ -387,7 +389,7 @@ function UserView(_props: {
                 plan: _props.plan,
                 payment_status: _props.payment_status,
                 account_status: _props.account_status,
-                pulse_status: _props.pulse_status
+                pulse_status: _props.pulse_status,
               })
             }}
           />

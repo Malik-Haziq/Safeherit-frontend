@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react"
 import tick from "@images/tick.svg"
 import creditCardImg from "@images/credit-card.svg"
 import cancelIcon from "@images/cancel.svg"
 
 import styles from "../../Dashboard.module.css"
 
-export default function MembershipPlanView(_props:{
+export default function MembershipPlanView(_props: {
   hidePlanView: React.MouseEventHandler<HTMLButtonElement>
 }) {
   const pricingInfoArr = [
@@ -48,7 +48,12 @@ export default function MembershipPlanView(_props:{
   ]
   return (
     <div className={styles.AppView}>
-      <button onClick={_props.hidePlanView} className=" mb-4 mt-2 p-2 hover:opacity-75 rounded-lg shadow-md my-[5px] w-[200px] mx-2">← Back to My Account</button>
+      <button
+        onClick={_props.hidePlanView}
+        className=" mb-4 mt-2 p-2 hover:opacity-75 rounded-lg shadow-md my-[5px] w-[200px] mx-2"
+      >
+        ← Back to My Account
+      </button>
       <main className=" p-6 rounded-lg shadow-md my-[22px] w-[1080px] mx-auto">
         <section className="mb-7">
           <h1 className="text-xl font-semibold mb-5">Your Membership Plan</h1>
@@ -74,7 +79,11 @@ export default function MembershipPlanView(_props:{
           <div className="flex itmes-center gap-3">
             {creditCardArr.map((card, index) => {
               return (
-                <CreditCard key={index} cardImg={card.cardImg} cardNum={card.cardNum} />
+                <CreditCard
+                  key={index}
+                  cardImg={card.cardImg}
+                  cardNum={card.cardNum}
+                />
               )
             })}
           </div>

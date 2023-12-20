@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import dashboardIcon from "@images/dashboard.svg"
 import assets from "@images/assets.svg"
 import beneficiaries from "@images/beneeficiaries.svg"
@@ -29,11 +29,11 @@ export default function Dashboard() {
   const user = useAppSelector((state) => state.user)
   const currentPath = useLocation()
   const [selectedOption, setSelectedOption] = useState(CONSTANT.DASHBOARD)
-  const [selectedPath, setSelectedPath] = useState('/dashboard')
-  
+  const [selectedPath, setSelectedPath] = useState("/dashboard")
+
   useEffect(() => {
     // Remove trailing slash
-    const trimmedPath = currentPath.pathname.replace(/\/$/, '')
+    const trimmedPath = currentPath.pathname.replace(/\/$/, "")
     setSelectedPath(trimmedPath)
     setSelectedOption(navBarHeadings[trimmedPath]?.id)
   }, [currentPath])
@@ -42,99 +42,104 @@ export default function Dashboard() {
     "/dashboard": {
       screen: CONSTANT.DASHBOARD,
       title: CONSTANT.DASHBOARD_TITLE,
-      id: CONSTANT.DASHBOARD
+      id: CONSTANT.DASHBOARD,
     },
     "/dashboard/assets": {
       screen: CONSTANT.MY_ASSETS,
       title: CONSTANT.MY_ASSETS_TITLE,
-      id: CONSTANT.MY_ASSETS
+      id: CONSTANT.MY_ASSETS,
     },
     "/dashboard/beneficiaries": {
       screen: CONSTANT.BENEFICIARIES,
       title: CONSTANT.BENEFICIARIES_TITLE,
-      id: CONSTANT.BENEFICIARIES
+      id: CONSTANT.BENEFICIARIES,
     },
     "/dashboard/validators": {
       screen: CONSTANT.VALIDATORS,
       title: CONSTANT.VALIDATORS_TITLE,
-      id: CONSTANT.VALIDATORS
+      id: CONSTANT.VALIDATORS,
     },
     "/dashboard/pulse": {
       screen: CONSTANT.PULSE_CHECK,
       title: CONSTANT.PULSE_CHECK_TITLE,
-      id: CONSTANT.PULSE_CHECK
+      id: CONSTANT.PULSE_CHECK,
     },
     "/dashboard/account": {
       screen: CONSTANT.MY_ACCOUNT,
       title: CONSTANT.MY_ACCOUNT_TITLE,
-      id: CONSTANT.MY_ACCOUNT
+      id: CONSTANT.MY_ACCOUNT,
     },
     "/dashboard/help": {
       screen: CONSTANT.HELP,
       title: CONSTANT.HELP_TITLE,
-      id: CONSTANT.HELP
+      id: CONSTANT.HELP,
     },
   }
   const beneficiaryNavBarHeadings: Record<string, NavBarItem> = {
     "/dashboard": {
       screen: CONSTANT.TESTAMENT,
       title: CONSTANT.TESTAMENT_TITLE,
-      id: CONSTANT.TESTAMENT
+      id: CONSTANT.TESTAMENT,
     },
     "/dashboard/assets": {
       screen: CONSTANT.ASSETS,
       title: CONSTANT.ASSETS_TITLE,
-      id: CONSTANT.ASSETS
+      id: CONSTANT.ASSETS,
     },
     "/dashboard/help": {
       screen: CONSTANT.HELP,
       title: CONSTANT.HELP_TITLE,
-      id: CONSTANT.HELP
+      id: CONSTANT.HELP,
     },
   }
   const validatorNavBarHeadings: Record<string, NavBarItem> = {
     "/dashboard": {
       screen: CONSTANT.VALIDATION,
       title: CONSTANT.VALIDATION_TITLE,
-      id: CONSTANT.VALIDATION
+      id: CONSTANT.VALIDATION,
     },
     "/dashboard/help": {
       screen: CONSTANT.HELP,
       title: CONSTANT.HELP_TITLE,
-      id: CONSTANT.HELP
+      id: CONSTANT.HELP,
     },
   }
   const adminNavBarHeadings: Record<string, NavBarItem> = {
     "/dashboard": {
       screen: CONSTANT.ADMIN,
       title: CONSTANT.ADMIN_TITLE,
-      id: CONSTANT.ADMIN
+      id: CONSTANT.ADMIN,
     },
     "/dashboard/setting": {
       screen: CONSTANT.SETTINGS,
       title: CONSTANT.SETTINGS_TITLE,
-      id: CONSTANT.SETTINGS
+      id: CONSTANT.SETTINGS,
     },
   }
   const superAdminNavBarHeadings: Record<string, NavBarItem> = {
     "/dashboard": {
       screen: CONSTANT.SUPER_ADMIN,
       title: CONSTANT.SUPER_ADMIN_TITLE,
-      id: CONSTANT.SUPER_ADMIN
+      id: CONSTANT.SUPER_ADMIN,
     },
     "/dashboard/setting": {
       screen: CONSTANT.SETTINGS,
       title: CONSTANT.SETTINGS_TITLE,
-      id: CONSTANT.SETTINGS
+      id: CONSTANT.SETTINGS,
     },
   }
-  const navBarHeadings: Record<string, NavBarItem> = 
-    user.role === "owner" ? ownerNavBarHeadings : 
-    user.role === "beneficiary" ? beneficiaryNavBarHeadings : 
-    user.role === "validator" ? validatorNavBarHeadings : 
-    user.role === "admin" ? adminNavBarHeadings : 
-    user.role === "super-admin" ? superAdminNavBarHeadings : 
-    {}
+  const navBarHeadings: Record<string, NavBarItem> =
+    user.role === "owner"
+      ? ownerNavBarHeadings
+      : user.role === "beneficiary"
+      ? beneficiaryNavBarHeadings
+      : user.role === "validator"
+      ? validatorNavBarHeadings
+      : user.role === "admin"
+      ? adminNavBarHeadings
+      : user.role === "super-admin"
+      ? superAdminNavBarHeadings
+      : {}
 
   const OwnerDrawerMenu = [
     {
@@ -258,32 +263,40 @@ export default function Dashboard() {
       },
     },
   ]
-  const DRAWER_MENU = 
-    user.role === "owner" ? OwnerDrawerMenu :
-    user.role === "beneficiary" ? beneficiaryDrawerMenu :
-    user.role === "validator" ? validatorDrawerMenu :
-    user.role === "admin" ? adminDrawerMenu :
-    user.role === "super-admin" ? superAdminDrawerMenu :
-    []
+  const DRAWER_MENU =
+    user.role === "owner"
+      ? OwnerDrawerMenu
+      : user.role === "beneficiary"
+      ? beneficiaryDrawerMenu
+      : user.role === "validator"
+      ? validatorDrawerMenu
+      : user.role === "admin"
+      ? adminDrawerMenu
+      : user.role === "super-admin"
+      ? superAdminDrawerMenu
+      : []
 
-  const DRAWER_SETTINGS = user.role === "owner" ? [
-    {
-      icon: profile,
-      option: CONSTANT.MY_ACCOUNT,
-      navigate: () => {
-        navigate("/dashboard/account")
-        setSelectedOption(CONSTANT.MY_ACCOUNT)
-      },
-    },
-    {
-      icon: setting,
-      option: CONSTANT.HELP,
-      navigate: () => {
-        navigate("/dashboard/help")
-        setSelectedOption(CONSTANT.HELP)
-      },
-    },
-  ] : []
+  const DRAWER_SETTINGS =
+    user.role === "owner"
+      ? [
+          {
+            icon: profile,
+            option: CONSTANT.MY_ACCOUNT,
+            navigate: () => {
+              navigate("/dashboard/account")
+              setSelectedOption(CONSTANT.MY_ACCOUNT)
+            },
+          },
+          {
+            icon: setting,
+            option: CONSTANT.HELP,
+            navigate: () => {
+              navigate("/dashboard/help")
+              setSelectedOption(CONSTANT.HELP)
+            },
+          },
+        ]
+      : []
   // TODO manually terminate the session on catch
   const _handleLogout = () => {
     dispatch<any>(logout({}))

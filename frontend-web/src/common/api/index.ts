@@ -1,18 +1,18 @@
 import axios from "axios"
-import { toast } from "@/components";
+import { toast } from "@/components"
 
 export const API = axios.create({
   baseURL: import.meta.env.VITE_REACT_APP_SERVER,
   // timeout: 1000,
   headers: {
     Accept: "application/json",
-    "Content-Type": "multipart/form-data"
+    "Content-Type": "multipart/form-data",
   },
 })
 
-const GET = async (DATA: { ROUTE: string; Body: object, token: string }) => {
+const GET = async (DATA: { ROUTE: string; Body: object; token: string }) => {
   const { ROUTE, Body, token } = DATA
-  API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  API.defaults.headers.common["Authorization"] = `Bearer ${token}`
   try {
     const response = await API.get(ROUTE, Body)
     return response
@@ -22,9 +22,9 @@ const GET = async (DATA: { ROUTE: string; Body: object, token: string }) => {
   }
 }
 
-const POST = async (DATA: { ROUTE: string; Body: object, token: string }) => {
+const POST = async (DATA: { ROUTE: string; Body: object; token: string }) => {
   const { ROUTE, Body, token } = DATA
-  API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  API.defaults.headers.common["Authorization"] = `Bearer ${token}`
   try {
     const response = await API.post(ROUTE, Body)
     return response
@@ -34,9 +34,9 @@ const POST = async (DATA: { ROUTE: string; Body: object, token: string }) => {
   }
 }
 
-const PUT = async (DATA: { ROUTE: string; Body: object, token: string }) => {
+const PUT = async (DATA: { ROUTE: string; Body: object; token: string }) => {
   const { ROUTE, Body, token } = DATA
-  API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  API.defaults.headers.common["Authorization"] = `Bearer ${token}`
   try {
     const response = await API.put(ROUTE, Body)
     return response
@@ -47,15 +47,17 @@ const PUT = async (DATA: { ROUTE: string; Body: object, token: string }) => {
 }
 
 const PATCH = () => {
-  try { /* empty */ } catch (error) {
+  try {
+    /* empty */
+  } catch (error) {
     _handleErrors(error)
     throw error
   }
 }
 
-const DELETE = async (DATA: { ROUTE: string; Body: object, token: string }) => {
+const DELETE = async (DATA: { ROUTE: string; Body: object; token: string }) => {
   const { ROUTE, Body, token } = DATA
-  API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  API.defaults.headers.common["Authorization"] = `Bearer ${token}`
   try {
     const response = await API.delete(ROUTE, Body)
     return response

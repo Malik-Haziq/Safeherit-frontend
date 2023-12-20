@@ -43,12 +43,9 @@ export const login = createAsyncThunk(
 
 export const loginWithGoogle = createAsyncThunk(
   "loginWithGoogle",
-  async (
-    Data: object,
-    { dispatch, rejectWithValue },
-  ) => {
+  async (Data: object, { dispatch, rejectWithValue }) => {
     try {
-      const response = await signInWithPopup(auth, new GoogleAuthProvider());
+      const response = await signInWithPopup(auth, new GoogleAuthProvider())
       const token = await response.user.getIdToken()
       dispatch(setToken(token))
       return response
@@ -66,7 +63,11 @@ export const signup = createAsyncThunk(
   ) => {
     const { email, password } = Data
     try {
-      const response = await createUserWithEmailAndPassword(auth, email, password)
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      )
       const token = await response.user.getIdToken()
       dispatch(setToken(token))
       return response
@@ -193,10 +194,14 @@ export const updatePK = createAsyncThunk(
 
 export const createPayment = createAsyncThunk(
   "createPayment",
-  async (Data: {subscriptionType: string}, { getState, rejectWithValue }) => {
+  async (Data: { subscriptionType: string }, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: any } }
     const formData = jsonToFormData(Data)
-    const params = { ROUTE: CREATE_PAYMENT_SESSION, Body: formData, token: user.token }
+    const params = {
+      ROUTE: CREATE_PAYMENT_SESSION,
+      Body: formData,
+      token: user.token,
+    }
     try {
       const response = await POST(params)
       return response
@@ -210,7 +215,11 @@ export const updatePayment = createAsyncThunk(
   "updatePayment",
   async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: any } }
-    const params = { ROUTE: CREATE_PAYMENT_SESSION_PORTAL, Body: {}, token: user.token }
+    const params = {
+      ROUTE: CREATE_PAYMENT_SESSION_PORTAL,
+      Body: {},
+      token: user.token,
+    }
     try {
       const response = await POST(params)
       return response

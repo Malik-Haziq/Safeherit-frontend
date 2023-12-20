@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import dollar from "@images/dollar.svg"
 import realEstate from "@images/real-estate.svg"
 import bank from "@images/bank.svg"
@@ -95,8 +95,7 @@ export default function AssetsView() {
               // TODO: show fallback page
             })
         })
-    }
-    else if (user.role == "beneficiary") {
+    } else if (user.role == "beneficiary") {
       dispatch<any>(getAllBeneficiaryAsset({}))
         .unwrap()
         .then((res: any) => {
@@ -208,7 +207,10 @@ export default function AssetsView() {
   ]
 
   const updateAssetArrayCount = (res: AxiosResponse<any, any>) => {
-    if (res.data.data && res.data.data.length > 0 || user.role == "beneficiary") {
+    if (
+      (res.data.data && res.data.data.length > 0) ||
+      user.role == "beneficiary"
+    ) {
       setHasAssets(1)
     } else if (res.data.data && res.data.data.length == 0) {
       setHasAssets(0)
@@ -246,9 +248,11 @@ export default function AssetsView() {
   }
   const _submitStepTwoModal = () => {
     // TODO validate fields
-    const beneficiaryIds = modalControl?.Beneficiary?.map((value: SelectOption) => {
-      return value?.value
-    })
+    const beneficiaryIds = modalControl?.Beneficiary?.map(
+      (value: SelectOption) => {
+        return value?.value
+      },
+    )
 
     const Data: {
       id?: string
@@ -262,7 +266,7 @@ export default function AssetsView() {
       assignedBeneficiaryIds: beneficiaryIds,
       data: JSON.stringify(modalControl),
       asset_file: assetFile,
-      beneficirayPublicKeys: beneficiary.beneficiary_mapper
+      beneficirayPublicKeys: beneficiary.beneficiary_mapper,
     }
     if (validateRequiredFields(modalControl, 1)) {
       startLoader()
@@ -280,7 +284,7 @@ export default function AssetsView() {
               })
           })
           .catch()
-          .finally(()=>{
+          .finally(() => {
             stopLoader()
           })
       } else if (modalAction == "create") {
@@ -297,7 +301,7 @@ export default function AssetsView() {
               })
           })
           .catch()
-          .finally(()=>{
+          .finally(() => {
             stopLoader()
           })
       }
@@ -368,13 +372,13 @@ export default function AssetsView() {
     } else if (user.role == "beneficiary") {
       const owner_email = user.selectedRoleUser?.ownerEmail
       const beneficiary_id = user.selectedRoleUser?.beneficiaryId
-      dispatch<any>(findBeneficiaryAsset(
-        { 
+      dispatch<any>(
+        findBeneficiaryAsset({
           id: assetId,
           owner_email: owner_email,
-          beneficiary_id: beneficiary_id 
-        }
-      ))
+          beneficiary_id: beneficiary_id,
+        }),
+      )
         .unwrap()
         .then((res: { data: { data: { data: string } } }) => {
           isEditingAsset.current = true //TODO look into this why is this here
@@ -559,14 +563,13 @@ function Assets(_props: {
                 <p className="font-medium text-sm uppercase">Value</p>
               </div>
               <div className="flex flex-grow justify-between">
-                {
-                  _props.userRole != "beneficiary" ?
-                    <p className="font-medium text-sm uppercase ">
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Beneficiary
-                    </p>
-                  :
+                {_props.userRole != "beneficiary" ? (
+                  <p className="font-medium text-sm uppercase ">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Beneficiary
+                  </p>
+                ) : (
                   <></>
-                }
+                )}
                 <p className="font-medium text-sm uppercase">Action</p>
               </div>
             </div>
@@ -661,20 +664,15 @@ function AssetDetails(_props: {
         </p>
       </div>
       <div className="flex justify-between items-center flex-grow w-[278px]">
-        {
-          _props.userRole != "beneficiary" ?
+        {_props.userRole != "beneficiary" ? (
           <div className="flex justify-between items-center gap-3">
-            <img
-              src={user}
-              alt="beneficiary image"
-              className="h-11 w-11"
-            />
-            <button>View</button> 
+            <img src={user} alt="beneficiary image" className="h-11 w-11" />
+            <button>View</button>
             {/* TODO ADD Beneficiray listing modal */}
           </div>
-          :
+        ) : (
           <></>
-        }
+        )}
         <div className="flex gap-1 ">
           <img
             src={eye}

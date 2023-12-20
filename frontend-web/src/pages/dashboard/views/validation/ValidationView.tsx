@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import { SetStateAction, useEffect, useState } from "react"
 import styles from "../../Dashboard.module.css"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom"
 import { getOwnerValidation, logout, validateOwner } from "@/redux/actions"
 
 export default function ValidationView() {
-
   const user = useAppSelector((state) => state.user)
 
   const dispatch = useAppDispatch()
@@ -18,48 +17,63 @@ export default function ValidationView() {
   useEffect(() => {
     getOwnerValidationData()
   }, [])
-  
+
   const getOwnerValidationData = async () => {
-    dispatch<any>(getOwnerValidation({})).unwrap()
-    .then((res: { data: { data: { personalized_message: SetStateAction<string>; canMarkPassing: SetStateAction<any> } } }) => {
-      setPersonalized_message(res.data.data.personalized_message)
-      setCanMarkPassing(res.data.data.canMarkPassing)
-      setLoadingData(true)
-    })
-    .catch()
+    dispatch<any>(getOwnerValidation({}))
+      .unwrap()
+      .then(
+        (res: {
+          data: {
+            data: {
+              personalized_message: SetStateAction<string>
+              canMarkPassing: SetStateAction<any>
+            }
+          }
+        }) => {
+          setPersonalized_message(res.data.data.personalized_message)
+          setCanMarkPassing(res.data.data.canMarkPassing)
+          setLoadingData(true)
+        },
+      )
+      .catch()
   }
   const _handleLogout = () => {
     dispatch<any>(logout({}))
-      .unwrap().catch()
+      .unwrap()
+      .catch()
       .finally(() => {
         navigate("/login")
       })
   }
-  
-  const _handlePassedAway = (confirmation: boolean) => {
-    dispatch<any>(validateOwner({passedAway: confirmation})).unwrap().catch()
-    .then(() => {
-      getOwnerValidationData()
-    })
-  }
 
+  const _handlePassedAway = (confirmation: boolean) => {
+    dispatch<any>(validateOwner({ passedAway: confirmation }))
+      .unwrap()
+      .catch()
+      .then(() => {
+        getOwnerValidationData()
+      })
+  }
 
   return (
     <div className={styles.AppView}>
       <main className="p-8 flex items-center gap-8 mx-auto">
-
         <section className="w-[520px] shadow-md max-h-[749px] min-h-[480px] rounded-2xl">
           <header className="py-3  bg-[#F6F6F6] text-center rounded-t-2xl text-[#00192B] font-bold text-lg">
             {`Message from ${user.selectedRoleUser.ownerName}`}
           </header>
-          {dataLoaded ? <div className="p-7 text-[#4F4F4F] ">{personalized_message}</div> : <p>Loading...</p>}
+          {dataLoaded ? (
+            <div className="p-7 text-[#4F4F4F] ">{personalized_message}</div>
+          ) : (
+            <p>Loading...</p>
+          )}
         </section>
 
         <section className="w-[520px] shadow-md rounded-2xl min-h-[480px] ">
           <header className="py-3 bg-[#F6F6F6] text-center rounded-t-2xl text-[#00192B] font-bold text-lg">
             {"Validation"}
           </header>
-          {dataLoaded ?
+          {dataLoaded ? (
             <div>
               <div className="p-7 scroll-auto text-[#00192B] text-lg text-center">
                 <h2 className="py-3 font-bold">
@@ -80,24 +94,37 @@ export default function ValidationView() {
               </div>
               <div className="flex items-center justify-between px-10 pb-12">
                 {canMarkPassing == false ? (
-                  <button onClick={_handleLogout} className="px-5 mt-12 mx-auto h-[80px] font-bold text-center w-[180px] bg-[#0971AA] text-white rounded-xl">
+                  <button
+                    onClick={_handleLogout}
+                    className="px-5 mt-12 mx-auto h-[80px] font-bold text-center w-[180px] bg-[#0971AA] text-white rounded-xl"
+                  >
                     CLICK HERE TO LOGOUT
                   </button>
                 ) : (
                   <>
-                    <button onClick={() => {_handlePassedAway(false)}} className="px-5 h-[80px] font-bold text-center w-[180px] bg-[#5CEAD2] text-[#04477B] rounded-xl">
+                    <button
+                      onClick={() => {
+                        _handlePassedAway(false)
+                      }}
+                      className="px-5 h-[80px] font-bold text-center w-[180px] bg-[#5CEAD2] text-[#04477B] rounded-xl"
+                    >
                       NO HE/SHE IS STILL ALIVE
                     </button>
-                    <button onClick={() => {_handlePassedAway(true)}} className="px-5 h-[80px] font-bold text-center w-[180px] bg-[#0971AA] text-white rounded-xl">
+                    <button
+                      onClick={() => {
+                        _handlePassedAway(true)
+                      }}
+                      className="px-5 h-[80px] font-bold text-center w-[180px] bg-[#0971AA] text-white rounded-xl"
+                    >
                       YES
                     </button>
                   </>
                 )}
               </div>
             </div>
-            :
+          ) : (
             <p>Loading...</p>
-          }
+          )}
         </section>
       </main>
     </div>

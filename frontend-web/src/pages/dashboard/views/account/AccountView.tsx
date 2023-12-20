@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import userImg from "@images/user.svg"
 import userIcon from "@images/UserIcon.png"
 import msgIcon from "@images/message.svg"
@@ -187,11 +187,13 @@ export default function AccountView() {
     dispatch<any>(updatePayment({}))
       .unwrap()
       .catch()
-      .then((res: { data: { data: { sessionUrl: string | URL | undefined } } }) => {
-        if (res.data.data.sessionUrl) {
-          window.open(res.data.data.sessionUrl, "_blank")
-        }
-      })
+      .then(
+        (res: { data: { data: { sessionUrl: string | URL | undefined } } }) => {
+          if (res.data.data.sessionUrl) {
+            window.open(res.data.data.sessionUrl, "_blank")
+          }
+        },
+      )
       .finally(() => {
         stopLoader()
       })

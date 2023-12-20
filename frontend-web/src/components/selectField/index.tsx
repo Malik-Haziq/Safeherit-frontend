@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import { useRef, useState } from "react"
 import Select, { components } from "react-select"
 import styles from "./SelectField.module.css"
@@ -51,7 +51,7 @@ const selectFieldStyles = (
       fontFamily: "Montserrat",
       fontWeight: 500,
       fontSize: "14px",
-      width: selectFieldWidth ? selectFieldWidth : '100%',
+      width: selectFieldWidth ? selectFieldWidth : "100%",
     }),
     menuList: (baseStyles: any) => ({
       ...baseStyles,
@@ -61,14 +61,14 @@ const selectFieldStyles = (
       fontFamily: "Montserrat",
       fontWeight: 400,
       fontSize: "14px",
-      width: selectFieldMenuWidth ? selectFieldMenuWidth : '100%',
+      width: selectFieldMenuWidth ? selectFieldMenuWidth : "100%",
     }),
     menu: (baseStyles: any) => ({
       ...baseStyles,
       borderRadius: 5,
       borderColor: "white",
       backgroundColor: "white",
-      width: selectFieldMenuWidth ? selectFieldMenuWidth : '100%',
+      width: selectFieldMenuWidth ? selectFieldMenuWidth : "100%",
     }),
   }
 }

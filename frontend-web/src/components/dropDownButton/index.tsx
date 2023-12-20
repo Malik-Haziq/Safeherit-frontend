@@ -44,7 +44,7 @@ export function DropDownButton(_props: any) {
               {_props.options?.map((option: any, index: string) => {
                 return (
                   <Menu.Item key={index}>
-                    {({ active } : { active: boolean}) => (
+                    {({ active }: { active: boolean }) => (
                       <button
                         className={`${
                           active ? "bg-safe-blue text-white" : "text-gray-900"
@@ -90,7 +90,7 @@ export function ValidatorDropDown(_props: {
           <Menu.Items className="absolute -left-[90px] mt-1 w-24 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
             <div className="px-1 py-1 ">
               <Menu.Item>
-                {({ active } : { active: boolean}) => (
+                {({ active }: { active: boolean }) => (
                   <div>
                     <button
                       className={`${
@@ -106,7 +106,7 @@ export function ValidatorDropDown(_props: {
                 )}
               </Menu.Item>
               <Menu.Item>
-                {({ active } : { active: boolean}) => (
+                {({ active }: { active: boolean }) => (
                   <div>
                     <button
                       className={`${

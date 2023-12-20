@@ -2,6 +2,6 @@ export * from "./sign_up"
 export * from "./login"
 export * from "./pricing"
 export * from "./register-key"
-export * from './home'
-export * from './about'
-export * from './contact'
+export * from "./home"
+export * from "./about"
+export * from "./contact"

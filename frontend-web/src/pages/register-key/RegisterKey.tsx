@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import arrowRight from "@images/Arrow - Right.svg"
 import registerPageVideo from "@images/register_page_video.png"
 import safepal from "@images/Safepal.svg"
@@ -13,28 +13,27 @@ import { updatePK } from "@/redux/actions"
 
 const initialState = {
   publicKey: "",
-  privateKey: ""
+  privateKey: "",
 }
 
 export default function RegisterKey() {
-  
   const dispatch = useAppDispatch()
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const encryptionService = new Encryption();
-  
+  const encryptionService = new Encryption()
+
   const user = useAppSelector((state) => state.user)
-  
-  const [modalVisibility, setModalVisibility] = useState('none')
+
+  const [modalVisibility, setModalVisibility] = useState("none")
   const [modalControl, setModalControl] = useState(initialState)
   const [filePresent, setFilePresent] = useState(false)
-  const [fileName, setFileName] = useState('')
+  const [fileName, setFileName] = useState("")
 
   const closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
     setFilePresent(false)
-    setFileName('')
+    setFileName("")
   }, [])
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
@@ -49,8 +48,7 @@ export default function RegisterKey() {
   const _handleGenerate = useCallback(() => {
     if (user.role == "beneficiary" || user.publicKey) {
       setModalVisibility("Load-PK")
-    } 
-    else {
+    } else {
       setModalVisibility("Generate-PK")
     }
   }, [])
@@ -60,39 +58,47 @@ export default function RegisterKey() {
     setTimeout(() => {
       setModalControl(encryptionService.generateKeyPair())
       toast("Keys Generated", "success")
-    }, 1000);
+    }, 1000)
   }, [])
 
   const _handleRegisterPK = () => {
-    if (encryptionService.validateKeyPair(modalControl.publicKey || user.publicKey, modalControl.privateKey)) {
+    if (
+      encryptionService.validateKeyPair(
+        modalControl.publicKey || user.publicKey,
+        modalControl.privateKey,
+      )
+    ) {
       if (modalVisibility == "Load-PK") {
         sessionStorage.setItem("privateKey", modalControl.privateKey)
-        navigate('/dashboard')
+        navigate("/dashboard")
+      } else {
+        dispatch<any>(
+          updatePK({
+            publicKey: modalControl.publicKey,
+            assetKeysEncByOwner: JSON.stringify({}),
+          }),
+        )
+          .unwrap()
+          .then(() => {
+            toast("Keys Registered", "success")
+            sessionStorage.setItem("privateKey", modalControl.privateKey)
+            navigate("/dashboard")
+          })
+          .catch((err: any) => {
+            console.log(err)
+          })
       }
-      else {
-        dispatch<any>(updatePK({publicKey: modalControl.publicKey, assetKeysEncByOwner: JSON.stringify({})})).unwrap()
-        .then(() => {
-          toast("Keys Registered", "success")
-          sessionStorage.setItem("privateKey", modalControl.privateKey)
-          navigate('/dashboard')
-        })
-        .catch((err: any) => {
-          console.log(err)
-        })
-      }
-    }
-    else {
+    } else {
       toast("Unable to verify keys", "error")
     }
   }
 
   const downloadPrivateKey = useCallback(() => {
     if (modalControl.privateKey) {
-      const KEY = {privateKey: modalControl.privateKey}
-      downloadJson(KEY, 'privateKey.json')
+      const KEY = { privateKey: modalControl.privateKey }
+      downloadJson(KEY, "privateKey.json")
       toast("Download Complete", "success")
-    }
-    else {
+    } else {
       toast("Kindly Generate Private Key", "error")
     }
   }, [modalControl.privateKey])
@@ -100,19 +106,17 @@ export default function RegisterKey() {
   const copyPrivateKey = useCallback(() => {
     if (modalControl.privateKey) {
       copyToClipboard(modalControl.privateKey)
-    }
-    else {
+    } else {
       toast("Kindly Generate Private Key", "error")
     }
   }, [modalControl.privateKey])
 
   const downloadPublicKey = useCallback(() => {
     if (modalControl.publicKey) {
-      const KEY = {publicKey: modalControl.publicKey}
-      downloadJson(KEY, 'publicKey.json')
+      const KEY = { publicKey: modalControl.publicKey }
+      downloadJson(KEY, "publicKey.json")
       toast("Download Complete", "success")
-    }
-    else {
+    } else {
       toast("Kindly Generate Public Key", "error")
     }
   }, [modalControl.publicKey])
@@ -120,8 +124,7 @@ export default function RegisterKey() {
   const copyPublicKey = useCallback(() => {
     if (modalControl.publicKey) {
       copyToClipboard(modalControl.publicKey)
-    }
-    else {
+    } else {
       toast("Kindly Generate Public Key", "error")
     }
   }, [modalControl.publicKey])
@@ -142,9 +145,9 @@ export default function RegisterKey() {
       />
       <GeneratePrivateKey
         openModal={modalVisibility == "Generate-PK"}
-        closeModal= {closeModal}
-        closeModalOnOverlayClick= {false}
-        closeIconVisibility= {true}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
         modalControl={modalControl}
         _handleChange={_handleChange}
         _handleGeneratePKPair={_handleGeneratePKPair}
@@ -170,12 +173,15 @@ export default function RegisterKey() {
         >
           Import
         </button>
-        {
-          !user.publicKey && <>
+        {!user.publicKey && (
+          <>
             <small className="before:content-none before:h-1 before:max-w-[146px] before:bg-safe-gray-shade after:content-none after:h-1 after:max-w-[146px] after:bg-safe-gray-shade mb-8 text-safe-text-dark-gray text-sm ">
               Don’t have a Public/Private key yet?
             </small>
-            <a onClick={_handleGenerate} className="cy-add-generate-PK flex gap-3 justify-between items-center bg-white shadow-md py-2 px-4 rounded-lg cursor-pointer w-full">
+            <a
+              onClick={_handleGenerate}
+              className="cy-add-generate-PK flex gap-3 justify-between items-center bg-white shadow-md py-2 px-4 rounded-lg cursor-pointer w-full"
+            >
               <div className="flex justify-center items-center gap-4">
                 <img src={safepal} alt="safepal icon" />
                 <span className="text-safe-text-black-tint font-medium">
@@ -185,7 +191,7 @@ export default function RegisterKey() {
               <img src={arrowRight} alt="arrow right" className="ml-9" />
             </a>
           </>
-        }
+        )}
       </section>
       <section className="basis-3/5 bg-linear-gradient flex justify-center items-center ">
         <div className="bg-white rounded-2xl  ">

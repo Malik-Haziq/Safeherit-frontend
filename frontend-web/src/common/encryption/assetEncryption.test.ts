@@ -42,7 +42,9 @@ describe("AssetEncryption", () => {
       category: "Real Estate",
       data: JSON.stringify({ body: "body test" }),
       assignedBeneficiaryIds: ["1"],
-      beneficirayPublicKeys: {"1": {public_key: beneficiaryKeyPair.publicKey}},
+      beneficirayPublicKeys: {
+        "1": { public_key: beneficiaryKeyPair.publicKey },
+      },
     }
 
     const encAssetData = assetEnc.encryptAssetData(
@@ -60,7 +62,7 @@ describe("AssetEncryption", () => {
     // key, so it should decrypt.
     const assetPrivateKey = enc.decrypt(
       beneficiaryKeyPair.privateKey,
-      encAssetData.privateKeysEncByBeneficiary['1'],
+      encAssetData.privateKeysEncByBeneficiary["1"],
     )
     expect(assetPrivateKey).toBeDefined()
 
@@ -100,7 +102,9 @@ describe("AssetEncryption", () => {
       category: "Real Estate",
       data: JSON.stringify({ body: "body test" }),
       assignedBeneficiaryIds: ["1"],
-      beneficirayPublicKeys: {"1": {public_key: beneficiaryKeyPair.publicKey}},
+      beneficirayPublicKeys: {
+        "1": { public_key: beneficiaryKeyPair.publicKey },
+      },
     }
 
     const encAssetData = assetEnc.encryptAssetData(
@@ -111,7 +115,7 @@ describe("AssetEncryption", () => {
 
     const decrData = assetEnc.decryptAssetDataForBeneficiary(
       beneficiaryKeyPair.privateKey,
-      '1',
+      "1",
       encAssetData,
     )
     expect(assetData).toEqual(decrData) // data should be decrypted

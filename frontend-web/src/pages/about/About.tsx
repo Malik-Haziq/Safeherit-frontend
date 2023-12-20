@@ -1,5 +1,5 @@
-import React from 'react'
+import React from "react"
 
-export function About(){
-    return <div>About Us</div>
+export function About() {
+  return <div>About Us</div>
 }

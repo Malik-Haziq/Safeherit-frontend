@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import userIcon from "@images/user-icon.svg"
 import addIcon from "@images/add-icon.svg"
 import facebook from "@images/facebook.svg"
@@ -152,7 +152,7 @@ export default function ValidatorsView() {
   }
 
   const _submitStepThreeModal = () => {
-        if (!modalControl.personalized_message) {
+    if (!modalControl.personalized_message) {
       toast("Personalized message cannot be empty", "error")
     } else {
       if (modalAction == "edit") {
@@ -175,7 +175,7 @@ export default function ValidatorsView() {
             console.log(err)
             // TODO: show fallback page
           })
-          .finally(()=>{
+          .finally(() => {
             stopLoader()
           })
       } else if (modalAction == "create") {
@@ -199,7 +199,7 @@ export default function ValidatorsView() {
             console.log(err)
             // TODO: show fallback page
           })
-          .finally(()=>{
+          .finally(() => {
             stopLoader()
           })
       }
@@ -285,15 +285,15 @@ export default function ValidatorsView() {
       })
   }
   const showPreviousModal = () => {
-    const lastEl = modalHistory[modalHistoryLength - 1] || 'none'
+    const lastEl = modalHistory[modalHistoryLength - 1] || "none"
     modalHistoryPop()
     setModalVisibility(lastEl)
   }
 
   const _handleDiscard = (name: string, value: any) => {
-    setModalControl({...modalControl, [name]: value});
+    setModalControl({ ...modalControl, [name]: value })
   }
-  
+
   return (
     <>
       <UserDetailsModal
@@ -466,7 +466,9 @@ function Validators(_props: {
               <p className="text-sm">Name</p>
             </li>
             <li className="text-safe-text-gray-shade text-sm">Email</li>
-            <li className="text-safe-text-gray-shade text-sm">Phone&nbsp;Number</li>
+            <li className="text-safe-text-gray-shade text-sm">
+              Phone&nbsp;Number
+            </li>
             <li className="text-safe-text-gray-shade text-sm relative w-[140px]">
               <p className="w-36 absolute right-20 -top-3">
                 Backup&nbsp;Phone&nbsp;Number
@@ -564,7 +566,7 @@ function Validator(_props: {
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
           <a
-            href={_props.facebook_link || 'https://www.facebook.com/login.php'}
+            href={_props.facebook_link || "https://www.facebook.com/login.php"}
             target="_blank"
             rel="noopener noreferrer"
           >

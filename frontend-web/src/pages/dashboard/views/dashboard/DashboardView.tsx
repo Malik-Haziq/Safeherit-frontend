@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import diamond from "@images/diamond.svg"
 import shield from "@images/Shield-done.svg"
 import heart from "@images/heart.svg"
@@ -133,7 +133,7 @@ function Cards(_props: {
 
       <div className="h-[444px] overflow-y-auto relative">
         {_props.loading ? (
-          <Spinner/>
+          <Spinner />
         ) : _props.assetsInfo.length ? (
           _props.assetsInfo.map((info: any, index: string) => {
             return (
@@ -146,7 +146,9 @@ function Cards(_props: {
             )
           })
         ) : (
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">No&nbsp;{_props.title}&nbsp;registered</div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            No&nbsp;{_props.title}&nbsp;registered
+          </div>
         )}
       </div>
     </div>
@@ -166,7 +168,11 @@ function Row(_props: { img: any; title: string; subTitle: string }) {
   }, [_props.img])
   return (
     <div className="p-4 flex gap-4 border-b-[.5px] ">
-      <img src={image || users} alt="" className="w-11 h-11 rounded-full object-contain" />
+      <img
+        src={image || users}
+        alt=""
+        className="w-11 h-11 rounded-full object-contain"
+      />
       <div>
         <h4 className="font-semibold">{_props.title}</h4>
         <small className="text-safe-text-light-gray-1 text-sm">
