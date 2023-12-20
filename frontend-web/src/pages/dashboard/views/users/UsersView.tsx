@@ -12,7 +12,7 @@ import { deleteUserRequest, getUsers } from "@/redux/actions/AdminAction"
 import { toast, Spinner } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
-import { getFileFromFirebase } from "@/common"
+import { getFileFromFirebase, isValidEmail } from "@/common"
 import { User } from "@/types"
 
 const initialState = {
@@ -70,7 +70,8 @@ export default function UsersView() {
       modalControl.email &&
       modalControl.phoneNumber
     ) {
-      dispatch(createUser(modalControl))
+      if(isValidEmail(modalControl.email)){
+        dispatch(createUser(modalControl))
         .unwrap()
         .catch()
         .then((res) => {
@@ -88,6 +89,9 @@ export default function UsersView() {
         .finally(()=>{
           stopLoader()
         })
+      } else{
+        toast('Please enter valid email', "error")
+      }
     } else {
       toast("All fields are required", "warning")
     }
