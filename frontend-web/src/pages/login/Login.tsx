@@ -442,7 +442,7 @@ export function Login() {
                 type={"login"}
                 buttonText={"Login with Google"}
               />
-              <div id="authenticate"></div>
+              <div className="z-10" id="authenticate"></div>
             </div>
             <footer className="flex justify-between">
               <small>© 2023 SafeHerit.com</small>

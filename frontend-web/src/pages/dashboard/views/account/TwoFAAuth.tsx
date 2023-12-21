@@ -113,7 +113,7 @@ export default function TwoFAAuth(_props: { hideTwoFA: () => void }) {
               code={code}
             />
           )}
-        <div id="authenticate"></div>
+        <div className="z-10" id="authenticate"></div>
       </>
     </div>
   )
