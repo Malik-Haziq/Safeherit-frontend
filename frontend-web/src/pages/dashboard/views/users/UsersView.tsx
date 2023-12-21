@@ -13,7 +13,7 @@ import { deleteUserRequest, getUsers } from "@/redux/actions/AdminAction"
 import { toast, Spinner } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
-import { getFileFromFirebase } from "@/common"
+import { getFileFromFirebase, isValidEmail } from "@/common"
 import { User } from "@/types"
 
 const initialState = {
@@ -71,24 +71,28 @@ export default function UsersView() {
       modalControl.email &&
       modalControl.phoneNumber
     ) {
-      dispatch<any>(createUser(modalControl))
-        .unwrap()
-        .catch()
-        .then((res: { data: { data: { password: any } } }) => {
-          startLoader()
-          fetchUsers()
-          setModalControl({
-            email: modalControl.email,
-            phoneNumber: modalControl.phoneNumber,
-            displayName: modalControl.displayName,
-            password: res.data.data.password,
+      if (isValidEmail(modalControl.email)) {
+        dispatch<any>(createUser(modalControl))
+          .unwrap()
+          .catch()
+          .then((res: { data: { data: { password: any } } }) => {
+            startLoader()
+            fetchUsers()
+            setModalControl({
+              email: modalControl.email,
+              phoneNumber: modalControl.phoneNumber,
+              displayName: modalControl.displayName,
+              password: res.data.data.password,
+            })
+            setModalVisibility("view-new-user")
+            toast("User Created", "success")
           })
-          setModalVisibility("view-new-user")
-          toast("User Created", "success")
-        })
-        .finally(() => {
-          stopLoader()
-        })
+          .finally(() => {
+            stopLoader()
+          })
+      } else {
+        toast("Please enter valid email", "error")
+      }
     } else {
       toast("All fields are required", "warning")
     }

@@ -1,5 +1,6 @@
 import React from "react"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
   _handleMFASubmit: any
@@ -11,6 +12,32 @@ export function VerificationCode({
   _handleMFACancel,
   code,
 }: Props) {
+  const [isTimeoutExpired, setIsTimeoutExpired] = useState(false)
+  const [remainingTime, setRemainingTime] = useState(1 * 60)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setRemainingTime((prevTime) => prevTime - 1)
+
+      if (remainingTime <= 0) {
+        clearInterval(intervalId)
+        setIsTimeoutExpired(true)
+        navigate("/dashboard/account")
+      }
+    }, 1000)
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [remainingTime])
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${minutes}:${secs < 10 ? `0${secs}` : secs}`
+  }
+
   return (
     <div className="flex sm:justify-center items-center px-4 sm:px-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
       <div className="bg-white flex flex-col p-5 md:p-6  border-2 border-palladium rounded-xl w-full sm:max-w-[540px]">
@@ -37,6 +64,11 @@ export function VerificationCode({
             )
           })}
         </div>
+        <div>
+          {!isTimeoutExpired && (
+            <p>This code will expire in: {formatTime(remainingTime)}</p>
+          )}
+        </div>
         <div className="flex mt-4 gap-x-4">
           <button
             onClick={() => _handleMFACancel()}
@@ -51,6 +83,33 @@ export function VerificationCode({
             <span className="text-base text-white">Submit</span>
           </button>
         </div>
+      </div>
+      <div className="flex gap-x-4 mt-6 md:mt-8 pb-4">
+        {code.map((value, index) => {
+          return (
+            <Input
+              key={index}
+              index={index}
+              getValue={(value, index) => {
+                code[index] = value
+              }}
+            />
+          )
+        })}
+      </div>
+      <div className="flex mt-4 gap-x-4">
+        <button
+          onClick={() => _handleMFACancel()}
+          className="rounded-xl flex gap-x-4 mb-8 h-11 w-1/2 items-center justify-center px-6 border border-[#04477B] text-[#04477B]"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => _handleMFASubmit()}
+          className="bg-safe-blue-tint rounded-xl flex h-11 w-1/2 items-center justify-center px-6 "
+        >
+          <span className="text-base text-white">Submit</span>
+        </button>
       </div>
     </div>
   )

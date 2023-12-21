@@ -152,14 +152,15 @@ export default function BeneficiariesView() {
     ) {
       toast("please enter a valid Email address", "error")
     } else if (
-      (!isValidPhoneWithRegion(modalControl.phone_number) &&
-        !isValidPhoneWithRegion(modalControl.backup_phone_number)) ||
-      (modalControl.phone_number &&
-        !isValidPhoneWithRegion(modalControl.phone_number)) ||
-      (modalControl.backup_phone_number &&
-        !isValidPhoneWithRegion(modalControl.backup_phone_number))
+      modalControl.phone_number !== "" &&
+      !isValidPhoneWithRegion(modalControl.phone_number)
     ) {
-      toast("please enter a valid Phone number", "error")
+      toast("Please enter a valid phone number", "error")
+    } else if (
+      modalControl.backup_phone_number !== "" &&
+      !isValidPhoneWithRegion(modalControl.backup_phone_number)
+    ) {
+      toast("Please enter a valid phone number", "error")
     } else {
       modalHistoryPush("Step-1")
       setModalVisibility("Step-2")
@@ -383,10 +384,12 @@ export default function BeneficiariesView() {
   }
 
   const _handleGeneratePKPair = useCallback(() => {
+    startLoader()
     toast("Generating Public/Private Key", "info")
     setTimeout(() => {
       setModalEncryptionKeyControl(encryptionService.generateKeyPair())
       toast("Keys Generated", "success")
+      stopLoader()
     }, 1000)
   }, [])
 
