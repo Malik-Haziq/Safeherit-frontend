@@ -145,18 +145,13 @@ export default function BeneficiariesView() {
       (modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2))
     ) {
       toast("please enter a valid Email address", "error")
-    } else if (
-      (!isValidPhoneWithRegion(modalControl.phone_number) &&
-        !isValidPhoneWithRegion(modalControl.backup_phone_number)) ||
-      (modalControl.phone_number &&
-        !isValidPhoneWithRegion(modalControl.phone_number)) ||
-      (modalControl.backup_phone_number &&
-        !isValidPhoneWithRegion(modalControl.backup_phone_number))
-    ) {
-      toast("please enter a valid Phone number", "error")
-    } else {
-      modalHistoryPush("Step-1")
-      setModalVisibility("Step-2")
+    } else if (modalControl.phone_number !== '' && !isValidPhoneWithRegion(modalControl.phone_number)) {
+      toast("Please enter a valid phone number", "error");
+    } else if (modalControl.backup_phone_number !== '' && !isValidPhoneWithRegion(modalControl.backup_phone_number)) {
+      toast("Please enter a valid phone number", "error");
+    } else{
+        modalHistoryPush("Step-1")
+        setModalVisibility("Step-2")
     }
   }
   const _submitStepTwoModal = () => {
