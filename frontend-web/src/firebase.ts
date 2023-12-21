@@ -12,9 +12,7 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_REACT_APP_measurementId,
 }
 
-
-
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
-export const provider = new GoogleAuthProvider();
+export const provider = new GoogleAuthProvider()
 export const firestore = getFirestore(app)

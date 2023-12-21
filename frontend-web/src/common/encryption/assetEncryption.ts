@@ -40,10 +40,13 @@ class AssetEncryption {
 
     if (data.assignedBeneficiaryIds?.length > 0) {
       data.privateKeysEncByBeneficiary = {}
-      
+
       data.assignedBeneficiaryIds.forEach((id: string) => {
         const beneficiaryPublicKey = data.beneficirayPublicKeys[id].public_key
-        data.privateKeysEncByBeneficiary[id] = this.encryption.encrypt(beneficiaryPublicKey, assetPrivateKey)
+        data.privateKeysEncByBeneficiary[id] = this.encryption.encrypt(
+          beneficiaryPublicKey,
+          assetPrivateKey,
+        )
       })
     }
 

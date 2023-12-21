@@ -1,9 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { login, loginWithGoogle, logout, signup, getUser, updateUser, updatePK } from "../actions/UserActions"
+import {
+  login,
+  loginWithGoogle,
+  logout,
+  getUser,
+  updateUser,
+  updatePK,
+} from "../actions/UserActions"
 import { SelectOption } from "@/types"
 
 type PulseDetails = {
-  [key: string]: { heading: string; subHeading: string }[];
+  [key: string]: { heading: string; subHeading: string }[]
 }
 interface UserState {
   email: string
@@ -16,7 +23,7 @@ interface UserState {
   language: string
   profile_image: string
   loading: boolean
-  beneficiaryOf: {}[]
+  beneficiaryOf: object[]
   _beneficiaryOf: SelectOption[]
   _validatorOf: SelectOption[]
   isBeneficiary: boolean
@@ -25,8 +32,8 @@ interface UserState {
   isAdmin: boolean
   isValidator: boolean
   role: string
-  selectedRoleUser: {[key: string]: any}
-  userMap: {[key: string]: any}
+  selectedRoleUser: { [key: string]: any }
+  userMap: { [key: string]: any }
   pulseDetail: PulseDetails
   pulseCheckNonValidationMonths: string
   pulseCheckDays: string
@@ -58,28 +65,28 @@ const initialState: UserState = {
   selectedRoleUser: {},
   userMap: {},
   pulseDetail: {
-    'Email': [
+    Email: [
       { heading: "Primary Phone", subHeading: "gmail.com" },
       { heading: "Backup Phone 1", subHeading: "+ymail" },
       { heading: "Backup Phone 2", subHeading: "+9 234 566 " },
     ],
-    'Phone': [
+    Phone: [
       { heading: "Primary Phone", subHeading: "+1 234 566 890" },
       { heading: "Backup Phone 1", subHeading: "+7 234 566 890" },
       { heading: "Backup Phone 2", subHeading: "+9 234 566 560" },
     ],
-    'Social media': [
+    "Social media": [
       { heading: "Social media", subHeading: "hard coded" },
       { heading: "Social media 1", subHeading: "hard coded" },
       { heading: "Social media 2", subHeading: "hard coded" },
     ],
   },
-  pulseCheckNonValidationMonths: '',
-  pulseCheckDays: '',
-  pulseCheckActive: '',
-  pulseCheckValidationRequired: '',
-  publicKey: '',
-  paymentStatus: ''
+  pulseCheckNonValidationMonths: "",
+  pulseCheckDays: "",
+  pulseCheckActive: "",
+  pulseCheckValidationRequired: "",
+  publicKey: "",
+  paymentStatus: "",
 }
 
 export const slice = createSlice({
@@ -96,27 +103,26 @@ export const slice = createSlice({
       state.role = action.payload
     },
     updateRoleCheck: (state, action) => {
-      switch (action.payload.role)
-      {
+      switch (action.payload.role) {
         case "owner": {
           state.isOwner = action.payload.value
-          break;
+          break
         }
         case "beneficiary": {
           state.isBeneficiary = action.payload.value
-          break;
+          break
         }
         case "validator": {
           state.isValidator = action.payload.value
-          break;
+          break
         }
         case "admin": {
           state.isAdmin = action.payload.value
-          break;
+          break
         }
         case "super-admin": {
           state.isSuperAdmin = action.payload.value
-          break;
+          break
         }
       }
     },
@@ -139,8 +145,8 @@ export const slice = createSlice({
       state._validatorOf = []
     },
     setToken: (state, action) => {
-      state.token = action.payload;
-    },  
+      state.token = action.payload
+    },
 
     setCredentials: (state, action) => {
       state.token = action.payload.token
@@ -148,7 +154,7 @@ export const slice = createSlice({
       state.displayName = action.payload.user || ""
       state.photo = action.payload.user || ""
       state.phone = action.payload.user || ""
-    }
+    },
   },
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
@@ -163,39 +169,57 @@ export const slice = createSlice({
       state.photo = action.payload.user.photoURL || ""
       state.phone = action.payload.user.phoneNumber || ""
     })
-    builder.addCase(signup.fulfilled, (state, action) => {})
-    builder.addCase(logout.fulfilled, (state, action) => {
+    builder.addCase(logout.fulfilled, () => {
       return initialState
     })
-    builder.addCase(getUser.pending, (state, action) => {
+    builder.addCase(getUser.pending, (state) => {
       state.loading = true
     })
     builder.addCase(getUser.fulfilled, (state, action) => {
       state.loading = false
       const methodArr: PulseDetails = {
-        'Email': [
-          { heading: "Pulse Check Email 1", subHeading: action.payload.data.data.pulseCheckEmail1 },
-          { heading: "Pulse Check Email 2", subHeading: action.payload.data.data.pulseCheckEmail2 },
-          { heading: "Pulse Check Email 3", subHeading: action.payload.data.data.pulseCheckEmail3 },
+        Email: [
+          {
+            heading: "Pulse Check Email 1",
+            subHeading: action.payload.data.data.pulseCheckEmail1,
+          },
+          {
+            heading: "Pulse Check Email 2",
+            subHeading: action.payload.data.data.pulseCheckEmail2,
+          },
+          {
+            heading: "Pulse Check Email 3",
+            subHeading: action.payload.data.data.pulseCheckEmail3,
+          },
         ],
-        'Phone': [
-          { heading: "Primary Phone", subHeading: action.payload.data.data.pulseCheckPhone1 },
-          { heading: "Backup Phone 1", subHeading: action.payload.data.data.pulseCheckPhone2 },
+        Phone: [
+          {
+            heading: "Primary Phone",
+            subHeading: action.payload.data.data.pulseCheckPhone1,
+          },
+          {
+            heading: "Backup Phone 1",
+            subHeading: action.payload.data.data.pulseCheckPhone2,
+          },
         ],
-        'Social media': [
+        "Social media": [
           { heading: "Social media", subHeading: "hard coded" },
           { heading: "Social media 1", subHeading: "hard coded" },
           { heading: "Social media 2", subHeading: "hard coded" },
         ],
       }
       state.pulseDetail = methodArr
-      state.pulseCheckNonValidationMonths = action.payload.data.data.pulseCheckNonValidationMonths
+      state.pulseCheckNonValidationMonths =
+        action.payload.data.data.pulseCheckNonValidationMonths
       state.pulseCheckActive = action.payload.data.data.pulseCheckActive
       state.pulseCheckDays = action.payload.data.data.pulseCheckDays
-      state.pulseCheckValidationRequired = action.payload.data.data.pulseCheckValidationRequired
-      state.displayName = action.payload.data.data.displayName || state.displayName
+      state.pulseCheckValidationRequired =
+        action.payload.data.data.pulseCheckValidationRequired
+      state.displayName =
+        action.payload.data.data.displayName || state.displayName
       state.language = action.payload.data.data.language
-      state.profile_image = action.payload.data.data.profile_image || state.profile_image
+      state.profile_image =
+        action.payload.data.data.profile_image || state.profile_image
       state.isBeneficiary = action.payload.data.data.isBeneficiary
       state.isOwner = action.payload.data.data.isOwner
       state.isSuperAdmin = action.payload.data.data.isSuperAdmin
@@ -205,29 +229,29 @@ export const slice = createSlice({
       state.publicKey = action.payload.data.data?.publicKey || ""
       state.paymentStatus = action.payload.data.data?.paymentStatus || ""
 
-      let beneficiaryOfArray: SelectOption[] = []
-      const beneficiaryMapper: {[key: string]: any} = {};
+      const beneficiaryOfArray: SelectOption[] = []
+      const beneficiaryMapper: { [key: string]: any } = {}
 
       if (action.payload.data.data._beneficiaryOf) {
         action.payload.data.data._beneficiaryOf.forEach((element: any) => {
           beneficiaryOfArray.push({
             label: element.ownerEmail + " - " + element.ownerName,
-            value: element.beneficiaryId
+            value: element.beneficiaryId,
           })
           beneficiaryMapper[element.beneficiaryId] = {
             ownerEmail: element.ownerEmail,
             beneficiaryId: element.beneficiaryId,
             ownerName: element.ownerName,
             public_key: element.public_key,
-            role: "beneficiary"
+            role: "beneficiary",
           }
         })
         state.userMap = beneficiaryMapper
         state._beneficiaryOf = beneficiaryOfArray
       }
 
-      let validatorOfArray: SelectOption[] = []
-      const validatorMapper: {[key: string]: any} = {};
+      const validatorOfArray: SelectOption[] = []
+      const validatorMapper: { [key: string]: any } = {}
 
       if (action.payload.data.data._validatorOf) {
         action.payload.data.data._validatorOf.forEach((element: any) => {
@@ -239,22 +263,19 @@ export const slice = createSlice({
             ownerEmail: element.ownerEmail,
             validatorId: element.validatorId,
             ownerName: element.ownerName,
-            role: "validator"
+            role: "validator",
           }
         })
-        state.userMap = {...state.userMap, ...validatorMapper}
+        state.userMap = { ...state.userMap, ...validatorMapper }
         state._validatorOf = validatorOfArray
       }
     })
-    builder.addCase(updateUser.pending, (state, action) => {
-    })
     builder.addCase(updateUser.fulfilled, (state, action) => {
-      state.displayName = action.payload.data.data.displayName || state.displayName
+      state.displayName =
+        action.payload.data.data.displayName || state.displayName
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image
       state.active = true
-    })
-    builder.addCase(updateUser.rejected, (state, action) => {
     })
     builder.addCase(updatePK.fulfilled, (state, action) => {
       state.publicKey = action.payload.data.data.publicKey
@@ -262,6 +283,18 @@ export const slice = createSlice({
   },
 })
 
-export const { updateName, updateActive, setToken, updateRole, updatePhone, updateRoleUser, resetMapper, resetBeneficiaryOf, resetValidatorOf, setCredentials, updateRoleCheck } = slice.actions
+export const {
+  updateName,
+  updateActive,
+  setToken,
+  updateRole,
+  updatePhone,
+  updateRoleUser,
+  resetMapper,
+  resetBeneficiaryOf,
+  resetValidatorOf,
+  setCredentials,
+  updateRoleCheck,
+} = slice.actions
 
 export default slice.reducer

@@ -1,3 +1,4 @@
+import React from "react"
 import facebook from "@images/facebook.svg"
 import twitter from "@images/twitter.svg"
 import instagram from "@images/insta.svg"
@@ -12,11 +13,11 @@ import { IoMdCloseCircle } from "react-icons/io"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
-  closeModal: Function
+  closeModal: () => void
   closeModalOnOverlayClick: boolean
   modalTitle: string
   closeIconVisibility: boolean
-  _submitModal: Function
+  _submitModal: () => void
 }) {
   return (
     <Modal
@@ -105,7 +106,7 @@ export function StepZeroInformationModal(_props: {
 
 export function StepOneModal(_props: {
   openModal: boolean
-  closeModal: Function
+  closeModal: () => void
   closeModalOnOverlayClick: boolean
   modalTitle: string
   closeIconVisibility: boolean
@@ -120,7 +121,7 @@ export function StepOneModal(_props: {
     phone_number: string
     backup_phone_number: string
   }
-  _submitModal: Function
+  _submitModal: () => void
   //   elements: objeect
 }) {
   return (
@@ -275,7 +276,7 @@ interface CustomChangeEvent {
 
 export function StepTwoModal(_props: {
   openModal: boolean
-  closeModal: Function
+  closeModal: () => void
   closeModalOnOverlayClick: boolean
   modalTitle: string
   closeIconVisibility: boolean
@@ -286,10 +287,10 @@ export function StepTwoModal(_props: {
     twitter_username: string
     profile_image: string
   }
-  _submitModal: Function
-  _handleDiscard: Function
+  _submitModal: () => void
+  _handleDiscard: (name: string, value: any) => void
   imageUpload: string
-  setImageUpload: Function
+  setImageUpload: any
   arrayLength: any
   showPreviousModal: any
 }) {
@@ -420,12 +421,12 @@ export function StepTwoModal(_props: {
                           className="w-20 h-20"
                         />
                         <span
-                            className="absolute top-0 right-0 text-red-900 cursor-pointer"
-                            onClick={() => {
-                              _props.setImageUpload("")
-                              _props._handleDiscard("profile_image", "");
-                            }}
-                          >
+                          className="absolute top-0 right-0 text-red-900 cursor-pointer"
+                          onClick={() => {
+                            _props.setImageUpload("")
+                            _props._handleDiscard("profile_image", "")
+                          }}
+                        >
                           <IoMdCloseCircle size={"20px"} />
                         </span>
                       </div>
@@ -458,7 +459,7 @@ export function StepTwoModal(_props: {
 
 export function StepThreeModal(_props: {
   openModal: boolean
-  closeModal: Function
+  closeModal: () => void
   closeModalOnOverlayClick: boolean
   modalTitle: string
   closeIconVisibility: boolean
@@ -466,7 +467,7 @@ export function StepThreeModal(_props: {
   modalControl: {
     personalized_message: string
   }
-  _submitModal: Function
+  _submitModal: () => void
   arrayLength: any
   showPreviousModal: any
 }) {
@@ -524,7 +525,7 @@ export function StepThreeModal(_props: {
 
 export function StepFourSuccessModal(_props: {
   openModal: boolean
-  closeModal: Function
+  closeModal: () => void
   closeModalOnOverlayClick: boolean
   modalTitle: string
   closeIconVisibility: boolean

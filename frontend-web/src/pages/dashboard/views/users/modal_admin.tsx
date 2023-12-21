@@ -1,3 +1,4 @@
+import React from "react"
 import { Modal } from "@/components"
 import { User } from "@/types"
 
@@ -6,13 +7,13 @@ export function NewUserModal(_props: {
   closeModal: any
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
-  _handleChange: Function
-  _submitModal: Function
+  _handleChange: (event: { target: { name: any; value: any } }) => void
+  _submitModal: () => void
   modalControl: {
-    email: string,
-    phoneNumber: string,
-    displayName: string,
-    password: string,
+    email: string
+    phoneNumber: string
+    displayName: string
+    password: string
   }
 }) {
   return (
@@ -20,7 +21,7 @@ export function NewUserModal(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={ "Create User"}
+      modalTitle={"Create User"}
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {
@@ -88,15 +89,15 @@ export function UserDetail(_props: {
 }) {
   const headings = Object.keys(_props.modalControl)
   const values = Object.values(_props.modalControl)
-  const USER_HEADINGS: {[key: string]: string; } = {
-    "displayName": "User name",
-    "id": "User id",
-    "email": "User email",
-    "joining_date": "Joining date",
-    "plan": "Plan",
-    "payment_status": "Payment status",
-    "account_status": "Account type",
-    "pulse_status": "Pulse status"
+  const USER_HEADINGS: { [key: string]: string } = {
+    displayName: "User name",
+    id: "User id",
+    email: "User email",
+    joining_date: "Joining date",
+    plan: "Plan",
+    payment_status: "Payment status",
+    account_status: "Account type",
+    pulse_status: "Pulse status",
   }
 
   return (
@@ -147,19 +148,19 @@ export function NewUserDetail(_props: {
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   modalControl: {
-    email: string,
-    phoneNumber: string,
-    displayName: string,
-    password: string,
+    email: string
+    phoneNumber: string
+    displayName: string
+    password: string
   }
 }) {
   const headings = Object.keys(_props.modalControl)
   const values = Object.values(_props.modalControl)
-  const USER_HEADINGS: {[key: string]: string; } = {
-    "email": "Email",
-    "phoneNumber": "Phone Number",
-    "displayName": "Display Name",
-    "password": "Password",
+  const USER_HEADINGS: { [key: string]: string } = {
+    email: "Email",
+    phoneNumber: "Phone Number",
+    displayName: "Display Name",
+    password: "Password",
   }
   return (
     <Modal

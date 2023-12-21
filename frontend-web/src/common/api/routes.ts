@@ -7,7 +7,8 @@ export const BENEFICIARIES = "/api-beneficiary"
 export const ALL_BENEFICIARIES = "/api-beneficiary/list"
 
 export const BENEFICIARY_ASSETS = "/api-beneficiary/as-beneficiary/assets"
-export const BENEFICIARY_ASSET_BY_ID = "/api-beneficiary/as-beneficiary/asset/byId"
+export const BENEFICIARY_ASSET_BY_ID =
+  "/api-beneficiary/as-beneficiary/asset/byId"
 export const TESTMENTS = "/api-beneficiary/as-beneficiary/testament"
 
 export const ASSETS = "/api-asset"
@@ -25,4 +26,5 @@ export const DELETE_USER_REQUEST = "/api-admin/delete-user-request"
 export const PULSE_CHECK = "/api-pulseCheck"
 
 export const CREATE_PAYMENT_SESSION = "/api-payment/create-subscription-session"
-export const CREATE_PAYMENT_SESSION_PORTAL = "/api-payment/create-portal-session"
+export const CREATE_PAYMENT_SESSION_PORTAL =
+  "/api-payment/create-portal-session"

@@ -16,13 +16,13 @@ const assetEnc = new AssetEncryption()
 
 export const getAllAsset = createAsyncThunk(
   "getAllAsset",
-  async (Data: {}, { getState, rejectWithValue }) => {
+  async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: "" } }
     const params = { ROUTE: ALL_ASSETS, Body: {}, token: user.token }
     // user logged in would be owner
     const ownerPrivateKey = sessionStorage.getItem("privateKey") || ""
     try {
-      let response = await GET(params)
+      const response = await GET(params)
       response.data.data = response.data.data.map((asset: any) => {
         return assetEnc.decryptAssetDataForOwner(ownerPrivateKey, asset)
       })
@@ -35,7 +35,7 @@ export const getAllAsset = createAsyncThunk(
 
 export const getAllBeneficiaryAsset = createAsyncThunk(
   "getAllBeneficiaryAsset",
-  async (Data: {}, { getState, rejectWithValue }) => {
+  async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as {
       user: {
         token: ""
@@ -52,7 +52,7 @@ export const getAllBeneficiaryAsset = createAsyncThunk(
     // user logged in would be beneficiary
     const beneficiaryPrivateKey = sessionStorage.getItem("privateKey") || ""
     try {
-      let response = await GET(params)
+      const response = await GET(params)
       response.data.data = response.data.data.map((asset: any) => {
         return assetEnc.decryptAssetDataForBeneficiary(
           beneficiaryPrivateKey,
@@ -73,17 +73,19 @@ export const createAsset = createAsyncThunk(
     const { user } = getState() as { user: { token: ""; publicKey: "" } }
     const ownerPrivateKey = sessionStorage.getItem("privateKey") || ""
     const ownerPublicKey = user.publicKey
-    
+
     Data = assetEnc.encryptAssetData(ownerPrivateKey, ownerPublicKey, Data)
 
     Data.assignedBeneficiaryIds = JSON.stringify(Data.assignedBeneficiaryIds)
-    Data.privateKeysEncByBeneficiary = JSON.stringify(Data.privateKeysEncByBeneficiary)
+    Data.privateKeysEncByBeneficiary = JSON.stringify(
+      Data.privateKeysEncByBeneficiary,
+    )
 
     const formData = jsonToFormData(Data)
 
     const params = { ROUTE: ASSETS, Body: formData, token: user.token }
     try {
-      let response = await POST(params)
+      const response = await POST(params)
       response.data.data = assetEnc.decryptAssetDataForOwner(
         ownerPrivateKey,
         response.data.data,
@@ -106,7 +108,7 @@ export const findAsset = createAsyncThunk(
     }
     const ownerPrivateKey = sessionStorage.getItem("privateKey") || ""
     try {
-      let response = await GET(params)
+      const response = await GET(params)
       response.data.data = assetEnc.decryptAssetDataForOwner(
         ownerPrivateKey,
         response.data.data,
@@ -120,7 +122,10 @@ export const findAsset = createAsyncThunk(
 
 export const findBeneficiaryAsset = createAsyncThunk(
   "findAsset",
-  async (Data: { id: string, owner_email: string, beneficiary_id: string }, { getState, rejectWithValue }) => {
+  async (
+    Data: { id: string; owner_email: string; beneficiary_id: string },
+    { getState, rejectWithValue },
+  ) => {
     const { user } = getState() as { user: { token: "" } }
     const params = {
       ROUTE: `${BENEFICIARY_ASSET_BY_ID}?id=${Data.id}&beneficiary_id=${Data.beneficiary_id}&owner_email=${Data.owner_email}`,
@@ -129,7 +134,7 @@ export const findBeneficiaryAsset = createAsyncThunk(
     }
     const beneficiaryPrivateKey = sessionStorage.getItem("privateKey") || ""
     try {
-      let response = await GET(params)
+      const response = await GET(params)
       response.data.data = assetEnc.decryptAssetDataForBeneficiary(
         beneficiaryPrivateKey,
         Data.beneficiary_id,
@@ -152,12 +157,14 @@ export const updateAsset = createAsyncThunk(
     Data = assetEnc.encryptAssetData(ownerPrivateKey, ownerPublicKey, Data)
 
     Data.assignedBeneficiaryIds = JSON.stringify(Data.assignedBeneficiaryIds)
-    Data.privateKeysEncByBeneficiary = JSON.stringify(Data.privateKeysEncByBeneficiary)
+    Data.privateKeysEncByBeneficiary = JSON.stringify(
+      Data.privateKeysEncByBeneficiary,
+    )
 
     const formData = jsonToFormData(Data)
     const params = { ROUTE: ASSETS, Body: formData, token: user.token }
     try {
-      let response = await PUT(params)
+      const response = await PUT(params)
       response.data.data = assetEnc.decryptAssetDataForOwner(
         ownerPrivateKey,
         response.data.data,
@@ -179,7 +186,7 @@ export const deleteAsset = createAsyncThunk(
       token: user.token,
     }
     try {
-      let response = await DELETE(params)
+      const response = await DELETE(params)
       return response
     } catch (error) {
       return rejectWithValue(error)

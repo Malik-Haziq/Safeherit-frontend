@@ -9,9 +9,9 @@ export const slice = createSlice({
   initialState,
   reducers: {
     setLoaderVisibility: (state, action) => {
-        state.loaderVisibility = action.payload
+      state.loaderVisibility = action.payload
     },
-  }
+  },
 })
 
 export const { setLoaderVisibility } = slice.actions

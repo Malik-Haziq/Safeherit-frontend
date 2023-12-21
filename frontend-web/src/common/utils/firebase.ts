@@ -30,7 +30,7 @@ export function verifyIfUserIsEnrolled() {
   } else {
     // toast("User not found", "error")
     return false
-  } 
+  }
 }
 
 export async function verifyUserEnrolled(
@@ -56,7 +56,6 @@ export async function verifyPhoneNumber(
   phoneNumber: string,
   recaptchaVerifier: ApplicationVerifier,
 ): Promise<false | string> {
-  
   const session = await multiFactor(user).getSession()
   const phoneInfoOptions = {
     phoneNumber,
@@ -151,15 +150,20 @@ export function isEmailVerified() {
 
 export async function verifyEmail(oobCode: string, apiKey: string) {
   const body = {
-    "oobCode": oobCode
+    oobCode: oobCode,
   }
-  const params = { ROUTE: `${import.meta.env.VITE_REACT_APP_GOOGLE_API_ACCOUNT_INFO}?key=${apiKey}`, Body: body}
+  const params = {
+    ROUTE: `${
+      import.meta.env.VITE_REACT_APP_GOOGLE_API_ACCOUNT_INFO
+    }?key=${apiKey}`,
+    Body: body,
+  }
   try {
-    let response = await API.post(params.ROUTE, params.Body, {
+    const response = await API.post(params.ROUTE, params.Body, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    });
+    })
     return response
   } catch (error) {
     return false

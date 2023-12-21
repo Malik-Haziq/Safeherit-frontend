@@ -1,10 +1,5 @@
-import {
-  ChangeEvent,
-  MouseEvent,
-  useState,
-  useCallback,
-  useEffect,
-} from "react"
+import React from "react"
+import { useState, useCallback, useEffect } from "react"
 import styles from "../../Dashboard.module.css"
 import shieldIcon from "@images/Shield-done.svg"
 import tickIcon from "@images/tick-blue.svg"
@@ -26,8 +21,7 @@ import {
 } from "@/common"
 import { InputField, PhoneNumField, Spinner, toast } from "@/components"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { getUser, updatePulse, validateOwner } from "@/redux/actions"
-import { useNavigate } from "react-router-dom"
+import { getUser, updatePulse } from "@/redux/actions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 
 const initialState = {
@@ -44,9 +38,9 @@ const initialState = {
 export default function PulseView() {
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.user)
-  const navigate = useNavigate()
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
+
   const [pulseCheck, setPulseCheck] = useState<boolean | null>(null)
   const [modalVisibility, setModalVisibility] = useState("none")
   const [confirmationDetails, setConfirmationDetails] = useState("Email")
@@ -90,10 +84,10 @@ export default function PulseView() {
   }, [confirmationDetails])
 
   const getUserDetails = () => {
-    dispatch(getUser({}))
+    dispatch<any>(getUser({}))
       .unwrap()
       .catch()
-      .then((res) => {
+      .then((res: { data: { data: { pulseCheckActive: string } } }) => {
         if (JSON.parse(res.data.data.pulseCheckActive)) {
           setPulseCheck(true)
         } else {
@@ -147,10 +141,10 @@ export default function PulseView() {
   const _submitStepFourModal = () => {
     startLoader()
     toast("creating pulse check ", "info")
-    dispatch(updatePulse(modalControl))
+    dispatch<any>(updatePulse(modalControl))
       .unwrap()
       .catch()
-      .then((res) => {
+      .then(() => {
         modalHistoryPush("Step-4")
         setModalVisibility("success-modal")
         getUserDetails()
@@ -205,7 +199,7 @@ export default function PulseView() {
     dispatch(updatePulse(updatedData))
       .unwrap()
       .catch()
-      .then((res) => {
+      .then(() => {
         toast("Pulse check data updated successfully", "info")
         getUserDetails()
       })
@@ -313,10 +307,16 @@ function PulseCheckView(_props: {
   setEditDetailInput: any
   pulseCheckDays: string
   newPulseCheckDays: string
-  setNewPulseCheckDays: Function
+  setNewPulseCheckDays: React.Dispatch<React.SetStateAction<string>>
   pulseCheckCustomDays: string
-  setPulseCheckCustomDays: Function
-  submitUpdatedValue: Function
+  setPulseCheckCustomDays: React.Dispatch<React.SetStateAction<string>>
+  submitUpdatedValue: ({
+    propertyName,
+    value,
+  }: {
+    propertyName: string
+    value: string
+  }) => void
 }) {
   return (
     <div className="px-8 py-4">
@@ -360,7 +360,11 @@ function PulseCheckView(_props: {
                   onClick={() => {
                     _props.submitUpdatedValue({
                       propertyName: "pulseCheckDays",
-                      value: (_props.newPulseCheckDays === "0" && _props.pulseCheckCustomDays) ? _props.pulseCheckCustomDays : _props.newPulseCheckDays,
+                      value:
+                        _props.newPulseCheckDays === "0" &&
+                        _props.pulseCheckCustomDays
+                          ? _props.pulseCheckCustomDays
+                          : _props.newPulseCheckDays,
                     })
                     _props.setNewPulseCheckDays("")
                     _props.setPulseCheckCustomDays("")
@@ -427,9 +431,9 @@ function CheckPulsePeriod(_props: {
   pulseCheckDays: any
   days: string
   newPulseCheckDays: string
-  setNewPulseCheckDays: Function
+  setNewPulseCheckDays: React.Dispatch<React.SetStateAction<string>>
   pulseCheckCustomDays: string
-  setPulseCheckCustomDays: Function
+  setPulseCheckCustomDays: React.Dispatch<React.SetStateAction<string>>
 }) {
   return (
     <div
@@ -518,7 +522,13 @@ function MethodRow(_props: {
   subHeading: string
   editDetailInput: string
   setEditDetailInput: any
-  submitUpdatedValue: Function
+  submitUpdatedValue: ({
+    propertyName,
+    value,
+  }: {
+    propertyName: string
+    value: string
+  }) => void
 }) {
   const [_inputValue, _setInputValue] = useState<string>("")
 

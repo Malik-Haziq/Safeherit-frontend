@@ -1,3 +1,4 @@
+import React from "react"
 import registerAssetsImg from "@images/register-assets.svg"
 import stepOne from "@images/step-1.svg"
 import stepTwo from "@images/step-2.svg"
@@ -7,7 +8,6 @@ import arrowDown from "@images/arrow-down.svg"
 import { Modal } from "@/components"
 import { assetData } from "./data"
 import { useAppSelector } from "@redux/hooks"
-import { getValueOfObjectFromArray } from "@/common"
 
 const selectFieldStyles =
   "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]"
@@ -17,10 +17,10 @@ const textInputFieldStyles =
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
-  closeModal: Function
+  closeModal: () => void
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
-  _submitModal: Function
+  _submitModal: () => void
   action: string
 }) {
   return (
@@ -84,7 +84,7 @@ const generateSelectFieldProps = (
   value: any,
   name: string,
   isMulti: boolean,
-  _handleChange: Function,
+  _handleChange: any,
 ) => {
   return {
     type: "selectView",
@@ -93,7 +93,7 @@ const generateSelectFieldProps = (
       value: value,
       selectProps: {
         placeholder: placeholder,
-        isMulti: isMulti
+        isMulti: isMulti,
       },
       setSelectedValue: (value: any) => {
         const customEvent = {
@@ -121,7 +121,7 @@ const generateMultiSelectFieldProps = (
   value: any,
   name: string,
   isMulti: boolean,
-  _handleChange: Function,
+  _handleChange: any,
 ) => {
   return {
     type: "selectView",
@@ -130,7 +130,7 @@ const generateMultiSelectFieldProps = (
       value: value,
       selectProps: {
         placeholder: placeholder,
-        isMulti: isMulti
+        isMulti: isMulti,
       },
       setSelectedValue: (value: any) => {
         const customEvent = {
@@ -156,7 +156,7 @@ const generateTextInputFieldProps = (
   name: string,
   placeholder: string,
   value: any,
-  _handleChange: Function,
+  _handleChange: any,
 ) => {
   return {
     type: "inputView",
@@ -183,7 +183,7 @@ export function StepOneModal(_props: {
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   modalControl: ModalControl
   assetTypes: { value: string; label: string }[]
-  _submitModal: Function
+  _submitModal: () => void
   disableAssetSelection: boolean
   arrayLength: any
   showPreviousModal: any
@@ -294,9 +294,9 @@ export function StepTwoModal(_props: {
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   modalControl: ModalControl
-  _submitModal: Function
+  _submitModal: () => void
   assetFile: any
-  setAssetFile: Function
+  setAssetFile: React.Dispatch<React.SetStateAction<string>>
   arrayLength: any
   showPreviousModal: any
 }) {
@@ -372,8 +372,7 @@ export function StepTwoModal(_props: {
           type: "textView",
           props: {
             text: "Online banking credentials",
-            textStyles:
-              "text-[#00192B] font-medium mb-4 px-7",
+            textStyles: "text-[#00192B] font-medium mb-4 px-7",
           },
         },
         ...conditionalElements,
@@ -394,8 +393,12 @@ export function StepTwoModal(_props: {
                   />
                   <div className="flex items-center justify-between gap-2 mb-8">
                     <div className="flex flex-col">
-                      <span className="text-safe-text-gray-shade font-medium text-sm" >File size should be less than 10MBs</span>
-                      <span className="text-gray text-safe-text-gray-shade text-sm">png/jpg/webp/jpeg</span>
+                      <span className="text-safe-text-gray-shade font-medium text-sm">
+                        File size should be less than 10MBs
+                      </span>
+                      <span className="text-gray text-safe-text-gray-shade text-sm">
+                        png/jpg/webp/jpeg
+                      </span>
                     </div>
                     <p>{_props.assetFile?.name || _props.assetFile}</p>
                     <img
@@ -536,10 +539,9 @@ export function AssetDetail(_props: {
                           key={index}
                           className="flex gap-6 items-center pb-6"
                         >
-                          {
-                            heading == "Beneficiary" ?
+                          {heading == "Beneficiary" ? (
                             <></>
-                            :
+                          ) : (
                             <>
                               <h2 className="text-[#292929] font-sm font-medium basis-2/5 text-right">
                                 {heading}
@@ -548,7 +550,7 @@ export function AssetDetail(_props: {
                                 {values[index]}
                               </p>
                             </>
-                          }
+                          )}
                         </div>
                       )
                     })}

@@ -1,4 +1,5 @@
-import { SnackbarProvider, enqueueSnackbar } from 'notistack'
+import React from "react"
+import { SnackbarProvider, enqueueSnackbar } from "notistack"
 
 export const CustomToast = () => {
   return (
@@ -11,12 +12,15 @@ export const CustomToast = () => {
   )
 }
 
-export const toast = (message: string, variant: "default" | "error" | "success" | "warning" | "info") => {
+export const toast = (
+  message: string,
+  variant: "default" | "error" | "success" | "warning" | "info",
+) => {
   enqueueSnackbar(message, {
     variant: variant,
     anchorOrigin: {
-      vertical: 'bottom',
-      horizontal: 'right'
-    }
+      vertical: "bottom",
+      horizontal: "right",
+    },
   })
 }

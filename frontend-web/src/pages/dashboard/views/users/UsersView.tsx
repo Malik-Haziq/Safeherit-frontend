@@ -1,3 +1,4 @@
+import React from "react"
 import styles from "../../Dashboard.module.css"
 import eye from "@images/eye.svg"
 import userImg from "@images/user.svg"
@@ -19,7 +20,7 @@ const initialState = {
   email: "",
   phoneNumber: "",
   displayName: "",
-  password: ""
+  password: "",
 }
 
 const userInitialState = {
@@ -31,14 +32,14 @@ const userInitialState = {
   payment_status: "",
   account_status: "",
   pulse_status: "",
-  profile_image: ""
+  profile_image: "",
 }
 
 export default function UsersView() {
   const dispatch = useAppDispatch()
   const admin = useAppSelector((state) => state.admin)
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(true)
@@ -70,27 +71,27 @@ export default function UsersView() {
       modalControl.email &&
       modalControl.phoneNumber
     ) {
-      if(isValidEmail(modalControl.email)){
-        dispatch(createUser(modalControl))
-        .unwrap()
-        .catch()
-        .then((res) => {
-          startLoader()
-          fetchUsers()
-          setModalControl({
-            email: modalControl.email,
-            phoneNumber: modalControl.phoneNumber,
-            displayName: modalControl.displayName,
-            password: res.data.data.password
+      if (isValidEmail(modalControl.email)) {
+        dispatch<any>(createUser(modalControl))
+          .unwrap()
+          .catch()
+          .then((res: { data: { data: { password: any } } }) => {
+            startLoader()
+            fetchUsers()
+            setModalControl({
+              email: modalControl.email,
+              phoneNumber: modalControl.phoneNumber,
+              displayName: modalControl.displayName,
+              password: res.data.data.password,
+            })
+            setModalVisibility("view-new-user")
+            toast("User Created", "success")
           })
-          setModalVisibility('view-new-user')
-          toast("User Created", "success")
-        })
-        .finally(()=>{
-          stopLoader()
-        })
-      } else{
-        toast('Please enter valid email', "error")
+          .finally(() => {
+            stopLoader()
+          })
+      } else {
+        toast("Please enter valid email", "error")
       }
     } else {
       toast("All fields are required", "warning")
@@ -99,7 +100,7 @@ export default function UsersView() {
 
   const fetchUsers = () => {
     setLoading(true)
-    dispatch(getUsers({ page: currentPage }))
+    dispatch<any>(getUsers({ page: currentPage }))
       .unwrap()
       .finally(() => {
         setLoading(false)
@@ -118,26 +119,29 @@ export default function UsersView() {
   }
 
   const deleteUser = (email: string) => {
-    let reason: string | null = ''
-    while(!reason) {
+    let reason: string | null = ""
+    while (!reason) {
       reason = prompt("Please enter reason for user deletion")
       if (reason) {
         startLoader()
         const data = {
           email: email,
-          reason: reason
+          reason: reason,
         }
-        dispatch(deleteUserRequest(data)).unwrap().catch()
-        .then((res) => {
-          toast("User deletion request submitted", "success")
-        })
-        .finally(() => {
-          stopLoader()
-        })
+        dispatch<any>(deleteUserRequest(data))
+          .unwrap()
+          .catch()
+          .then(() => {
+            toast("User deletion request submitted", "success")
+          })
+          .finally(() => {
+            stopLoader()
+          })
       }
     }
   }
   const editUser = (id: string) => {
+    id
     toast("functionality not implemented", "error")
   }
   const viewUser = (_props: User) => {
@@ -150,9 +154,9 @@ export default function UsersView() {
       payment_status: _props.payment_status,
       account_status: _props.account_status,
       pulse_status: _props.pulse_status,
-      profile_image: _props.profile_image
+      profile_image: _props.profile_image,
     })
-    setModalVisibility('view-user')
+    setModalVisibility("view-user")
   }
   const createAccount = () => {
     setModalVisibility("create-user")
@@ -300,19 +304,19 @@ function UserView(_props: {
   account_status: string
   pulse_status: string
   pulseStatusSubtile: string
-  viewUser: Function
-  editUser: Function
-  deleteUser: Function
+  viewUser: (_props: User) => void
+  editUser: (id: string) => void
+  deleteUser: (id: string) => void
 }) {
-  const [userImage, setUserImage] = useState('')
+  const [userImage, setUserImage] = useState("")
   if (_props.profile_image) {
     getFileFromFirebase(_props.profile_image)
-    .then((res) => {
-      setUserImage(res)
-    })
-    .catch(() => {
-      setUserImage("")
-    })
+      .then((res) => {
+        setUserImage(res)
+      })
+      .catch(() => {
+        setUserImage("")
+      })
   }
   return (
     <tr className="border-b-[1px] border-x-[1px] border-[#E5E5E5] h-16 rounded-2xl">
@@ -348,7 +352,8 @@ function UserView(_props: {
         className={
           _props.account_status.toLowerCase() === "active"
             ? "w-[80px] text-[#27AE60] font-medium text-sm"
-            : _props.payment_status.toLowerCase() === "blocked" || "deleted"
+            : // eslint-disable-next-line no-constant-condition
+            _props.payment_status.toLowerCase() === "blocked" || "deleted"
             ? "w-[80px] text-[#F44336] font-medium text-sm"
             : "w-[80px] text-[#000] font-medium text-sm"
         }
@@ -388,7 +393,7 @@ function UserView(_props: {
                 plan: _props.plan,
                 payment_status: _props.payment_status,
                 account_status: _props.account_status,
-                pulse_status: _props.pulse_status
+                pulse_status: _props.pulse_status,
               })
             }}
           />

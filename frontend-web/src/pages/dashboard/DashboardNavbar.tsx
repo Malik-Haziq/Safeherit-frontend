@@ -1,7 +1,8 @@
+import React from "react"
 import userImg from "@images/user.svg"
 import arrowDown from "@images/chevron-down.svg"
 
-import { DropDownButton, Notifications } from "@/components"
+import { DropDownButton } from "@/components"
 import { useAppSelector } from "@redux/hooks"
 import { useEffect, useState } from "react"
 import { getFileFromFirebase } from "@/common"
@@ -12,7 +13,7 @@ type NavBarItem = {
 }
 
 export default function DashboardNavbar(_props: {
-  _handleLogout: Function
+  _handleLogout: () => void
   navBarHeadings: Record<string, NavBarItem>
   currentPath: any
 }) {

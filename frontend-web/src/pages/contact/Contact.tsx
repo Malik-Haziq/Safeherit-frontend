@@ -1,3 +1,5 @@
-export function Contact(){
-    return <div>Contact Us</div>
+import React from "react"
+
+export function Contact() {
+  return <div>Contact Us</div>
 }

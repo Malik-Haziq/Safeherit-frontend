@@ -1,3 +1,4 @@
+import React from "react"
 import logo from "@images/safeherit_logo.svg"
 import userIcon from "@images/UserIcon.png"
 import emailIcon from "@images/EmailIcon.png"
@@ -5,22 +6,24 @@ import signupBg from "@images/signup-bg.svg"
 import passwordVisibilityIcon from "@images/PasswordVisibilityIcon.png"
 import signupImg from "@images/signup-pic.png"
 import { useState } from "react"
-import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { loginWithGoogle, signup, updateUser } from "@redux/actions"
+import { loginWithGoogle, signup } from "@redux/actions"
 import { useAppDispatch } from "@redux/hooks"
-import { updateProfile } from "firebase/auth"
+import { User, updateProfile } from "firebase/auth"
 import { GoogleAuthButton, toast } from "@/components"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
-import { updateActive, updateRole, updateRoleCheck } from "@/redux/reducers/UserSlice"
+import {
+  updateActive,
+  updateRole,
+  updateRoleCheck,
+} from "@/redux/reducers/UserSlice"
 import { sendEmailVerificationEmail, isStrongPassword } from "@/common"
 
 export function SignUp() {
-  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [formControl, setFormControl] = useState({
     name: "",
@@ -46,7 +49,6 @@ export function SignUp() {
   }
 
   const _handleSubmit = () => {
-
     if (
       formControl.name &&
       formControl.email &&
@@ -56,41 +58,41 @@ export function SignUp() {
     ) {
       if (formControl.password !== formControl.confirm_password) {
         toast("password must match", "error")
-      }
-      else if(!isStrongPassword(formControl.password)){
-        toast('Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special symbol.', 'error');
-      }
-      else {
+      } else if (!isStrongPassword(formControl.password)) {
+        toast(
+          "Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special symbol.",
+          "error",
+        )
+      } else {
         startLoader()
         toast("signing up", "info")
-        dispatch(
+        dispatch<any>(
           signup({ email: formControl.email, password: formControl.password }),
         )
           .unwrap()
-          .then((res) => {
+          .then((res: { user: User }) => {
             updateProfile(res.user, {
               displayName: formControl.name,
             })
-            .then()
-            .catch((err) => {
-              toast(err?.code, "error")
-            })
-            .finally(async () => {
-              const emailSent = await sendEmailVerificationEmail()
-              if (emailSent) {
-                toast("Verification Email Sent", "info")
-                setTimeout(() => {
-                  toast("Please verify your email to login", "info")
-                  stopLoader()
+              .then()
+              .catch((err) => {
+                toast(err?.code, "error")
+              })
+              .finally(async () => {
+                const emailSent = await sendEmailVerificationEmail()
+                if (emailSent) {
+                  toast("Verification Email Sent", "info")
+                  setTimeout(() => {
+                    toast("Please verify your email to login", "info")
+                    stopLoader()
+                    navigate("/login")
+                  }, 500)
+                } else {
                   navigate("/login")
-                }, 500);
-              }
-              else {
-                navigate("/login")
-              }
-            })
+                }
+              })
           })
-          .catch((err) => {
+          .catch((err: { code: string }) => {
             toast(err?.code, "error")
             stopLoader()
           })
@@ -100,18 +102,18 @@ export function SignUp() {
 
   const _signupWithGoogle = () => {
     startLoader()
-    dispatch(loginWithGoogle({}))
+    dispatch<any>(loginWithGoogle({}))
       .unwrap()
       .then(() => {
-        dispatch(updateActive(true))
-        dispatch(updateRole("owner"))
-        dispatch(updateRoleCheck({role: "owner", value: true}))
+        dispatch<any>(updateActive(true))
+        dispatch<any>(updateRole("owner"))
+        dispatch<any>(updateRoleCheck({ role: "owner", value: true }))
         setTimeout(() => {
           stopLoader()
           navigate("/pricing")
-        }, 1000);
+        }, 1000)
       })
-      .catch((err) => {
+      .catch((err: { code: string }) => {
         toast(err?.code, "error")
       })
       .finally(() => {
@@ -218,9 +220,9 @@ export function SignUp() {
           </button>
         </form>
         <GoogleAuthButton
-          handleClick={_signupWithGoogle} 
+          handleClick={_signupWithGoogle}
           type={"signup"}
-          buttonText={"Continue with Google"}    
+          buttonText={"Continue with Google"}
         />
         <small className="text-sm text-safe-text-dark-gray">
           Already have an account?&nbsp;
@@ -229,8 +231,20 @@ export function SignUp() {
           </a>
         </small>
       </section>
-      <section className="bg-safe-blue hidden lg:flex lg:items-center lg:justify-center lg:w-3/5 relative" style={{background: `url(${signupBg})`, backgroundRepeat: 'no-repeat',backgroundPosition: 'center', backgroundSize: 'cover'}}>
-        <img src={signupImg} alt="sign up image" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      <section
+        className="bg-safe-blue hidden lg:flex lg:items-center lg:justify-center lg:w-3/5 relative"
+        style={{
+          background: `url(${signupBg})`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+        }}
+      >
+        <img
+          src={signupImg}
+          alt="sign up image"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        />
       </section>
     </main>
   )

@@ -1,3 +1,4 @@
+import React from "react"
 import { ProtectedRoutes } from "./common"
 import {
   BrowserRouter,
@@ -33,15 +34,17 @@ const AccountView = lazy(
   () => import("./pages/dashboard/views/account/AccountView"),
 )
 const HelpView = lazy(() => import("./pages/dashboard/views/help/HelpView"))
-const SettingView = lazy(() => import("./pages/dashboard/views/setting/SettingView"))
+const SettingView = lazy(
+  () => import("./pages/dashboard/views/setting/SettingView"),
+)
 
 function App() {
-  const loader = useAppSelector(state => state.loader)
+  const loader = useAppSelector((state) => state.loader)
   return (
     // TODO: add suspense with loading fallback to handle loading time delays.
     <>
-      <CustomToast/>
-      { loader.loaderVisibility && <Spinner withOverlay={true}/> }
+      <CustomToast />
+      {loader.loaderVisibility && <Spinner withOverlay={true} />}
       <AppRoutes />
     </>
   )
@@ -52,9 +55,8 @@ function AppRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<NavBarLayout />}>
+          <Route path={""} element={<Home />} />
 
-          <Route path={''} element={<Home />} />
-          
           <Route path={ROUTE_CONSTANTS.ABOUT} element={<About />} />
           <Route path={ROUTE_CONSTANTS.CONTACT} element={<Contact />} />
 
@@ -63,14 +65,20 @@ function AppRoutes() {
           </Route>
 
           <Route element={<ProtectedRoutes page="register-pk" />}>
-            <Route path={ROUTE_CONSTANTS.REGISTER_KEY} element={<RegisterKey />} />
+            <Route
+              path={ROUTE_CONSTANTS.REGISTER_KEY}
+              element={<RegisterKey />}
+            />
           </Route>
 
           <Route element={<ProtectedRoutes page="registration" />}>
             <Route path={ROUTE_CONSTANTS.SIGN_UP} element={<SignUp />} />
           </Route>
-          
-          <Route path="*" element={<Navigate to={ROUTE_CONSTANTS.HOME} replace />} />
+
+          <Route
+            path="*"
+            element={<Navigate to={ROUTE_CONSTANTS.HOME} replace />}
+          />
         </Route>
 
         <Route element={<ProtectedRoutes page="registration" />}>
@@ -78,29 +86,46 @@ function AppRoutes() {
         </Route>
 
         <Route element={<ProtectedRoutes page="dashboard" />}>
-
           <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<Dashboard />}>
-
             <Route path="" element={<DashboardControl />} />
-            <Route path={ROUTE_CONSTANTS.DASHBOARD_HELP} element={<HelpView />}/>
+            <Route
+              path={ROUTE_CONSTANTS.DASHBOARD_HELP}
+              element={<HelpView />}
+            />
 
             <Route element={<ProtectedRoutes page="dashboard-owner" />}>
-              <Route path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES} element={<BeneficiariesView />}/>
-              <Route path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS} element={<ValidatorsView />}/>
-              <Route path={ROUTE_CONSTANTS.DASHBOARD_PULSE} element={<PulseView />}/>
-              <Route path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT} element={<AccountView />}/>
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}
+                element={<BeneficiariesView />}
+              />
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}
+                element={<ValidatorsView />}
+              />
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
+                element={<PulseView />}
+              />
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT}
+                element={<AccountView />}
+              />
             </Route>
 
             <Route element={<ProtectedRoutes page="dashboard-beneficiary" />}>
-              <Route path={ROUTE_CONSTANTS.DASHBOARD_ASSETS} element={<AssetsView />}/>
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
+                element={<AssetsView />}
+              />
             </Route>
 
             <Route element={<ProtectedRoutes page="dashboard-admin" />}>
-              <Route path={ROUTE_CONSTANTS.DASHBOARD_SETTINGS} element={<SettingView />}/>
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_SETTINGS}
+                element={<SettingView />}
+              />
             </Route>
-
           </Route>
-
         </Route>
       </Routes>
     </BrowserRouter>

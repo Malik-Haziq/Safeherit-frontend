@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
-import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import { persistStore, persistReducer } from "redux-persist"
+import storage from "redux-persist/lib/storage"
 import user from "./reducers/UserSlice"
 import validator from "./reducers/ValidatorSlice"
 import beneficiary from "./reducers/BeneficiarySlice"
@@ -8,17 +8,17 @@ import asset from "./reducers/AssetSlice"
 import dashboard from "./reducers/DashboardSlice"
 import admin from "./reducers/AdminSlice"
 import loader from "./reducers/LoaderSlice"
-import sessionStorage from "redux-persist/es/storage/session"
+// import sessionStorage from "redux-persist/es/storage/session"
 
 const rootPersistConfig = {
-  key: 'data',
+  key: "data",
   storage,
 }
-const sessionPersistConfig = {
-  key: 'root',
-  storage: sessionStorage,
-}
-const rootReducer = combineReducers({ 
+// const sessionPersistConfig = {
+//   key: 'root',
+//   storage: sessionStorage,
+// }
+const rootReducer = combineReducers({
   user: persistReducer(rootPersistConfig, user),
   loader: loader,
   validator: persistReducer(rootPersistConfig, validator),

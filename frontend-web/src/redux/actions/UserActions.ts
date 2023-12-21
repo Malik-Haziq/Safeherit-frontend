@@ -31,8 +31,8 @@ export const login = createAsyncThunk(
   ) => {
     const { email, password } = Data
     try {
-      let response = await signInWithEmailAndPassword(auth, email, password)
-      let token = await response.user.getIdToken()
+      const response = await signInWithEmailAndPassword(auth, email, password)
+      const token = await response.user.getIdToken()
       dispatch(setToken(token))
       return response
     } catch (error) {
@@ -43,13 +43,10 @@ export const login = createAsyncThunk(
 
 export const loginWithGoogle = createAsyncThunk(
   "loginWithGoogle",
-  async (
-    Data: {},
-    { dispatch, rejectWithValue },
-  ) => {
+  async (Data: object, { dispatch, rejectWithValue }) => {
     try {
-      let response = await signInWithPopup(auth, new GoogleAuthProvider());
-      let token = await response.user.getIdToken()
+      const response = await signInWithPopup(auth, new GoogleAuthProvider())
+      const token = await response.user.getIdToken()
       dispatch(setToken(token))
       return response
     } catch (error) {
@@ -66,8 +63,12 @@ export const signup = createAsyncThunk(
   ) => {
     const { email, password } = Data
     try {
-      let response = await createUserWithEmailAndPassword(auth, email, password)
-      let token = await response.user.getIdToken()
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      )
+      const token = await response.user.getIdToken()
       dispatch(setToken(token))
       return response
     } catch (error) {
@@ -78,9 +79,9 @@ export const signup = createAsyncThunk(
 
 export const logout = createAsyncThunk(
   "logout",
-  async (Data: {}, { rejectWithValue }) => {
+  async (Data: object, { rejectWithValue }) => {
     try {
-      let response = await signOut(auth)
+      const response = await signOut(auth)
       sessionStorage.clear()
       localStorage.clear()
       return response
@@ -95,7 +96,7 @@ export const resetPassword = createAsyncThunk(
   async (Data: { email: string }, { rejectWithValue }) => {
     const { email } = Data
     try {
-      let response = await sendPasswordResetEmail(auth, email)
+      const response = await sendPasswordResetEmail(auth, email)
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -105,11 +106,11 @@ export const resetPassword = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
   "getUser",
-  async (Data: {}, { getState, rejectWithValue }) => {
+  async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: any } }
     const params = { ROUTE: GET_USER, Body: {}, token: user.token }
     try {
-      let response = await GET(params)
+      const response = await GET(params)
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -119,12 +120,12 @@ export const getUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "updateUser",
-  async (Data: {}, { getState, rejectWithValue }) => {
+  async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: any } }
-    let formData = jsonToFormData(Data)
+    const formData = jsonToFormData(Data)
     const params = { ROUTE: GET_USER, Body: formData, token: user.token }
     try {
-      let response = await PUT(params)
+      const response = await PUT(params)
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -134,11 +135,11 @@ export const updateUser = createAsyncThunk(
 
 export const deleteUser = createAsyncThunk(
   "deleteUser",
-  async (Data: {}, { getState, rejectWithValue }) => {
+  async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: any } }
     const params = { ROUTE: GET_USER, Body: {}, token: user.token }
     try {
-      let response = await DELETE(params)
+      const response = await DELETE(params)
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -148,12 +149,12 @@ export const deleteUser = createAsyncThunk(
 
 export const createUser = createAsyncThunk(
   "createUser",
-  async (Data: {}, { getState, rejectWithValue }) => {
+  async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: any } }
-    let formData = jsonToFormData(Data)
+    const formData = jsonToFormData(Data)
     const params = { ROUTE: CREATE_USER, Body: formData, token: user.token }
     try {
-      let response = await POST(params)
+      const response = await POST(params)
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -163,12 +164,12 @@ export const createUser = createAsyncThunk(
 
 export const updatePulse = createAsyncThunk(
   "updatePulse",
-  async (Data: {}, { getState, rejectWithValue }) => {
+  async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: any } }
-    let formData = jsonToFormData(Data)
+    const formData = jsonToFormData(Data)
     const params = { ROUTE: PULSE_CHECK, Body: formData, token: user.token }
     try {
-      let response = await PUT(params)
+      const response = await PUT(params)
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -178,12 +179,12 @@ export const updatePulse = createAsyncThunk(
 
 export const updatePK = createAsyncThunk(
   "updatePK",
-  async (Data: {}, { getState, rejectWithValue }) => {
+  async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: any } }
-    let formData = jsonToFormData(Data)
+    const formData = jsonToFormData(Data)
     const params = { ROUTE: PUBLIC_KEY, Body: formData, token: user.token }
     try {
-      let response = await PUT(params)
+      const response = await PUT(params)
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -193,12 +194,16 @@ export const updatePK = createAsyncThunk(
 
 export const createPayment = createAsyncThunk(
   "createPayment",
-  async (Data: {subscriptionType: string}, { getState, rejectWithValue }) => {
+  async (Data: { subscriptionType: string }, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: any } }
-    let formData = jsonToFormData(Data)
-    const params = { ROUTE: CREATE_PAYMENT_SESSION, Body: formData, token: user.token }
+    const formData = jsonToFormData(Data)
+    const params = {
+      ROUTE: CREATE_PAYMENT_SESSION,
+      Body: formData,
+      token: user.token,
+    }
     try {
-      let response = await POST(params)
+      const response = await POST(params)
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -208,11 +213,15 @@ export const createPayment = createAsyncThunk(
 
 export const updatePayment = createAsyncThunk(
   "updatePayment",
-  async (Data: {}, { getState, rejectWithValue }) => {
+  async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: any } }
-    const params = { ROUTE: CREATE_PAYMENT_SESSION_PORTAL, Body: {}, token: user.token }
+    const params = {
+      ROUTE: CREATE_PAYMENT_SESSION_PORTAL,
+      Body: {},
+      token: user.token,
+    }
     try {
-      let response = await POST(params)
+      const response = await POST(params)
       return response
     } catch (error) {
       return rejectWithValue(error)

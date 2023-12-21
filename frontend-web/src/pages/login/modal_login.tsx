@@ -1,9 +1,10 @@
+import React from "react"
 import logo from "@images/safeherit_logo.svg"
 import userImg from "@images/user.svg"
-import { InputField, Modal, SelectField } from "@/components"
+import { Modal, SelectField } from "@/components"
 import { SelectOption } from "@/types"
-import downArrow from '@images/Arrow-Down-Circle.svg'
- 
+import downArrow from "@images/Arrow-Down-Circle.svg"
+
 export function UserRolesModal(_props: {
   openModal: boolean
   closeModal: any
@@ -18,10 +19,14 @@ export function UserRolesModal(_props: {
   _beneficiaryOf: SelectOption[]
   _validatorOf: SelectOption[]
   selectedBeneficiary: SelectOption | undefined
-  setSelectedBeneficiary: Function
+  setSelectedBeneficiary: React.Dispatch<
+    React.SetStateAction<SelectOption | undefined>
+  >
   selectedValidator: SelectOption | undefined
-  setSelectedValidator: Function
-  _handleUserRolesSubmit: Function
+  setSelectedValidator: React.Dispatch<
+    React.SetStateAction<SelectOption | undefined>
+  >
+  _handleUserRolesSubmit: (selectedRole: string) => void
 }) {
   return (
     <Modal
@@ -110,11 +115,15 @@ function LoggedUser(_props: {
   ownerName?: string
   _beneficiaryOf?: SelectOption[]
   _validatorOf?: SelectOption[]
-  setSelectedBeneficiary?: Function
+  setSelectedBeneficiary?: React.Dispatch<
+    React.SetStateAction<SelectOption | undefined>
+  >
   selectedBeneficiary?: SelectOption | undefined
-  setSelectedValidator?: Function
+  setSelectedValidator?: React.Dispatch<
+    React.SetStateAction<SelectOption | undefined>
+  >
   selectedValidator?: SelectOption | undefined
-  _handleUserRolesSubmit: Function
+  _handleUserRolesSubmit: (selectedRole: string) => void
 }) {
   return (
     <div className="flex justify-between items-end py-1 mx-14 my-4 border-b-[1px] ">
@@ -124,19 +133,26 @@ function LoggedUser(_props: {
             {_props.userRole?.toUpperCase()}
           </p>
           <div className="flex justify-between w-full">
-            <small className= {
-              _props.userRole == "beneficiary" || _props.userRole == "validator" ? "text-sm font-small text-[#bbb]" : "text-lg font-medium" }>{
-              _props.selectedBeneficiary ? _props.selectedBeneficiary.label :
-              _props.selectedValidator ? _props.selectedValidator.label :
-              _props.userName
-            }
+            <small
+              className={
+                _props.userRole == "beneficiary" ||
+                _props.userRole == "validator"
+                  ? "text-sm font-small text-[#bbb]"
+                  : "text-lg font-medium"
+              }
+            >
+              {_props.selectedBeneficiary
+                ? _props.selectedBeneficiary.label
+                : _props.selectedValidator
+                ? _props.selectedValidator.label
+                : _props.userName}
             </small>
             <button
               onClick={() => {
                 _props._handleUserRolesSubmit(_props.userRole)
               }}
               className="text-sm font-medium text-[#0C8AC1] cursor-pointer hover:opacity-75"
-              > 
+            >
               Login
             </button>
           </div>
@@ -153,7 +169,7 @@ function LoggedUser(_props: {
               }
               hasRightIcon={true}
               rightIcon={downArrow}
-              rightIconStyles='absolute right-4 top-4 cursor-pointer'
+              rightIconStyles="absolute right-4 top-4 cursor-pointer"
             />
           ) : _props.userRole.toLowerCase() == "validator" ? (
             <SelectField
@@ -166,7 +182,7 @@ function LoggedUser(_props: {
               }
               hasRightIcon={true}
               rightIcon={downArrow}
-              rightIconStyles='absolute right-4 top-4 cursor-pointer'
+              rightIconStyles="absolute right-4 top-4 cursor-pointer"
             />
           ) : (
             <div></div>

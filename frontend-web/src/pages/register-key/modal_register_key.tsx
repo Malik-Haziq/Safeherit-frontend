@@ -1,3 +1,4 @@
+import React from "react"
 import uploadImg from "@images/upload.png"
 import copyIcon from "@images/copy-icon.svg"
 import downloadIcon from "@images/download.svg"
@@ -18,20 +19,18 @@ export function PrivateKeyModal(_props: {
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   _handleRegisterPK: React.MouseEventHandler<HTMLButtonElement>
   filePresent: any
-  setFilePresent:any
+  setFilePresent: any
   fileName: any
   setFileName: any
 }) {
-
-
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0]
 
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = (e) => {
         try {
-          const parsedData: Data = JSON.parse(e.target?.result as string);
+          const parsedData: Data = JSON.parse(e.target?.result as string)
           if (parsedData.privateKey) {
             const customEvent: CustomChangeEvent = {
               target: {
@@ -39,19 +38,20 @@ export function PrivateKeyModal(_props: {
                 value: parsedData.privateKey,
               },
             }
-            _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+            _props._handleChange(
+              customEvent as React.ChangeEvent<HTMLInputElement>,
+            )
             _props.setFilePresent(true)
             _props.setFileName(file.name)
             toast("File uploaded", "success")
-          }
-          else {
+          } else {
             toast("Please choose a valid file", "error")
           }
         } catch (error) {
-          toast('Error loading file', 'error');
+          toast("Error loading file", "error")
         }
-      };
-      reader.readAsText(file);
+      }
+      reader.readAsText(file)
     }
   }
 
@@ -106,10 +106,30 @@ export function PrivateKeyModal(_props: {
                     className="opacity-0 absolute top-2 left-36 h-10 w-[266px]"
                   />
                   <div className="mx-[142px] mb-4">
-                    <input type="text" className="text-[#74777E] border-2 border-[#aab4b9] py-2 px-2 bg-white w-[150px]" placeholder="Choose File" value={_props.fileName}  disabled />
-                    <button className="bg-[#DDE3E8] py-2 px-3 border-2 border-[#aab4b9] border-l-0 font-bold text-[#515D66]">Browse File</button>
+                    <input
+                      type="text"
+                      className="text-[#74777E] border-2 border-[#aab4b9] py-2 px-2 bg-white w-[150px]"
+                      placeholder="Choose File"
+                      value={_props.fileName}
+                      disabled
+                    />
+                    <button className="bg-[#DDE3E8] py-2 px-3 border-2 border-[#aab4b9] border-l-0 font-bold text-[#515D66]">
+                      Browse File
+                    </button>
                   </div>
-                  {_props.filePresent ? <img src={jsonFile} alt="json file icon" className="mx-auto w-28 mb-3"/> : <img src={uploadImg} alt="upload file" className="mx-auto" />}
+                  {_props.filePresent ? (
+                    <img
+                      src={jsonFile}
+                      alt="json file icon"
+                      className="mx-auto w-28 mb-3"
+                    />
+                  ) : (
+                    <img
+                      src={uploadImg}
+                      alt="upload file"
+                      className="mx-auto"
+                    />
+                  )}
                 </div>
               )
             },
@@ -122,10 +142,16 @@ export function PrivateKeyModal(_props: {
             CustomView: () => {
               return (
                 <div className="flex items-center justify-between px-8">
-                  <button onClick={_props.closeModal} className="primary-btn rounded-xl px-9 border-[1px] border-[#04477B] text-[#04477B] bg-white shadow-none">
+                  <button
+                    onClick={_props.closeModal}
+                    className="primary-btn rounded-xl px-9 border-[1px] border-[#04477B] text-[#04477B] bg-white shadow-none"
+                  >
                     Cancel
                   </button>
-                  <button onClick={_props._handleRegisterPK} className="primary-btn rounded-xl px-9 bg-[#04477B] text-white shadow-none">
+                  <button
+                    onClick={_props._handleRegisterPK}
+                    className="primary-btn rounded-xl px-9 bg-[#04477B] text-white shadow-none"
+                  >
                     Load
                   </button>
                 </div>
@@ -144,11 +170,11 @@ export function GeneratePrivateKey(_props: {
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   modalControl: {
-    publicKey: string,
+    publicKey: string
     privateKey: string
   }
-  _handleGeneratePKPair: Function
-  _handleRegisterPK: Function
+  _handleGeneratePKPair: () => void
+  _handleRegisterPK: () => void
   _handleChange: React.ChangeEventHandler<HTMLTextAreaElement>
   downloadPrivateKey: React.MouseEventHandler<HTMLDivElement>
   downloadPublicKey: React.MouseEventHandler<HTMLDivElement>
@@ -182,11 +208,17 @@ export function GeneratePrivateKey(_props: {
                 <div className="flex justify-between items-center">
                   <p className="text-[#00192B] font-semibold ">Public Key:</p>
                   <div className="flex items-center gap-3 ">
-                    <div onClick={_props.copyPublicKey} className="flex items-center gap-1 cursor-pointer">
+                    <div
+                      onClick={_props.copyPublicKey}
+                      className="flex items-center gap-1 cursor-pointer"
+                    >
                       <span>Copy</span>
                       <img src={copyIcon} alt="copy icon " />
                     </div>
-                    <div onClick={_props.downloadPublicKey} className="cy-add-generate-private-key flex items-center gap-1 cursor-pointer">
+                    <div
+                      onClick={_props.downloadPublicKey}
+                      className="cy-add-generate-private-key flex items-center gap-1 cursor-pointer"
+                    >
                       <span>Download</span>
                       <img src={downloadIcon} alt="download icon" />
                     </div>
@@ -200,11 +232,12 @@ export function GeneratePrivateKey(_props: {
           type: "TextAreaField",
           props: {
             textAreaContainerStyles: "flex justify-between items-center",
-            name:"publicKey",
-            inputStyles:"h-[68px] w-[502px] mx-6 p-2 border-[1px] border-[#858992] rounded-[5px] resize-none",
-            value:_props.modalControl.publicKey,
-            _handleChange:_props._handleChange,
-            isDisabled: true
+            name: "publicKey",
+            inputStyles:
+              "h-[68px] w-[502px] mx-6 p-2 border-[1px] border-[#858992] rounded-[5px] resize-none",
+            value: _props.modalControl.publicKey,
+            _handleChange: _props._handleChange,
+            isDisabled: true,
           },
         },
         {
@@ -218,11 +251,17 @@ export function GeneratePrivateKey(_props: {
                     Secret Phrase (Private Key):
                   </p>
                   <div className="flex items-center gap-3 ">
-                    <div onClick={_props.copyPrivateKey} className="flex items-center gap-1 cursor-pointer">
+                    <div
+                      onClick={_props.copyPrivateKey}
+                      className="flex items-center gap-1 cursor-pointer"
+                    >
                       <span>Copy</span>
                       <img src={copyIcon} alt="copy icon " />
                     </div>
-                    <div onClick={_props.downloadPrivateKey} className="cy-add-download-public-key flex items-center gap-1 cursor-pointer">
+                    <div
+                      onClick={_props.downloadPrivateKey}
+                      className="cy-add-download-public-key flex items-center gap-1 cursor-pointer"
+                    >
                       <span>Download</span>
                       <img src={downloadIcon} alt="download icon" />
                     </div>
@@ -236,11 +275,12 @@ export function GeneratePrivateKey(_props: {
           type: "TextAreaField",
           props: {
             textAreaContainerStyles: "flex justify-between items-center",
-            name:"privateKey",
-            inputStyles:"h-[107px] w-[502px] mx-6 p-2 resize-none border-[1px] border-[#858992] rounded-[5px] mx-6",
-            value:_props.modalControl.privateKey,
-            _handleChange:_props._handleChange,
-            isDisabled: true
+            name: "privateKey",
+            inputStyles:
+              "h-[107px] w-[502px] mx-6 p-2 resize-none border-[1px] border-[#858992] rounded-[5px] mx-6",
+            value: _props.modalControl.privateKey,
+            _handleChange: _props._handleChange,
+            isDisabled: true,
           },
         },
         {

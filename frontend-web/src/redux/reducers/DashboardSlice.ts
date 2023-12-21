@@ -14,10 +14,9 @@ const initialState = {
 export const slice = createSlice({
   name: "dashboard",
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers(builder) {
-    builder.addCase(getData.pending, (state, action) => {
+    builder.addCase(getData.pending, (state) => {
       state.loading = true
     })
     builder.addCase(getData.fulfilled, (state, action) => {
@@ -27,31 +26,39 @@ export const slice = createSlice({
       state.validatorCount = action.payload?.data?.data?.validatorCount
 
       state.assets = action.payload?.data?.data?.assets?.map((asset: any) => {
-        let data = JSON.parse(asset.data)
+        const data = JSON.parse(asset.data)
         return {
           // img: asset?.profile_image,
           title: asset?.category,
-          subTitle: data?.Notes
+          subTitle: data?.Notes,
         }
       })
-      state.beneficiaries = action.payload?.data?.data?.beneficiaries?.map((beneficiary: any) => {
-        return {
-          img: beneficiary?.profile_image,
-          title: beneficiary?.name,
-          subTitle: beneficiary?.primary_email || beneficiary?.backup_email || beneficiary?.primary_backup_email2,
-        }
-      })
-      state.validators = action.payload?.data?.data?.validators?.map((validator: any) => {
-        return {
-          img: validator?.profile_image,
-          title: validator?.name,
-          subTitle: validator?.primary_email || validator?.backup_email || validator?.primary_backup_email2,
-        }
-      })
+      state.beneficiaries = action.payload?.data?.data?.beneficiaries?.map(
+        (beneficiary: any) => {
+          return {
+            img: beneficiary?.profile_image,
+            title: beneficiary?.name,
+            subTitle:
+              beneficiary?.primary_email ||
+              beneficiary?.backup_email ||
+              beneficiary?.primary_backup_email2,
+          }
+        },
+      )
+      state.validators = action.payload?.data?.data?.validators?.map(
+        (validator: any) => {
+          return {
+            img: validator?.profile_image,
+            title: validator?.name,
+            subTitle:
+              validator?.primary_email ||
+              validator?.backup_email ||
+              validator?.primary_backup_email2,
+          }
+        },
+      )
     })
   },
 })
-
-export const { } = slice.actions
 
 export default slice.reducer

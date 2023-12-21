@@ -1,3 +1,4 @@
+import React from "react"
 import styles from "../../Dashboard.module.css"
 import { toast, InputField } from "@/components"
 import { auth } from "@/firebase"
@@ -7,19 +8,19 @@ import {
   reauthenticateWithCredential,
 } from "firebase/auth"
 import { useState } from "react"
-import { useAppDispatch } from "@/redux/hooks";
-import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice";
+import { useAppDispatch } from "@/redux/hooks"
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 
 export default function AuthenticateUser(_props: {
-  hideUserAuthenticate: Function,
-  showTwoFA: Function,
+  hideUserAuthenticate: () => void
+  showTwoFA: () => void
 }) {
   const dispatch = useAppDispatch()
 
   const [password, setPassword] = useState("")
 
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const _handleChange = (event: { target: { value: any } }) => {
     const { value } = event.target
@@ -27,19 +28,19 @@ export default function AuthenticateUser(_props: {
   }
 
   const _handleCancel = () => {
-    _props.hideUserAuthenticate();
+    _props.hideUserAuthenticate()
   }
 
   function handleAuthentication() {
     startLoader()
     const user: User = auth.currentUser!
-    const email: string = user?.email!
+    const email: string = user?.email || ""
     const credential = EmailAuthProvider.credential(email, password)
 
     reauthenticateWithCredential(user, credential)
       .then(() => {
-        _props.hideUserAuthenticate();
-        _props.showTwoFA();
+        _props.hideUserAuthenticate()
+        _props.showTwoFA()
       })
       .catch((error) => {
         if (error.code === "auth/wrong-password") {
@@ -48,7 +49,7 @@ export default function AuthenticateUser(_props: {
           toast(error.code, "error")
         }
       })
-      .finally(()=>{
+      .finally(() => {
         stopLoader()
       })
   }
@@ -67,7 +68,9 @@ export default function AuthenticateUser(_props: {
           </div>
           <div className="space-y-4 my-6">
             <div className="relative">
-              <p className="mb-2 font-semibold text-safe-text-dark-gray">Password</p>
+              <p className="mb-2 font-semibold text-safe-text-dark-gray">
+                Password
+              </p>
               <InputField
                 type="password"
                 name="password"
@@ -76,7 +79,8 @@ export default function AuthenticateUser(_props: {
                 _handleChange={_handleChange}
                 required={true}
                 inputStyles={""}
-                inputContainerStyles={""} />
+                inputContainerStyles={""}
+              />
             </div>
           </div>
           <div className="flex justify-between mt-4 gap-x-4">
@@ -84,14 +88,18 @@ export default function AuthenticateUser(_props: {
               className="border-2 border-bg-safe-blue-tint rounded-xl flex h-11 w-1/2 items-center justify-center px-6"
               onClick={_handleCancel}
             >
-              <span className="text-base text-safe-text-light-gray-1">Cancel</span>
+              <span className="text-base text-safe-text-light-gray-1">
+                Cancel
+              </span>
             </button>
             <button
               className="bg-safe-blue-tint rounded-xl flex h-11 w-1/2 items-center justify-center px-6"
               disabled={!password}
               onClick={handleAuthentication}
             >
-              <span className="text-base text-white font-semibold">Confirm</span>
+              <span className="text-base text-white font-semibold">
+                Confirm
+              </span>
             </button>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import React from "react"
 import notificationIcon from "@images/Notification.svg"
 import notification from "@images/notification-icon.svg"
 

@@ -1,3 +1,4 @@
+import React from "react"
 import userImg from "@images/user.svg"
 import userIcon from "@images/UserIcon.png"
 import msgIcon from "@images/message.svg"
@@ -32,7 +33,6 @@ import AuthenticateUser from "./AuthenticateUser"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { GeneratePrivateKey } from "@/pages/register-key/modal_register_key"
 import Encryption from "@/common/encryption/encryption"
-import { Asset } from "@/types"
 
 const initialState = {
   displayName: "",
@@ -86,10 +86,10 @@ export default function AccountView() {
     }
   }, [user.profile_image])
 
-  const showPlanView = () => setShowMemberShipPlan(true)
+  // const showPlanView = () => setShowMemberShipPlan(true)
   const hidePlanView = () => setShowMemberShipPlan(false)
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const showTwoFA = () => setShowTwoFAAuth(true)
   const hideTwoFA = () => {
@@ -103,9 +103,9 @@ export default function AccountView() {
   }
 
   const getUserDetails = () => {
-    dispatch(getUser({}))
+    dispatch<any>(getUser({}))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         setAuth2FAEnabled(verifyIfUserIsEnrolled())
         setModalControl(res.data.data)
       })
@@ -127,7 +127,7 @@ export default function AccountView() {
   const _submitEditUserModal = () => {
     startLoader()
     toast("Updating user information", "info")
-    dispatch(updateUser(modalControl))
+    dispatch<any>(updateUser(modalControl))
       .unwrap()
       .then(() => {
         toast("User updated", "success")
@@ -144,9 +144,9 @@ export default function AccountView() {
   }
 
   const _handleLogout = () => {
-    dispatch(logout({}))
+    dispatch<any>(logout({}))
       .unwrap()
-      .catch((err) => {
+      .catch((err: { code: string }) => {
         toast(err?.code, "error")
       })
       .finally(() => {
@@ -157,10 +157,10 @@ export default function AccountView() {
   const _submitUserDeletionRequest = () => {
     startLoader()
     toast("Deleting user", "info")
-    dispatch(deleteUser({}))
+    dispatch<any>(deleteUser({}))
       .unwrap()
       .catch()
-      .then((response) => {
+      .then((response: { data: { message: string } }) => {
         toast(response?.data.message, "info")
         _handleLogout()
       })
@@ -184,14 +184,16 @@ export default function AccountView() {
 
   const updatePlan = () => {
     startLoader()
-    dispatch(updatePayment({}))
+    dispatch<any>(updatePayment({}))
       .unwrap()
       .catch()
-      .then((res) => {
-        if (res.data.data.sessionUrl) {
-          window.open(res.data.data.sessionUrl, "_blank")
-        }
-      })
+      .then(
+        (res: { data: { data: { sessionUrl: string | URL | undefined } } }) => {
+          if (res.data.data.sessionUrl) {
+            window.open(res.data.data.sessionUrl, "_blank")
+          }
+        },
+      )
       .finally(() => {
         stopLoader()
       })
@@ -213,31 +215,31 @@ export default function AccountView() {
         PKEditModalControl.privateKey,
       )
     ) {
-      dispatch(getAllAsset({}))
+      dispatch<any>(getAllAsset({}))
         .unwrap()
-        .then((res) => {
-          let data: any = {}
+        .then((res: { data: { data: any[] } }) => {
+          const data: any = {}
 
           res.data.data.forEach((asset: any) => {
-            let key = encryptionService.decrypt(
+            const key = encryptionService.decrypt(
               modalControl.privateKey,
               asset.privateKeyEncByOwner,
             )
-            let newKey = encryptionService.encrypt(
+            const newKey = encryptionService.encrypt(
               PKEditModalControl.publicKey,
               key,
             )
             data[`${asset.id}`] = newKey
           })
 
-          dispatch(
+          dispatch<any>(
             updatePK({
               publicKey: PKEditModalControl.publicKey,
               assetKeysEncByOwner: JSON.stringify(data),
             }),
           )
             .unwrap()
-            .then((res) => {
+            .then(() => {
               toast("Keys Registered", "success")
               closeModal()
               sessionStorage.setItem(

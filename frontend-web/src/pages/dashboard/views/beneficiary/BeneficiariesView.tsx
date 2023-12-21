@@ -1,3 +1,4 @@
+import React from "react"
 import userIcon from "@images/user-icon.svg"
 import addIcon from "@images/add-icon.svg"
 import facebook from "@images/facebook.svg"
@@ -5,7 +6,6 @@ import instagram from "@images/insta.svg"
 import twitter from "@images/twitter.svg"
 import userImg from "@images/user.svg"
 import beneficiaryImg from "@images/beneficiaryScreen.svg"
-import { PhoneNumField } from "@/components/phoneNumberField"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styles from "../../Dashboard.module.css"
@@ -40,7 +40,10 @@ import {
   useArray,
   downloadJson,
 } from "@/common"
-import { PrivateKeyModal, GeneratePrivateKey } from "@/pages/register-key/modal_register_key"
+import {
+  PrivateKeyModal,
+  GeneratePrivateKey,
+} from "@/pages/register-key/modal_register_key"
 import Encryption from "@/common/encryption/encryption"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 
@@ -58,30 +61,32 @@ const initialState = {
   personalized_message: "",
   personalized_video: "",
   profile_image: "",
-  public_key: ""
+  public_key: "",
 }
 
 const initialStateForEncryptionKeys = {
   publicKey: "",
-  privateKey: ""
+  privateKey: "",
 }
 
 export default function BeneficiariesView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const encryptionService = new Encryption();
-  const startLoader = () => dispatch(setLoaderVisibility(true))
-  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const encryptionService = new Encryption()
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [hasBeneficiaries, setHasBeneficiaries] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
-  const [modalEncryptionKeyControl, setModalEncryptionKeyControl] = useState(initialStateForEncryptionKeys)
+  const [modalEncryptionKeyControl, setModalEncryptionKeyControl] = useState(
+    initialStateForEncryptionKeys,
+  )
   const [imageUpload, setImageUpload] = useState("")
   const [videoUpload, setVideoUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
   const [filePresent, setFilePresent] = useState(false)
-  const [fileName, setFileName] = useState('')
+  const [fileName, setFileName] = useState("")
   const [
     modalHistory,
     modalHistoryLength,
@@ -101,9 +106,9 @@ export default function BeneficiariesView() {
     }
   }
   useEffect(() => {
-    dispatch(getAllBeneficiary({}))
+    dispatch<any>(getAllBeneficiary({}))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         updateBeneficiaryArrayCount(res)
       })
       .catch(() => {
@@ -126,7 +131,7 @@ export default function BeneficiariesView() {
     setVideoUpload("")
     modalHistoryPopAll()
     setFilePresent(false)
-    setFileName('')
+    setFileName("")
   }, [])
 
   const addBeneficiary = useCallback(() => {
@@ -140,23 +145,30 @@ export default function BeneficiariesView() {
       (!isValidEmail(modalControl.primary_email) &&
         !isValidEmail(modalControl.backup_email2) &&
         !isValidEmail(modalControl.backup_email)) ||
-      (modalControl.primary_email && !isValidEmail(modalControl.primary_email)) ||
+      (modalControl.primary_email &&
+        !isValidEmail(modalControl.primary_email)) ||
       (modalControl.backup_email && !isValidEmail(modalControl.backup_email)) ||
       (modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2))
     ) {
       toast("please enter a valid Email address", "error")
-    } else if (modalControl.phone_number !== '' && !isValidPhoneWithRegion(modalControl.phone_number)) {
-      toast("Please enter a valid phone number", "error");
-    } else if (modalControl.backup_phone_number !== '' && !isValidPhoneWithRegion(modalControl.backup_phone_number)) {
-      toast("Please enter a valid phone number", "error");
-    } else{
-        modalHistoryPush("Step-1")
-        setModalVisibility("Step-2")
+    } else if (
+      modalControl.phone_number !== "" &&
+      !isValidPhoneWithRegion(modalControl.phone_number)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else if (
+      modalControl.backup_phone_number !== "" &&
+      !isValidPhoneWithRegion(modalControl.backup_phone_number)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else {
+      modalHistoryPush("Step-1")
+      setModalVisibility("Step-2")
     }
   }
   const _submitStepTwoModal = () => {
-      modalHistoryPush("Step-2")
-      setModalVisibility("Step-3")
+    modalHistoryPush("Step-2")
+    setModalVisibility("Step-3")
   }
 
   const _submitStepThreeModal = () => {
@@ -166,12 +178,17 @@ export default function BeneficiariesView() {
       if (modalAction == "edit") {
         startLoader()
         toast("Updating beneficiary", "info")
-        dispatch(updateBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
+        dispatch<any>(
+          updateBeneficiary({
+            ...modalControl,
+            public_key: modalEncryptionKeyControl.publicKey,
+          }),
+        )
           .unwrap()
-          .then((res) => {
-            dispatch(getAllBeneficiary({}))
+          .then(() => {
+            dispatch<any>(getAllBeneficiary({}))
               .unwrap()
-              .then((res) => {
+              .then((res: any) => {
                 modalHistoryPush("Step-3")
                 setModalVisibility("Step-success")
                 updateBeneficiaryArrayCount(res)
@@ -180,22 +197,27 @@ export default function BeneficiariesView() {
                 // TODO: show fallback page
               })
           })
-          .catch((err) => {
+          .catch((err: any) => {
             console.log(err)
             // TODO: show fallback page
           })
-          .finally(()=>{
+          .finally(() => {
             stopLoader()
           })
       } else if (modalAction == "create") {
         startLoader()
         toast("creating beneficiary", "info")
-        dispatch(createBeneficiary({...modalControl, public_key: modalEncryptionKeyControl.publicKey}))
+        dispatch<any>(
+          createBeneficiary({
+            ...modalControl,
+            public_key: modalEncryptionKeyControl.publicKey,
+          }),
+        )
           .unwrap()
-          .then((res) => {
-            dispatch(getAllBeneficiary({}))
+          .then(() => {
+            dispatch<any>(getAllBeneficiary({}))
               .unwrap()
-              .then((res) => {
+              .then((res: any) => {
                 modalHistoryPush("Step-3")
                 setModalVisibility("Step-success")
                 updateBeneficiaryArrayCount(res)
@@ -204,11 +226,11 @@ export default function BeneficiariesView() {
                 // TODO: show fallback page
               })
           })
-          .catch((err) => {
+          .catch((err: any) => {
             console.log(err)
             // TODO: show fallback page
           })
-          .finally(()=>{
+          .finally(() => {
             stopLoader()
           })
       }
@@ -221,16 +243,18 @@ export default function BeneficiariesView() {
 
   const _submitRegisterPKModal = (registerKeyModalType?: string) => {
     modalHistoryPush("Step-pk")
-    registerKeyModalType == "generate-key" ? setModalVisibility("Generate-PK") : setModalVisibility("Load-PK")
+    registerKeyModalType == "generate-key"
+      ? setModalVisibility("Generate-PK")
+      : setModalVisibility("Load-PK")
   }
   const _submitDeleteModal = () => {
     toast("deleting Beneficiary " + modalControl.name, "info")
-    dispatch(deleteBeneficiary({ id: modalControl.id }))
+    dispatch<any>(deleteBeneficiary({ id: modalControl.id }))
       .unwrap()
-      .then((res) => {
-        dispatch(getAllBeneficiary({}))
+      .then(() => {
+        dispatch<any>(getAllBeneficiary({}))
           .unwrap()
-          .then((res) => {
+          .then((res: any) => {
             setModalVisibility("none")
             updateBeneficiaryArrayCount(res)
           })
@@ -250,12 +274,17 @@ export default function BeneficiariesView() {
   }
 
   const _handleDiscard = (name: string, value: any) => {
-    setModalControl({...modalControl, [name]: value});
+    setModalControl({ ...modalControl, [name]: value })
   }
 
-  const _handleEncryptionKeyChange = (event: { target: { name: any; value: any } }) => {
+  const _handleEncryptionKeyChange = (event: {
+    target: { name: any; value: any }
+  }) => {
     const { name, value } = event.target
-    setModalEncryptionKeyControl({ ...modalEncryptionKeyControl, [name]: value })
+    setModalEncryptionKeyControl({
+      ...modalEncryptionKeyControl,
+      [name]: value,
+    })
   }
   const newBeneficiary = () => {
     setModalAction("create")
@@ -266,9 +295,9 @@ export default function BeneficiariesView() {
     setModalVisibility("Step-pk")
   }
   const editBeneficiary = (id: string) => {
-    dispatch(findBeneficiary({ id: id }))
+    dispatch<any>(findBeneficiary({ id: id }))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         setModalAction("edit")
         setModalControl(res?.data?.data)
         getFileFromFirebase(res?.data?.data?.profile_image)
@@ -290,9 +319,9 @@ export default function BeneficiariesView() {
       })
   }
   const destroyBeneficiary = (id: string) => {
-    dispatch(findBeneficiary({ id: id }))
+    dispatch<any>(findBeneficiary({ id: id }))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         setModalAction("delete")
         setModalControl(res?.data?.data)
         setModalVisibility("Step-delete")
@@ -306,9 +335,9 @@ export default function BeneficiariesView() {
   }
   const viewBeneficiary = (id: string) => {
     toast("showing user data", "info")
-    dispatch(findBeneficiary({ id: id }))
+    dispatch<any>(findBeneficiary({ id: id }))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         setModalAction("view")
         setModalControl(res?.data?.data)
         getFileFromFirebase(res?.data?.data?.profile_image)
@@ -330,14 +359,18 @@ export default function BeneficiariesView() {
       })
   }
   const showPreviousModal = () => {
-    const lastEl = modalHistory[modalHistoryLength - 1] || 'none'
+    const lastEl = modalHistory[modalHistoryLength - 1] || "none"
     modalHistoryPop()
     setModalVisibility(lastEl)
   }
 
-  
   const _handleRegisterPK = () => {
-    if (encryptionService.validateKeyPair(modalEncryptionKeyControl.publicKey, modalEncryptionKeyControl.privateKey)) {
+    if (
+      encryptionService.validateKeyPair(
+        modalEncryptionKeyControl.publicKey,
+        modalEncryptionKeyControl.privateKey,
+      )
+    ) {
       if (modalAction == "create") {
         modalHistoryPush("Step-pk")
         setModalVisibility("Step-1")
@@ -345,8 +378,7 @@ export default function BeneficiariesView() {
         modalHistoryPush("Step-pk")
         setModalVisibility("Step-success")
       }
-    }
-    else {
+    } else {
       toast("Unable to verify keys", "error")
     }
   }
@@ -358,16 +390,15 @@ export default function BeneficiariesView() {
       setModalEncryptionKeyControl(encryptionService.generateKeyPair())
       toast("Keys Generated", "success")
       stopLoader()
-    }, 1000);
+    }, 1000)
   }, [])
 
   const downloadPrivateKey = useCallback(() => {
     if (modalEncryptionKeyControl.privateKey) {
-      const KEY = {privateKey: modalEncryptionKeyControl.privateKey}
-      downloadJson(KEY, 'privateKey.json')
+      const KEY = { privateKey: modalEncryptionKeyControl.privateKey }
+      downloadJson(KEY, "privateKey.json")
       toast("Download Complete", "success")
-    }
-    else {
+    } else {
       toast("Kindly Generate Private Key", "error")
     }
   }, [modalEncryptionKeyControl.privateKey])
@@ -375,19 +406,17 @@ export default function BeneficiariesView() {
   const copyPrivateKey = useCallback(() => {
     if (modalEncryptionKeyControl.privateKey) {
       copyToClipboard(modalEncryptionKeyControl.privateKey)
-    }
-    else {
+    } else {
       toast("Kindly Generate Private Key", "error")
     }
   }, [modalEncryptionKeyControl.privateKey])
 
   const downloadPublicKey = useCallback(() => {
     if (modalEncryptionKeyControl.publicKey) {
-      const KEY = {publicKey: modalEncryptionKeyControl.publicKey}
-      downloadJson(KEY, 'publicKey.json')
+      const KEY = { publicKey: modalEncryptionKeyControl.publicKey }
+      downloadJson(KEY, "publicKey.json")
       toast("Download Complete", "success")
-    }
-    else {
+    } else {
       toast("Kindly Generate Public Key", "error")
     }
   }, [modalEncryptionKeyControl.publicKey])
@@ -395,8 +424,7 @@ export default function BeneficiariesView() {
   const copyPublicKey = useCallback(() => {
     if (modalEncryptionKeyControl.publicKey) {
       copyToClipboard(modalEncryptionKeyControl.publicKey)
-    }
-    else {
+    } else {
       toast("Kindly Generate Public Key", "error")
     }
   }, [modalEncryptionKeyControl.publicKey])
@@ -418,9 +446,9 @@ export default function BeneficiariesView() {
 
       <GeneratePrivateKey
         openModal={modalVisibility == "Generate-PK"}
-        closeModal= {closeModal}
-        closeModalOnOverlayClick= {false}
-        closeIconVisibility= {true}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
         modalControl={modalEncryptionKeyControl}
         _handleChange={_handleEncryptionKeyChange}
         _handleGeneratePKPair={_handleGeneratePKPair}
@@ -503,7 +531,7 @@ export default function BeneficiariesView() {
           _submitRegisterPKModal()
         }}
         _handleKeyGeneration={() => {
-          _submitRegisterPKModal('generate-key')
+          _submitRegisterPKModal("generate-key")
         }}
         arrayLength={modalHistoryLength}
         showPreviousModal={showPreviousModal}
@@ -577,9 +605,9 @@ function AddBeneficiary(_props: {
 function Beneficiaries(_props: {
   beneficiaryArray: any
   createBeneficiary: React.MouseEventHandler<HTMLImageElement>
-  editBeneficiary: Function
-  deleteBeneficiary: Function
-  viewBeneficiary: Function
+  editBeneficiary: (id: string) => void
+  deleteBeneficiary: (id: string) => void
+  viewBeneficiary: (id: string) => void
 }) {
   return (
     <div className={styles.AppView}>
@@ -624,7 +652,9 @@ function Beneficiaries(_props: {
               <p className="text-sm">Name</p>
             </li>
             <li className="text-safe-text-gray-shade text-sm">Email</li>
-            <li className="text-safe-text-gray-shade text-sm">Phone&nbsp;Number</li>
+            <li className="text-safe-text-gray-shade text-sm">
+              Phone&nbsp;Number
+            </li>
             <li className="text-safe-text-gray-shade text-sm relative w-[140px]">
               <p className="w-36 absolute right-20 -top-3">
                 Backup&nbsp;Phone&nbsp;Number
@@ -670,9 +700,9 @@ function Beneficiary(_props: {
   instagram_username: string
   twitter_username: string
   id: string
-  editBeneficiary: Function
-  deleteBeneficiary: Function
-  viewBeneficiary: Function
+  editBeneficiary: (id: string) => void
+  deleteBeneficiary: (id: string) => void
+  viewBeneficiary: (id: string) => void
 }) {
   const [image, setImage] = useState<string>("")
   useEffect(() => {
@@ -723,7 +753,7 @@ function Beneficiary(_props: {
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
           <a
-            href={_props.facebook_link || 'https://www.facebook.com/login.php'}
+            href={_props.facebook_link || "https://www.facebook.com/login.php"}
             target="_blank"
             rel="noopener noreferrer"
           >
