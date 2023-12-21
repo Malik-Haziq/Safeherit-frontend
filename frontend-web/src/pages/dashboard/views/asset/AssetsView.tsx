@@ -20,6 +20,7 @@ import {
   StepOneModal,
   StepTwoModal,
   AssetDetail,
+  AssetBeneficiaries,
 } from "./modal_assets"
 import { ASSET_TYPES, ROUTE_CONSTANTS, useArray } from "@/common"
 
@@ -63,6 +64,7 @@ export default function AssetsView() {
   const [selected, setSelected] = useState("")
   const [selectedAsset, setSelectedAsset] = useState("")
   const [assetFile, setAssetFile] = useState("")
+  const [assetBeneficiariesData, setAssetBeneficiariesData] = useState(initialState)
   const [
     modalHistory,
     modalHistoryLength,
@@ -117,6 +119,9 @@ export default function AssetsView() {
     setSelectedAsset("")
     isEditingAsset.current = false
     modalHistoryPopAll()
+    if (Object.keys(assetBeneficiariesData).length > 0) {
+      setAssetBeneficiariesData(initialState)
+    }
   }, [])
 
   const showPreviousModal = () => {
@@ -390,6 +395,16 @@ export default function AssetsView() {
     }
   }
 
+  const viewBeneficiaries = (assetId: string) => {
+    dispatch(findAsset({ id: assetId }))
+    .unwrap()
+    .then((res) => {
+      setSelectedAsset(assetId)
+      setAssetBeneficiariesData(res.data.data.beneficiaries)
+      setModalVisibility("beneficiaries-listing")
+    })
+  }
+
   return (
     <>
       <StepZeroInformationModal
@@ -459,6 +474,14 @@ export default function AssetsView() {
         role={user.role}
         userName={user.displayName}
       />
+      <AssetBeneficiaries
+        openModal={modalVisibility == "beneficiaries-listing"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        modalControl={assetBeneficiariesData}
+        assetId={selectedAsset}
+      />
       {hasAssets > 0 ? (
         <Assets
           AssetDetailsCardArr={AssetDetailsCardArr}
@@ -469,6 +492,7 @@ export default function AssetsView() {
           destroyAsset={destroyAsset}
           editAsset={editAsset}
           viewAsset={viewAsset}
+          viewBeneficiaries={viewBeneficiaries}
           userRole={user.role}
         />
       ) : hasAssets == 0 ? (
@@ -517,9 +541,10 @@ function Assets(_props: {
   selected: string
   setSelected: React.Dispatch<React.SetStateAction<string>>
   assetDetailsArr: Asset[]
-  destroyAsset: (assetId: string) => void
-  editAsset: (assetId: string) => void
-  viewAsset: (assetId: string) => void
+  destroyAsset: Function
+  editAsset: Function
+  viewAsset: Function
+  viewBeneficiaries: Function
   userRole: string
 }) {
   return (
@@ -584,6 +609,7 @@ function Assets(_props: {
                   destroyAsset={_props.destroyAsset}
                   editAsset={_props.editAsset}
                   viewAsset={_props.viewAsset}
+                  viewBeneficiaries={_props.viewBeneficiaries}
                   userRole={_props.userRole}
                 />
               )
@@ -645,9 +671,10 @@ function AssetDetails(_props: {
   assetName: string
   assetValue: string
   beneficiaries: Beneficiary[]
-  destroyAsset: (assetId: string) => void
-  editAsset: (assetId: string) => void
-  viewAsset: (assetId: string) => void
+  destroyAsset: Function
+  editAsset: Function
+  viewAsset: Function
+  viewBeneficiaries: Function
   userRole: string
 }) {
   return (
@@ -667,7 +694,9 @@ function AssetDetails(_props: {
         {_props.userRole != "beneficiary" ? (
           <div className="flex justify-between items-center gap-3">
             <img src={user} alt="beneficiary image" className="h-11 w-11" />
-            <button>View</button>
+            <button onClick={() => _props.viewBeneficiaries(_props.assetId)}>
+              View
+            </button>
             {/* TODO ADD Beneficiray listing modal */}
           </div>
         ) : (

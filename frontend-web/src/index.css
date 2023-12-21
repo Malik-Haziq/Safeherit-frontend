@@ -203,3 +203,15 @@ html {
     color: rgb(255, 84, 84);
   }
 }
+
+
+.css-15gvdpi-control {
+  min-height: 56px !important;
+  height: fit-content !important;
+}
+.css-2o11vy-control {
+  min-height: 56px !important;
+  height: fit-content !important;
+}
+
+
