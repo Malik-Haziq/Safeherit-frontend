@@ -57,7 +57,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
         mask={element?.props?.mask}
       />
     )
-  } else if (element?.type === "selectView") {
+  } else if (element?.type === "selectView") {    
     return (
       <SelectField
         key={_props.index}
@@ -171,6 +171,7 @@ export const Modal = (_props: {
   closeIconVisibility: boolean
   arrayLength?: any
   showPreviousModal?: any
+  modalCustomStyles?: string
 }) => {
   const elements = _props?.elements
   return (
@@ -178,7 +179,7 @@ export const Modal = (_props: {
       {_props.openModal && (
         <div className={styles.backDrop}>
           <div className={styles.modalContainer}>
-            <div className={styles.modal}>
+            <div className={`${styles.modal} ${_props.modalCustomStyles && _props.modalCustomStyles}`}>
               <ModalHeader
                 closeModal={_props.closeModal}
                 title={_props.modalTitle}
