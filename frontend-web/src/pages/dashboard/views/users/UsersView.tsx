@@ -120,24 +120,24 @@ export default function UsersView() {
 
   const deleteUser = (email: string) => {
     let reason: string | null = ""
-    while (!reason) {
-      reason = prompt("Please enter reason for user deletion")
-      if (reason) {
-        startLoader()
-        const data = {
-          email: email,
-          reason: reason,
-        }
-        dispatch<any>(deleteUserRequest(data))
-          .unwrap()
-          .catch()
-          .then(() => {
-            toast("User deletion request submitted", "success")
-          })
-          .finally(() => {
-            stopLoader()
-          })
+    reason = prompt("Please enter reason for user deletion")
+    if (reason === null) {
+      toast("User deletion request canceled", "info")
+    } else {
+      startLoader()
+      const data = {
+        email: email,
+        reason: reason,
       }
+      dispatch<any>(deleteUserRequest(data))
+        .unwrap()
+        .catch()
+        .then(() => {
+          toast("User deletion request submitted", "success")
+        })
+        .finally(() => {
+          stopLoader()
+        })
     }
   }
   const editUser = (id: string) => {
