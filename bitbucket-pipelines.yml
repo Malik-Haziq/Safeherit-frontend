@@ -21,7 +21,7 @@ pipelines:
             - node -v
             - yarn
             - yarn run build
-            - yarn install -g firebase-tools
+            - yarn global add firebase-tools
             - firebase deploy --only hosting:testing --token $FIREBASE_TOKEN --project $FIREBASE_PROJECT_ID
           services:
             - docker
