@@ -9,6 +9,8 @@ import { toast } from "@/components"
 import { copyToClipboard, downloadJson } from "@/common/utils"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { updatePK } from "@/redux/actions"
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
+
 
 const initialState = {
   publicKey: "",
@@ -19,6 +21,8 @@ export default function RegisterKey() {
   
   const dispatch = useAppDispatch()
   const navigate = useNavigate();
+  const stopLoader = () => dispatch(setLoaderVisibility(false))
+  const startLoader = () => dispatch(setLoaderVisibility(true))
 
   const encryptionService = new Encryption();
   
@@ -28,7 +32,6 @@ export default function RegisterKey() {
   const [modalControl, setModalControl] = useState(initialState)
   const [filePresent, setFilePresent] = useState(false)
   const [fileName, setFileName] = useState('')
-
   const closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
@@ -55,10 +58,12 @@ export default function RegisterKey() {
   }, [])
 
   const _handleGeneratePKPair = useCallback(() => {
+    startLoader()
     toast("Generating Public/Private Key", "info")
     setTimeout(() => {
       setModalControl(encryptionService.generateKeyPair())
       toast("Keys Generated", "success")
+      stopLoader()
     }, 1000);
   }, [])
 
@@ -159,8 +164,8 @@ export default function RegisterKey() {
         </h1>
         <p className="text-safe-text-dark-gray text-center mb-5">
           If you already have a Public/Private key pair, you can use it with
-          SafeHerit by registering it. If you don’t haveone we can generate a
-          Key Pair for you, or you can useone of the many generators on the web
+          SafeHerit by registering it. If you don’t have one we can generate a
+          Key Pair for you, or you can use one of the many generators on the web
           to generate them yourself. The choice is yours!
         </p>
         <button
@@ -198,7 +203,7 @@ export default function RegisterKey() {
             <p className="text-center mb-12">
               Learn how private keys keep your data safe.
             </p>
-            <img src={registerPageVideo} alt="resiter video screenshot" />
+            <img src={registerPageVideo} alt="register video screenshot" />
           </div>
         </div>
       </section>

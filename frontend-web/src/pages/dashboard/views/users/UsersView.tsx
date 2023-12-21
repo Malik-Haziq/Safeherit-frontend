@@ -8,31 +8,30 @@ import deleteIcon from "@images/delete.svg"
 import { NewUserDetail, NewUserModal, UserDetail } from "../users/modal_admin"
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { getUsers } from "@/redux/actions/AdminAction"
+import { deleteUserRequest, getUsers } from "@/redux/actions/AdminAction"
 import { toast, Spinner } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
+import { getFileFromFirebase, isValidEmail } from "@/common"
+import { User } from "@/types"
 
 const initialState = {
   email: "",
   phoneNumber: "",
   displayName: "",
+  password: ""
 }
-const initialNewUserState = {
-  "Email": "",
-  "Phone Number": "",
-  "Display Name": "",
-  "Password": "",
-}
+
 const userInitialState = {
-  "User name": "",
-  "User id": "",
-  "User email": "",
-  "Joining date": "",
-  "Plan": "",
-  "Payment status": "",
-  "Account type": "",
-  "Pulse status": ""
+  displayName: "",
+  id: "",
+  email: "",
+  joining_date: "",
+  plan: "",
+  payment_status: "",
+  account_status: "",
+  pulse_status: "",
+  profile_image: ""
 }
 
 export default function UsersView() {
@@ -45,7 +44,6 @@ export default function UsersView() {
   const [loading, setLoading] = useState(true)
   const [modalControl, setModalControl] = useState(initialState)
   const [userViewControl, setViewControl] = useState(userInitialState)
-  const [newUserCredentials, setNewUserCredentials] = useState(initialNewUserState)
   const [modalVisibility, setModalVisibility] = useState("none")
 
   useEffect(() => {
@@ -60,8 +58,8 @@ export default function UsersView() {
     setModalControl(initialState)
     setModalVisibility("none")
   }, [])
+
   const _handleChange = (event: { target: { name: any; value: any } }) => {
-    // debugger
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
   }
@@ -72,17 +70,18 @@ export default function UsersView() {
       modalControl.email &&
       modalControl.phoneNumber
     ) {
-      dispatch(createUser(modalControl))
+      if(isValidEmail(modalControl.email)){
+        dispatch(createUser(modalControl))
         .unwrap()
         .catch()
         .then((res) => {
           startLoader()
           fetchUsers()
-          setNewUserCredentials({
-            "Email": modalControl.email,
-            "Phone Number": modalControl.phoneNumber,
-            "Display Name": modalControl.displayName,
-            "Password": res.data.data.password
+          setModalControl({
+            email: modalControl.email,
+            phoneNumber: modalControl.phoneNumber,
+            displayName: modalControl.displayName,
+            password: res.data.data.password
           })
           setModalVisibility('view-new-user')
           toast("User Created", "success")
@@ -90,6 +89,9 @@ export default function UsersView() {
         .finally(()=>{
           stopLoader()
         })
+      } else{
+        toast('Please enter valid email', "error")
+      }
     } else {
       toast("All fields are required", "warning")
     }
@@ -115,22 +117,40 @@ export default function UsersView() {
     _changePage(currentPage + 1)
   }
 
-  const deleteUser = (id: string) => {
-    toast("functionality not implemented", "error")
+  const deleteUser = (email: string) => {
+    let reason: string | null = ''
+    while(!reason) {
+      reason = prompt("Please enter reason for user deletion")
+      if (reason) {
+        startLoader()
+        const data = {
+          email: email,
+          reason: reason
+        }
+        dispatch(deleteUserRequest(data)).unwrap().catch()
+        .then((res) => {
+          toast("User deletion request submitted", "success")
+        })
+        .finally(() => {
+          stopLoader()
+        })
+      }
+    }
   }
   const editUser = (id: string) => {
     toast("functionality not implemented", "error")
   }
-  const viewUser = (userImg: string, userName: string, userId: string, joiningDate: string, plan: string, payment: string, account: string, pulseStatusTitle: string, userEmail: string) => {
+  const viewUser = (_props: User) => {
     setViewControl({
-      "User name": userName,
-      "User id": userId,
-      "User email": userEmail,
-      "Joining date": joiningDate,
-      "Plan": plan,
-      "Payment status": payment,
-      "Account type": account,
-      "Pulse status": pulseStatusTitle
+      displayName: _props.displayName,
+      id: _props.id,
+      email: _props.email,
+      joining_date: _props.joining_date,
+      plan: _props.plan,
+      payment_status: _props.payment_status,
+      account_status: _props.account_status,
+      pulse_status: _props.pulse_status,
+      profile_image: _props.profile_image
     })
     setModalVisibility('view-user')
   }
@@ -161,7 +181,7 @@ export default function UsersView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
-        modalControl={newUserCredentials}
+        modalControl={modalControl}
       />
       <main className="p-5 mx-auto w-[1101px]">
         <button onClick={createAccount} className="mt-10 flex justify-end mb-8">
@@ -199,17 +219,17 @@ export default function UsersView() {
               <tbody>
                 {admin.users.map((user, index) => {
                   return (
-                    <User
+                    <UserView
                       key={index}
-                      userImg={""}
-                      userName={user.name}
-                      userId={user.id}
-                      userEmail={user.email}
-                      joiningDate={`${user.joining_date}`}
+                      profile_image={user.profile_image}
+                      displayName={user.displayName}
+                      id={user.id}
+                      email={user.email}
+                      joining_date={`${user.joining_date}`}
                       plan={user.plan}
-                      payment={user.payment_status}
-                      account={user.account_status}
-                      pulseStatusTitle={user.pulse_status}
+                      payment_status={user.payment_status}
+                      account_status={user.account_status}
+                      pulse_status={user.pulse_status}
                       pulseStatusSubtile={" "}
                       viewUser={viewUser}
                       editUser={editUser}
@@ -269,35 +289,45 @@ export default function UsersView() {
   )
 }
 
-function User(_props: {
-  userImg: any
-  userName: string
-  userId: string
-  userEmail: string
-  joiningDate: string
+function UserView(_props: {
+  profile_image: any
+  displayName: string
+  id: string
+  email: string
+  joining_date: string
   plan: string
-  payment: string
-  account: string
-  pulseStatusTitle: string
+  payment_status: string
+  account_status: string
+  pulse_status: string
   pulseStatusSubtile: string
   viewUser: Function
   editUser: Function
   deleteUser: Function
 }) {
+  const [userImage, setUserImage] = useState('')
+  if (_props.profile_image) {
+    getFileFromFirebase(_props.profile_image)
+    .then((res) => {
+      setUserImage(res)
+    })
+    .catch(() => {
+      setUserImage("")
+    })
+  }
   return (
     <tr className="border-b-[1px] border-x-[1px] border-[#E5E5E5] h-16 rounded-2xl">
       <td className="w-[220px] pl-5 flex items-center gap-3 content-center h-16">
         <img
-          src={_props.userImg || userImg}
+          src={userImage || userImg}
           alt="user image"
           className="w-9 h-9 rounded-full object-contain"
         />
         <p className="text-[#00192B] text-lg font-semibold">
-          {_props.userName}
+          {_props.displayName}
         </p>
       </td>
       <td className="w-[120px] text-[#4D4D4D] font-medium text-sm">
-        {_props.joiningDate}
+        {_props.joining_date}
       </td>
       <td className="w-[80px] text-[#4D4D4D] font-medium text-sm">
         {_props.plan}
@@ -305,28 +335,28 @@ function User(_props: {
 
       <td
         className={
-          _props.payment.toLowerCase() === "paid"
+          _props.payment_status.toLowerCase() === "paid"
             ? "w-[80px] text-[#27AE60] font-medium text-sm"
-            : _props.payment.toLowerCase() === "overdue"
+            : _props.payment_status.toLowerCase() === "overdue"
             ? "w-[80px] text-[#5CEAD2] font-medium text-sm"
             : "w-[80px] text-[#F44336] font-medium text-sm"
         }
       >
-        {_props.payment}{" "}
+        {_props.payment_status}{" "}
       </td>
       <td
         className={
-          _props.account.toLowerCase() === "active"
+          _props.account_status.toLowerCase() === "active"
             ? "w-[80px] text-[#27AE60] font-medium text-sm"
-            : _props.payment.toLowerCase() === "blocked" || "deleted"
+            : _props.payment_status.toLowerCase() === "blocked" || "deleted"
             ? "w-[80px] text-[#F44336] font-medium text-sm"
             : "w-[80px] text-[#000] font-medium text-sm"
         }
       >
-        {_props.account}{" "}
+        {_props.account_status}{" "}
       </td>
       <td className="w-[170px] text-[#4D4D4D] font-medium text-xs">
-        <p>{_props.pulseStatusTitle}</p>
+        <p>{_props.pulse_status}</p>
         <span
           className={
             _props.pulseStatusSubtile.toLowerCase() === "waiting for answer"
@@ -349,7 +379,17 @@ function User(_props: {
             className="cy-view-asset-btn cursor-pointer"
             id="cy-view-asset-btn"
             onClick={() => {
-              _props.viewUser(_props.userImg, _props.userName, _props.userId, _props.joiningDate, _props.plan, _props.payment, _props.account, _props.pulseStatusTitle, _props.userEmail)
+              _props.viewUser({
+                profile_image: _props.profile_image,
+                displayName: _props.displayName,
+                id: _props.id,
+                email: _props.email,
+                joining_date: _props.joining_date,
+                plan: _props.plan,
+                payment_status: _props.payment_status,
+                account_status: _props.account_status,
+                pulse_status: _props.pulse_status
+              })
             }}
           />
           <img
@@ -358,7 +398,7 @@ function User(_props: {
             className="cy-edit-asset-btn cursor-pointer"
             id="cy-edit-asset-btn"
             onClick={() => {
-              _props.editUser(_props.userId)
+              _props.editUser(_props.id)
             }}
           />
           <img
@@ -367,7 +407,7 @@ function User(_props: {
             className="cy-del-asset-btn cursor-pointer"
             id="cy-del-asset-btn"
             onClick={() => {
-              _props.deleteUser(_props.userId)
+              _props.deleteUser(_props.email)
             }}
           />
         </div>

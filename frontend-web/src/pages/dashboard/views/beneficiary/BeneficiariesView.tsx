@@ -155,16 +155,8 @@ export default function BeneficiariesView() {
     }
   }
   const _submitStepTwoModal = () => {
-    if (
-      !modalControl.facebook_link &&
-      !modalControl.instagram_username &&
-      !modalControl.twitter_username
-    ) {
-      toast("At least 1 social media accounts is compulsory", "error")
-    } else {
       modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
-    }
   }
 
   const _submitStepThreeModal = () => {
@@ -360,10 +352,12 @@ export default function BeneficiariesView() {
   }
 
   const _handleGeneratePKPair = useCallback(() => {
+    startLoader()
     toast("Generating Public/Private Key", "info")
     setTimeout(() => {
       setModalEncryptionKeyControl(encryptionService.generateKeyPair())
       toast("Keys Generated", "success")
+      stopLoader()
     }, 1000);
   }, [])
 

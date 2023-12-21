@@ -25,7 +25,7 @@ export const CONSTANT = {
   ADMIN: "Users",
   ADMIN_TITLE: "Admin Dashboard",
   SUPER_ADMIN: "Users",
-  SUPER_ADMIN_TITLE: "Admin Dashboard",
+  SUPER_ADMIN_TITLE: "Super Admin Dashboard",
   HELP: "Help",
   HELP_TITLE: "Get the help",
   SETTINGS: "Settings",
