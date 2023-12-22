@@ -1,4 +1,5 @@
 import React from "react"
+import { useState } from 'react';
 import uploadImg from "@images/upload.png"
 import copyIcon from "@images/copy-icon.svg"
 import downloadIcon from "@images/download.svg"
@@ -23,14 +24,13 @@ export function PrivateKeyModal(_props: {
   fileName: any
   setFileName: any
 }) {
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
+    const [droppedFile, setDroppedFile] = useState(null);
+  
+    const fileReader = (file: any)=>{
+      const reader = new FileReader();
+      reader.onload = () => {
         try {
-          const parsedData: Data = JSON.parse(e.target?.result as string)
+          const parsedData: Data = JSON.parse(reader.result as string);
           if (parsedData.privateKey) {
             const customEvent: CustomChangeEvent = {
               target: {
@@ -52,6 +52,38 @@ export function PrivateKeyModal(_props: {
         }
       }
       reader.readAsText(file)
+    }
+
+    const handleDragEnter = (e: any) => {
+      e.preventDefault();
+    };
+  
+    const handleDragOver = (e:any) => {
+      e.preventDefault();
+    };
+  
+    const handleDragLeave = () => {
+    };
+  
+    const handleDrop = (e:any) => {
+      e.preventDefault();
+
+      const droppedFiles = Array.from(e.dataTransfer.files);
+      const firstFile:any = droppedFiles[0];
+      
+      console.log(e)
+      console.log(droppedFiles)
+      
+      firstFile && _props.setFilePresent(true)
+      setDroppedFile(firstFile);
+      fileReader(droppedFile)
+    };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      fileReader(file)
     }
   }
 
@@ -117,19 +149,7 @@ export function PrivateKeyModal(_props: {
                       Browse File
                     </button>
                   </div>
-                  {_props.filePresent ? (
-                    <img
-                      src={jsonFile}
-                      alt="json file icon"
-                      className="mx-auto w-28 mb-3"
-                    />
-                  ) : (
-                    <img
-                      src={uploadImg}
-                      alt="upload file"
-                      className="mx-auto"
-                    />
-                  )}
+                  {_props.filePresent ? <img src={jsonFile} alt="json file icon" className="mx-auto w-28 mb-3"/> : <img src={uploadImg} alt="upload file" className={"mx-auto"} draggable={'true'} onDragEnter={handleDragEnter} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}/>}
                 </div>
               )
             },
