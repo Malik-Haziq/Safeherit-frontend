@@ -84,33 +84,6 @@ export function VerificationCode({
           </button>
         </div>
       </div>
-      <div className="flex gap-x-4 mt-6 md:mt-8 pb-4">
-        {code.map((value, index) => {
-          return (
-            <Input
-              key={index}
-              index={index}
-              getValue={(value, index) => {
-                code[index] = value
-              }}
-            />
-          )
-        })}
-      </div>
-      <div className="flex mt-4 gap-x-4">
-        <button
-          onClick={() => _handleMFACancel()}
-          className="rounded-xl flex gap-x-4 mb-8 h-11 w-1/2 items-center justify-center px-6 border border-[#04477B] text-[#04477B]"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={() => _handleMFASubmit()}
-          className="bg-safe-blue-tint rounded-xl flex h-11 w-1/2 items-center justify-center px-6 "
-        >
-          <span className="text-base text-white">Submit</span>
-        </button>
-      </div>
     </div>
   )
 }
