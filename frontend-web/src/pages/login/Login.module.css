@@ -1,4 +1,4 @@
-.signup_form{
+.signup_form {
   min-width: 800px;
   display: flex;
   flex-direction: column;
@@ -10,8 +10,8 @@
   height: 60px;
   border-radius: 22px;
   margin-top: 22px;
-  background-color: #F5FAFD;
-  border-color: #F5FAFD;
+  background-color: #f5fafd;
+  border-color: #f5fafd;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -47,8 +47,8 @@
   background-color: white;
 }
 
-input[type='checkbox'] {
-  accent-color: #52CEB7;
+input[type="checkbox"] {
+  accent-color: #52ceb7;
   background-color: aliceblue;
 }
 

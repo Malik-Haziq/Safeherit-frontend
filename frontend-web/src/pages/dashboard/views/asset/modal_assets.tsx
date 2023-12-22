@@ -623,7 +623,7 @@ export function AssetBeneficiaries(_props: {
                       </th>
                     </tr>
                   </thead>
-                  <tbody >
+                  <tbody>
                     {_props.modalControl.map(
                       (beneficiary: any, index: number) => (
                         <tr
@@ -631,7 +631,7 @@ export function AssetBeneficiaries(_props: {
                           className="flex justify-between px-5 py-1"
                         >
                           <td className="text-[#292929] font-sm min-w-[160px] px-1">
-                            {beneficiary?.name.slice(0,20)}
+                            {beneficiary?.name.slice(0, 20)}
                           </td>
                           <td className="text-[#292929] font-sm min-w-[300px] text-left px-1">
                             {beneficiary?.primary_email}
@@ -642,9 +642,6 @@ export function AssetBeneficiaries(_props: {
                         </tr>
                       ),
                     )}
-                    
-                    
-                    
                   </tbody>
                 </table>
               )

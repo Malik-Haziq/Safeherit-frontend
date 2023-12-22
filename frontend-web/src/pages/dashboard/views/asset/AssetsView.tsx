@@ -64,7 +64,8 @@ export default function AssetsView() {
   const [selected, setSelected] = useState("")
   const [selectedAsset, setSelectedAsset] = useState("")
   const [assetFile, setAssetFile] = useState("")
-  const [assetBeneficiariesData, setAssetBeneficiariesData] = useState(initialState)
+  const [assetBeneficiariesData, setAssetBeneficiariesData] =
+    useState(initialState)
   const [
     modalHistory,
     modalHistoryLength,
@@ -397,12 +398,12 @@ export default function AssetsView() {
 
   const viewBeneficiaries = (assetId: string) => {
     dispatch(findAsset({ id: assetId }))
-    .unwrap()
-    .then((res) => {
-      setSelectedAsset(assetId)
-      setAssetBeneficiariesData(res.data.data.beneficiaries)
-      setModalVisibility("beneficiaries-listing")
-    })
+      .unwrap()
+      .then((res) => {
+        setSelectedAsset(assetId)
+        setAssetBeneficiariesData(res.data.data.beneficiaries)
+        setModalVisibility("beneficiaries-listing")
+      })
   }
 
   return (
@@ -541,10 +542,10 @@ function Assets(_props: {
   selected: string
   setSelected: React.Dispatch<React.SetStateAction<string>>
   assetDetailsArr: Asset[]
-  destroyAsset: Function
-  editAsset: Function
-  viewAsset: Function
-  viewBeneficiaries: Function
+  destroyAsset: (assetId: string) => void
+  editAsset: (assetId: string) => void
+  viewAsset: (assetId: string) => void
+  viewBeneficiaries: (assetId: string) => void
   userRole: string
 }) {
   return (
@@ -671,10 +672,10 @@ function AssetDetails(_props: {
   assetName: string
   assetValue: string
   beneficiaries: Beneficiary[]
-  destroyAsset: Function
-  editAsset: Function
-  viewAsset: Function
-  viewBeneficiaries: Function
+  destroyAsset: (assetId: string) => void
+  editAsset: (assetId: string) => void
+  viewAsset: (assetId: string) => void
+  viewBeneficiaries: (assetId: string) => void
   userRole: string
 }) {
   return (
