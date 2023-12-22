@@ -7,7 +7,7 @@ import { useCallback, useState } from "react"
 import { GeneratePrivateKey, PrivateKeyModal } from "./modal_register_key"
 import Encryption from "@/common/encryption/encryption"
 import { toast } from "@/components"
-import { copyToClipboard, downloadJson } from "@/common/utils"
+import { copyToClipboard, downloadJson, downloadPEM } from "@/common/utils"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { updatePK } from "@/redux/actions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
@@ -102,7 +102,7 @@ export default function RegisterKey() {
   const downloadPrivateKey = useCallback(() => {
     if (modalControl.privateKey) {
       const KEY = { privateKey: modalControl.privateKey }
-      downloadJson(KEY, "privateKey.json")
+      downloadPEM(KEY, `${user.displayName}_privateKey.pem`)
       toast("Download Complete", "success")
     } else {
       toast("Kindly Generate Private Key", "error")
@@ -120,7 +120,7 @@ export default function RegisterKey() {
   const downloadPublicKey = useCallback(() => {
     if (modalControl.publicKey) {
       const KEY = { publicKey: modalControl.publicKey }
-      downloadJson(KEY, "publicKey.json")
+      downloadPEM(KEY, `${user.displayName}_publicKey.pem`)
       toast("Download Complete", "success")
     } else {
       toast("Kindly Generate Public Key", "error")

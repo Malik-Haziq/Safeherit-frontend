@@ -100,7 +100,7 @@ export function PrivateKeyModal(_props: {
                 <div className="relative">
                   <input
                     type="file"
-                    accept=".json"
+                    accept=".pem"
                     name="personalized_video"
                     onChange={handleFileChange}
                     className="opacity-0 absolute top-2 left-36 h-10 w-[266px]"
