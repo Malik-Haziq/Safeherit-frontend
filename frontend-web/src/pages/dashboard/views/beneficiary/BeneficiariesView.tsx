@@ -73,6 +73,7 @@ export default function BeneficiariesView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const encryptionService = new Encryption()
+  const user = useAppSelector((state) => state.user)
   const startLoader = () => dispatch<any>(setLoaderVisibility(true))
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
@@ -94,6 +95,7 @@ export default function BeneficiariesView() {
     modalHistoryPush,
     modalHistoryPopAll,
   ] = useArray()
+
 
   const beneficiaryArray = useAppSelector(
     (state) => state.beneficiary.beneficiary_array,
@@ -181,7 +183,7 @@ export default function BeneficiariesView() {
         dispatch<any>(
           updateBeneficiary({
             ...modalControl,
-            public_key: modalEncryptionKeyControl.publicKey,
+            public_key: user.publicKey,
           }),
         )
           .unwrap()
