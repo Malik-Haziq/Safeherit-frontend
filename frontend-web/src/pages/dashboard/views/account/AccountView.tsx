@@ -22,7 +22,7 @@ import {
 } from "@redux/actions"
 import {
   copyToClipboard,
-  downloadJson,
+  downloadPEM,
   getFileFromFirebase,
   verifyIfUserIsEnrolled,
 } from "@/common"
@@ -264,7 +264,7 @@ export default function AccountView() {
   const downloadPrivateKey = useCallback(() => {
     if (PKEditModalControl.privateKey) {
       const KEY = { privateKey: PKEditModalControl.privateKey }
-      downloadJson(KEY, "privateKey.json")
+      downloadPEM(KEY, `${user.displayName}_privateKey.pem`)
       toast("Download Complete", "success")
     } else {
       toast("Kindly Generate Private Key", "error")
@@ -282,7 +282,7 @@ export default function AccountView() {
   const downloadPublicKey = useCallback(() => {
     if (PKEditModalControl.publicKey) {
       const KEY = { publicKey: PKEditModalControl.publicKey }
-      downloadJson(KEY, "publicKey.json")
+      downloadPEM(KEY, `${user.displayName}_publicKey.pem`)
       toast("Download Complete", "success")
     } else {
       toast("Kindly Generate Public Key", "error")

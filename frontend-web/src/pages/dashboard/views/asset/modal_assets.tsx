@@ -10,7 +10,7 @@ import { assetData } from "./data"
 import { useAppSelector } from "@redux/hooks"
 
 const selectFieldStyles =
-  "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]"
+  "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] min-h-[56px] h-[100%]"
 const selectFieldRightIconStyles = "absolute right-4 top-4 cursor-pointer"
 const textInputFieldStyles =
   "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2"
@@ -108,7 +108,7 @@ const generateSelectFieldProps = (
       rightIcon: arrowDown,
       rightIconAlt: "rightIcon",
       // selectFieldWidth: 490,
-      selectContainer: "mx-7 mb-4 relative",
+      selectContainer: "mx-7 mb-4 relative min-h-[56px] h-[100%]",
       selectFieldStyles: selectFieldStyles,
       rightIconStyles: selectFieldRightIconStyles,
     },
@@ -578,6 +578,72 @@ export function AssetDetail(_props: {
                     : <></>
                   } */}
                 </section>
+              )
+            },
+          },
+        },
+      ]}
+    />
+  )
+}
+export function AssetBeneficiaries(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  closeIconVisibility: boolean
+  modalControl: ModalControl
+  assetId: string
+}) {
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={"Beneficiaries"}
+      closeIconVisibility={_props.closeIconVisibility}
+      modalCustomStyles={"min-w-[700px] w-auto"}
+      elements={[
+        {
+          type: "customView",
+          props: {
+            customViewContainer: "max-h-[500px] overflow-auto",
+            CustomView: () => {
+              return (
+                <table className="rounded-xl w-full  overflow-auto">
+                  <thead className="bg-[#F2F2F2]">
+                    <tr className="flex justify-between px-5 py-3 rounded-t-lg">
+                      <th className="font-medium text-sm uppercase min-w-[160px] text-left">
+                        Name
+                      </th>
+                      <th className="font-medium text-sm uppercase min-w-[300px] text-left">
+                        Email
+                      </th>
+                      <th className="font-medium text-sm uppercase text-left min-w-[160px]">
+                        Phone
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {_props.modalControl.map(
+                      (beneficiary: any, index: number) => (
+                        <tr
+                          key={index}
+                          className="flex justify-between px-5 py-1"
+                        >
+                          <td className="text-[#292929] font-sm min-w-[160px] px-1">
+                            {beneficiary?.name.slice(0, 20)}
+                          </td>
+                          <td className="text-[#292929] font-sm min-w-[300px] text-left px-1">
+                            {beneficiary?.primary_email}
+                          </td>
+                          <td className="text-[#292929] font-sm min-w-[160px] text-left px-1">
+                            {beneficiary?.phone_number}
+                          </td>
+                        </tr>
+                      ),
+                    )}
+                  </tbody>
+                </table>
               )
             },
           },

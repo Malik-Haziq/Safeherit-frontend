@@ -38,7 +38,7 @@ import {
   copyToClipboard,
   isValidPhoneWithRegion,
   useArray,
-  downloadJson,
+  downloadPEM,
 } from "@/common"
 import {
   PrivateKeyModal,
@@ -73,6 +73,7 @@ export default function BeneficiariesView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const encryptionService = new Encryption()
+  const user = useAppSelector((state) => state.user)
   const startLoader = () => dispatch<any>(setLoaderVisibility(true))
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
@@ -94,6 +95,7 @@ export default function BeneficiariesView() {
     modalHistoryPush,
     modalHistoryPopAll,
   ] = useArray()
+
 
   const beneficiaryArray = useAppSelector(
     (state) => state.beneficiary.beneficiary_array,
@@ -181,7 +183,7 @@ export default function BeneficiariesView() {
         dispatch<any>(
           updateBeneficiary({
             ...modalControl,
-            public_key: modalEncryptionKeyControl.publicKey,
+            public_key: user.publicKey,
           }),
         )
           .unwrap()
@@ -396,7 +398,7 @@ export default function BeneficiariesView() {
   const downloadPrivateKey = useCallback(() => {
     if (modalEncryptionKeyControl.privateKey) {
       const KEY = { privateKey: modalEncryptionKeyControl.privateKey }
-      downloadJson(KEY, "privateKey.json")
+      downloadPEM(KEY, "privateKey.pem")
       toast("Download Complete", "success")
     } else {
       toast("Kindly Generate Private Key", "error")
@@ -414,7 +416,7 @@ export default function BeneficiariesView() {
   const downloadPublicKey = useCallback(() => {
     if (modalEncryptionKeyControl.publicKey) {
       const KEY = { publicKey: modalEncryptionKeyControl.publicKey }
-      downloadJson(KEY, "publicKey.json")
+      downloadPEM(KEY, "publicKey.pem")
       toast("Download Complete", "success")
     } else {
       toast("Kindly Generate Public Key", "error")

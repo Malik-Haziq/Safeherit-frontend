@@ -171,6 +171,7 @@ export const Modal = (_props: {
   closeIconVisibility: boolean
   arrayLength?: any
   showPreviousModal?: any
+  modalCustomStyles?: string
 }) => {
   const elements = _props?.elements
   return (
@@ -178,7 +179,11 @@ export const Modal = (_props: {
       {_props.openModal && (
         <div className={styles.backDrop}>
           <div className={styles.modalContainer}>
-            <div className={styles.modal}>
+            <div
+              className={`${styles.modal} ${
+                _props.modalCustomStyles && _props.modalCustomStyles
+              }`}
+            >
               <ModalHeader
                 closeModal={_props.closeModal}
                 title={_props.modalTitle}

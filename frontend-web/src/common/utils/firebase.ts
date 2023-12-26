@@ -148,14 +148,27 @@ export function isEmailVerified() {
   if (auth.currentUser) return auth.currentUser.emailVerified
 }
 
-export async function verifyEmail(oobCode: string, apiKey: string) {
-  const body = {
+export async function verifyEmail(
+  oobCode: string,
+  apiKey: string,
+  mode: string,
+  password?: string,
+) {
+  const body: {
+    oobCode: string
+    newPassword?: string
+  } = {
     oobCode: oobCode,
   }
+
+  if (password) {
+    body["newPassword"] = password
+  }
+
   const params = {
     ROUTE: `${
       import.meta.env.VITE_REACT_APP_GOOGLE_API_ACCOUNT_INFO
-    }?key=${apiKey}`,
+    }/${mode}?key=${apiKey}`,
     Body: body,
   }
   try {
