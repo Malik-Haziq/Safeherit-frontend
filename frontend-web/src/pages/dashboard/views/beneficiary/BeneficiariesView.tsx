@@ -38,7 +38,7 @@ import {
   copyToClipboard,
   isValidPhoneWithRegion,
   useArray,
-  downloadJson,
+  downloadPEM,
 } from "@/common"
 import {
   PrivateKeyModal,
@@ -396,7 +396,7 @@ export default function BeneficiariesView() {
   const downloadPrivateKey = useCallback(() => {
     if (modalEncryptionKeyControl.privateKey) {
       const KEY = { privateKey: modalEncryptionKeyControl.privateKey }
-      downloadJson(KEY, "privateKey.json")
+      downloadPEM(KEY, "privateKey.pem")
       toast("Download Complete", "success")
     } else {
       toast("Kindly Generate Private Key", "error")
@@ -414,7 +414,7 @@ export default function BeneficiariesView() {
   const downloadPublicKey = useCallback(() => {
     if (modalEncryptionKeyControl.publicKey) {
       const KEY = { publicKey: modalEncryptionKeyControl.publicKey }
-      downloadJson(KEY, "publicKey.json")
+      downloadPEM(KEY, "publicKey.pem")
       toast("Download Complete", "success")
     } else {
       toast("Kindly Generate Public Key", "error")
