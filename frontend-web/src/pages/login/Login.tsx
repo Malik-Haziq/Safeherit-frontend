@@ -68,27 +68,46 @@ export function Login() {
 
   // verify email
   useEffect(() => {
-    const verifyUserEmail = async () => {
+    const verifyOrUpdateUser = async () => {
       if (queryParams.size) {
         startLoader()
         const mode = queryParams.get("mode")
+        const oobCode = queryParams.get("oobCode") || ""
+        const apiKey = queryParams.get("apiKey") || ""
         if (mode == "verifyEmail") {
           toast("Verifying Email", "info")
-          const oobCode = queryParams.get("oobCode") || ""
-          const apiKey = queryParams.get("apiKey") || ""
-          const response = await verifyEmail(oobCode, apiKey)
+          const response = await verifyEmail(oobCode, apiKey, "setAccountInfo")
           if (response) {
             toast("Email Verified", "success")
           }
           if (!response) {
             toast("Unable to verify your email", "error")
           }
+        } else if (mode == "resetPassword") {
+          let newPassword: string | null = ""
+          newPassword = prompt("Enter new password")
+          if (newPassword) {
+            const response = await verifyEmail(
+              oobCode,
+              apiKey,
+              mode,
+              newPassword,
+            )
+            if (response) {
+              toast("Password changed", "success")
+            }
+            if (!response) {
+              toast("Some error occured", "error")
+            }
+          }
+
           navigate("/login")
-          stopLoader()
         }
+
+        stopLoader()
       }
     }
-    verifyUserEmail()
+    verifyOrUpdateUser()
   }, [])
 
   async function getCode(code: string) {
