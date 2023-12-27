@@ -1,5 +1,4 @@
 import React from "react"
-import { useState } from 'react';
 import uploadImg from "@images/upload.png"
 import copyIcon from "@images/copy-icon.svg"
 import downloadIcon from "@images/download.svg"
@@ -24,63 +23,49 @@ export function PrivateKeyModal(_props: {
   fileName: any
   setFileName: any
 }) {
-    const [droppedFile, setDroppedFile] = useState(null);
-  
-    const fileReader = (file: any)=>{
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const parsedData: Data = JSON.parse(reader.result as string);
-          if (parsedData.privateKey) {
-            const customEvent: CustomChangeEvent = {
-              target: {
-                name: "privateKey",
-                value: parsedData.privateKey,
-              },
-            }
-            _props._handleChange(
-              customEvent as React.ChangeEvent<HTMLInputElement>,
-            )
-            _props.setFilePresent(true)
-            _props.setFileName(file.name)
-            toast("File uploaded", "success")
-          } else {
-            toast("Please choose a valid file", "error")
+  const fileReader = (file: any) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      try {
+        const parsedData: Data = JSON.parse(reader.result as string)
+        if (parsedData.privateKey) {
+          const customEvent: CustomChangeEvent = {
+            target: {
+              name: "privateKey",
+              value: parsedData.privateKey,
+            },
           }
-        } catch (error) {
-          toast("Error loading file", "error")
+          _props._handleChange(
+            customEvent as React.ChangeEvent<HTMLInputElement>,
+          )
+          _props.setFilePresent(true)
+          _props.setFileName(file.name)
+          toast("File uploaded", "success")
+        } else {
+          toast("Please choose a valid file", "error")
         }
+      } catch (error) {
+        toast("Error loading file", "error")
       }
-      reader.readAsText(file)
     }
+    reader.readAsText(file)
+  }
 
-    const handleDragEnter = (e: any) => {
-      e.preventDefault();
-    };
-  
-    const handleDragOver = (e:any) => {
-      e.preventDefault();
-    };
-  
-    const handleDragLeave = () => {
-    };
-  
-    const handleDrop = (e:any) => {
-      e.preventDefault();
+  const handleDrop = (e: any) => {
+    e.preventDefault()
 
-      const droppedFiles = Array.from(e.dataTransfer.files);
-      const firstFile:any = droppedFiles[0];
-      
-      console.log(e)
-      console.log(droppedFiles)
-      
-      firstFile && _props.setFilePresent(true)
-      setDroppedFile(firstFile);
-      fileReader(droppedFile)
-    };
+    const file = e.dataTransfer.files[0]
+
+    if (file) {
+      _props.setFilePresent(true)
+      fileReader(file)
+    } else {
+      toast("Please drop a valid PEM file.", "error")
+    }
+  }
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0]
 
     if (file) {
       fileReader(file)
@@ -149,7 +134,20 @@ export function PrivateKeyModal(_props: {
                       Browse File
                     </button>
                   </div>
-                  {_props.filePresent ? <img src={jsonFile} alt="json file icon" className="mx-auto w-28 mb-3"/> : <img src={uploadImg} alt="upload file" className={"mx-auto"} draggable={'true'} onDragEnter={handleDragEnter} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}/>}
+                  {_props.filePresent ? (
+                    <img
+                      src={jsonFile}
+                      alt="json file icon"
+                      className="mx-auto w-28 mb-3"
+                    />
+                  ) : (
+                    <img
+                      src={uploadImg}
+                      alt="upload file"
+                      className={"mx-auto"}
+                      onDrop={handleDrop}
+                    />
+                  )}
                 </div>
               )
             },
