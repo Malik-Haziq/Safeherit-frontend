@@ -269,10 +269,10 @@ export default function AssetsView() {
       beneficirayPublicKeys: any
     } = {
       category: modalControl.category,
-      assignedBeneficiaryIds: beneficiaryIds,
+      assignedBeneficiaryIds: beneficiaryIds || [],
       data: JSON.stringify(modalControl),
       asset_file: assetFile,
-      beneficirayPublicKeys: beneficiary.beneficiary_mapper,
+      beneficirayPublicKeys: beneficiary.beneficiary_mapper || {},
     }
     if (validateRequiredFields(modalControl, 1)) {
       startLoader()
