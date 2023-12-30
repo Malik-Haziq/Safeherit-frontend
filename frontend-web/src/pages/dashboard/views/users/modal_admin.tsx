@@ -41,7 +41,7 @@ export function NewUserModal(_props: {
         {
           type: "phoneNumberView",
           props: {
-            name: "phone_number",
+            name: "phoneNumber",
             placeholder: "Phone Number",
             value: _props?.modalControl?.phoneNumber?.split(" ")[1],
             code: _props?.modalControl?.phoneNumber?.split(" ")[0],
