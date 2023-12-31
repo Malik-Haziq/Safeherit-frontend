@@ -23,35 +23,52 @@ export function PrivateKeyModal(_props: {
   fileName: any
   setFileName: any
 }) {
+  const fileReader = (file: any) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      try {
+        const parsedData: Data = JSON.parse(reader.result as string)
+        if (parsedData.privateKey) {
+          const customEvent: CustomChangeEvent = {
+            target: {
+              name: "privateKey",
+              value: parsedData.privateKey,
+            },
+          }
+          _props._handleChange(
+            customEvent as React.ChangeEvent<HTMLInputElement>,
+          )
+          _props.setFilePresent(true)
+          _props.setFileName(file.name)
+          toast("File uploaded", "success")
+        } else {
+          toast("Please choose a valid file", "error")
+        }
+      } catch (error) {
+        toast("Error loading file", "error")
+      }
+    }
+    reader.readAsText(file)
+  }
+
+  const handleDrop = (e: any) => {
+    e.preventDefault()
+
+    const file = e.dataTransfer.files[0]
+
+    if (file) {
+      _props.setFilePresent(true)
+      fileReader(file)
+    } else {
+      toast("Please drop a valid PEM file.", "error")
+    }
+  }
+
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
 
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        try {
-          const parsedData: Data = JSON.parse(e.target?.result as string)
-          if (parsedData.privateKey) {
-            const customEvent: CustomChangeEvent = {
-              target: {
-                name: "privateKey",
-                value: parsedData.privateKey,
-              },
-            }
-            _props._handleChange(
-              customEvent as React.ChangeEvent<HTMLInputElement>,
-            )
-            _props.setFilePresent(true)
-            _props.setFileName(file.name)
-            toast("File uploaded", "success")
-          } else {
-            toast("Please choose a valid file", "error")
-          }
-        } catch (error) {
-          toast("Error loading file", "error")
-        }
-      }
-      reader.readAsText(file)
+      fileReader(file)
     }
   }
 
@@ -127,7 +144,8 @@ export function PrivateKeyModal(_props: {
                     <img
                       src={uploadImg}
                       alt="upload file"
-                      className="mx-auto"
+                      className={"mx-auto"}
+                      onDrop={handleDrop}
                     />
                   )}
                 </div>
