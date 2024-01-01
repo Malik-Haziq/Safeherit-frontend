@@ -34,7 +34,7 @@ export function SignUp() {
     confirm_password_visibility: false,
   })
   const [agreeTermAndCondition, setAgreeTermAndCondition] = useState(false)
-
+  const [validPassword, setValidPassword] = useState(false)
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     setFormControl({ ...formControl, [name]: value })
@@ -59,10 +59,7 @@ export function SignUp() {
       if (formControl.password !== formControl.confirm_password) {
         toast("password must match", "error")
       } else if (!isStrongPassword(formControl.password)) {
-        toast(
-          "Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special symbol.",
-          "error",
-        )
+        setValidPassword(true)
       } else {
         startLoader()
         toast("signing up", "info")
@@ -123,13 +120,13 @@ export function SignUp() {
 
   return (
     <main className="flex flex-col md:flex-row justify-center lg:justify-between font-safe-font-default w-screen h-[calc(100vh-80px)]">
-      <section className="flex items-center  flex-col gap-8 w-full lg:w-2/5 my-8">
+      <section className="flex items-center flex-col gap-8 w-full lg:w-2/5 my-4">
         <div className="mt-6">
           <img
             src={logo}
-            alt="safe herit logo"
-            className=" w-52 hidden lg:block my-12 mx-auto"
-          />
+            alt="safeherit logo"
+            className=" w-52 hidden lg:block my-4 mx-auto"
+          />  
           <h2 className="text-xl lg:text-2xl mb-2  font-bold font-monstrate text-safe-text-dark-blue text-center">
             Create New Account!
           </h2>
@@ -195,8 +192,8 @@ export function SignUp() {
               )
             }}
           />
-
-          <div className="flex gap-2 text-safe-text-gray mt-2 mb-8">
+          {validPassword && <PasswordValidation/>}
+          <div className="flex gap-2 text-safe-text-gray mt-2 mb-6">
             <input
               name="checkbox"
               type="checkbox"
@@ -287,6 +284,19 @@ function InputField(_props: {
         onClick={_imagePress}
         className="absolute right-4 top-4 cursor-pointer"
       />
+    </div>
+  )
+}
+
+function PasswordValidation() {
+  return (
+    <div>
+      <ul className="text-red-500 text-sm list-disc list-inside flex flex-col gap-1">
+        <li>password must be 8 or more characters length.</li>
+        <li>password must contain 1 or more uppercase characters.</li>
+        <li>password must contain 1 or more digit characters.</li>
+        <li>password must contain 1 or more spacial characters.</li>
+      </ul>
     </div>
   )
 }
