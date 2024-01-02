@@ -79,7 +79,7 @@ export const createAsset = createAsyncThunk(
     Data.assignedBeneficiaryIds = JSON.stringify(Data.assignedBeneficiaryIds)
     Data.privateKeysEncByBeneficiary = JSON.stringify(
       Data.privateKeysEncByBeneficiary,
-    )
+    ) || ""
 
     const formData = jsonToFormData(Data)
 
@@ -159,7 +159,7 @@ export const updateAsset = createAsyncThunk(
     Data.assignedBeneficiaryIds = JSON.stringify(Data.assignedBeneficiaryIds)
     Data.privateKeysEncByBeneficiary = JSON.stringify(
       Data.privateKeysEncByBeneficiary,
-    )
+    ) || ""
 
     const formData = jsonToFormData(Data)
     const params = { ROUTE: ASSETS, Body: formData, token: user.token }
