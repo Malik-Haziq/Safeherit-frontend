@@ -148,6 +148,7 @@ export default function RegisterKey() {
         setFilePresent={setFilePresent}
         fileName={fileName}
         setFileName={setFileName}
+        keyType="Private"
       />
       <GeneratePrivateKey
         openModal={modalVisibility == "Generate-PK"}

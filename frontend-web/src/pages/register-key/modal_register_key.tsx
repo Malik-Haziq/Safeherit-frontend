@@ -8,7 +8,8 @@ import { ChangeEvent } from "react"
 import { CustomChangeEvent } from "@/types"
 
 interface Data {
-  privateKey: string
+  privateKey?: string
+  publicKey?: string
 }
 
 export function PrivateKeyModal(_props: {
@@ -22,17 +23,31 @@ export function PrivateKeyModal(_props: {
   setFilePresent: any
   fileName: any
   setFileName: any
+  keyType: string
 }) {
   const fileReader = (file: any) => {
     const reader = new FileReader()
     reader.onload = () => {
       try {
         const parsedData: Data = JSON.parse(reader.result as string)
-        if (parsedData.privateKey) {
+        if (parsedData.privateKey && _props.keyType == "Private") {
           const customEvent: CustomChangeEvent = {
             target: {
               name: "privateKey",
               value: parsedData.privateKey,
+            },
+          }
+          _props._handleChange(
+            customEvent as React.ChangeEvent<HTMLInputElement>,
+          )
+          _props.setFilePresent(true)
+          _props.setFileName(file.name)
+          toast("File uploaded", "success")
+        } else if (parsedData.publicKey && _props.keyType == "Public") {
+          const customEvent: CustomChangeEvent = {
+            target: {
+              name: "publicKey",
+              value: parsedData.publicKey,
             },
           }
           _props._handleChange(
@@ -77,7 +92,7 @@ export function PrivateKeyModal(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={"Load Private Key"}
+      modalTitle={`Load ${_props.keyType} Key`}
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {

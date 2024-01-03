@@ -753,7 +753,7 @@ export function RegisterPKModal(_props: {
         {
           type: "textView",
           props: {
-            text: "If you already have a Public/Private key pair, click on “I have a Private Key”. If not click on “Generate a Key pair” and we will generate one for you. ",
+            text: "If you already have a Public/Private key pair, click on “I have a Public Key”. If not click on “Generate a Key pair” and we will generate one for you. ",
             textStyles: "text-[#858992] px-7 mb-9",
           },
         },
@@ -774,7 +774,7 @@ export function RegisterPKModal(_props: {
                     onClick={_props._submitModal}
                     className="primary-btn bg-[#0971AA] rounded-2xl px-8 py-4 font-bold"
                   >
-                    I have a Private Key
+                    I have a Public Key
                   </button>
                 </div>
               )
