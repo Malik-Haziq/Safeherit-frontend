@@ -45,7 +45,9 @@ export const loginWithGoogle = createAsyncThunk(
   "loginWithGoogle",
   async (Data: object, { dispatch, rejectWithValue }) => {
     try {
-      const response = await signInWithPopup(auth, new GoogleAuthProvider())
+      const googleAuthProvider = new GoogleAuthProvider();
+      googleAuthProvider.setCustomParameters({ prompt: 'select_account' })
+      const response = await signInWithPopup(auth, googleAuthProvider)
       const token = await response.user.getIdToken()
       dispatch(setToken(token))
       return response

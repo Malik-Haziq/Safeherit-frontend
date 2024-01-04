@@ -96,7 +96,6 @@ export default function BeneficiariesView() {
     modalHistoryPopAll,
   ] = useArray()
 
-
   const beneficiaryArray = useAppSelector(
     (state) => state.beneficiary.beneficiary_array,
   )
@@ -368,10 +367,12 @@ export default function BeneficiariesView() {
 
   const _handleRegisterPK = () => {
     if (
-      encryptionService.validateKeyPair(
-        modalEncryptionKeyControl.publicKey,
-        modalEncryptionKeyControl.privateKey,
-      )
+      modalVisibility === "Load-PK" ||
+      (modalVisibility === "Generate-PK" &&
+        encryptionService.validateKeyPair(
+          modalEncryptionKeyControl.publicKey,
+          modalEncryptionKeyControl.privateKey,
+        ))
     ) {
       if (modalAction == "create") {
         modalHistoryPush("Step-pk")
@@ -444,6 +445,7 @@ export default function BeneficiariesView() {
         setFilePresent={setFilePresent}
         fileName={fileName}
         setFileName={setFileName}
+        keyType="Public"
       />
 
       <GeneratePrivateKey
