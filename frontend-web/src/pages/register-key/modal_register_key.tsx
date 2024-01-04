@@ -2,7 +2,7 @@ import React from "react"
 import uploadImg from "@images/upload.png"
 import copyIcon from "@images/copy-icon.svg"
 import downloadIcon from "@images/download.svg"
-import jsonFile from "@images/json.webp"
+import fileIcon from "@images/file-icon.svg"
 import { Modal, toast } from "@/components"
 import { ChangeEvent } from "react"
 import { CustomChangeEvent } from "@/types"
@@ -151,7 +151,7 @@ export function PrivateKeyModal(_props: {
                   </div>
                   {_props.filePresent ? (
                     <img
-                      src={jsonFile}
+                      src={fileIcon}
                       alt="json file icon"
                       className="mx-auto w-28 mb-3"
                     />

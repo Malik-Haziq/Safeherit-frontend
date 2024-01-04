@@ -125,30 +125,24 @@ export default function ValidatorsView() {
     ) {
       toast("please enter a valid Email address", "error")
     } else if (
-      (!isValidPhoneWithRegion(modalControl.phone_number) &&
-        !isValidPhoneWithRegion(modalControl.backup_phone_number)) ||
-      (modalControl.phone_number &&
-        !isValidPhoneWithRegion(modalControl.phone_number)) ||
-      (modalControl.backup_phone_number &&
-        !isValidPhoneWithRegion(modalControl.backup_phone_number))
+      modalControl.phone_number !== "" &&
+      !isValidPhoneWithRegion(modalControl.phone_number)
     ) {
-      toast("please enter a valid Phone number", "error")
+      toast("Please enter a valid phone number", "error")
+    } else if (
+      modalControl.backup_phone_number !== "" &&
+      !isValidPhoneWithRegion(modalControl.backup_phone_number)
+    ) {
+      toast("Please enter a valid phone number", "error")
     } else {
       modalHistoryPush("Step-1")
       setModalVisibility("Step-2")
     }
   }
+
   const _submitStepTwoModal = () => {
-    if (
-      !modalControl.facebook_link &&
-      !modalControl.twitter_username &&
-      !modalControl.instagram_username
-    ) {
-      toast("Atleast 1 social media accounts is compulsory", "error")
-    } else {
       modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
-    }
   }
 
   const _submitStepThreeModal = () => {
