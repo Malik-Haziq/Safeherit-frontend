@@ -397,12 +397,16 @@ export default function AssetsView() {
   }
 
   const viewBeneficiaries = (assetId: string) => {
+    startLoader()
     dispatch(findAsset({ id: assetId }))
       .unwrap()
       .then((res) => {
         setSelectedAsset(assetId)
         setAssetBeneficiariesData(res.data.data.beneficiaries)
         setModalVisibility("beneficiaries-listing")
+      })
+      .finally(()=>{
+        stopLoader()
       })
   }
 
@@ -694,9 +698,9 @@ function AssetDetails(_props: {
       <div className="flex justify-between items-center flex-grow w-[278px]">
         {_props.userRole != "beneficiary" ? (
           <div className="flex justify-between items-center gap-3">
-            <img src={user} alt="beneficiary image" className="h-11 w-11" />
-            <button onClick={() => _props.viewBeneficiaries(_props.assetId)}>
-              View
+            
+            <button onClick={() => _props.viewBeneficiaries(_props.assetId)}  className="font-semibold">
+              View Beneficiary
             </button>
             {/* TODO ADD Beneficiray listing modal */}
           </div>

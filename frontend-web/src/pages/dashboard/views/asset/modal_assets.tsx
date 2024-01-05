@@ -609,7 +609,7 @@ export function AssetBeneficiaries(_props: {
             customViewContainer: "max-h-[500px] overflow-auto",
             CustomView: () => {
               return (
-                <table className="rounded-xl w-full  overflow-auto">
+                <table className="rounded-xl w-full overflow-auto">
                   <thead className="bg-[#F2F2F2]">
                     <tr className="flex justify-between px-5 py-3 rounded-t-lg">
                       <th className="font-medium text-sm uppercase min-w-[160px] text-left">
