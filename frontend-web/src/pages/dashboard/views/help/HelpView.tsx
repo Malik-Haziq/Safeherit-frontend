@@ -1,9 +1,6 @@
-import React from "react"
 import styles from "../../Dashboard.module.css"
 import addIcon from "@images/add.svg"
 import crossIcon from "@images/cross.svg"
-import emailIcon from "@images/email.svg"
-import callIcon from "@images/call.svg"
 import downArrow from "@images/Arrow-Down-Circle.svg"
 
 import { useState } from "react"
