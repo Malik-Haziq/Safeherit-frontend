@@ -140,6 +140,7 @@ export default function BeneficiariesView() {
   }, [])
 
   const _submitStepOneModal = () => {
+    console.log(modalControl.phone_number)
     if (!modalControl.name) {
       toast("please enter a valid name", "error")
     } else if (
@@ -153,12 +154,12 @@ export default function BeneficiariesView() {
     ) {
       toast("please enter a valid Email address", "error")
     } else if (
-      modalControl.phone_number !== "" &&
+      modalControl.phone_number &&
       !isValidPhoneWithRegion(modalControl.phone_number)
     ) {
       toast("Please enter a valid phone number", "error")
     } else if (
-      modalControl.backup_phone_number !== "" &&
+      modalControl.backup_phone_number &&
       !isValidPhoneWithRegion(modalControl.backup_phone_number)
     ) {
       toast("Please enter a valid phone number", "error")
