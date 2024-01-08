@@ -140,7 +140,6 @@ export default function BeneficiariesView() {
   }, [])
 
   const _submitStepOneModal = () => {
-    console.log(modalControl.phone_number)
     if (!modalControl.name) {
       toast("please enter a valid name", "error")
     } else if (
