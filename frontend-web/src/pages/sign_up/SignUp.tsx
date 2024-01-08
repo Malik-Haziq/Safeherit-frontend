@@ -34,7 +34,7 @@ export function SignUp() {
     confirm_password_visibility: false,
   })
   const [agreeTermAndCondition, setAgreeTermAndCondition] = useState(false)
-  const [validPassword, setValidPassword] = useState(false)
+  const [isValidPassword, setIsValidPassword] = useState(false)
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     setFormControl({ ...formControl, [name]: value })
@@ -59,7 +59,7 @@ export function SignUp() {
       if (formControl.password !== formControl.confirm_password) {
         toast("password must match", "error")
       } else if (!isStrongPassword(formControl.password)) {
-        setValidPassword(true)
+        setIsValidPassword(true)
       } else {
         startLoader()
         toast("signing up", "info")
@@ -192,7 +192,7 @@ export function SignUp() {
               )
             }}
           />
-          {validPassword && <PasswordValidation/>}
+          {isValidPassword && <PasswordValidation/>}
           <div className="flex gap-2 text-safe-text-gray mt-2 mb-6">
             <input
               name="checkbox"

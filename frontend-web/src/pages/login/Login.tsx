@@ -454,7 +454,7 @@ export function Login() {
                       ? "primary-btn rounded-md bg-safe-gray-shade-1 text-safe-gray-shade px-40"
                       : "primary-btn rounded-md bg-safe-blue-shade px-40"
                   }
-                  disabled={logingin ? true : false}
+                  disabled={logingin}
                 >
                   Login
                 </button>

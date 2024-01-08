@@ -22,7 +22,7 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
         className={`flex items-center justify-center border primary-btn bg-[#fff] text-[#000] gap-1 ${
           type === "login" && "rounded-md w-[100%]"
         } ${type === "signup" && "w-[300px]"} ${logingin ? "text-[#ccc]" : "text-[#000]"}`}
-        disabled={logingin ? true : false}
+        disabled={logingin}
       >
         {isLoading ? "Loading..." : <>{buttonText}</>}
       </button>
