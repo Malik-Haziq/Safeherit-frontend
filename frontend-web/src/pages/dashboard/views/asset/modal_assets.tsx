@@ -670,7 +670,7 @@ export function BeneficiaryWarning(_props: {
         {
           type: "textView",
           props: {
-            text: "OOps! It looks like you haven't registered any beneficiaries yet.",
+            text: "Oops! It looks like you haven't registered any beneficiaries yet.",
             textStyles: "text-[#00192B] text-xl font-bold mb-4 mt-14 px-7 text-center mx-auto w-fit",
           },
         },
