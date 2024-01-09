@@ -1,13 +1,16 @@
-import React from "react"
+import React from 'react'
+import {useState, useEffect} from "react"
 import registerAssetsImg from "@images/register-assets.svg"
 import stepOne from "@images/step-1.svg"
 import stepTwo from "@images/step-2.svg"
 import uploadVideoIcon from "@images/upload-video.svg"
 import arrowDown from "@images/arrow-down.svg"
+import userImg from "@images/user.svg"
 
 import { Modal } from "@/components"
 import { assetData } from "./data"
 import { useAppSelector } from "@redux/hooks"
+import { getFileFromFirebase } from "@/common"
 
 const selectFieldStyles =
   "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] min-h-[56px] h-[100%]"
@@ -594,6 +597,7 @@ export function AssetBeneficiaries(_props: {
   modalControl: ModalControl
   assetId: string
 }) {
+
   return (
     <Modal
       openModal={_props.openModal}
@@ -626,20 +630,7 @@ export function AssetBeneficiaries(_props: {
                   <tbody>
                     {_props.modalControl.map(
                       (beneficiary: any, index: number) => (
-                        <tr
-                          key={index}
-                          className="flex justify-between px-5 py-1"
-                        >
-                          <td className="text-[#292929] font-sm min-w-[160px] px-1">
-                            {beneficiary?.name.slice(0, 20)}
-                          </td>
-                          <td className="text-[#292929] font-sm min-w-[300px] text-left px-1">
-                            {beneficiary?.primary_email}
-                          </td>
-                          <td className="text-[#292929] font-sm min-w-[160px] text-left px-1">
-                            {beneficiary?.phone_number}
-                          </td>
-                        </tr>
+                        <Beneficiary img={beneficiary.profile_image} name={beneficiary.name} email={beneficiary.primary_email} number={beneficiary.phone_number} key={index}/>
                       ),
                     )}
                   </tbody>
@@ -650,5 +641,40 @@ export function AssetBeneficiaries(_props: {
         },
       ]}
     />
+  )
+}
+
+function Beneficiary(_props: {img: string; name: string; email: string; number: string; }){
+
+  const [image, setImage] = useState<string>(_props.img)
+
+  useEffect(() => {
+    getFileFromFirebase(_props.img)
+      .then((res) => {
+        setImage(res)
+      })
+      .catch(() => {
+        setImage(userImg)
+      })
+  }, [])
+
+  return (
+    <>
+        <tr
+          className="flex justify-between items-center px-5 py-3"
+        >
+          <td className="text-[#292929] font-sm min-w-[160px] px-1 flex gap-2 items-center">
+            <img src={image} alt="beneficiary image" className='w-10'/>
+            {_props.name.slice(0, 20)}
+          </td>
+          <td className="text-[#292929] font-sm min-w-[300px] text-left px-1">
+            {_props.email}
+          </td>
+          <td className="text-[#292929] font-sm min-w-[160px] text-left px-1">
+            {_props.number}
+          </td>
+        </tr>
+
+    </>
   )
 }
