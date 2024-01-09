@@ -53,7 +53,6 @@ export function PrivateKeyModal(_props: {
 
   const handleDrop = (e: any) => {
     e.preventDefault()
-    console.log("hello")
     const file = e.dataTransfer.files[0]
 
     if (file) {
