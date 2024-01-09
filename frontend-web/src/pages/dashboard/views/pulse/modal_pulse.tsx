@@ -465,7 +465,8 @@ export function StepFourModal(_props: {
 }) {
   const [getResponseFromValidator, setGetResponseFromValidator] =
     useState("opt-1")
-
+  const [responseMonths, setResponseMonths] = useState('3')
+  
   function handleClick(selectedOption: string) {
     setGetResponseFromValidator(selectedOption)
   }
@@ -486,9 +487,9 @@ export function StepFourModal(_props: {
     if (getResponseFromValidator == "opt-1") {
       triggerEvent("pulseCheckValidationRequired", "true")
     } else {
-      triggerEvent("pulseCheckNonValidationMonths", "3")
+      triggerEvent("pulseCheckNonValidationMonths", responseMonths)
     }
-  }, [getResponseFromValidator])
+  }, [getResponseFromValidator, responseMonths])
 
   const triggerEvent = (name: string, value: string) => {
     const customEvent: CustomChangeEvent = {
@@ -558,7 +559,7 @@ export function StepFourModal(_props: {
                     {getResponseFromValidator == "opt-1" ? (
                       <img src={radioGreenIcon} alt="radio icon green" />
                     ) : (
-                      <img src={radioGrayIcon} alt="radio icon green" />
+                      <img src={radioGrayIcon} alt="radio icon gray" />
                     )}
 
                     <p className="text-start cursor-default">
@@ -577,10 +578,10 @@ export function StepFourModal(_props: {
                     {getResponseFromValidator == "opt-2" ? (
                       <img src={radioGreenIcon} alt="radio icon green" />
                     ) : (
-                      <img src={radioGrayIcon} alt="radio icon green" />
+                      <img src={radioGrayIcon} alt="radio icon gray" />
                     )}
                     <p className="text-start cursor-default">
-                      Make the data available to my beneficiaries after n months
+                      Make the data available to my beneficiaries after <input type="number" onChange={(e)=> setResponseMonths(e.target.value)} autoFocus={getResponseFromValidator === "opt-2"} disabled={getResponseFromValidator !== "opt-2"} value={responseMonths} className="inline h-7 w-16 px-3 text-safe-text-dark-gray rounded-md border-[1px] border-safe-color-gray outline-none" required/> months
                       without a response from any validator.
                     </p>
                   </div>
