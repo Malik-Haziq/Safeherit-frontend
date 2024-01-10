@@ -2,7 +2,7 @@ import React from "react"
 import uploadImg from "@images/upload.png"
 import copyIcon from "@images/copy-icon.svg"
 import downloadIcon from "@images/download.svg"
-import jsonFile from "@images/json.webp"
+import fileIcon from "@images/file-icon.svg"
 import { Modal, toast } from "@/components"
 import { ChangeEvent } from "react"
 import { CustomChangeEvent } from "@/types"
@@ -68,7 +68,6 @@ export function PrivateKeyModal(_props: {
 
   const handleDrop = (e: any) => {
     e.preventDefault()
-
     const file = e.dataTransfer.files[0]
 
     if (file) {
@@ -149,19 +148,24 @@ export function PrivateKeyModal(_props: {
                       Browse File
                     </button>
                   </div>
+
                   {_props.filePresent ? (
                     <img
-                      src={jsonFile}
+                      src={fileIcon}
                       alt="json file icon"
                       className="mx-auto w-28 mb-3"
                     />
                   ) : (
-                    <img
-                      src={uploadImg}
-                      alt="upload file"
-                      className={"mx-auto"}
+                    <div
                       onDrop={handleDrop}
-                    />
+                      onDragOver={(e) => e.preventDefault()}
+                    >
+                      <img
+                        src={uploadImg}
+                        alt="upload file"
+                        className="mx-auto"
+                      />
+                    </div>
                   )}
                 </div>
               )

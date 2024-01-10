@@ -1,9 +1,6 @@
-import React from "react"
 import styles from "../../Dashboard.module.css"
 import addIcon from "@images/add.svg"
 import crossIcon from "@images/cross.svg"
-import emailIcon from "@images/email.svg"
-import callIcon from "@images/call.svg"
 import downArrow from "@images/Arrow-Down-Circle.svg"
 
 import { useState } from "react"
@@ -750,22 +747,7 @@ function Suggestions(_props: {
 function Support() {
   return (
     <main className="flex flex-col gap-6 bg-white mx-8 py-10 px-8 rounded-2xl w-[1085px] shadow-sm">
-      <section className="flex justify-between gap-6">
-        <article className="flex gap-6 shadow-md rounded-2xl p-6 basis-1/2">
-          <img src={emailIcon} alt="email icon" />
-          <div>
-            <h2 className="text-[#828282] text-sm">Email Address</h2>
-            <p className="font-semibold">Support.Safeherit@gmail.com</p>
-          </div>
-        </article>
-        <article className="flex gap-6 shadow-md rounded-2xl p-6 basis-1/2">
-          <img src={callIcon} alt="email icon" />
-          <div>
-            <h2 className="text-[#828282] text-sm">Contact Us</h2>
-            <p className="font-semibold">+91 90000 00000 | 798 00000 000</p>
-          </div>
-        </article>
-      </section>
+      <p className="text-[#838383] text-center">Need Assistance? Please fill out the form below with your support request or any questions you may have. Be as detailed as possible to help us assist you better. Our support team will get back to you as quickly as possible</p>
       <form className="mb-14">
         <textarea
           placeholder="Enter your message..."

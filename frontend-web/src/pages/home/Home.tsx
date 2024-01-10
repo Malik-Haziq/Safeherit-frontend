@@ -36,7 +36,7 @@ export function Home() {
             even in the afterlife.
           </p>
           <a
-            className="text-[#04477B] bg-white rounded-2xl px-8 py-5 w-fit font-bold"
+            className="text-[#04477B] bg-white rounded-2xl px-8 py-5 w-fit font-bold cursor-pointer"
             onClick={() => navigate("/register")}
           >
             Register the Generated Public Key

@@ -139,6 +139,7 @@ export default function ValidatorsView() {
       setModalVisibility("Step-2")
     }
   }
+
   const _submitStepTwoModal = () => {
       modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
