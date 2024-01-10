@@ -417,7 +417,7 @@ export function StepThreeModal(_props: {
                       alt="icon for linking twitter account"
                     />
                     <a href="#" className="text-[#00192B] underline">
-                      Click to link your Facebook account
+                      Click to link your Twitter account
                     </a>
                   </div>
                   <div className="flex items-center  gap-3">
@@ -426,7 +426,7 @@ export function StepThreeModal(_props: {
                       alt="icon for linking instagram account"
                     />
                     <a href="#" className="text-[#00192B] underline">
-                      Click to link your Facebook account
+                      Click to link your instagram account
                     </a>
                   </div>
                 </div>
