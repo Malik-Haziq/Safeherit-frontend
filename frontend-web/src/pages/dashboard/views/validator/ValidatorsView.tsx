@@ -125,12 +125,12 @@ export default function ValidatorsView() {
     ) {
       toast("please enter a valid Email address", "error")
     } else if (
-      modalControl.phone_number !== "" &&
+      modalControl.phone_number &&
       !isValidPhoneWithRegion(modalControl.phone_number)
     ) {
       toast("Please enter a valid phone number", "error")
     } else if (
-      modalControl.backup_phone_number !== "" &&
+      modalControl.backup_phone_number &&
       !isValidPhoneWithRegion(modalControl.backup_phone_number)
     ) {
       toast("Please enter a valid phone number", "error")
