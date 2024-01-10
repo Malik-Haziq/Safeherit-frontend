@@ -68,7 +68,6 @@ export function PrivateKeyModal(_props: {
 
   const handleDrop = (e: any) => {
     e.preventDefault()
-
     const file = e.dataTransfer.files[0]
 
     if (file) {
@@ -149,6 +148,7 @@ export function PrivateKeyModal(_props: {
                       Browse File
                     </button>
                   </div>
+
                   {_props.filePresent ? (
                     <img
                       src={jsonFile}
@@ -156,12 +156,16 @@ export function PrivateKeyModal(_props: {
                       className="mx-auto w-28 mb-3"
                     />
                   ) : (
-                    <img
-                      src={uploadImg}
-                      alt="upload file"
-                      className={"mx-auto"}
+                    <div
                       onDrop={handleDrop}
-                    />
+                      onDragOver={(e) => e.preventDefault()}
+                    >
+                      <img
+                        src={uploadImg}
+                        alt="upload file"
+                        className="mx-auto"
+                      />
+                    </div>
                   )}
                 </div>
               )
