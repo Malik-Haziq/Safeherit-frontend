@@ -404,6 +404,7 @@ export default function AssetsView() {
   }
 
   const viewBeneficiaries = (assetId: string) => {
+    startLoader()
     dispatch(findAsset({ id: assetId }))
       .unwrap()
       .then((res) => {
@@ -701,15 +702,15 @@ function AssetDetails(_props: {
           </p>
         </div>
         <p className="text-[#00192B] text-sm font-semibold">
-          USD <span>{_props.assetValue}</span>
+          <span>{_props.assetValue == "No value found" && ''}</span>
         </p>
       </div>
       <div className="flex justify-between items-center flex-grow w-[278px]">
         {_props.userRole != "beneficiary" ? (
           <div className="flex justify-between items-center gap-3">
-            <img src={user} alt="beneficiary image" className="h-11 w-11" />
-            <button onClick={() => _props.viewBeneficiaries(_props.assetId)}>
-              View
+            
+            <button onClick={() => _props.viewBeneficiaries(_props.assetId)}  className="font-semibold">
+              View Beneficiary
             </button>
             {/* TODO ADD Beneficiray listing modal */}
           </div>
