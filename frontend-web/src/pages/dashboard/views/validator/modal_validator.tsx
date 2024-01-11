@@ -331,10 +331,31 @@ export function StepTwoModal(_props: {
           },
         },
         {
-          type: "textView",
+          type: "multiFields",
+          containerStyles: "flex gap-5 items-center justify-between mx-7 mb-7",
           props: {
-            text: "Social media links",
-            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
+            fields: [
+              {
+                type: "textView",
+                props: {
+                  text: "Social media links",
+                  textStyles: "text-[#00192B] font-semibold mb-3",
+                },
+              },
+              {
+                type: 'customView',
+                props: {
+                  customViewContainer: '',
+                  CustomView: () => {
+                    return (
+                      <div className="flex items-center justify-center bg-[#206392] w-7 h-7 rounded-md cursor-default" title="We request social media links for your beneficiaries and validators as a secondary means of contact. This information will only be used if we're unable to reach them through the primary contact details you provided.">
+                        <span className="text-white font-medium">?</span>
+                      </div>
+                    )
+                  }
+                }
+              },
+            ],
           },
         },
         {
