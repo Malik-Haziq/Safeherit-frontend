@@ -5,6 +5,7 @@ interface GoogleAuthButtonProps {
   type: string
   isLoading?: boolean
   buttonText: string
+  logingin?: boolean
 }
 
 export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
@@ -12,6 +13,7 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
   type,
   isLoading,
   buttonText,
+  logingin,
 }) => {
   return (
     <div className="flex items-center justify-center">
@@ -19,7 +21,8 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
         onClick={handleClick}
         className={`flex items-center justify-center border primary-btn bg-[#fff] text-[#000] gap-1 ${
           type === "login" && "rounded-md w-[100%]"
-        } ${type === "signup" && "w-[300px]"}`}
+        } ${type === "signup" && "w-[300px]"} ${logingin ? "text-[#ccc]" : "text-[#000]"}`}
+        disabled={logingin}
       >
         {isLoading ? "Loading..." : <>{buttonText}</>}
       </button>

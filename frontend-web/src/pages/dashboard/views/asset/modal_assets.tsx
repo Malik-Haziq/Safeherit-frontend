@@ -25,7 +25,6 @@ export function StepZeroInformationModal(_props: {
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   _submitModal: () => void
-  action: string
 }) {
   return (
     <Modal
@@ -699,5 +698,48 @@ function Beneficiary(_props: {img: string; name: string; email: string; number: 
         </tr>
 
     </>
+  )
+}
+export function BeneficiaryWarning(_props: {
+  openModal: boolean
+  closeModal: () => void
+  closeModalOnOverlayClick: boolean
+  closeIconVisibility: boolean
+  _submitModal: () => void
+}) {
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={"Register beneficiary"}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "textView",
+          props: {
+            text: "Oops! It looks like you haven't registered any beneficiaries yet.",
+            textStyles: "text-[#00192B] text-xl font-bold mb-4 mt-14 px-7 text-center mx-auto w-fit",
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "SafeHerit requires at least one registered beneficiary to assign to your assets. Please add your beneficiaries first to continue with asset registration.",
+            textStyles: "text-[#868686] leading-7 px-7 mb-12 text-center ",
+          },
+        },
+        {
+          type: "buttonView",
+          props: {
+            title: "Register Beneficiary",
+            onclick: _props._submitModal,
+            buttonStyle:
+              "bg-[#0971AA] font-bold text-white mx-auto px-8 py-3 rounded-2xl block",
+            buttonContainer: " mb-10 ",
+          },
+        },
+      ]}
+    />
   )
 }

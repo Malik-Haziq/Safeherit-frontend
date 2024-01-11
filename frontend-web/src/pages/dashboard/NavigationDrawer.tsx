@@ -14,8 +14,8 @@ export default function NavigationDrawer(_props: {
   return (
     <div className={styles.NavigationDrawer}>
       <div className="relative h-full">
-        <div className="flex items-center justify-center mt-7">
-          <img className="w-32 md:w-48 " src={logo} alt="safeherit logo"></img>
+        <div className="flex items-center justify-center">
+          <img className="w-32 md:w-48 mt-7" src={logo} alt="safeherit logo"></img>
         </div>
         <div className="mt-11 cursor-pointer">
           {_props.DRAWER_MENU.map((item) => {

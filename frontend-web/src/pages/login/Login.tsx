@@ -63,7 +63,7 @@ export function Login() {
   const [resetEmail, setResetEmail] = useState("")
   const [verificationId, setVerificationId] = useState<string>()
   const [resolver, setResolver] = useState<MultiFactorResolver | null>()
-
+  const [logingin, setLogingin] = useState(false)
   const code = new Array<string>(6).fill("")
 
   // verify email
@@ -228,7 +228,7 @@ export function Login() {
   const _handleSubmit = () => {
     toast("logging in", "info")
     if (formControl.email && formControl.password) {
-      startLoader()
+      setLogingin(true)
       dispatch<any>(
         login({ email: formControl.email, password: formControl.password }),
       )
@@ -243,11 +243,13 @@ export function Login() {
             if (emailSent) {
               toast("Verification Email Sent", "info")
             }
-            stopLoader()
           }
         })
         .catch((err: any) => {
           _handleMFA(err)
+        })
+        .finally(() => {
+          setLogingin(false)
         })
     }
   }
@@ -422,6 +424,7 @@ export function Login() {
                   _handleChange={_handleChange}
                   inputLable="password"
                 />
+
                 <div className="flex justify-between items-center ">
                   <div className="flex gap-2 text-safe-text-gray items-center justify-center  ">
                     <input
@@ -435,15 +438,24 @@ export function Login() {
                     </small>
                   </div>
                   <p
-                    className="text-safe-text-blue-shade font-medium cursor-pointer"
+                    className={
+                      "text-safe-text-blue-shade font-medium cursor-pointer"
+                    }
                     onClick={() => {
-                      setModalVisibility("forgot-password")
+                      !logingin && setModalVisibility("forgot-password")
                     }}
                   >
                     Forgot Password?
                   </p>
                 </div>
-                <button className="primary-btn rounded-md bg-safe-blue-shade px-40">
+                <button
+                  className={
+                    logingin
+                      ? "primary-btn rounded-md bg-safe-gray-shade-1 text-safe-gray-shade px-40"
+                      : "primary-btn rounded-md bg-safe-blue-shade px-40"
+                  }
+                  disabled={logingin}
+                >
                   Login
                 </button>
                 <small className="text-sm text-safe-text-black font-medium mx-auto">
@@ -460,6 +472,7 @@ export function Login() {
                 handleClick={_loginWithGoogle}
                 type={"login"}
                 buttonText={"Login with Google"}
+                logingin={logingin}
               />
               <div className="z-10" id="authenticate"></div>
             </div>
@@ -491,7 +504,7 @@ export function Login() {
             </div>
             <img
               src={loginImg}
-              alt="dashboad image"
+              alt="dashboard image"
               className="absolute -bottom-10 xl:bottom-0 -right-10 xl:right-0 w-[500] h-[523] xl:max-w-[700px] xl:max-h-[623px]"
             />
           </section>

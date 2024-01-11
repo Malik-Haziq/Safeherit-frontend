@@ -21,6 +21,7 @@ import {
   StepTwoModal,
   AssetDetail,
   AssetBeneficiaries,
+  BeneficiaryWarning
 } from "./modal_assets"
 import { ASSET_TYPES, ROUTE_CONSTANTS, useArray } from "@/common"
 
@@ -334,6 +335,12 @@ export default function AssetsView() {
       })
   }
 
+  const _submitBeneficiaryWarningModal = () =>{
+
+    setModalVisibility('none')
+    navigate("/dashboard/beneficiaries")
+  }
+  
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
@@ -345,7 +352,7 @@ export default function AssetsView() {
     setModalVisibility("Step-1")
   }
   const addAsset = () => {
-    setModalVisibility("Step-0")
+    beneficiary.beneficiary_list.length !== 0 ? setModalVisibility("Step-0") : setModalVisibility("beneficiary-warning")
   }
   const editAsset = (assetId: string) => {
     dispatch<any>(findAsset({ id: assetId }))
@@ -405,20 +412,23 @@ export default function AssetsView() {
         setAssetBeneficiariesData(res.data.data.beneficiaries)
         setModalVisibility("beneficiaries-listing")
       })
-      .finally(()=>{
-        stopLoader()
-      })
-  }
+  } 
 
   return (
     <>
+      <BeneficiaryWarning
+        openModal={modalVisibility == "beneficiary-warning"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        _submitModal={_submitBeneficiaryWarningModal}
+      />
       <StepZeroInformationModal
         openModal={modalVisibility == "Step-0"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
         _submitModal={_submitStepZeroInformationModal}
-        action={"string"}
       />
       <StepOneModal
         openModal={modalVisibility == "Step-1"}

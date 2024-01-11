@@ -10,6 +10,7 @@ import { getData } from "@redux/actions"
 import { useEffect, useState } from "react"
 import { getFileFromFirebase, ROUTE_CONSTANTS } from "@/common"
 import { Spinner } from "@/components"
+import { Link } from "react-router-dom"
 
 export default function DashboardView() {
   const dispatch = useAppDispatch()
@@ -123,12 +124,12 @@ function Cards(_props: {
         <h3 className="text-safe-text-black-tint text-lg font-bold">
           {_props.title}
         </h3>
-        <a
-          href={_props.navigationPath}
+        <Link
+          to={_props.navigationPath}
           className="text-safe-text-blue-shade text-sm font-semibold hover:opacity-75 cursor-pointer"
         >
           View All
-        </a>
+        </Link>
       </div>
 
       <div className="h-[444px] overflow-y-auto relative">

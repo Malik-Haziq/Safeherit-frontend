@@ -6,11 +6,11 @@ import stepThree from "@images/step_3_of_4.svg"
 import stepFour from "@images/step_4_of_4.svg"
 import videoImg from "@images/register_page_video.png"
 import radioBlueIcon from "@images/radio-icon-blue.svg"
-import radioGreenIcon from "@images/radio-icon-green.svg"
 import radioGrayIcon from "@images/radio-icon-gray.svg"
 import linkFacebook from "@images/link-facebook.svg"
 import linkTwitter from "@images/link-twitter.svg"
 import linkInsta from "@images/link-insta.svg"
+import checkmark from "@images/checkmark.svg"
 
 import { useEffect, useState } from "react"
 interface CustomChangeEvent {
@@ -417,7 +417,7 @@ export function StepThreeModal(_props: {
                       alt="icon for linking twitter account"
                     />
                     <a href="#" className="text-[#00192B] underline">
-                      Click to link your Facebook account
+                      Click to link your Twitter account
                     </a>
                   </div>
                   <div className="flex items-center  gap-3">
@@ -426,7 +426,7 @@ export function StepThreeModal(_props: {
                       alt="icon for linking instagram account"
                     />
                     <a href="#" className="text-[#00192B] underline">
-                      Click to link your Facebook account
+                      Click to link your instagram account
                     </a>
                   </div>
                 </div>
@@ -465,7 +465,8 @@ export function StepFourModal(_props: {
 }) {
   const [getResponseFromValidator, setGetResponseFromValidator] =
     useState("opt-1")
-
+  const [responseMonths, setResponseMonths] = useState('3')
+  
   function handleClick(selectedOption: string) {
     setGetResponseFromValidator(selectedOption)
   }
@@ -486,9 +487,9 @@ export function StepFourModal(_props: {
     if (getResponseFromValidator == "opt-1") {
       triggerEvent("pulseCheckValidationRequired", "true")
     } else {
-      triggerEvent("pulseCheckNonValidationMonths", "3")
+      triggerEvent("pulseCheckNonValidationMonths", responseMonths)
     }
-  }, [getResponseFromValidator])
+  }, [getResponseFromValidator, responseMonths])
 
   const triggerEvent = (name: string, value: string) => {
     const customEvent: CustomChangeEvent = {
@@ -550,15 +551,15 @@ export function StepFourModal(_props: {
                   <div
                     className={
                       getResponseFromValidator == "opt-1"
-                        ? "flex items-center gap-3 text-sm font-semibold mb-3 text-[#47B29E]"
+                        ? "flex items-center gap-3 text-sm font-semibold mb-3 text-[#474747]"
                         : "flex items-center gap-3 text-sm font-medium mb-3 text-[#8C8C8C]"
                     }
                     onClick={() => handleClick("opt-1")}
                   >
                     {getResponseFromValidator == "opt-1" ? (
-                      <img src={radioGreenIcon} alt="radio icon green" />
-                    ) : (
-                      <img src={radioGrayIcon} alt="radio icon green" />
+                      <img src={checkmark} alt="checkmark" className="w-6 h-6"/>
+                      ) : (
+                        <div className="w-6 h-6 border-2 shrink-0 rounded-sm"></div>
                     )}
 
                     <p className="text-start cursor-default">
@@ -566,21 +567,23 @@ export function StepFourModal(_props: {
                       you get a confirmation from a validator.
                     </p>
                   </div>
+                  
                   <div
                     className={
                       getResponseFromValidator == "opt-2"
-                        ? "flex items-center gap-3 text-sm font-semibold mb-3 text-[#47B29E]"
+                        ? "flex items-center gap-3 text-sm font-semibold mb-3 text-[#474747]"
                         : "flex items-center gap-3 text-sm font-medium mb-3 text-[#8C8C8C]"
                     }
                     onClick={() => handleClick("opt-2")}
                   >
                     {getResponseFromValidator == "opt-2" ? (
-                      <img src={radioGreenIcon} alt="radio icon green" />
+                      <img src={checkmark} alt="checkmark" className="w-6 h-6"/>
                     ) : (
-                      <img src={radioGrayIcon} alt="radio icon green" />
+                      <div className="w-6 h-6 border-2 shrink-0 rounded-sm"></div>
                     )}
+
                     <p className="text-start cursor-default">
-                      Make the data available to my beneficiaries after n months
+                      Make the data available to my beneficiaries after <input type="number" onChange={(e)=> setResponseMonths(e.target.value)} autoFocus={getResponseFromValidator === "opt-2"} disabled={getResponseFromValidator !== "opt-2"} value={responseMonths} className="inline h-7 w-16 px-3 text-safe-text-dark-gray rounded-md border-[1px] border-safe-color-gray outline-none" required/> months
                       without a response from any validator.
                     </p>
                   </div>
