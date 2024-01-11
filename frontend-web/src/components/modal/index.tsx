@@ -182,7 +182,7 @@ export const Modal = (_props: {
             <div
               className={`${styles.modal} ${
                 _props.modalCustomStyles && _props.modalCustomStyles
-              }`}
+              } relative`}
             >
               <ModalHeader
                 closeModal={_props.closeModal}
@@ -192,8 +192,20 @@ export const Modal = (_props: {
                 showPreviousModal={_props.showPreviousModal}
               />
               <RenderModal elements={elements} />
+              {_props.arrayLength ? (
+                <div className="absolute bottom-12">
+                  <img
+                    src={arrowLeft}
+                    alt="Back Arrow"
+                    className="cursor-pointer ml-4 w-5"
+                    onClick={_props.showPreviousModal}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
-          </div>{" "}
+          </div>
         </div>
       )}
     </>
@@ -209,18 +221,6 @@ function ModalHeader(_props: {
 }) {
   return (
     <div className={styles.header}>
-      {_props.arrayLength ? (
-        <div>
-          <img
-            src={arrowLeft}
-            alt="left Arrow"
-            className="cursor-pointer ml-4 w-5"
-            onClick={_props.showPreviousModal}
-          />
-        </div>
-      ) : (
-        ""
-      )}
       <div className={styles.title}>{_props.title}</div>
       {_props.closeIconVisibility && (
         <div className={styles.icon} onClick={_props.closeModal}>
