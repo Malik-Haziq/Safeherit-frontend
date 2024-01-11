@@ -11,6 +11,7 @@ import { Modal } from "@/components"
 import { assetData } from "./data"
 import { useAppSelector } from "@redux/hooks"
 import { getFileFromFirebase } from "@/common"
+import { CurrencyField } from "@/components/currencyField"
 
 const selectFieldStyles =
   "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD] min-h-[56px] h-[100%]"
@@ -194,7 +195,29 @@ export function StepOneModal(_props: {
   const factoryElements = assetData[_props.modalControl?.category]?.[0]
   const conditionalElements = factoryElements
     ? factoryElements.map((Asset) => {
-        if (Asset.type === "Text") {
+        if (Asset.name == "Currency") {
+          return null
+        }
+        if (Asset.name == "Balance" || Asset.name == "Acquisition cost" ) {
+          return (
+            <CurrencyField
+              name={Asset.name}
+              placeholder={Asset.placeholder}
+              containerStyles="mx-7 mb-4"
+              _handleChange={_props._handleChange}
+              value={
+                _props.modalControl?.[Asset?.name]
+                  ? _props.modalControl?.[`${Asset?.name}`]
+                  : ""
+              }
+              currency={
+                _props.modalControl?.["Currency"]
+                  ? _props.modalControl?.["Currency"]
+                  : ""
+              }
+            />
+          )
+        } else if (Asset.type === "Text") {
           return generateTextInputFieldProps(
             Asset.name,
             Asset.placeholder,
