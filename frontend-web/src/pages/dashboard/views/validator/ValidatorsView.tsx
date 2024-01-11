@@ -141,8 +141,20 @@ export default function ValidatorsView() {
   }
 
   const _submitStepTwoModal = () => {
+    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i;
+    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i;
+    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i;
+
+    if(modalControl.facebook_link && !(facebookRegex.test(modalControl.facebook_link))){
+      toast('Please enter a valid facebook link', 'error')
+    } else if(modalControl.instagram_username && !(instagramRegex.test(modalControl.instagram_username))){
+      toast('Please enter a valid instagram link', 'error')
+    } else if(modalControl.twitter_username && !(twitterRegex.test(modalControl.twitter_username))){
+      toast('Please enter a valid twitter link', 'error')
+    } else{
       modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
+    }
   }
 
   const _submitStepThreeModal = () => {
