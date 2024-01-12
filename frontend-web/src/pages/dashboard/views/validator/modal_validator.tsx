@@ -487,10 +487,12 @@ export function StepThreeModal(_props: {
   _handleChange: any
   modalControl: {
     personalized_message: string
+    name: string
   }
   _submitModal: () => void
   arrayLength: any
   showPreviousModal: any
+  userName: string
 }) {
   return (
     <Modal
@@ -514,7 +516,14 @@ export function StepThreeModal(_props: {
           type: "textView",
           props: {
             text: "Send a personalized message to your validator once your passing is confirmed.",
-            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
+            textStyles: "text-[#00192B] font-semibold px-7 mb-5",
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "Note: If you don't enter any message. we will send default message to beneficiary.",
+            textStyles: "text-safe-text-light-gray-1 text-sm px-7 mb-3",
           },
         },
         {
@@ -523,7 +532,7 @@ export function StepThreeModal(_props: {
             textAreaContainerStyles: "",
             name: "personalized_message",
             placeholder:
-              "Dear {Name}, \n\nIf you receive this message it probably means I am gone. \n\nSince you’re one of the closest people to me, you probably know if am still alive or not. If I’m indeed dead, please confirm it as per the instructions of this platform (SafeHerit). \n\nThis will help me a lot in making sure that my family gets access to its inheritance as quickly as possible. \n\nThank you buddy, I’m counting on you! \n\n{your name}",
+              `Dear ${_props.modalControl.name}, \n\nIf you receive this message it probably means I am gone. \n\nSince you’re one of the closest people to me, you probably know if am still alive or not. If I’m indeed dead, please confirm it as per the instructions of this platform (SafeHerit). \n\nThis will help me a lot in making sure that my family gets access to its inheritance as quickly as possible. \n\nThank you buddy, I’m counting on you! \n\n${_props.userName}`,
             _handleChange: _props._handleChange,
             value: _props.modalControl.personalized_message,
             inputStyles:
