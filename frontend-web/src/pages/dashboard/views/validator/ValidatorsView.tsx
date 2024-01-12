@@ -58,6 +58,7 @@ const initialState = {
 export default function ValidatorsView() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const user = useAppSelector((state) => state.user)
 
   const startLoader = () => dispatch<any>(setLoaderVisibility(true))
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
@@ -159,8 +160,8 @@ export default function ValidatorsView() {
 
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
-      toast("Personalized message cannot be empty", "error")
-    } else {
+      modalControl.personalized_message = `Dear ${modalControl.name}, \n\nIf you receive this message it probably means I am gone. \n\nSince you’re one of the closest people to me, you probably know if am still alive or not. If I’m indeed dead, please confirm it as per the instructions of this platform (SafeHerit). \n\nThis will help me a lot in making sure that my family gets access to its inheritance as quickly as possible. \n\nThank you buddy, I’m counting on you! \n\n${user.displayName}`
+    }
       if (modalAction == "edit") {
         startLoader()
         toast("Updating validator", "info")
@@ -209,7 +210,7 @@ export default function ValidatorsView() {
             stopLoader()
           })
       }
-    }
+    
   }
   const _submitDeleteModal = () => {
     dispatch<any>(deleteValidator({ id: modalControl.id }))
@@ -374,6 +375,7 @@ export default function ValidatorsView() {
         _submitModal={_submitStepThreeModal}
         arrayLength={modalHistoryLength}
         showPreviousModal={showPreviousModal}
+        userName={user.displayName}
       />
       {hasValidators == -1 ? (
         <div className={styles.AppView}>
