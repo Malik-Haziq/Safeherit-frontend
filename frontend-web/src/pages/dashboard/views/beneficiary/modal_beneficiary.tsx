@@ -587,6 +587,7 @@ export function StepThreeModal(_props: {
   setVideoUpload: any
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   modalControl: {
+    name: string
     personalized_message: string
     personalized_video: string
   }
@@ -648,7 +649,14 @@ export function StepThreeModal(_props: {
           type: "textView",
           props: {
             text: "Send a personalized message to your beneficiary once your passing is confirmed.",
-            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
+            textStyles: "text-[#00192B] font-semibold px-7 mb-5",
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "Note: If you don't enter any message. we will send default message to beneficiary.",
+            textStyles: "text-safe-text-light-gray-1 text-sm px-7 mb-3",
           },
         },
         {
@@ -657,9 +665,9 @@ export function StepThreeModal(_props: {
             textAreaContainerStyles: " ",
             name: "personalized_message",
             placeholder:
-              "Dear {Name} \n\nIf you receive this message it probably means I am gone. If so go to my closet and you will find a piece of paper in the pocket or my blue leather jacket. The paper contains the codes you will need to login to this platform (SafeHerit) and have access to the list of my assets.",
+             `Dear ${_props.modalControl.name} \n\nIf you receive this message it probably means I am gone. If so go to my closet and you will find a piece of paper in the pocket or my blue leather jacket. The paper contains the codes you will need to login to this platform (SafeHerit) and have access to the list of my assets.`,
             _handleChange: _props._handleChange,
-            value: _props.modalControl.personalized_message,
+            value: _props.modalControl.personalized_message, 
             inputStyles:
               "bg-[#F5FAFD] text-[#6F767B] pl-5 py-3 font-base rounded-3xl mx-auto block w-[514px] h-[163px] resize-none focus:outline-none scrollbar leading-tight mb-10",
           },
@@ -668,7 +676,7 @@ export function StepThreeModal(_props: {
           type: "textView",
           props: {
             text: "Upload a video testament for this beneficiary. This will only be shared once we confirm your passing. ",
-            textStyles: "text-[#00192B] font-medium pl-7 mb-5",
+            textStyles: "text-[#00192B] font-medium px-7 mb-5",
           },
         },
         {
