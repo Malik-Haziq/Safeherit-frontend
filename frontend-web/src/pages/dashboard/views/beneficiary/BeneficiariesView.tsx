@@ -21,7 +21,7 @@ import {
   StepOneModal,
   StepTwoModal,
   StepThreeModal,
-  RegisterPKModal,
+  // RegisterPKModal,
 } from "./modal_beneficiary"
 import {
   getAllBeneficiary,
@@ -115,9 +115,6 @@ export default function BeneficiariesView() {
       .catch(() => {
         // TODO: show fallback page
       })
-    // .finally(() => {
-    //   modalHistoryPush("step-pk")
-    // })
   }, [])
 
   useEffect(() => {
@@ -253,12 +250,6 @@ export default function BeneficiariesView() {
     closeModal()
   }
 
-  const _submitRegisterPKModal = (registerKeyModalType?: string) => {
-    modalHistoryPush("Step-pk")
-    registerKeyModalType == "generate-key"
-      ? setModalVisibility("Generate-PK")
-      : setModalVisibility("Load-PK")
-  }
   const _submitDeleteModal = () => {
     toast("deleting Beneficiary " + modalControl.name, "info")
     dispatch<any>(deleteBeneficiary({ id: modalControl.id }))
@@ -304,7 +295,7 @@ export default function BeneficiariesView() {
     setImageUpload("")
     setVideoUpload("")
     modalHistoryPush("Step-0")
-    setModalVisibility("Step-pk")
+    setModalVisibility("Generate-PK")
   }
   const editBeneficiary = (id: string) => {
     dispatch<any>(findBeneficiary({ id: id }))
@@ -378,7 +369,6 @@ export default function BeneficiariesView() {
 
   const _handleRegisterPK = () => {
     if (
-      modalVisibility === "Load-PK" ||
       (modalVisibility === "Generate-PK" &&
         encryptionService.validateKeyPair(
           modalEncryptionKeyControl.publicKey,
@@ -386,10 +376,10 @@ export default function BeneficiariesView() {
         ))
     ) {
       if (modalAction == "create") {
-        modalHistoryPush("Step-pk")
+        modalHistoryPush("Generate-PK")
         setModalVisibility("Step-1")
       } else {
-        modalHistoryPush("Step-pk")
+        modalHistoryPush("Generate-PK")
         setModalVisibility("Step-success")
       }
     } else {
@@ -445,20 +435,6 @@ export default function BeneficiariesView() {
 
   return (
     <>
-      <PrivateKeyModal
-        openModal={modalVisibility == "Load-PK"}
-        closeModal={closeModal}
-        closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
-        _handleChange={_handleEncryptionKeyChange}
-        _handleRegisterPK={_handleRegisterPK}
-        filePresent={filePresent}
-        setFilePresent={setFilePresent}
-        fileName={fileName}
-        setFileName={setFileName}
-        keyType="Public"
-      />
-
       <GeneratePrivateKey
         openModal={modalVisibility == "Generate-PK"}
         closeModal={closeModal}
@@ -535,21 +511,6 @@ export default function BeneficiariesView() {
         registerAnotherBeneficiary={registerAnotherBeneficiary}
         gotoValidators={gotoValidators}
         _submitModal={_submitSuccessModal}
-      />
-      <RegisterPKModal
-        openModal={modalVisibility == "Step-pk"}
-        closeModal={closeModal}
-        closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
-        action={modalAction}
-        _submitModal={() => {
-          _submitRegisterPKModal()
-        }}
-        _handleKeyGeneration={() => {
-          _submitRegisterPKModal("generate-key")
-        }}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       <ConfirmationModal
         openModal={modalVisibility == "Step-delete"}
