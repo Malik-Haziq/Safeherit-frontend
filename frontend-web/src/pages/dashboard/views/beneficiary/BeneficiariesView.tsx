@@ -21,7 +21,6 @@ import {
   StepOneModal,
   StepTwoModal,
   StepThreeModal,
-  // RegisterPKModal,
 } from "./modal_beneficiary"
 import {
   getAllBeneficiary,
