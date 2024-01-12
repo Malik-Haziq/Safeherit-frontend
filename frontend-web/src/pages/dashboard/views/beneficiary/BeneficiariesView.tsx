@@ -187,6 +187,7 @@ export default function BeneficiariesView() {
   const _submitStepThreeModal = () => {
     if (!modalControl.personalized_message) {
       modalControl.personalized_message = `Dear ${modalControl.name} If you receive this message it probably means I am gone. If so go to my closet and you will find a piece of paper in the pocket or my blue leather jacket. The paper contains the codes you will need to login to this platform (SafeHerit) and have access to the list of my assets.`
+    }
       if (modalAction == "edit") {
         startLoader()
         toast("Updating beneficiary", "info")
@@ -245,7 +246,6 @@ export default function BeneficiariesView() {
           .finally(() => {
             stopLoader()
           })
-      }
     }
   }
 
