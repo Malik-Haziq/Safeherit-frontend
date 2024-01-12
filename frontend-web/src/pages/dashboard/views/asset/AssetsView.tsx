@@ -315,9 +315,7 @@ export default function AssetsView() {
     }
   }
   const _submitSuccessModal = () => {
-    // goto Dashboard
     setModalVisibility("none")
-    navigate(ROUTE_CONSTANTS.DASHBOARD)
   }
   const _submitDeleteModal = () => {
     dispatch<any>(deleteAsset({ id: selectedAsset }))
@@ -464,7 +462,7 @@ export default function AssetsView() {
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
         registerAnotherAsset={newAsset}
-        gotoDashboard={_submitSuccessModal}
+        submitModal={_submitSuccessModal}
       />
       <ConfirmationModal
         openModal={modalVisibility == "Step-delete"}
