@@ -21,7 +21,7 @@ import {
   StepTwoModal,
   AssetDetail,
   AssetBeneficiaries,
-  BeneficiaryWarning
+  BeneficiaryWarning,
 } from "./modal_assets"
 import { ASSET_TYPES, ROUTE_CONSTANTS, useArray } from "@/common"
 
@@ -335,12 +335,11 @@ export default function AssetsView() {
       })
   }
 
-  const _submitBeneficiaryWarningModal = () =>{
-
-    setModalVisibility('none')
+  const _submitBeneficiaryWarningModal = () => {
+    setModalVisibility("none")
     navigate("/dashboard/beneficiaries")
   }
-  
+
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
@@ -352,7 +351,9 @@ export default function AssetsView() {
     setModalVisibility("Step-1")
   }
   const addAsset = () => {
-    beneficiary.beneficiary_list.length !== 0 ? setModalVisibility("Step-0") : setModalVisibility("beneficiary-warning")
+    beneficiary.beneficiary_list.length !== 0
+      ? setModalVisibility("Step-0")
+      : setModalVisibility("beneficiary-warning")
   }
   const editAsset = (assetId: string) => {
     dispatch<any>(findAsset({ id: assetId }))
@@ -412,7 +413,7 @@ export default function AssetsView() {
         setAssetBeneficiariesData(res.data.data.beneficiaries)
         setModalVisibility("beneficiaries-listing")
       })
-  } 
+  }
 
   return (
     <>
@@ -599,7 +600,8 @@ function Assets(_props: {
           <section className="rounded-xl h-[650px] shadow-lg mb-5 overflow-auto scrollbar w-[1080px]">
             <div className="bg-[#F2F2F2] flex justify-between gap-24 px-5 py-3 rounded-t-lg">
               <div className="flex flex-grow justify-between">
-                <p className="font-medium text-sm uppercase">Asset</p>
+                <p className="font-medium text-sm uppercase">Asset Name</p>
+                <p className="font-medium text-sm uppercase">Asset Type</p>
                 <p className="font-medium text-sm uppercase">Value</p>
               </div>
               <div className="flex flex-grow justify-between">
@@ -614,12 +616,18 @@ function Assets(_props: {
               </div>
             </div>
             {_props.assetDetailsArr.map((asset: Asset, index) => {
+              const assetValue = Intl.NumberFormat("en-US").format(
+                asset.data?.["Acquisition cost"] ||
+                  asset.data?.["Balance"] ||
+                  0,
+              )
               return (
                 <AssetDetails
                   key={index}
                   assetId={asset?.id || ""}
-                  assetName={asset?.category || ""}
-                  assetValue={asset?.data?.value || "No value found"}
+                  assetType={asset?.category || ""}
+                  assetName={asset?.data?.["Asset Name"] || ""}
+                  assetValue={`${asset?.data?.Currency || "USD"} ${assetValue}`}
                   beneficiaries={asset?.beneficiaries}
                   destroyAsset={_props.destroyAsset}
                   editAsset={_props.editAsset}
@@ -683,6 +691,7 @@ function AssetCategory(_props: {
 function AssetDetails(_props: {
   key: number
   assetId: string
+  assetType: string
   assetName: string
   assetValue: string
   beneficiaries: Beneficiary[]
@@ -694,22 +703,31 @@ function AssetDetails(_props: {
 }) {
   return (
     <div className="flex justify-between gap-24 px-5 py-3">
-      <div className="flex justify-between items-center w-[268px] flex-grow">
+      <div className="flex justify-between items-center w-[50px]   flex-grow">
         <div className="flex gap-4 items-center">
-          <img src={realEstate} alt="real estate icon" />
           <p className="text-[#00192B] text-sm font-semibold">
             {_props.assetName}
           </p>
         </div>
+      </div>
+      <div className="flex justify-between items-center w-[268px] flex-grow">
+        <div className="flex gap-4 items-center">
+          <img src={realEstate} alt="real estate icon" />
+          <p className="text-[#00192B] text-sm font-semibold">
+            {_props.assetType}
+          </p>
+        </div>
         <p className="text-[#00192B] text-sm font-semibold">
-          <span>{_props.assetValue == "No value found" && ''}</span>
+          <span>{_props.assetValue}</span>
         </p>
       </div>
       <div className="flex justify-between items-center flex-grow w-[278px]">
         {_props.userRole != "beneficiary" ? (
           <div className="flex justify-between items-center gap-3">
-            
-            <button onClick={() => _props.viewBeneficiaries(_props.assetId)}  className="font-semibold">
+            <button
+              onClick={() => _props.viewBeneficiaries(_props.assetId)}
+              className="font-semibold"
+            >
               View Beneficiary
             </button>
             {/* TODO ADD Beneficiray listing modal */}
