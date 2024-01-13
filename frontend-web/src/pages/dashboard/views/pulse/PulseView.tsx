@@ -178,7 +178,7 @@ export default function PulseView() {
     propertyName: string
     value: string
   }) => {
-    if (value === "0") {
+    if (!value || value === "0" ) {
       toast("Please enter valid days", "error")
       return
     }
@@ -192,7 +192,7 @@ export default function PulseView() {
       pulseCheckValidationRequired: user.pulseCheckValidationRequired,
       pulseCheckNonValidationMonths: user.pulseCheckNonValidationMonths,
     }
-    if (!newPulseCheckDays) {
+    if (propertyName !== "pulseCheckDays") {
       updatedData["pulseCheckDays"] = user.pulseCheckDays
     }
 
@@ -318,6 +318,26 @@ function PulseCheckView(_props: {
     value: string
   }) => void
 }) {
+  useEffect(() => {
+    function handleUpdatePulseCheckDays() {
+      _props.submitUpdatedValue({
+        propertyName: "pulseCheckDays",
+        value:
+          _props.newPulseCheckDays === "0" && _props.pulseCheckCustomDays
+            ? _props.pulseCheckCustomDays
+            : _props.newPulseCheckDays,
+      })
+      _props.setNewPulseCheckDays("")
+    }
+    if (
+      _props.newPulseCheckDays &&
+      _props.newPulseCheckDays !== _props.pulseCheckDays &&
+      _props.newPulseCheckDays !== "0"
+    ) {
+      handleUpdatePulseCheckDays()
+    }
+  }, [_props.newPulseCheckDays])
+
   return (
     <div className="px-8 py-4">
       <main className="flex justify-between gap-14 shadow-xl h-full rounded-2xl p-6">
@@ -336,8 +356,8 @@ function PulseCheckView(_props: {
             activity on your registered social media for the following number of
             days:
           </p>
-          <div className="flex flex-col justify-center items-center mb-4">
-            <div className="flex justify-between mb-6 gap-3">
+          <div className="flex flex-col justify-center items-center mb-6">
+            <div className="flex justify-between mb-2 gap-3">
               {_props.checkPulsePeriodArr.map((value: any, index: string) => {
                 return (
                   <CheckPulsePeriod
@@ -352,19 +372,14 @@ function PulseCheckView(_props: {
                 )
               })}
             </div>
-            {_props.newPulseCheckDays &&
-              Number(_props.newPulseCheckDays) !==
-                Number(_props.pulseCheckDays) && (
+            {_props.newPulseCheckDays === "0" && (
+              <div className="w-[100%] flex justify-end pe-2">
                 <button
                   className="primary-btn text-[12px] rounded-2xl bg-[#0971AA]"
                   onClick={() => {
                     _props.submitUpdatedValue({
                       propertyName: "pulseCheckDays",
-                      value:
-                        _props.newPulseCheckDays === "0" &&
-                        _props.pulseCheckCustomDays
-                          ? _props.pulseCheckCustomDays
-                          : _props.newPulseCheckDays,
+                      value: _props.pulseCheckCustomDays,
                     })
                     _props.setNewPulseCheckDays("")
                     _props.setPulseCheckCustomDays("")
@@ -372,7 +387,8 @@ function PulseCheckView(_props: {
                 >
                   Update
                 </button>
-              )}
+              </div>
+            )}
           </div>
           <div className="bg-[#ECF6FA] text-[#0C8AC1] flex flex-col gap-2 py-3 pl-5 text-sm rounded-xl mb-6">
             <CheckPulseDates
@@ -437,13 +453,16 @@ function CheckPulsePeriod(_props: {
 }) {
   return (
     <div
-      className={
-        _props.pulseCheckDays == _props.days ||
-        _props.newPulseCheckDays == _props.days
-          ? "flex items-center justify-center flex-col py-6 px-11 bg-[#F6F6F6] rounded-xl cursor-pointer border-[1px] border-[#0C8AC1] relative"
-          : "flex items-center justify-center flex-col py-6 px-11 bg-[#F6F6F6] rounded-xl cursor-pointer"
+      className={`
+      w-[120px] flex items-center justify-center flex-col py-6  bg-[#F6F6F6] rounded-xl cursor-pointer ${
+        (_props.pulseCheckDays == _props.days ||
+          _props.newPulseCheckDays == _props.days) &&
+        " border-[1px] border-[#0C8AC1] relative"
       }
-      onClick={() => _props.setNewPulseCheckDays(_props.days)}
+      `}
+      onClick={() => {
+        _props.setNewPulseCheckDays(_props.days)
+      }}
     >
       {_props.newPulseCheckDays == _props.days &&
       _props.newPulseCheckDays == "0" ? (
@@ -452,11 +471,19 @@ function CheckPulsePeriod(_props: {
           placeholder="0"
           value={_props.pulseCheckCustomDays}
           onChange={(e) => _props.setPulseCheckCustomDays(e.target.value)}
-          className="w-[100%] outline-none border-0 text-xl font-bold bg-[#F6F6F6]"
+          onBlur={(e) => {
+            if (e.target.value === "0") {
+              _props.setPulseCheckCustomDays("")
+            }
+          }}
+          className="w-[100px] outline-none border-0 text-xl font-bold bg-[#F6F6F6]"
+          autoFocus
         />
       ) : (
         <>
-          <h3 className="text-xl font-bold ">{_props.days}</h3>
+          <h3 className="text-xl font-bold ">
+            {_props.days !== "0" ? _props.days : "Custom"}
+          </h3>
           <small className="text-[#666] text-sm ">days</small>
         </>
       )}
