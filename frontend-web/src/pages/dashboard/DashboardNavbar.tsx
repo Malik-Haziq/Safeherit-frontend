@@ -52,7 +52,7 @@ export default function DashboardNavbar(_props: {
           arrowDownClassName={"ml-1 "}
           userIcon={image ? image : userImg}
           userIconClassName={"w-8 h-8 rounded-full object-contain"}
-          options={["Logout"]}
+          options={["My account", "Setting", "Logout"]}
         />
       </div>
     </div>
