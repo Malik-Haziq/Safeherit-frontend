@@ -3,9 +3,11 @@ import userImg from "@images/user.svg"
 import arrowDown from "@images/chevron-down.svg"
 
 import { DropDownButton } from "@/components"
-import { useAppSelector } from "@redux/hooks"
+import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { useEffect, useState } from "react"
 import { getFileFromFirebase } from "@/common"
+import { useNavigate } from "react-router-dom"
+import { logout } from "@redux/actions"
 
 type NavBarItem = {
   screen: string
@@ -17,7 +19,9 @@ export default function DashboardNavbar(_props: {
   navBarHeadings: Record<string, NavBarItem>
   currentPath: any
 }) {
+  const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.user)
+  const navigate = useNavigate()
 
   const [image, setImage] = useState<string>("")
   useEffect(() => {
@@ -29,6 +33,28 @@ export default function DashboardNavbar(_props: {
         setImage("")
       })
   }, [user.profile_image])
+
+  const handleMyAccount = () => {
+    navigate('/dashboard/account')
+  }
+  const handleHelp = () => {
+    navigate('/dashboard/help')
+  }
+  // TODO manually terminate the session on catch
+  const handleLogout = () => {
+    dispatch<any>(logout({}))
+      .unwrap()
+      .catch()
+      .finally(() => {
+        navigate("/login")
+      })
+  }
+  
+  const options = [
+    { option: "My Account", handleFunction: handleMyAccount },
+    { option: "Help", handleFunction: handleHelp },
+    { option: "Logout", handleFunction: handleLogout },
+  ]
 
   return (
     <div className="h-[83px] p-2 sm:p-7 flex justify-between items-center shadow-sm min-w-[1200px] max-w-[100vw]">
@@ -52,7 +78,7 @@ export default function DashboardNavbar(_props: {
           arrowDownClassName={"ml-1 "}
           userIcon={image ? image : userImg}
           userIconClassName={"w-8 h-8 rounded-full object-contain"}
-          options={["My account", "Setting", "Logout"]}
+          options={options}
         />
       </div>
     </div>

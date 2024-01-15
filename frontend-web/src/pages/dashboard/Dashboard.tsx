@@ -297,6 +297,7 @@ export default function Dashboard() {
           },
         ]
       : []
+
   // TODO manually terminate the session on catch
   const _handleLogout = () => {
     dispatch<any>(logout({}))
@@ -306,7 +307,7 @@ export default function Dashboard() {
         navigate("/login")
       })
   }
-
+  
   return (
     <div className={styles.App}>
       <NavigationDrawer

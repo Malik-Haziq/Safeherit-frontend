@@ -47,6 +47,28 @@ export function NavBar() {
     _handleLogout()
     navigate("/login")
   }
+  const handleMyAccount = () => {
+    navigate('/dashboard/account')
+  }
+  const handleHelp = () => {
+    navigate('/dashboard/help')
+  }
+  // TODO manually terminate the session on catch
+  const handleLogout = () => {
+    dispatch<any>(logout({}))
+      .unwrap()
+      .catch()
+      .finally(() => {
+        navigate("/login")
+      })
+  }
+  
+  const options = [
+    { option: "My Account", handleFunction: handleMyAccount },
+    { option: "Help", handleFunction: handleHelp },
+    { option: "Logout", handleFunction: handleLogout },
+  ]
+
 
   return (
     <div className="text-safe-text-gray h-20 bg-safe-white shadow-sm">
@@ -98,7 +120,7 @@ export function NavBar() {
               arrowDownClassName={"ml-1"}
               userIcon={userImage || userImg}
               userIconClassName={"sm:w-8 sm:h-8 rounded-full object-contain"}
-              options={["Logout"]}
+              options={options}
             />
           </div>
         )}

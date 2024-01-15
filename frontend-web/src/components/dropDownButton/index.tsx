@@ -1,5 +1,4 @@
 import dots from "@images/dots.svg"
-import { useNavigate } from "react-router-dom"
 
 import React, { Fragment } from "react"
 // eslint-disable
@@ -7,7 +6,6 @@ import { Menu, Transition } from "@headlessui/react"
 // eslint-enable
 
 export function DropDownButton(_props: any) {
-    const navigate = useNavigate()
   return (
     <div>
       <Menu as="div" className="inline-block text-left relative">
@@ -51,11 +49,9 @@ export function DropDownButton(_props: any) {
                         className={`${
                           active ? "bg-safe-blue text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-3 py-2 text-sm`}
-                        onClick={()=>{
-                          option == "Logout" ? _props.onClick() : option === "My account" ? navigate('/dashboard/account') : navigate('/dashboard/help')
-                        }}
+                        onClick={option.handleFunction}
                       >
-                        {option}
+                        {option.option}
                       </button>
                     )}
                   </Menu.Item>
