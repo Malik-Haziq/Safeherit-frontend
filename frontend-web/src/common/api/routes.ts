@@ -1,3 +1,5 @@
+export const SIGN_UP = "/api-auth/signup"
+
 export const VALIDATORS = "/api-validator"
 export const ALL_VALIDATORS = "/api-validator/list"
 

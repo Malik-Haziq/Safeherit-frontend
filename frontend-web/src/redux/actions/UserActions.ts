@@ -1,6 +1,5 @@
 import {
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
   signInWithPopup,
@@ -21,7 +20,9 @@ import {
   PUBLIC_KEY,
   CREATE_PAYMENT_SESSION,
   CREATE_PAYMENT_SESSION_PORTAL,
+  SIGN_UP,
 } from "@/common"
+import { setLoaderVisibility } from "../reducers/LoaderSlice"
 
 export const login = createAsyncThunk(
   "login",
@@ -45,14 +46,17 @@ export const loginWithGoogle = createAsyncThunk(
   "loginWithGoogle",
   async (Data: object, { dispatch, rejectWithValue }) => {
     try {
-      const googleAuthProvider = new GoogleAuthProvider();
-      googleAuthProvider.setCustomParameters({ prompt: 'select_account' })
+      dispatch(setLoaderVisibility(true))
+      const googleAuthProvider = new GoogleAuthProvider()
+      googleAuthProvider.setCustomParameters({ prompt: "select_account" })
       const response = await signInWithPopup(auth, googleAuthProvider)
       const token = await response.user.getIdToken()
       dispatch(setToken(token))
       return response
     } catch (error) {
       return rejectWithValue(error)
+    } finally {
+      dispatch(setLoaderVisibility(false))
     }
   },
 )
@@ -60,21 +64,19 @@ export const loginWithGoogle = createAsyncThunk(
 export const signup = createAsyncThunk(
   "signup",
   async (
-    Data: { email: string; password: string },
+    Data: { email: string; password: string; displayName: string },
     { dispatch, rejectWithValue },
   ) => {
-    const { email, password } = Data
+    dispatch(setLoaderVisibility(true))
+    const formData = jsonToFormData(Data)
+    const params = { ROUTE: SIGN_UP, Body: formData, token: "" }
     try {
-      const response = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      )
-      const token = await response.user.getIdToken()
-      dispatch(setToken(token))
+      const response = await POST(params)
       return response
     } catch (error) {
       return rejectWithValue(error)
+    } finally {
+      dispatch(setLoaderVisibility(false))
     }
   },
 )

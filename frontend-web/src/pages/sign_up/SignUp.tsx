@@ -9,21 +9,17 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { loginWithGoogle, signup } from "@redux/actions"
 import { useAppDispatch } from "@redux/hooks"
-import { User, updateProfile } from "firebase/auth"
 import { GoogleAuthButton, toast } from "@/components"
-import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import {
   updateActive,
   updateRole,
   updateRoleCheck,
 } from "@/redux/reducers/UserSlice"
-import { sendEmailVerificationEmail, isStrongPassword } from "@/common"
+import { isStrongPassword } from "@/common"
 
 export function SignUp() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
-  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [formControl, setFormControl] = useState({
     name: "",
@@ -61,60 +57,37 @@ export function SignUp() {
       } else if (!isStrongPassword(formControl.password)) {
         setIsValidPassword(true)
       } else {
-        startLoader()
-        toast("signing up", "info")
+        setIsValidPassword(false)
         dispatch<any>(
-          signup({ email: formControl.email, password: formControl.password }),
+          signup({
+            email: formControl.email,
+            password: formControl.password,
+            displayName: formControl.name,
+          }),
         )
           .unwrap()
-          .then((res: { user: User }) => {
-            updateProfile(res.user, {
-              displayName: formControl.name,
-            })
-              .then()
-              .catch((err) => {
-                toast(err?.code, "error")
-              })
-              .finally(async () => {
-                const emailSent = await sendEmailVerificationEmail()
-                if (emailSent) {
-                  toast("Verification Email Sent", "info")
-                  setTimeout(() => {
-                    toast("Please verify your email to login", "info")
-                    stopLoader()
-                    navigate("/login")
-                  }, 500)
-                } else {
-                  navigate("/login")
-                }
-              })
+          .then((res: { data: { message: string } }) => {
+            toast(res.data.message, "success")
+            navigate("/login")
           })
           .catch((err: { code: string }) => {
             toast(err?.code, "error")
-            stopLoader()
           })
       }
     }
   }
 
   const _signupWithGoogle = () => {
-    startLoader()
     dispatch<any>(loginWithGoogle({}))
       .unwrap()
       .then(() => {
         dispatch<any>(updateActive(true))
         dispatch<any>(updateRole("owner"))
         dispatch<any>(updateRoleCheck({ role: "owner", value: true }))
-        setTimeout(() => {
-          stopLoader()
-          navigate("/pricing")
-        }, 1000)
+        navigate("/pricing")
       })
       .catch((err: { code: string }) => {
         toast(err?.code, "error")
-      })
-      .finally(() => {
-        stopLoader()
       })
   }
 
@@ -126,7 +99,7 @@ export function SignUp() {
             src={logo}
             alt="safeherit logo"
             className=" w-52 hidden lg:block my-4 mx-auto"
-          />  
+          />
           <h2 className="text-xl lg:text-2xl mb-2  font-bold font-monstrate text-safe-text-dark-blue text-center">
             Create New Account!
           </h2>
@@ -192,7 +165,7 @@ export function SignUp() {
               )
             }}
           />
-          {isValidPassword && <PasswordValidation/>}
+          {isValidPassword && <PasswordValidation />}
           <div className="flex gap-2 text-safe-text-gray mt-2 mb-6">
             <input
               name="checkbox"
