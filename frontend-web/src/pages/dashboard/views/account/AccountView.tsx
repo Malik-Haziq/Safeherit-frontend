@@ -450,15 +450,20 @@ function UserProfileDetails(_props: {
   return (
     <section className="rounded-2xl shadow-md mb-4">
       <div className="p-5 flex justify-between items-center border-b-[1px]">
-        <p className="text-[#061334] text-lg font-semibold">
-          {_props.userName}
-        </p>
+        <div>
+          <p className="font-bold mb-2">Name</p>
+          
+          <p className="text-[#061334] text-lg">{_props.userName}</p>
+        </div>
         <img src={userIcon} alt="User Image" />
       </div>
       <div className="p-5 flex justify-between items-center border-b-[1px]">
-        <p className="text-[#061334] text-lg font-semibold">
-          {_props.userEmail}
-        </p>
+        <div>
+          <p className="font-bold mb-2">Email</p>
+          <p className="text-[#061334] text-lg">
+            {_props.userEmail}
+          </p>
+        </div>
         <img src={msgIcon} alt="Message icon" />
       </div>
       <div className="p-5 flex justify-between items-center border-b-[1px]">
