@@ -51,7 +51,7 @@ export function DropDownButton(_props: any) {
                         } group flex w-full items-center rounded-md px-3 py-2 text-sm`}
                         onClick={option.action}
                       >
-                        {option.option}
+                        {option.button}
                       </button>
                     )}
                   </Menu.Item>

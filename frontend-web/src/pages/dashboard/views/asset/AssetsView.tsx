@@ -176,12 +176,12 @@ export default function AssetsView() {
   ]
 
   const options = [
-    { option: "All", action: ()=>{} },
-    { option: "Bank", action: ()=>{} },
-    { option: "Stock", action: ()=>{} },
-    { option: "Real Estate", action: ()=>{} },
-    { option: "Life Insurance", action: ()=>{} },
-    { option: "Cryptocurrency", action: ()=>{} },
+    { button: "All", action: ()=>{} },
+    { button: "Bank", action: ()=>{} },
+    { button: "Stock", action: ()=>{} },
+    { button: "Real Estate", action: ()=>{} },
+    { button: "Life Insurance", action: ()=>{} },
+    { button: "Cryptocurrency", action: ()=>{} },
   ]
 
   const AssetDetailsCardArr = [

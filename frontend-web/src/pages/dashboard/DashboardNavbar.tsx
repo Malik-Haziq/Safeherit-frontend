@@ -51,9 +51,9 @@ export default function DashboardNavbar(_props: {
   }
   
   const options = [
-    { option: "My Account", action: handleMyAccount },
-    { option: "Help", action: handleHelp },
-    { option: "Logout", action: handleLogout },
+    { button: "My Account", action: handleMyAccount },
+    { button: "Help", action: handleHelp },
+    { button: "Logout", action: handleLogout },
   ]
 
   return (
