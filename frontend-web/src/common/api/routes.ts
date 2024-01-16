@@ -1,5 +1,6 @@
 export const SIGN_UP = "/api-auth/signup"
 export const LOGIN = "/api-auth/sessionLogin"
+export const LOGOUT = "/api-auth/sessionLogout"
 
 export const VALIDATORS = "/api-validator"
 export const ALL_VALIDATORS = "/api-validator/list"

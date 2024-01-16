@@ -1,6 +1,5 @@
 import {
   signInWithEmailAndPassword,
-  signOut,
   sendPasswordResetEmail,
   signInWithPopup,
   GoogleAuthProvider,
@@ -22,6 +21,7 @@ import {
   CREATE_PAYMENT_SESSION_PORTAL,
   SIGN_UP,
   LOGIN,
+  LOGOUT,
 } from "@/common"
 import { setLoaderVisibility } from "../reducers/LoaderSlice"
 
@@ -90,14 +90,18 @@ export const signup = createAsyncThunk(
 
 export const logout = createAsyncThunk(
   "logout",
-  async (Data: object, { rejectWithValue }) => {
+  async (Data: object, { dispatch, rejectWithValue }) => {
     try {
-      const response = await signOut(auth)
+      dispatch(setLoaderVisibility(true))
+      const params = { ROUTE: LOGOUT, Body: {}, token: "" }
+      const response = await POST(params)
       sessionStorage.clear()
       localStorage.clear()
       return response
     } catch (error) {
       return rejectWithValue(error)
+    } finally {
+      dispatch(setLoaderVisibility(false))
     }
   },
 )
