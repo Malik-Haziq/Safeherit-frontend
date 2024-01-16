@@ -317,7 +317,8 @@ export default function AssetsView() {
   const _submitSuccessModal = () => {
     // goto Dashboard
     setModalVisibility("none")
-    navigate(ROUTE_CONSTANTS.DASHBOARD)
+    navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`
+      )
   }
   const _submitDeleteModal = () => {
     dispatch<any>(deleteAsset({ id: selectedAsset }))
