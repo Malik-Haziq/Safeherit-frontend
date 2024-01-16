@@ -21,6 +21,7 @@ import {
   CREATE_PAYMENT_SESSION,
   CREATE_PAYMENT_SESSION_PORTAL,
   SIGN_UP,
+  LOGIN,
 } from "@/common"
 import { setLoaderVisibility } from "../reducers/LoaderSlice"
 
@@ -32,12 +33,18 @@ export const login = createAsyncThunk(
   ) => {
     const { email, password } = Data
     try {
+      dispatch(setLoaderVisibility(true))
       const response = await signInWithEmailAndPassword(auth, email, password)
       const token = await response.user.getIdToken()
       dispatch(setToken(token))
-      return response
+      const formData = jsonToFormData({ idToken: token, csrfToken: "" })
+      const params = { ROUTE: LOGIN, Body: formData, token: "" }
+      const _response = await POST(params)
+      return _response
     } catch (error) {
       return rejectWithValue(error)
+    } finally {
+      dispatch(setLoaderVisibility(false))
     }
   },
 )
