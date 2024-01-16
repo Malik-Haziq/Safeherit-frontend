@@ -6,8 +6,6 @@ import App from "./App"
 import "./index.css"
 import "./assets/i18n/en.json"
 import "./firebase"
-import { PersistGate } from "redux-persist/integration/react"
-import { persistor } from "./redux"
 import { Spinner } from "./components/spinner/Spinner"
 import styles from "./pages/dashboard/Dashboard.module.css"
 
@@ -24,12 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       }
     >
       <Provider store={store}>
-        <PersistGate
-          loading={<Spinner withOverlay={true} />}
-          persistor={persistor}
-        >
-          <App />
-        </PersistGate>
+        <App />
       </Provider>
     </Suspense>
   </React.StrictMode>,
