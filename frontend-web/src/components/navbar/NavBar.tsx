@@ -64,9 +64,9 @@ export function NavBar() {
   }
   
   const options = [
-    { option: "My Account", handleFunction: handleMyAccount },
-    { option: "Help", handleFunction: handleHelp },
-    { option: "Logout", handleFunction: handleLogout },
+    { option: "My Account", action: handleMyAccount },
+    { option: "Help", action: handleHelp },
+    { option: "Logout", action: handleLogout },
   ]
 
 

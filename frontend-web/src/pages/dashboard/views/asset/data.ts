@@ -1,3 +1,6 @@
+import stock from "@images/stock.svg"
+import realEstate from "@images/real-estate.svg"
+import bank from "@images/bank.svg"
 export interface AssetData {
   [category: string]: {
     name: string
@@ -1096,6 +1099,24 @@ export const TypeOfInvestmentInInvestmentFunds = [
     label: "Other",
   },
 ]
+
+export const assetImages: any = {
+  "Bank Account": bank,
+  "Life insurance": "",
+  "Real Estate": realEstate,
+  "Retirement Account": bank,
+  "Brokerage Account": bank,
+  "Safety box": "",
+  "Stocks": stock,
+  "Bonds": stock,
+  "Company Shares": stock,
+  "Investment Funds": stock,
+  "Cryptocurrency (Self-custody)" : "",
+  "Cryptocurrency (Online Exchange)": "",
+  "Physical goods": "",
+  "Account passwords": bank,
+  "Others (Custom)": ""
+}
 
 export const assetData: AssetData = {
   "Bank Account": [

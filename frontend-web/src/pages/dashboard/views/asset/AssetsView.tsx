@@ -21,7 +21,7 @@ import {
   StepTwoModal,
   AssetDetail,
   AssetBeneficiaries,
-  BeneficiaryWarning
+  BeneficiaryWarning,
 } from "./modal_assets"
 import { ASSET_TYPES, ROUTE_CONSTANTS, useArray } from "@/common"
 
@@ -37,7 +37,7 @@ import {
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
-import { getRequiredFields } from "./data"
+import { getRequiredFields, assetImages } from "./data"
 import { AxiosResponse } from "axios"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { SelectOption, Asset, Beneficiary } from "@/types"
@@ -174,6 +174,16 @@ export default function AssetsView() {
     },
     { value: ASSET_TYPES.OTHERS_CUSTOM, label: ASSET_TYPES.OTHERS_CUSTOM },
   ]
+
+  const options = [
+    { option: "All", action: ()=>{} },
+    { option: "Bank", action: ()=>{} },
+    { option: "Stock", action: ()=>{} },
+    { option: "Real Estate", action: ()=>{} },
+    { option: "Life Insurance", action: ()=>{} },
+    { option: "Cryptocurrency", action: ()=>{} },
+  ]
+
   const AssetDetailsCardArr = [
     {
       img: dollar,
@@ -185,14 +195,7 @@ export default function AssetsView() {
           title="All"
           titleClassName="font-semibold cursor-pointer"
           arrowIcon={arrowDown}
-          options={[
-            "All",
-            "Bank",
-            "Stock",
-            "Real Estate",
-            "Life Insurance",
-            "Cryptocurrency",
-          ]}
+          options={options}
         />
       ),
     },
@@ -333,12 +336,11 @@ export default function AssetsView() {
       })
   }
 
-  const _submitBeneficiaryWarningModal = () =>{
-
-    setModalVisibility('none')
+  const _submitBeneficiaryWarningModal = () => {
+    setModalVisibility("none")
     navigate("/dashboard/beneficiaries")
   }
-  
+
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
@@ -350,7 +352,9 @@ export default function AssetsView() {
     setModalVisibility("Step-1")
   }
   const addAsset = () => {
-    beneficiary.beneficiary_list.length !== 0 ? setModalVisibility("Step-0") : setModalVisibility("beneficiary-warning")
+    beneficiary.beneficiary_list.length !== 0
+      ? setModalVisibility("Step-0")
+      : setModalVisibility("beneficiary-warning")
   }
   const editAsset = (assetId: string) => {
     dispatch<any>(findAsset({ id: assetId }))
@@ -410,7 +414,7 @@ export default function AssetsView() {
         setAssetBeneficiariesData(res.data.data.beneficiaries)
         setModalVisibility("beneficiaries-listing")
       })
-  } 
+  }
 
   return (
     <>
@@ -694,20 +698,27 @@ function AssetDetails(_props: {
     <div className="flex justify-between gap-24 px-5 py-3">
       <div className="flex justify-between items-center w-[268px] flex-grow">
         <div className="flex gap-4 items-center">
-          <img src={realEstate} alt="real estate icon" />
-          <p className="text-[#00192B] text-sm font-semibold">
+          <img src={assetImages[_props.assetName]} alt="asset image" className="w-10 h-10"/>
+          <p
+            className="text-[#00192B] text-sm font-semibold cursor-pointer"
+            onClick={() => {
+              _props.viewAsset(_props.assetId)
+            }}
+          >
             {_props.assetName}
           </p>
         </div>
         <p className="text-[#00192B] text-sm font-semibold">
-          <span>{_props.assetValue == "No value found" && ''}</span>
+          <span>{_props.assetValue == "No value found" && ""}</span>
         </p>
       </div>
       <div className="flex justify-between items-center flex-grow w-[278px]">
         {_props.userRole != "beneficiary" ? (
           <div className="flex justify-between items-center gap-3">
-            
-            <button onClick={() => _props.viewBeneficiaries(_props.assetId)}  className="font-semibold">
+            <button
+              onClick={() => _props.viewBeneficiaries(_props.assetId)}
+              className="font-semibold"
+            >
               View Beneficiary
             </button>
             {/* TODO ADD Beneficiray listing modal */}
