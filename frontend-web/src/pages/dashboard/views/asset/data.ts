@@ -1153,15 +1153,15 @@ export const assetData: AssetData = {
         required: false,
         allFields: "",
       },
+    ],
+    [
       {
-        name: "Online banking credentials",
-        placeholder: "Online banking credentials",
-        type: "Text",
+        name: "Online Banking credentials",
+        placeholder: "Online Account credentials",
+        type: "textView",
         required: false,
         allFields: "",
       },
-    ],
-    [
       {
         name: "Website",
         placeholder: "Website",
@@ -1538,15 +1538,15 @@ export const assetData: AssetData = {
         required: false,
         allFields: "",
       },
+    ],
+    [
       {
         name: "Online Account credentials",
         placeholder: "Online Account credentials",
-        type: "Text",
+        type: "textView",
         required: false,
         allFields: "",
       },
-    ],
-    [
       {
         name: "Website",
         placeholder: "Website",
@@ -2151,15 +2151,15 @@ export const assetData: AssetData = {
         required: false,
         allFields: "",
       },
+    ],
+    [
       {
         name: "Online Account credentials",
         placeholder: "Online Account credentials",
-        type: "Text",
+        type: "textView",
         required: false,
         allFields: "",
       },
-    ],
-    [
       {
         name: "Website",
         placeholder: "Website",
@@ -2277,15 +2277,16 @@ export const assetData: AssetData = {
         required: true,
         allFields: "",
       },
+      
+    ],
+    [
       {
         name: "Online Account credentials",
         placeholder: "Online Account credentials",
-        type: "Text",
+        type: "textView",
         required: false,
         allFields: "",
       },
-    ],
-    [
       {
         name: "Website",
         placeholder: "Website",

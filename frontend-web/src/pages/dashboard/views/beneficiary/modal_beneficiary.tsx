@@ -746,7 +746,6 @@ export function RegisterPKModal(_props: {
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   action: string
-  _submitModal: React.MouseEventHandler<HTMLButtonElement>
   _handleKeyGeneration: React.MouseEventHandler<HTMLButtonElement>
   arrayLength: any
   showPreviousModal: any
@@ -793,18 +792,12 @@ export function RegisterPKModal(_props: {
             customViewContainer: "mx-auto",
             CustomView: () => {
               return (
-                <div className="flex items-center justify-between px-7 mb-11">
+                <div className="flex items-center justify-center px-7 mb-11">
                   <button
                     onClick={_props._handleKeyGeneration}
                     className="primary-btn bg-[#D7D7D7] rounded-2xl text-[#04477B] px-8 py-4 font-bold"
                   >
                     Generate a Key pair
-                  </button>
-                  <button
-                    onClick={_props._submitModal}
-                    className="primary-btn bg-[#0971AA] rounded-2xl px-8 py-4 font-bold"
-                  >
-                    I have a Public Key
                   </button>
                 </div>
               )
