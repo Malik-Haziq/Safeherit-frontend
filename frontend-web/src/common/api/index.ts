@@ -3,6 +3,7 @@ import { toast } from "@/components"
 
 export const API = axios.create({
   baseURL: import.meta.env.VITE_REACT_APP_SERVER,
+  withCredentials: true, // send cookies when cross-domain requests
   // timeout: 1000,
   headers: {
     Accept: "application/json",
