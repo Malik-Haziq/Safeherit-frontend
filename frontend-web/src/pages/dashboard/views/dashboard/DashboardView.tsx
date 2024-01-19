@@ -36,7 +36,8 @@ export default function DashboardView() {
     { img: heart, numberOfItems: "22 Days", title: "Check due in" },
     { img: privateKeysIcon, numberOfItems: "Medium", title: "Security Score" },
   ]
-  const assets = [
+  
+  const _dashboardData = [
     {
       title: "Assets",
       data: dashboardData.assets,
@@ -77,13 +78,13 @@ export default function DashboardView() {
         })}
       </section>
       <section className=" flex gap-4 px-auto mx-auto">
-        {assets.map((asset, index) => {
+        {_dashboardData.map((data, index) => {
           return (
             <Cards
               key={index}
-              rowData={asset.data}
-              navigationPath={asset.navigationPath}
-              title={asset.title}
+              rowData={data.data}
+              navigationPath={data.navigationPath}
+              title={data.title}
               loading={dashboardData.loading}
             />
           )
@@ -159,7 +160,7 @@ function Cards(_props: {
   )
 }
 
-function Row(_props: { img: any; title: string; subTitle: string; type: any;}) {
+function Row(_props: { img: any; title: string; subTitle: string; type: string;}) {
   const [image, setImage] = useState<string>("")
   useEffect(() => {
     getFileFromFirebase(_props.img)
