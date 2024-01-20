@@ -1,3 +1,6 @@
+import stock from "@images/stock.svg"
+import realEstate from "@images/real-estate.svg"
+import bank from "@images/bank.svg"
 export interface AssetData {
   [category: string]: {
     name: string
@@ -1097,9 +1100,34 @@ export const TypeOfInvestmentInInvestmentFunds = [
   },
 ]
 
+export const assetImages: any = {
+  "Bank Account": bank,
+  "Life insurance": "realEstate",
+  "Real Estate": realEstate,
+  "Retirement Account": bank,
+  "Brokerage Account": bank,
+  "Safety box": "realEstate",
+  "Stocks": stock,
+  "Bonds": stock,
+  "Company Shares": stock,
+  "Investment Funds": stock,
+  "Cryptocurrency (Self-custody)" : "realEstate",
+  "Cryptocurrency (Online Exchange)": "realEstate",
+  "Physical goods": "realEstate",
+  "Account passwords": bank,
+  "Others (Custom)": "realEstate"
+}
+
 export const assetData: AssetData = {
   "Bank Account": [
     [
+      {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
       {
         name: "Bank name",
         placeholder: "Bank name",
@@ -1153,15 +1181,15 @@ export const assetData: AssetData = {
         required: false,
         allFields: "",
       },
+    ],
+    [
       {
-        name: "Online banking credentials",
-        placeholder: "Online banking credentials",
-        type: "Text",
+        name: "Online Banking credentials",
+        placeholder: "Online Account credentials",
+        type: "textView",
         required: false,
         allFields: "",
       },
-    ],
-    [
       {
         name: "Website",
         placeholder: "Website",
@@ -1209,6 +1237,13 @@ export const assetData: AssetData = {
   ],
   "Life insurance": [
     [
+      {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
       {
         name: "Insurance company name",
         placeholder: "Insurance company name",
@@ -1305,6 +1340,13 @@ export const assetData: AssetData = {
   "Real Estate": [
     [
       {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
+      {
         name: "Type of Real Estate",
         placeholder: "Type of Real Estate",
         type: "Text",
@@ -1390,6 +1432,13 @@ export const assetData: AssetData = {
   ],
   "Retirement Account": [
     [
+      {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
       {
         name: "Type of account",
         placeholder: "Select Type of account",
@@ -1486,6 +1535,13 @@ export const assetData: AssetData = {
   "Brokerage Account": [
     [
       {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
+      {
         name: "Brokerage Firm",
         placeholder: "Brokerage Firm",
         type: "Text",
@@ -1538,15 +1594,15 @@ export const assetData: AssetData = {
         required: false,
         allFields: "",
       },
+    ],
+    [
       {
         name: "Online Account credentials",
         placeholder: "Online Account credentials",
-        type: "Text",
+        type: "textView",
         required: false,
         allFields: "",
       },
-    ],
-    [
       {
         name: "Website",
         placeholder: "Website",
@@ -1594,6 +1650,13 @@ export const assetData: AssetData = {
   ],
   "Safety box": [
     [
+      {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
       {
         name: "Safety Box Custodian",
         placeholder: "Safety Box Custodian",
@@ -1652,6 +1715,13 @@ export const assetData: AssetData = {
   ],
   Stocks: [
     [
+      {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
       {
         name: "Company name",
         placeholder: "Company name",
@@ -1767,6 +1837,13 @@ export const assetData: AssetData = {
   Bonds: [
     [
       {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
+      {
         name: "Bond type",
         placeholder: "Bond type",
         type: "Text",
@@ -1865,6 +1942,13 @@ export const assetData: AssetData = {
   "Company Shares": [
     [
       {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
+      {
         name: "Company name",
         placeholder: "Company name",
         type: "Text",
@@ -1937,6 +2021,13 @@ export const assetData: AssetData = {
   ],
   "Investment Funds": [
     [
+      {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
       {
         name: "Type of investment fund",
         placeholder: "Select Type of investment fund",
@@ -2045,6 +2136,13 @@ export const assetData: AssetData = {
   "Cryptocurrency (Self-custody)": [
     [
       {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
+      {
         name: "Type of self custody",
         placeholder: "Select Type of self custody",
         type: "Select",
@@ -2117,6 +2215,13 @@ export const assetData: AssetData = {
   "Cryptocurrency (Online Exchange)": [
     [
       {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
+      {
         name: "Online exchange name",
         placeholder: "Online exchange name",
         type: "Text",
@@ -2151,15 +2256,15 @@ export const assetData: AssetData = {
         required: false,
         allFields: "",
       },
+    ],
+    [
       {
         name: "Online Account credentials",
         placeholder: "Online Account credentials",
-        type: "Text",
+        type: "textView",
         required: false,
         allFields: "",
       },
-    ],
-    [
       {
         name: "Website",
         placeholder: "Website",
@@ -2271,21 +2376,29 @@ export const assetData: AssetData = {
   "Account passwords": [
     [
       {
+        name: "Asset Name",
+        placeholder: "Asset Name",
+        type: "Text",
+        required: true,
+        allFields: "",
+      },
+      {
         name: "Online platform name",
         placeholder: "Online platform name",
         type: "Text",
         required: true,
         allFields: "",
       },
+      
+    ],
+    [
       {
         name: "Online Account credentials",
         placeholder: "Online Account credentials",
-        type: "Text",
+        type: "textView",
         required: false,
         allFields: "",
       },
-    ],
-    [
       {
         name: "Website",
         placeholder: "Website",

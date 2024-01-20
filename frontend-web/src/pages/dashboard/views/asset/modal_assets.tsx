@@ -177,6 +177,16 @@ const generateTextInputFieldProps = (
   }
 }
 
+const generateTextView = (name: string) => {
+  return ({
+    type: "textView",
+    props: {
+      text: name,
+      textStyles: "text-[#00192B] font-medium mb-4 px-7",
+    },
+  })
+}
+
 export function StepOneModal(_props: {
   openModal: boolean
   closeModal: any
@@ -364,10 +374,15 @@ export function StepTwoModal(_props: {
               _props._handleChange,
             )
           }
+        } else if (Asset.type === "textView") {
+          return generateTextView(
+            Asset.name
+          )
         }
         return null // Return null for other types or handle as needed
       })
     : []
+
 
   const handleFileInputChange = (event: any) => {
     const file = event.target.files[0]
@@ -391,13 +406,6 @@ export function StepTwoModal(_props: {
             image: stepTwo,
             imageStyles: "mx-auto",
             imageContainerStyles: "my-7",
-          },
-        },
-        {
-          type: "textView",
-          props: {
-            text: "Online banking credentials",
-            textStyles: "text-[#00192B] font-medium mb-4 px-7",
           },
         },
         ...conditionalElements,
@@ -457,7 +465,7 @@ export function SuccessModal(_props: {
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   registerAnotherAsset: React.MouseEventHandler<HTMLButtonElement>
-  gotoDashboard: React.MouseEventHandler<HTMLButtonElement>
+  submitModal: React.MouseEventHandler<HTMLButtonElement>
 }) {
   return (
     <Modal
@@ -507,7 +515,7 @@ export function SuccessModal(_props: {
                       take you to your Dashboard
                     </p>
                     <button
-                      onClick={_props.gotoDashboard}
+                      onClick={_props.submitModal}
                       className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl"
                     >
                       Done

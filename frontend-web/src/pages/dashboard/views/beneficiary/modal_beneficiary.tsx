@@ -3,7 +3,6 @@ import facebook from "@images/facebook.svg"
 import instagram from "@images/insta.svg"
 import twitter from "@images/twitter.svg"
 import uploadVideoIcon from "@images/upload-video.svg"
-import video from "@images/register_page_video.png"
 import profilePic from "@images/profile-pic.svg"
 import registerBeneficiaryImg from "@images/register-beneficiary.svg"
 import stepOne from "@images/step_1_of_4.svg"
@@ -441,17 +440,20 @@ export function StepTwoModal(_props: {
                 },
               },
               {
-                type: 'customView',
+                type: "customView",
                 props: {
-                  customViewContainer: '',
+                  customViewContainer: "",
                   CustomView: () => {
                     return (
-                      <div className="flex items-center justify-center bg-[#206392] w-7 h-7 rounded-md cursor-default" title="We request social media links for your beneficiaries and validators as a secondary means of contact. This information will only be used if we're unable to reach them through the primary contact details you provided.">
+                      <div
+                        className="flex items-center justify-center bg-[#206392] w-7 h-7 rounded-md cursor-default"
+                        title="We request social media links for your beneficiaries and validators as a secondary means of contact. This information will only be used if we're unable to reach them through the primary contact details you provided."
+                      >
                         <span className="text-white font-medium">?</span>
                       </div>
                     )
-                  }
-                }
+                  },
+                },
               },
             ],
           },
@@ -664,10 +666,9 @@ export function StepThreeModal(_props: {
           props: {
             textAreaContainerStyles: " ",
             name: "personalized_message",
-            placeholder:
-             `Dear ${_props.modalControl.name} \n\nIf you receive this message it probably means I am gone. If so go to my closet and you will find a piece of paper in the pocket or my blue leather jacket. The paper contains the codes you will need to login to this platform (SafeHerit) and have access to the list of my assets.`,
+            placeholder: `Dear ${_props.modalControl.name} \n\nIf you receive this message it probably means I am gone. If so go to my closet and you will find a piece of paper in the pocket or my blue leather jacket. The paper contains the codes you will need to login to this platform (SafeHerit) and have access to the list of my assets.`,
             _handleChange: _props._handleChange,
-            value: _props.modalControl.personalized_message, 
+            value: _props.modalControl.personalized_message,
             inputStyles:
               "bg-[#F5FAFD] text-[#6F767B] pl-5 py-3 font-base rounded-3xl mx-auto block w-[514px] h-[163px] resize-none focus:outline-none scrollbar leading-tight mb-10",
           },

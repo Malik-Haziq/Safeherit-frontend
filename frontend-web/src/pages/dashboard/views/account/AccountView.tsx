@@ -66,7 +66,7 @@ export default function AccountView() {
   const [auth2FAEnabled, setAuth2FAEnabled] = useState(false)
 
   useEffect(() => {
-    const key = sessionStorage.getItem("privateKey")
+    const key = localStorage.getItem("privateKey")
     setModalControl({ ...modalControl, privateKey: key || "" })
   }, [modalControl.privateKey])
 
@@ -103,7 +103,7 @@ export default function AccountView() {
   }
 
   const getUserDetails = () => {
-    dispatch<any>(getUser({}))
+    dispatch<any>(getUser({ HideLoader: true }))
       .unwrap()
       .then((res: any) => {
         setAuth2FAEnabled(verifyIfUserIsEnrolled())
@@ -242,10 +242,7 @@ export default function AccountView() {
             .then(() => {
               toast("Keys Registered", "success")
               closeModal()
-              sessionStorage.setItem(
-                "privateKey",
-                PKEditModalControl.privateKey,
-              )
+              localStorage.setItem("privateKey", PKEditModalControl.privateKey)
             })
             .catch()
             .finally(() => {
@@ -450,15 +447,20 @@ function UserProfileDetails(_props: {
   return (
     <section className="rounded-2xl shadow-md mb-4">
       <div className="p-5 flex justify-between items-center border-b-[1px]">
-        <p className="text-[#061334] text-lg font-semibold">
-          {_props.userName}
-        </p>
+        <div>
+          <p className="font-bold mb-2">Name</p>
+          
+          <p className="text-[#061334] text-lg">{_props.userName}</p>
+        </div>
         <img src={userIcon} alt="User Image" />
       </div>
       <div className="p-5 flex justify-between items-center border-b-[1px]">
-        <p className="text-[#061334] text-lg font-semibold">
-          {_props.userEmail}
-        </p>
+        <div>
+          <p className="font-bold mb-2">Email</p>
+          <p className="text-[#061334] text-lg">
+            {_props.userEmail}
+          </p>
+        </div>
         <img src={msgIcon} alt="Message icon" />
       </div>
       <div className="p-5 flex justify-between items-center border-b-[1px]">

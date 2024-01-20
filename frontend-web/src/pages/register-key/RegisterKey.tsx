@@ -75,7 +75,7 @@ export default function RegisterKey() {
       )
     ) {
       if (modalVisibility == "Load-PK") {
-        sessionStorage.setItem("privateKey", modalControl.privateKey)
+        localStorage.setItem("privateKey", modalControl.privateKey)
         navigate("/dashboard")
       } else {
         dispatch<any>(
@@ -87,7 +87,7 @@ export default function RegisterKey() {
           .unwrap()
           .then(() => {
             toast("Keys Registered", "success")
-            sessionStorage.setItem("privateKey", modalControl.privateKey)
+            localStorage.setItem("privateKey", modalControl.privateKey)
             navigate("/dashboard")
           })
           .catch((err: any) => {
