@@ -1,4 +1,3 @@
-import React from "react"
 import logo from "@images/safeherit_logo.svg"
 import userImg from "@images/user.svg"
 import arrowDown from "@images/chevron-down.svg"
@@ -7,7 +6,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { logout } from "@redux/actions"
-import { DropDownButton, toast } from "@/components"
+import { NavDropDownButton, toast } from "@/components"
 import { getFileFromFirebase } from "@/common"
 
 export function NavBar() {
@@ -88,7 +87,7 @@ export function NavBar() {
           </button>
         ) : (
           <div>
-            <DropDownButton
+            <NavDropDownButton
               className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
               onClick={_handleLogout}
               title={USER_NAME}
@@ -97,7 +96,6 @@ export function NavBar() {
               arrowDownClassName={"ml-1"}
               userIcon={userImage || userImg}
               userIconClassName={"sm:w-8 sm:h-8 rounded-full object-contain"}
-              options={["Logout"]}
             />
           </div>
         )}

@@ -1,8 +1,7 @@
-import React from "react"
 import userImg from "@images/user.svg"
 import arrowDown from "@images/chevron-down.svg"
 
-import { DropDownButton } from "@/components"
+import { NavDropDownButton } from "@/components"
 import { useAppSelector } from "@redux/hooks"
 import { useEffect, useState } from "react"
 import { getFileFromFirebase, getNavBarHeadings } from "@/common"
@@ -37,7 +36,7 @@ export default function DashboardNavbar(_props: { _handleLogout: () => void }) {
       <div className="flex items-center gap-3 md:gap-10">
         {/* <Notifications /> */}
 
-        <DropDownButton
+        <NavDropDownButton
           className="flex items-center bg-safe-white-shade px-2 py-1 rounded-full gap-1 cursor-pointer"
           onClick={_props._handleLogout}
           title={user.displayName || "Profile"}
@@ -46,7 +45,6 @@ export default function DashboardNavbar(_props: { _handleLogout: () => void }) {
           arrowDownClassName={"ml-1 "}
           userIcon={image ? image : userImg}
           userIconClassName={"w-8 h-8 rounded-full object-contain"}
-          options={["Logout"]}
         />
       </div>
     </div>

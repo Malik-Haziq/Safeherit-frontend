@@ -11,6 +11,7 @@ import { useEffect, useState } from "react"
 import { getFileFromFirebase, ROUTE_CONSTANTS } from "@/common"
 import { Spinner } from "@/components"
 import { Link } from "react-router-dom"
+import { assetImages } from "../asset/data"
 
 export default function DashboardView() {
   const dispatch = useAppDispatch()
@@ -35,7 +36,8 @@ export default function DashboardView() {
     { img: heart, numberOfItems: "22 Days", title: "Check due in" },
     { img: privateKeysIcon, numberOfItems: "Medium", title: "Security Score" },
   ]
-  const assets = [
+  
+  const _dashboardData = [
     {
       title: "Assets",
       data: dashboardData.assets,
@@ -76,13 +78,13 @@ export default function DashboardView() {
         })}
       </section>
       <section className=" flex gap-4 px-auto mx-auto">
-        {assets.map((asset, index) => {
+        {_dashboardData.map((data, index) => {
           return (
             <Cards
               key={index}
-              assetsInfo={asset.data}
-              navigationPath={asset.navigationPath}
-              title={asset.title}
+              rowData={data.data}
+              navigationPath={data.navigationPath}
+              title={data.title}
               loading={dashboardData.loading}
             />
           )
@@ -114,10 +116,11 @@ function DetailsCard(_props: {
 
 function Cards(_props: {
   title: string
-  assetsInfo: any
+  rowData: any
   navigationPath: string
   loading: boolean
-}) {
+}) 
+{
   return (
     <div className="h-[500px] min-w-[350px] rounded-lg shadow-lg">
       <div className="flex justify-between items-center h-14 bg-safe-green-light-1 p-4 rounded-t-lg">
@@ -135,14 +138,15 @@ function Cards(_props: {
       <div className="h-[444px] overflow-y-auto relative">
         {_props.loading ? (
           <Spinner />
-        ) : _props.assetsInfo.length ? (
-          _props.assetsInfo.map((info: any, index: string) => {
+        ) : _props.rowData.length ? (
+          _props.rowData.map((info: any, index: string) => {
             return (
               <Row
                 key={index}
                 img={info.img}
                 title={info.title}
                 subTitle={info.subTitle}
+                type={_props.title}
               />
             )
           })
@@ -156,7 +160,7 @@ function Cards(_props: {
   )
 }
 
-function Row(_props: { img: any; title: string; subTitle: string }) {
+function Row(_props: { img: any; title: string; subTitle: string; type: string;}) {
   const [image, setImage] = useState<string>("")
   useEffect(() => {
     getFileFromFirebase(_props.img)
@@ -170,7 +174,7 @@ function Row(_props: { img: any; title: string; subTitle: string }) {
   return (
     <div className="p-4 flex gap-4 border-b-[.5px] ">
       <img
-        src={image || users}
+        src={_props.type === "Assets" ? assetImages[_props.title] : image || users}
         alt=""
         className="w-11 h-11 rounded-full object-contain"
       />

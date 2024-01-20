@@ -7,7 +7,6 @@ import edit from "@images/edit.svg"
 import deleteIcon from "@images/delete.svg"
 import arrowDown from "@images/arrow-down.svg"
 import AddAssetImg from "@images/beneficiaryScreen.svg"
-import user from "@images/UserIcon.png"
 import addIcon from "@images/add-icon.svg"
 
 import styles from "../../Dashboard.module.css"
@@ -37,7 +36,7 @@ import {
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
-import { getRequiredFields } from "./data"
+import { getRequiredFields, assetImages } from "./data"
 import { AxiosResponse } from "axios"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { SelectOption, Asset, Beneficiary } from "@/types"
@@ -174,6 +173,16 @@ export default function AssetsView() {
     },
     { value: ASSET_TYPES.OTHERS_CUSTOM, label: ASSET_TYPES.OTHERS_CUSTOM },
   ]
+
+  const options = [
+    { button: "All", action: () => {} },
+    { button: "Bank", action: () => {} },
+    { button: "Stock", action: () => {} },
+    { button: "Real Estate", action: () => {} },
+    { button: "Life Insurance", action: () => {} },
+    { button: "Cryptocurrency", action: () => {} },
+  ]
+
   const AssetDetailsCardArr = [
     {
       img: dollar,
@@ -185,14 +194,7 @@ export default function AssetsView() {
           title="All"
           titleClassName="font-semibold cursor-pointer"
           arrowIcon={arrowDown}
-          options={[
-            "All",
-            "Bank",
-            "Stock",
-            "Real Estate",
-            "Life Insurance",
-            "Cryptocurrency",
-          ]}
+          options={options}
         />
       ),
     },
@@ -315,10 +317,8 @@ export default function AssetsView() {
     }
   }
   const _submitSuccessModal = () => {
-    // goto Dashboard
     setModalVisibility("none")
-    navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`
-      )
+    navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`)
   }
   const _submitDeleteModal = () => {
     dispatch<any>(deleteAsset({ id: selectedAsset }))
@@ -466,7 +466,7 @@ export default function AssetsView() {
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
         registerAnotherAsset={newAsset}
-        gotoDashboard={_submitSuccessModal}
+        submitModal={_submitSuccessModal}
       />
       <ConfirmationModal
         openModal={modalVisibility == "Step-delete"}
@@ -706,18 +706,30 @@ function AssetDetails(_props: {
     <div className="flex justify-between gap-24 px-5 py-3">
       <div className="flex justify-between items-center w-[50px]   flex-grow">
         <div className="flex gap-4 items-center">
-          <p className="text-[#00192B] text-sm font-semibold">
+          <img
+            src={assetImages[_props.assetName]}
+            alt="asset image"
+            className="w-10 h-10"
+          />
+          <p
+            className="text-[#00192B] text-sm font-semibold cursor-pointer"
+            onClick={() => {
+              _props.viewAsset(_props.assetId)
+            }}
+          >
             {_props.assetName}
           </p>
         </div>
       </div>
       <div className="flex justify-between items-center w-[268px] flex-grow">
         <div className="flex gap-4 items-center">
-          <img src={realEstate} alt="real estate icon" 
-          className="cursor-pointer"
-          onClick={() => {
-            _props.viewAsset(_props.assetId)
-          }}
+          <img
+            src={realEstate}
+            alt="real estate icon"
+            className="cursor-pointer"
+            onClick={() => {
+              _props.viewAsset(_props.assetId)
+            }}
           />
           <p className="text-[#00192B] text-sm font-semibold">
             {_props.assetType}

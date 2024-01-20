@@ -465,7 +465,7 @@ export function SuccessModal(_props: {
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   registerAnotherAsset: React.MouseEventHandler<HTMLButtonElement>
-  gotoDashboard: React.MouseEventHandler<HTMLButtonElement>
+  submitModal: React.MouseEventHandler<HTMLButtonElement>
 }) {
   return (
     <Modal
@@ -515,7 +515,7 @@ export function SuccessModal(_props: {
                       take you to your Dashboard
                     </p>
                     <button
-                      onClick={_props.gotoDashboard}
+                      onClick={_props.submitModal}
                       className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl"
                     >
                       Done
