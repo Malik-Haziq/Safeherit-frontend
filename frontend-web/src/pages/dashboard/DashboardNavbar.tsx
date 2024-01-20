@@ -5,20 +5,14 @@ import arrowDown from "@images/chevron-down.svg"
 import { DropDownButton } from "@/components"
 import { useAppSelector } from "@redux/hooks"
 import { useEffect, useState } from "react"
-import { getFileFromFirebase } from "@/common"
+import { getFileFromFirebase, getNavBarHeadings } from "@/common"
+import { useLocation } from "react-router-dom"
 
-type NavBarItem = {
-  screen: string
-  title: string
-}
-
-export default function DashboardNavbar(_props: {
-  _handleLogout: () => void
-  navBarHeadings: Record<string, NavBarItem>
-  currentPath: any
-}) {
+export default function DashboardNavbar(_props: { _handleLogout: () => void }) {
   const user = useAppSelector((state) => state.user)
-
+  const currentPath = useLocation()
+  const trimmedPath = currentPath.pathname.replace(/\/$/, "")
+  const NAVBAR_HEADINGS = getNavBarHeadings(user.role)
   const [image, setImage] = useState<string>("")
   useEffect(() => {
     getFileFromFirebase(user.profile_image)
@@ -34,10 +28,10 @@ export default function DashboardNavbar(_props: {
     <div className="h-[83px] p-2 sm:p-7 flex justify-between items-center shadow-sm min-w-[1200px] max-w-[100vw]">
       <div>
         <h2 className="text-safe-text-black-tint sm:text-xl font-bold">
-          {_props.navBarHeadings[_props.currentPath]?.screen}
+          {NAVBAR_HEADINGS[trimmedPath]?.screen}
         </h2>
         <p className="text-safe-text-dark-gray text-sm sm:text-base ">
-          {_props.navBarHeadings[_props.currentPath]?.title}
+          {NAVBAR_HEADINGS[trimmedPath]?.title}
         </p>
       </div>
       <div className="flex items-center gap-3 md:gap-10">

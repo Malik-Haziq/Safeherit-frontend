@@ -8,20 +8,17 @@ export const ProtectedRoutes = (_props: { page: string }) => {
   const encryptionService = new Encryption()
   const user = useAppSelector((state) => state.user)
 
-  const active = user.active
   const role = user.role
   const paymentStatus = user.paymentStatus
   const publicKey = user.publicKey
-  const privateKey = sessionStorage.getItem("privateKey") || ""
+  const privateKey = localStorage.getItem("privateKey") || ""
 
   let redirectTo: string = ROUTE_CONSTANTS.LOGIN
 
   switch (_props.page) {
     case "price": {
       redirectTo = ROUTE_CONSTANTS.LOGIN
-      return active &&
-        role == "owner" &&
-        (!paymentStatus || paymentStatus == "Pending") ? (
+      return role == "owner" && user.isOwner && paymentStatus == "Pending" ? (
         <Outlet />
       ) : (
         <Navigate to={redirectTo} replace />
@@ -30,8 +27,7 @@ export const ProtectedRoutes = (_props: { page: string }) => {
     }
     case "register-pk": {
       redirectTo = ROUTE_CONSTANTS.LOGIN
-      return active &&
-        role != "validator" &&
+      return role != "validator" &&
         role != "super-admin" &&
         role != "admin" &&
         privateKey == "" &&
@@ -44,7 +40,7 @@ export const ProtectedRoutes = (_props: { page: string }) => {
     }
     case "registration": {
       redirectTo = ROUTE_CONSTANTS.DASHBOARD
-      return !active && (!role || role == "none") ? (
+      return !role || role == "none" ? (
         <Outlet />
       ) : (
         <Navigate to={redirectTo} replace />
@@ -56,6 +52,7 @@ export const ProtectedRoutes = (_props: { page: string }) => {
         !paymentStatus || paymentStatus == "Pending"
           ? ROUTE_CONSTANTS.PRICING
           : ROUTE_CONSTANTS.REGISTER_KEY
+
       const isValidKey = encryptionService.validateKeyPair(
         publicKey,
         privateKey,
@@ -72,12 +69,17 @@ export const ProtectedRoutes = (_props: { page: string }) => {
     }
     case "dashboard-owner": {
       redirectTo = ROUTE_CONSTANTS.DASHBOARD
-      return role == "owner" ? <Outlet /> : <Navigate to={redirectTo} replace />
+      return role == "owner" && user.isOwner ? (
+        <Outlet />
+      ) : (
+        <Navigate to={redirectTo} replace />
+      )
       break
     }
     case "dashboard-beneficiary": {
       redirectTo = ROUTE_CONSTANTS.DASHBOARD
-      return role == "owner" || role == "beneficiary" ? (
+      return (role == "owner" || role == "beneficiary") &&
+        (user.isOwner || user.isBeneficiary) ? (
         <Outlet />
       ) : (
         <Navigate to={redirectTo} replace />
@@ -86,7 +88,8 @@ export const ProtectedRoutes = (_props: { page: string }) => {
     }
     case "dashboard-admin": {
       redirectTo = ROUTE_CONSTANTS.DASHBOARD
-      return role == "admin" || role == "super-admin" ? (
+      return (role == "admin" || role == "super-admin") &&
+        (user.isAdmin || user.isSuperAdmin) ? (
         <Outlet />
       ) : (
         <Navigate to={redirectTo} replace />

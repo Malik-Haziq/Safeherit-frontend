@@ -84,7 +84,7 @@ export default function PulseView() {
   }, [confirmationDetails])
 
   const getUserDetails = () => {
-    dispatch<any>(getUser({}))
+    dispatch<any>(getUser({ HideLoader: true }))
       .unwrap()
       .catch()
       .then((res: { data: { data: { pulseCheckActive: string } } }) => {

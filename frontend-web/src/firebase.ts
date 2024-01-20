@@ -1,6 +1,11 @@
 import { initializeApp } from "firebase/app"
 import { getFirestore } from "@firebase/firestore"
-import { getAuth, GoogleAuthProvider } from "firebase/auth"
+import {
+  getAuth,
+  GoogleAuthProvider,
+  inMemoryPersistence,
+  setPersistence,
+} from "firebase/auth"
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_REACT_APP_apiKey,
@@ -14,5 +19,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
+setPersistence(auth, inMemoryPersistence)
 export const provider = new GoogleAuthProvider()
 export const firestore = getFirestore(app)

@@ -8,7 +8,7 @@ export const getData = createAsyncThunk(
   async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: "" } }
     const params = { ROUTE: GET_DATA, Body: {}, token: user.token }
-    const ownerPrivateKey = sessionStorage.getItem("privateKey") || ""
+    const ownerPrivateKey = localStorage.getItem("privateKey") || ""
 
     try {
       const response = await GET(params)
