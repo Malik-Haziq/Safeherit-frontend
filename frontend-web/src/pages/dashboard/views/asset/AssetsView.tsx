@@ -696,7 +696,12 @@ function AssetDetails(_props: {
     <div className="flex justify-between gap-24 px-5 py-3">
       <div className="flex justify-between items-center w-[268px] flex-grow">
         <div className="flex gap-4 items-center">
-          <img src={realEstate} alt="real estate icon" />
+          <img src={realEstate} alt="real estate icon" 
+          className="cursor-pointer"
+          onClick={() => {
+            _props.viewAsset(_props.assetId)
+          }}
+          />
           <p className="text-[#00192B] text-sm font-semibold">
             {_props.assetName}
           </p>
