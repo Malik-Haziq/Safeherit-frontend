@@ -17,7 +17,7 @@ interface UserState {
   photo: string
   phone: string
   access: string
-  active: boolean
+  accountStatus: string
   token: string
   displayName: string
   language: string
@@ -37,17 +37,18 @@ interface UserState {
   pulseDetail: PulseDetails
   pulseCheckNonValidationMonths: string
   pulseCheckDays: string
-  pulseCheckActive: string
+  pulseCheckActive: boolean
   pulseCheckValidationRequired: string
   publicKey: string
   paymentStatus: string
+  startupWizardCompleted: boolean
 }
 const initialState: UserState = {
   email: "",
   photo: "",
   phone: "",
   access: "",
-  active: false,
+  accountStatus: "",
   token: "",
   displayName: "",
   language: "",
@@ -83,10 +84,11 @@ const initialState: UserState = {
   },
   pulseCheckNonValidationMonths: "",
   pulseCheckDays: "",
-  pulseCheckActive: "",
+  pulseCheckActive: false,
   pulseCheckValidationRequired: "",
   publicKey: "",
   paymentStatus: "",
+  startupWizardCompleted: false,
 }
 
 export const slice = createSlice({
@@ -96,11 +98,9 @@ export const slice = createSlice({
     updateName: (state, action) => {
       state.displayName = action.payload
     },
-    updateActive: (state, action) => {
-      state.active = action.payload
-    },
     updateRole: (state, action) => {
       state.role = action.payload
+      localStorage.setItem("role", action.payload)
     },
     updateRoleCheck: (state, action) => {
       switch (action.payload.role) {
@@ -158,16 +158,34 @@ export const slice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
-      state.email = action.payload.user.email || ""
-      state.displayName = action.payload.user.displayName || ""
-      state.photo = action.payload.user.photoURL || ""
-      state.phone = action.payload.user.phoneNumber || ""
+      state.email = action.payload.data.data.email
+      state.startupWizardCompleted = action.payload.data.data.email
+      state.displayName = action.payload.data.data.displayName
+      state.isSuperAdmin = action.payload.data.data.isSuperAdmin
+      state.language = action.payload.data.data.language
+      state.isAdmin = action.payload.data.data.isAdmin
+      state.accountStatus = action.payload.data.data.accountStatus
+      state.isOwner = action.payload.data.data.isOwner
+      state.pulseCheckActive = action.payload.data.data.pulseCheckActive
+      state.isBeneficiary = action.payload.data.data.isBeneficiary
+      state.paymentStatus = action.payload.data.data.paymentStatus
+      state.isValidator = action.payload.data.data.isValidator
+      state.role = localStorage.getItem("role") || "none"
     })
     builder.addCase(loginWithGoogle.fulfilled, (state, action) => {
-      state.email = action.payload.user.email || ""
-      state.displayName = action.payload.user.displayName || ""
-      state.photo = action.payload.user.photoURL || ""
-      state.phone = action.payload.user.phoneNumber || ""
+      state.email = action.payload.data.data.email
+      state.startupWizardCompleted = action.payload.data.data.email
+      state.displayName = action.payload.data.data.displayName
+      state.isSuperAdmin = action.payload.data.data.isSuperAdmin
+      state.language = action.payload.data.data.language
+      state.isAdmin = action.payload.data.data.isAdmin
+      state.accountStatus = action.payload.data.data.accountStatus
+      state.isOwner = action.payload.data.data.isOwner
+      state.pulseCheckActive = action.payload.data.data.pulseCheckActive
+      state.isBeneficiary = action.payload.data.data.isBeneficiary
+      state.paymentStatus = action.payload.data.data.paymentStatus
+      state.isValidator = action.payload.data.data.isValidator
+      state.role = localStorage.getItem("role") || "none"
     })
     builder.addCase(logout.fulfilled, () => {
       return initialState
@@ -228,6 +246,7 @@ export const slice = createSlice({
       state.beneficiaryOf = action.payload.data.data._beneficiaryOf
       state.publicKey = action.payload.data.data?.publicKey || ""
       state.paymentStatus = action.payload.data.data?.paymentStatus || ""
+      state.role = localStorage.getItem("role") || "none"
 
       const beneficiaryOfArray: SelectOption[] = []
       const beneficiaryMapper: { [key: string]: any } = {}
@@ -275,7 +294,6 @@ export const slice = createSlice({
         action.payload.data.data.displayName || state.displayName
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image
-      state.active = true
     })
     builder.addCase(updatePK.fulfilled, (state, action) => {
       state.publicKey = action.payload.data.data.publicKey
@@ -285,7 +303,6 @@ export const slice = createSlice({
 
 export const {
   updateName,
-  updateActive,
   setToken,
   updateRole,
   updatePhone,

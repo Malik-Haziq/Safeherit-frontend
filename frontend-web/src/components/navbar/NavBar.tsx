@@ -43,7 +43,6 @@ export function NavBar() {
   }
 
   const _handleLoginPress = () => {
-    _handleLogout()
     navigate("/login")
   }
 
@@ -82,7 +81,7 @@ export function NavBar() {
           </ul>
         </div>
 
-        {!user.active ? (
+        {user.role == "none" ? (
           <button className="primary-btn " onClick={_handleLoginPress}>
             Login / Register
           </button>

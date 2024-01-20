@@ -256,8 +256,7 @@ export default function BeneficiariesView() {
   const _submitRegisterPKModal = (registerKeyModalType?: string) => {
     modalHistoryPush("Step-pk")
     registerKeyModalType == "generate-key"
-      ? setModalVisibility("Generate-PK")
-      : setModalVisibility("Load-PK")
+      && setModalVisibility("Generate-PK")
   }
   const _submitDeleteModal = () => {
     toast("deleting Beneficiary " + modalControl.name, "info")
@@ -542,9 +541,6 @@ export default function BeneficiariesView() {
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
         action={modalAction}
-        _submitModal={() => {
-          _submitRegisterPKModal()
-        }}
         _handleKeyGeneration={() => {
           _submitRegisterPKModal("generate-key")
         }}

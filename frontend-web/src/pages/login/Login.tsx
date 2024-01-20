@@ -10,7 +10,7 @@ import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import {
   ForgotPasswordModal,
-  toast,
+  appToast,
   GoogleAuthButton,
   VerificationCode,
 } from "@/components"
@@ -20,9 +20,7 @@ import {
   resetMapper,
   resetValidatorOf,
   setCredentials,
-  updateActive,
   updateRole,
-  updateRoleCheck,
   updateRoleUser,
 } from "@/redux/reducers/UserSlice"
 import { SelectOption } from "@/types"
@@ -34,15 +32,20 @@ import {
   verifyUserEnrolled,
   verifyUserMFA,
 } from "@/common"
-import { MultiFactorResolver, getAdditionalUserInfo } from "@firebase/auth"
+import { MultiFactorResolver } from "@firebase/auth"
 import { auth } from "@/firebase"
-import { UserCredential } from "firebase/auth"
 
 export function Login() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-
+  const USER_ROLES = [
+    "owner",
+    "super-admin",
+    "admin",
+    "beneficiary",
+    "validator",
+  ]
   const queryParams = new URLSearchParams(location.search)
 
   const recaptcha = useRecaptcha("authenticate")
@@ -75,13 +78,13 @@ export function Login() {
         const oobCode = queryParams.get("oobCode") || ""
         const apiKey = queryParams.get("apiKey") || ""
         if (mode == "verifyEmail") {
-          toast("Verifying Email", "info")
+          appToast("Verifying Email", "info")
           const response = await verifyEmail(oobCode, apiKey, "setAccountInfo")
           if (response) {
-            toast("Email Verified", "success")
+            appToast("Email Verified", "success")
           }
           if (!response) {
-            toast("Unable to verify your email", "error")
+            appToast("Unable to verify your email", "error")
           }
         } else if (mode == "resetPassword") {
           let newPassword: string | null = ""
@@ -94,10 +97,10 @@ export function Login() {
               newPassword,
             )
             if (response) {
-              toast("Password changed", "success")
+              appToast("Password changed", "success")
             }
             if (!response) {
-              toast("Some error occured", "error")
+              appToast("Some error occured", "error")
             }
           }
 
@@ -138,30 +141,30 @@ export function Login() {
                 getUserDetails()
               })
               .catch(() => {
-                toast(
+                appToast(
                   "Unable to obtain token from server, Please login again.",
                   "error",
                 )
               })
           } else {
-            toast(
+            appToast(
               "Unable to obtain token from server, Please login again.",
               "error",
             )
           }
         } else {
-          toast("Something went wrong while verifing code.", "error")
+          appToast("Something went wrong while verifing code.", "error")
         }
       } catch (err) {
         const errorWithCode = err as { code?: string }
         if (errorWithCode && errorWithCode.code) {
-          toast(errorWithCode.code, "error")
+          appToast(errorWithCode.code, "error")
         } else {
-          toast("Something went wrong while verifing code.", "error")
+          appToast("Something went wrong while verifing code.", "error")
         }
       }
     } else {
-      toast("Something went wrong. Please try again.", "error")
+      appToast("Something went wrong. Please try again.", "error")
     }
     setVerificationId("")
     setResolver(null)
@@ -170,7 +173,6 @@ export function Login() {
   const closeModal = useCallback(() => {
     setModalVisibility("none")
     setResetEmail("")
-    sessionStorage.clear()
     localStorage.clear()
   }, [])
 
@@ -208,7 +210,6 @@ export function Login() {
             !res.data.data.isSuperAdmin
           ) {
             setModalVisibility("none")
-            dispatch<any>(updateActive(true))
             dispatch<any>(updateRole("owner"))
             if (res.data.data.paymentStatus != "Pending") {
               navigate("/register")
@@ -220,13 +221,10 @@ export function Login() {
           }
         },
       )
-      .finally(() => {
-        stopLoader()
-      })
   }
 
   const _handleSubmit = () => {
-    toast("logging in", "info")
+    appToast("logging in", "info")
     if (formControl.email && formControl.password) {
       setLogingin(true)
       dispatch<any>(
@@ -238,10 +236,10 @@ export function Login() {
           if (verifiedEmail) {
             getUserDetails()
           } else {
-            toast("Please verify your email", "error")
+            appToast("Please verify your email", "error")
             const emailSent = await sendEmailVerificationEmail()
             if (emailSent) {
-              toast("Verification Email Sent", "info")
+              appToast("Verification Email Sent", "info")
             }
           }
         })
@@ -264,13 +262,12 @@ export function Login() {
         setResolver(resolver)
       }
     } else {
-      toast(response?.code, "error")
+      appToast(response?.code, "error")
     }
     stopLoader()
   }
 
   const _handleMFASubmit = () => {
-    startLoader()
     const finalCode = code.reduce((previousValue, currentValue) => {
       return previousValue.concat(currentValue)
     })
@@ -283,34 +280,19 @@ export function Login() {
   }
 
   const _loginWithGoogle = () => {
-    startLoader()
     dispatch<any>(loginWithGoogle({}))
       .unwrap()
-      .then(async (res: UserCredential) => {
-        const isNewUser = getAdditionalUserInfo(res)
-
-        if (isNewUser && isNewUser.isNewUser) {
-          dispatch<any>(updateActive(true))
-          dispatch<any>(updateRole("owner"))
-          dispatch<any>(updateRoleCheck({ role: "owner", value: true }))
-          navigate("/pricing")
-        } else {
-          getUserDetails()
-        }
+      .then(() => {
+        getUserDetails()
       })
       .catch((err: any) => {
         _handleMFA(err)
-      })
-      .finally(() => {
-        stopLoader()
       })
   }
 
   const _handleUserRolesSubmit = (selectedRole: string) => {
     if (
-      selectedRole == "owner" ||
-      selectedRole == "super-admin" ||
-      selectedRole == "admin" ||
+      USER_ROLES.includes(selectedRole) ||
       (selectedRole == "beneficiary" && selectedBeneficiary) ||
       (selectedRole == "validator" && selectedValidator)
     ) {
@@ -324,7 +306,6 @@ export function Login() {
         )
       }
       setModalVisibility("none")
-      dispatch<any>(updateActive(true))
       dispatch<any>(updateRole(selectedRole))
       dispatch<any>(resetMapper())
       dispatch<any>(resetValidatorOf())
@@ -344,7 +325,7 @@ export function Login() {
         .unwrap()
         .catch()
         .then(() => {
-          toast("Email Sent", "info")
+          appToast("Email Sent", "info")
         })
         .finally(() => {
           closeModal()

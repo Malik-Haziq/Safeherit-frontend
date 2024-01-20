@@ -7,7 +7,6 @@ import edit from "@images/edit.svg"
 import deleteIcon from "@images/delete.svg"
 import arrowDown from "@images/arrow-down.svg"
 import AddAssetImg from "@images/beneficiaryScreen.svg"
-import user from "@images/UserIcon.png"
 import addIcon from "@images/add-icon.svg"
 
 import styles from "../../Dashboard.module.css"
@@ -176,12 +175,12 @@ export default function AssetsView() {
   ]
 
   const options = [
-    { button: "All", action: ()=>{} },
-    { button: "Bank", action: ()=>{} },
-    { button: "Stock", action: ()=>{} },
-    { button: "Real Estate", action: ()=>{} },
-    { button: "Life Insurance", action: ()=>{} },
-    { button: "Cryptocurrency", action: ()=>{} },
+    { button: "All", action: () => {} },
+    { button: "Bank", action: () => {} },
+    { button: "Stock", action: () => {} },
+    { button: "Real Estate", action: () => {} },
+    { button: "Life Insurance", action: () => {} },
+    { button: "Cryptocurrency", action: () => {} },
   ]
 
   const AssetDetailsCardArr = [
@@ -319,6 +318,7 @@ export default function AssetsView() {
   }
   const _submitSuccessModal = () => {
     setModalVisibility("none")
+    navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`)
   }
   const _submitDeleteModal = () => {
     dispatch<any>(deleteAsset({ id: selectedAsset }))
@@ -601,7 +601,8 @@ function Assets(_props: {
           <section className="rounded-xl h-[650px] shadow-lg mb-5 overflow-auto scrollbar w-[1080px]">
             <div className="bg-[#F2F2F2] flex justify-between gap-24 px-5 py-3 rounded-t-lg">
               <div className="flex flex-grow justify-between">
-                <p className="font-medium text-sm uppercase">Asset</p>
+                <p className="font-medium text-sm uppercase">Asset Name</p>
+                <p className="font-medium text-sm uppercase">Asset Type</p>
                 <p className="font-medium text-sm uppercase">Value</p>
               </div>
               <div className="flex flex-grow justify-between">
@@ -616,12 +617,18 @@ function Assets(_props: {
               </div>
             </div>
             {_props.assetDetailsArr.map((asset: Asset, index) => {
+              const assetValue = Intl.NumberFormat("en-US").format(
+                asset.data?.["Acquisition cost"] ||
+                  asset.data?.["Balance"] ||
+                  0,
+              )
               return (
                 <AssetDetails
                   key={index}
                   assetId={asset?.id || ""}
-                  assetName={asset?.category || ""}
-                  assetValue={asset?.data?.value || "No value found"}
+                  assetType={asset?.category || ""}
+                  assetName={asset?.data?.["Asset Name"] || ""}
+                  assetValue={`${asset?.data?.Currency || "USD"} ${assetValue}`}
                   beneficiaries={asset?.beneficiaries}
                   destroyAsset={_props.destroyAsset}
                   editAsset={_props.editAsset}
@@ -685,6 +692,7 @@ function AssetCategory(_props: {
 function AssetDetails(_props: {
   key: number
   assetId: string
+  assetType: string
   assetName: string
   assetValue: string
   beneficiaries: Beneficiary[]
@@ -696,9 +704,13 @@ function AssetDetails(_props: {
 }) {
   return (
     <div className="flex justify-between gap-24 px-5 py-3">
-      <div className="flex justify-between items-center w-[268px] flex-grow">
+      <div className="flex justify-between items-center w-[50px]   flex-grow">
         <div className="flex gap-4 items-center">
-          <img src={assetImages[_props.assetName]} alt="asset image" className="w-10 h-10"/>
+          <img
+            src={assetImages[_props.assetName]}
+            alt="asset image"
+            className="w-10 h-10"
+          />
           <p
             className="text-[#00192B] text-sm font-semibold cursor-pointer"
             onClick={() => {
@@ -708,8 +720,23 @@ function AssetDetails(_props: {
             {_props.assetName}
           </p>
         </div>
+      </div>
+      <div className="flex justify-between items-center w-[268px] flex-grow">
+        <div className="flex gap-4 items-center">
+          <img
+            src={realEstate}
+            alt="real estate icon"
+            className="cursor-pointer"
+            onClick={() => {
+              _props.viewAsset(_props.assetId)
+            }}
+          />
+          <p className="text-[#00192B] text-sm font-semibold">
+            {_props.assetType}
+          </p>
+        </div>
         <p className="text-[#00192B] text-sm font-semibold">
-          <span>{_props.assetValue == "No value found" && ""}</span>
+          <span>{_props.assetValue}</span>
         </p>
       </div>
       <div className="flex justify-between items-center flex-grow w-[278px]">
