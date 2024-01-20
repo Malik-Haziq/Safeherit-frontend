@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { ProtectedRoutes } from "./common"
 import {
   BrowserRouter,
@@ -11,39 +11,41 @@ import { Login, SignUp, Home, About, Contact } from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar, Spinner } from "./components"
 import { lazy } from "react"
-import { CustomToast } from "./components/customToast"
-import { useAppSelector } from "./redux/hooks"
+import { CustomAppToast, CustomToast } from "./components/customToast"
+import { useAppDispatch, useAppSelector } from "./redux/hooks"
+import { getUser } from "./redux/actions"
+import Dashboard from "./pages/dashboard/Dashboard"
+import DashboardControl from "./pages/dashboard/views/dashboardControl/DashboardControl"
+import HelpView from "./pages/dashboard/views/help/HelpView"
+import BeneficiariesView from "./pages/dashboard/views/beneficiary/BeneficiariesView"
+import ValidatorsView from "./pages/dashboard/views/validator/ValidatorsView"
+import PulseView from "./pages/dashboard/views/pulse/PulseView"
+import AccountView from "./pages/dashboard/views/account/AccountView"
+import AssetsView from "./pages/dashboard/views/asset/AssetsView"
+import SettingView from "./pages/dashboard/views/setting/SettingView"
 
 const Pricing = lazy(() => import("./pages/pricing/Pricing"))
 const RegisterKey = lazy(() => import("./pages/register-key/RegisterKey"))
-const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"))
-const AssetsView = lazy(
-  () => import("./pages/dashboard/views/asset/AssetsView"),
-)
-const DashboardControl = lazy(
-  () => import("./pages/dashboard/views/dashboardControl/DashboardControl"),
-)
-const BeneficiariesView = lazy(
-  () => import("./pages/dashboard/views/beneficiary/BeneficiariesView"),
-)
-const PulseView = lazy(() => import("./pages/dashboard/views/pulse/PulseView"))
-const ValidatorsView = lazy(
-  () => import("./pages/dashboard/views/validator/ValidatorsView"),
-)
-const AccountView = lazy(
-  () => import("./pages/dashboard/views/account/AccountView"),
-)
-const HelpView = lazy(() => import("./pages/dashboard/views/help/HelpView"))
-const SettingView = lazy(
-  () => import("./pages/dashboard/views/setting/SettingView"),
-)
 
 function App() {
   const loader = useAppSelector((state) => state.loader)
-  return (
-    // TODO: add suspense with loading fallback to handle loading time delays.
+  const user = useAppSelector((state) => state.user)
+  const dispatch = useAppDispatch()
+  const [fetchingData, setFetchingData] = useState(true)
+
+  useEffect(() => {
+    dispatch<any>(getUser({ MuteToast: true }))
+      .unwrap()
+      .finally(() => {
+        setFetchingData(false)
+      })
+  }, [])
+
+  return fetchingData ? (
+    <Spinner withOverlay={true} />
+  ) : (
     <>
-      <CustomToast />
+      {user.role != "none" ? <CustomToast /> : <CustomAppToast />}
       {loader.loaderVisibility && <Spinner withOverlay={true} />}
       <AppRoutes />
     </>

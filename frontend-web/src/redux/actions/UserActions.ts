@@ -38,7 +38,7 @@ export const login = createAsyncThunk(
       const token = await response.user.getIdToken()
       dispatch(setToken(token))
       const formData = jsonToFormData({ idToken: token, csrfToken: "" })
-      const params = { ROUTE: LOGIN, Body: formData, token: "" }
+      const params = { ROUTE: LOGIN, Body: formData, toastType: "appToast" }
       const _response = await POST(params)
       return _response
     } catch (error) {
@@ -59,7 +59,10 @@ export const loginWithGoogle = createAsyncThunk(
       const response = await signInWithPopup(auth, googleAuthProvider)
       const token = await response.user.getIdToken()
       dispatch(setToken(token))
-      return response
+      const formData = jsonToFormData({ idToken: token, csrfToken: "" })
+      const params = { ROUTE: LOGIN, Body: formData, toastType: "appToast" }
+      const _response = await POST(params)
+      return _response
     } catch (error) {
       return rejectWithValue(error)
     } finally {
@@ -76,7 +79,7 @@ export const signup = createAsyncThunk(
   ) => {
     dispatch(setLoaderVisibility(true))
     const formData = jsonToFormData(Data)
-    const params = { ROUTE: SIGN_UP, Body: formData, token: "" }
+    const params = { ROUTE: SIGN_UP, Body: formData, toastType: "appToast" }
     try {
       const response = await POST(params)
       return response
@@ -93,9 +96,8 @@ export const logout = createAsyncThunk(
   async (Data: object, { dispatch, rejectWithValue }) => {
     try {
       dispatch(setLoaderVisibility(true))
-      const params = { ROUTE: LOGOUT, Body: {}, token: "" }
+      const params = { ROUTE: LOGOUT, Body: {}, toastType: "appToast" }
       const response = await POST(params)
-      sessionStorage.clear()
       localStorage.clear()
       return response
     } catch (error) {
@@ -121,24 +123,28 @@ export const resetPassword = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
   "getUser",
-  async (Data: object, { getState, rejectWithValue }) => {
-    const { user } = getState() as { user: { token: any } }
-    const params = { ROUTE: GET_USER, Body: {}, token: user.token }
+  async (
+    Data: { MuteToast?: boolean; HideLoader?: boolean },
+    { dispatch, rejectWithValue },
+  ) => {
+    const params = { ROUTE: GET_USER, Body: {}, MuteToast: Data?.MuteToast }
+    !Data.HideLoader && dispatch(setLoaderVisibility(true))
     try {
       const response = await GET(params)
       return response
     } catch (error) {
       return rejectWithValue(error)
+    } finally {
+      dispatch(setLoaderVisibility(false))
     }
   },
 )
 
 export const updateUser = createAsyncThunk(
   "updateUser",
-  async (Data: object, { getState, rejectWithValue }) => {
-    const { user } = getState() as { user: { token: any } }
+  async (Data: object, { rejectWithValue }) => {
     const formData = jsonToFormData(Data)
-    const params = { ROUTE: GET_USER, Body: formData, token: user.token }
+    const params = { ROUTE: GET_USER, Body: formData }
     try {
       const response = await PUT(params)
       return response
@@ -150,9 +156,8 @@ export const updateUser = createAsyncThunk(
 
 export const deleteUser = createAsyncThunk(
   "deleteUser",
-  async (Data: object, { getState, rejectWithValue }) => {
-    const { user } = getState() as { user: { token: any } }
-    const params = { ROUTE: GET_USER, Body: {}, token: user.token }
+  async (Data: object, { rejectWithValue }) => {
+    const params = { ROUTE: GET_USER, Body: {} }
     try {
       const response = await DELETE(params)
       return response
@@ -164,10 +169,9 @@ export const deleteUser = createAsyncThunk(
 
 export const createUser = createAsyncThunk(
   "createUser",
-  async (Data: object, { getState, rejectWithValue }) => {
-    const { user } = getState() as { user: { token: any } }
+  async (Data: object, { rejectWithValue }) => {
     const formData = jsonToFormData(Data)
-    const params = { ROUTE: CREATE_USER, Body: formData, token: user.token }
+    const params = { ROUTE: CREATE_USER, Body: formData }
     try {
       const response = await POST(params)
       return response
@@ -179,10 +183,9 @@ export const createUser = createAsyncThunk(
 
 export const updatePulse = createAsyncThunk(
   "updatePulse",
-  async (Data: object, { getState, rejectWithValue }) => {
-    const { user } = getState() as { user: { token: any } }
+  async (Data: object, { rejectWithValue }) => {
     const formData = jsonToFormData(Data)
-    const params = { ROUTE: PULSE_CHECK, Body: formData, token: user.token }
+    const params = { ROUTE: PULSE_CHECK, Body: formData }
     try {
       const response = await PUT(params)
       return response
@@ -194,10 +197,9 @@ export const updatePulse = createAsyncThunk(
 
 export const updatePK = createAsyncThunk(
   "updatePK",
-  async (Data: object, { getState, rejectWithValue }) => {
-    const { user } = getState() as { user: { token: any } }
+  async (Data: object, { rejectWithValue }) => {
     const formData = jsonToFormData(Data)
-    const params = { ROUTE: PUBLIC_KEY, Body: formData, token: user.token }
+    const params = { ROUTE: PUBLIC_KEY, Body: formData }
     try {
       const response = await PUT(params)
       return response
@@ -209,13 +211,11 @@ export const updatePK = createAsyncThunk(
 
 export const createPayment = createAsyncThunk(
   "createPayment",
-  async (Data: { subscriptionType: string }, { getState, rejectWithValue }) => {
-    const { user } = getState() as { user: { token: any } }
+  async (Data: { subscriptionType: string }, { rejectWithValue }) => {
     const formData = jsonToFormData(Data)
     const params = {
       ROUTE: CREATE_PAYMENT_SESSION,
       Body: formData,
-      token: user.token,
     }
     try {
       const response = await POST(params)
@@ -228,12 +228,10 @@ export const createPayment = createAsyncThunk(
 
 export const updatePayment = createAsyncThunk(
   "updatePayment",
-  async (Data: object, { getState, rejectWithValue }) => {
-    const { user } = getState() as { user: { token: any } }
+  async (Data: object, { rejectWithValue }) => {
     const params = {
       ROUTE: CREATE_PAYMENT_SESSION_PORTAL,
       Body: {},
-      token: user.token,
     }
     try {
       const response = await POST(params)

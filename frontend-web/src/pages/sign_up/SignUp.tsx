@@ -7,14 +7,10 @@ import passwordVisibilityIcon from "@images/PasswordVisibilityIcon.png"
 import signupImg from "@images/signup-pic.png"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { loginWithGoogle, signup } from "@redux/actions"
+import { getUser, loginWithGoogle, signup } from "@redux/actions"
 import { useAppDispatch } from "@redux/hooks"
-import { GoogleAuthButton, toast } from "@/components"
-import {
-  updateActive,
-  updateRole,
-  updateRoleCheck,
-} from "@/redux/reducers/UserSlice"
+import { GoogleAuthButton, appToast } from "@/components"
+import { updateRole, updateRoleCheck } from "@/redux/reducers/UserSlice"
 import { isStrongPassword } from "@/common"
 
 export function SignUp() {
@@ -53,7 +49,7 @@ export function SignUp() {
       agreeTermAndCondition
     ) {
       if (formControl.password !== formControl.confirm_password) {
-        toast("password must match", "error")
+        appToast("password must match", "error")
       } else if (!isStrongPassword(formControl.password)) {
         setIsValidPassword(true)
       } else {
@@ -67,11 +63,11 @@ export function SignUp() {
         )
           .unwrap()
           .then((res: { data: { message: string } }) => {
-            toast(res.data.message, "success")
+            appToast(res.data.message, "success")
             navigate("/login")
           })
           .catch((err: { code: string }) => {
-            toast(err?.code, "error")
+            appToast(err?.code, "error")
           })
       }
     }
@@ -81,13 +77,16 @@ export function SignUp() {
     dispatch<any>(loginWithGoogle({}))
       .unwrap()
       .then(() => {
-        dispatch<any>(updateActive(true))
         dispatch<any>(updateRole("owner"))
         dispatch<any>(updateRoleCheck({ role: "owner", value: true }))
-        navigate("/pricing")
+        dispatch<any>(getUser({}))
+          .unwrap()
+          .finally(() => {
+            navigate("/pricing")
+          })
       })
       .catch((err: { code: string }) => {
-        toast(err?.code, "error")
+        appToast(err?.code, "error")
       })
   }
 
