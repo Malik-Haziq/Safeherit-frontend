@@ -3,7 +3,6 @@ import facebook from "@images/facebook.svg"
 import instagram from "@images/insta.svg"
 import twitter from "@images/twitter.svg"
 import uploadVideoIcon from "@images/upload-video.svg"
-import video from "@images/register_page_video.png"
 import profilePic from "@images/profile-pic.svg"
 import registerBeneficiaryImg from "@images/register-beneficiary.svg"
 import stepOne from "@images/step_1_of_4.svg"
@@ -441,17 +440,20 @@ export function StepTwoModal(_props: {
                 },
               },
               {
-                type: 'customView',
+                type: "customView",
                 props: {
-                  customViewContainer: '',
+                  customViewContainer: "",
                   CustomView: () => {
                     return (
-                      <div className="flex items-center justify-center bg-[#206392] w-7 h-7 rounded-md cursor-default" title="We request social media links for your beneficiaries and validators as a secondary means of contact. This information will only be used if we're unable to reach them through the primary contact details you provided.">
+                      <div
+                        className="flex items-center justify-center bg-[#206392] w-7 h-7 rounded-md cursor-default"
+                        title="We request social media links for your beneficiaries and validators as a secondary means of contact. This information will only be used if we're unable to reach them through the primary contact details you provided."
+                      >
                         <span className="text-white font-medium">?</span>
                       </div>
                     )
-                  }
-                }
+                  },
+                },
               },
             ],
           },
@@ -664,10 +666,9 @@ export function StepThreeModal(_props: {
           props: {
             textAreaContainerStyles: " ",
             name: "personalized_message",
-            placeholder:
-             `Dear ${_props.modalControl.name} \n\nIf you receive this message it probably means I am gone. If so go to my closet and you will find a piece of paper in the pocket or my blue leather jacket. The paper contains the codes you will need to login to this platform (SafeHerit) and have access to the list of my assets.`,
+            placeholder: `Dear ${_props.modalControl.name} \n\nIf you receive this message it probably means I am gone. If so go to my closet and you will find a piece of paper in the pocket or my blue leather jacket. The paper contains the codes you will need to login to this platform (SafeHerit) and have access to the list of my assets.`,
             _handleChange: _props._handleChange,
-            value: _props.modalControl.personalized_message, 
+            value: _props.modalControl.personalized_message,
             inputStyles:
               "bg-[#F5FAFD] text-[#6F767B] pl-5 py-3 font-base rounded-3xl mx-auto block w-[514px] h-[163px] resize-none focus:outline-none scrollbar leading-tight mb-10",
           },
@@ -733,91 +734,6 @@ export function StepThreeModal(_props: {
             onclick: _props._submitModal,
             buttonStyle: "",
             buttonContainer: "mx-48 mb-10",
-          },
-        },
-      ]}
-    />
-  )
-}
-
-export function RegisterPKModal(_props: {
-  openModal: boolean
-  closeModal: any
-  closeModalOnOverlayClick: boolean
-  closeIconVisibility: boolean
-  action: string
-  _handleKeyGeneration: React.MouseEventHandler<HTMLButtonElement>
-  arrayLength: any
-  showPreviousModal: any
-}) {
-  return (
-    <Modal
-      openModal={_props.openModal}
-      closeModal={_props.closeModal}
-      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={
-        _props.action == "create"
-          ? "Register Beneficiaries"
-          : "Edit Beneficiary Details"
-      }
-      closeIconVisibility={_props.closeIconVisibility}
-      arrayLength={_props.arrayLength}
-      showPreviousModal={_props.showPreviousModal}
-      elements={[
-        {
-          type: "iconView",
-          props: {
-            image: _props.action == "create" ? stepOne : stepFour,
-            imageStyles: "mx-auto",
-            imageContainerStyles: "my-7",
-          },
-        },
-        {
-          type: "textView",
-          props: {
-            text: "Register a Public Key for this Beneficiary",
-            textStyles: "text-[#00192B] font-semibold pl-7 mb-3 text-lg",
-          },
-        },
-        {
-          type: "textView",
-          props: {
-            text: "If you already have a Public/Private key pair, click on “I have a Public Key”. If not click on “Generate a Key pair” and we will generate one for you. ",
-            textStyles: "text-[#858992] px-7 mb-9",
-          },
-        },
-        {
-          type: "customView",
-          props: {
-            customViewContainer: "mx-auto",
-            CustomView: () => {
-              return (
-                <div className="flex items-center justify-center px-7 mb-11">
-                  <button
-                    onClick={_props._handleKeyGeneration}
-                    className="primary-btn bg-[#D7D7D7] rounded-2xl text-[#04477B] px-8 py-4 font-bold"
-                  >
-                    Generate a Key pair
-                  </button>
-                </div>
-              )
-            },
-          },
-        },
-        {
-          type: "textView",
-          props: {
-            text: "Why do you need to set a private key?  ",
-            textStyles: "text-[#00192B] px-7 mb-3 font-medium",
-          },
-        },
-        {
-          type: "iconView",
-          props: {
-            image: video,
-            onclick: () => {},
-            imageStyles: "mx-auto",
-            imageContainerStyles: "mb-6",
           },
         },
       ]}

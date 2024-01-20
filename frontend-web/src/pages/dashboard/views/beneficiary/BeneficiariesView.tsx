@@ -21,7 +21,6 @@ import {
   StepOneModal,
   StepTwoModal,
   StepThreeModal,
-  RegisterPKModal,
 } from "./modal_beneficiary"
 import {
   getAllBeneficiary,
@@ -40,10 +39,7 @@ import {
   useArray,
   downloadPEM,
 } from "@/common"
-import {
-  PrivateKeyModal,
-  GeneratePrivateKey,
-} from "@/pages/register-key/modal_register_key"
+import { GeneratePrivateKey } from "@/pages/register-key/modal_register_key"
 import Encryption from "@/common/encryption/encryption"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 
@@ -86,8 +82,6 @@ export default function BeneficiariesView() {
   const [videoUpload, setVideoUpload] = useState("")
   const [modalAction, setModalAction] = useState("")
   const [modalVisibility, setModalVisibility] = useState("none")
-  const [filePresent, setFilePresent] = useState(false)
-  const [fileName, setFileName] = useState("")
   const [
     modalHistory,
     modalHistoryLength,
@@ -115,9 +109,6 @@ export default function BeneficiariesView() {
       .catch(() => {
         // TODO: show fallback page
       })
-    // .finally(() => {
-    //   modalHistoryPush("step-pk")
-    // })
   }, [])
 
   useEffect(() => {
@@ -131,8 +122,6 @@ export default function BeneficiariesView() {
     setImageUpload("")
     setVideoUpload("")
     modalHistoryPopAll()
-    setFilePresent(false)
-    setFileName("")
   }, [])
 
   const addBeneficiary = useCallback(() => {
@@ -168,17 +157,26 @@ export default function BeneficiariesView() {
     }
   }
   const _submitStepTwoModal = () => {
-    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i;
-    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i;
-    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i;
+    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i
+    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i
+    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i
 
-    if(modalControl.facebook_link && !(facebookRegex.test(modalControl.facebook_link))){
-      toast('Please enter a valid facebook link', 'error')
-    } else if(modalControl.instagram_username && !(instagramRegex.test(modalControl.instagram_username))){
-      toast('Please enter a valid instagram link', 'error')
-    } else if(modalControl.twitter_username && !(twitterRegex.test(modalControl.twitter_username))){
-      toast('Please enter a valid twitter link', 'error')
-    } else{
+    if (
+      modalControl.facebook_link &&
+      !facebookRegex.test(modalControl.facebook_link)
+    ) {
+      toast("Please enter a valid facebook link", "error")
+    } else if (
+      modalControl.instagram_username &&
+      !instagramRegex.test(modalControl.instagram_username)
+    ) {
+      toast("Please enter a valid instagram link", "error")
+    } else if (
+      modalControl.twitter_username &&
+      !twitterRegex.test(modalControl.twitter_username)
+    ) {
+      toast("Please enter a valid twitter link", "error")
+    } else {
       modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
     }
@@ -188,64 +186,64 @@ export default function BeneficiariesView() {
     if (!modalControl.personalized_message) {
       modalControl.personalized_message = `Dear ${modalControl.name} If you receive this message it probably means I am gone. If so go to my closet and you will find a piece of paper in the pocket or my blue leather jacket. The paper contains the codes you will need to login to this platform (SafeHerit) and have access to the list of my assets.`
     }
-      if (modalAction == "edit") {
-        startLoader()
-        toast("Updating beneficiary", "info")
-        dispatch<any>(
-          updateBeneficiary({
-            ...modalControl,
-            public_key: user.publicKey,
-          }),
-        )
-          .unwrap()
-          .then(() => {
-            dispatch<any>(getAllBeneficiary({}))
-              .unwrap()
-              .then((res: any) => {
-                modalHistoryPush("Step-3")
-                setModalVisibility("Step-success")
-                updateBeneficiaryArrayCount(res)
-              })
-              .catch(() => {
-                // TODO: show fallback page
-              })
-          })
-          .catch((err: any) => {
-            console.log(err)
-            // TODO: show fallback page
-          })
-          .finally(() => {
-            stopLoader()
-          })
-      } else if (modalAction == "create") {
-        startLoader()
-        toast("creating beneficiary", "info")
-        dispatch<any>(
-          createBeneficiary({
-            ...modalControl,
-            public_key: modalEncryptionKeyControl.publicKey,
-          }),
-        )
-          .unwrap()
-          .then(() => {
-            dispatch<any>(getAllBeneficiary({}))
-              .unwrap()
-              .then((res: any) => {
-                modalHistoryPush("Step-3")
-                setModalVisibility("Step-success")
-                updateBeneficiaryArrayCount(res)
-              })
-              .catch(() => {
-                // TODO: show fallback page
-              })
-          })
-          .catch((err: any) => {
-            console.log(err)
-            // TODO: show fallback page
-          })
-          .finally(() => {
-            stopLoader()
-          })
+    if (modalAction == "edit") {
+      startLoader()
+      toast("Updating beneficiary", "info")
+      dispatch<any>(
+        updateBeneficiary({
+          ...modalControl,
+          public_key: user.publicKey,
+        }),
+      )
+        .unwrap()
+        .then(() => {
+          dispatch<any>(getAllBeneficiary({}))
+            .unwrap()
+            .then((res: any) => {
+              modalHistoryPush("Step-3")
+              setModalVisibility("Step-success")
+              updateBeneficiaryArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
+        })
+        .catch((err: any) => {
+          console.log(err)
+          // TODO: show fallback page
+        })
+        .finally(() => {
+          stopLoader()
+        })
+    } else if (modalAction == "create") {
+      startLoader()
+      toast("creating beneficiary", "info")
+      dispatch<any>(
+        createBeneficiary({
+          ...modalControl,
+          public_key: modalEncryptionKeyControl.publicKey,
+        }),
+      )
+        .unwrap()
+        .then(() => {
+          dispatch<any>(getAllBeneficiary({}))
+            .unwrap()
+            .then((res: any) => {
+              modalHistoryPush("Step-3")
+              setModalVisibility("Step-success")
+              updateBeneficiaryArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
+        })
+        .catch((err: any) => {
+          console.log(err)
+          // TODO: show fallback page
+        })
+        .finally(() => {
+          stopLoader()
+        })
     }
   }
 
@@ -253,11 +251,6 @@ export default function BeneficiariesView() {
     closeModal()
   }
 
-  const _submitRegisterPKModal = (registerKeyModalType?: string) => {
-    modalHistoryPush("Step-pk")
-    registerKeyModalType == "generate-key"
-      && setModalVisibility("Generate-PK")
-  }
   const _submitDeleteModal = () => {
     toast("deleting Beneficiary " + modalControl.name, "info")
     dispatch<any>(deleteBeneficiary({ id: modalControl.id }))
@@ -303,7 +296,7 @@ export default function BeneficiariesView() {
     setImageUpload("")
     setVideoUpload("")
     modalHistoryPush("Step-0")
-    setModalVisibility("Step-pk")
+    setModalVisibility("Generate-PK")
   }
   const editBeneficiary = (id: string) => {
     dispatch<any>(findBeneficiary({ id: id }))
@@ -377,18 +370,17 @@ export default function BeneficiariesView() {
 
   const _handleRegisterPK = () => {
     if (
-      modalVisibility === "Load-PK" ||
-      (modalVisibility === "Generate-PK" &&
-        encryptionService.validateKeyPair(
-          modalEncryptionKeyControl.publicKey,
-          modalEncryptionKeyControl.privateKey,
-        ))
+      modalVisibility === "Generate-PK" &&
+      encryptionService.validateKeyPair(
+        modalEncryptionKeyControl.publicKey,
+        modalEncryptionKeyControl.privateKey,
+      )
     ) {
       if (modalAction == "create") {
-        modalHistoryPush("Step-pk")
+        modalHistoryPush("Generate-PK")
         setModalVisibility("Step-1")
       } else {
-        modalHistoryPush("Step-pk")
+        modalHistoryPush("Generate-PK")
         setModalVisibility("Step-success")
       }
     } else {
@@ -444,20 +436,6 @@ export default function BeneficiariesView() {
 
   return (
     <>
-      <PrivateKeyModal
-        openModal={modalVisibility == "Load-PK"}
-        closeModal={closeModal}
-        closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
-        _handleChange={_handleEncryptionKeyChange}
-        _handleRegisterPK={_handleRegisterPK}
-        filePresent={filePresent}
-        setFilePresent={setFilePresent}
-        fileName={fileName}
-        setFileName={setFileName}
-        keyType="Public"
-      />
-
       <GeneratePrivateKey
         openModal={modalVisibility == "Generate-PK"}
         closeModal={closeModal}
@@ -534,18 +512,6 @@ export default function BeneficiariesView() {
         registerAnotherBeneficiary={registerAnotherBeneficiary}
         gotoValidators={gotoValidators}
         _submitModal={_submitSuccessModal}
-      />
-      <RegisterPKModal
-        openModal={modalVisibility == "Step-pk"}
-        closeModal={closeModal}
-        closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
-        action={modalAction}
-        _handleKeyGeneration={() => {
-          _submitRegisterPKModal("generate-key")
-        }}
-        arrayLength={modalHistoryLength}
-        showPreviousModal={showPreviousModal}
       />
       <ConfirmationModal
         openModal={modalVisibility == "Step-delete"}
