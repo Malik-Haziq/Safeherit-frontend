@@ -228,7 +228,11 @@ export function Login() {
     if (formControl.email && formControl.password) {
       setLogingin(true)
       dispatch<any>(
-        login({ email: formControl.email, password: formControl.password }),
+        login({
+          email: formControl.email,
+          password: formControl.password,
+          rememberMe: rememberMe,
+        }),
       )
         .unwrap()
         .then(async () => {

@@ -28,16 +28,20 @@ import { setLoaderVisibility } from "../reducers/LoaderSlice"
 export const login = createAsyncThunk(
   "login",
   async (
-    Data: { email: string; password: string },
+    Data: { email: string; password: string; rememberMe: boolean },
     { dispatch, rejectWithValue },
   ) => {
-    const { email, password } = Data
+    const { email, password, rememberMe } = Data
     try {
       dispatch(setLoaderVisibility(true))
       const response = await signInWithEmailAndPassword(auth, email, password)
       const token = await response.user.getIdToken()
       dispatch(setToken(token))
-      const formData = jsonToFormData({ idToken: token, csrfToken: "" })
+      const formData = jsonToFormData({
+        idToken: token,
+        csrfToken: "",
+        rememberMe: rememberMe,
+      })
       const params = { ROUTE: LOGIN, Body: formData, toastType: "appToast" }
       const _response = await POST(params)
       return _response
