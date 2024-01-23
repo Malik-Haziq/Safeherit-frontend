@@ -12,8 +12,11 @@ import {
   PhoneAuthProvider,
   PhoneMultiFactorGenerator,
   User,
+  applyActionCode,
+  confirmPasswordReset,
+  verifyPasswordResetCode,
 } from "firebase/auth"
-import { toast } from "@/components"
+import { appToast } from "@/components"
 import { API } from ".."
 
 const storage = getStorage()
@@ -46,7 +49,7 @@ export async function verifyUserEnrolled(
   try {
     return await resolver.resolveSignIn(multiFactorAssertion)
   } catch (e) {
-    toastError(e)
+    toastFirebaseError(e)
     return false
   }
 }
@@ -69,7 +72,7 @@ export async function verifyPhoneNumber(
       recaptchaVerifier,
     )
   } catch (e) {
-    toastError(e)
+    toastFirebaseError(e)
     return false
   }
 }
@@ -93,7 +96,7 @@ export async function enrollUser(
     )
     return true
   } catch (e) {
-    toastError(e)
+    toastFirebaseError(e)
     return false
   }
 }
@@ -124,7 +127,7 @@ export async function verifyUserMFA(
       )
       return { verificationId, resolver }
     } catch (e) {
-      toastError(e)
+      toastFirebaseError(e)
       return false
     }
   }
@@ -136,7 +139,7 @@ export async function sendEmailVerificationEmail(): Promise<boolean> {
       await sendEmailVerification(auth.currentUser)
       return true
     } catch (e) {
-      toastError(e)
+      toastFirebaseError(e)
       return false
     }
   } else {
@@ -183,7 +186,37 @@ export async function verifyEmail(
   }
 }
 
-function toastError(e: any) {
+export const handleVerifyEmail = (actionCode: string) => {
+  applyActionCode(auth, actionCode)
+    .then(() => {
+      appToast("Email Verified", "success")
+    })
+    .catch((error) => {
+      toastFirebaseError(error)
+    })
+}
+
+export const handleResetPassword = async (
+  actionCode: string,
+  newPassword: string,
+) => {
+  verifyPasswordResetCode(auth, actionCode)
+    .then(() => {
+      confirmPasswordReset(auth, actionCode, newPassword)
+        .then((resp) => {
+          console.log(resp)
+          appToast("Password changed", "success")
+        })
+        .catch((error) => {
+          toastFirebaseError(error)
+        })
+    })
+    .catch((error) => {
+      toastFirebaseError(error)
+    })
+}
+
+export function toastFirebaseError(e: any) {
   const errorWithCode = e as { code?: string }
 
   if (
@@ -191,6 +224,6 @@ function toastError(e: any) {
     errorWithCode.code &&
     errorWithCode.code != "auth/too-many-requests"
   ) {
-    toast(errorWithCode.code, "error")
+    appToast(errorWithCode.code, "error")
   }
 }

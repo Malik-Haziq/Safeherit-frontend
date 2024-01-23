@@ -25,10 +25,11 @@ import {
 } from "@/redux/reducers/UserSlice"
 import { SelectOption } from "@/types"
 import {
+  handleResetPassword,
+  handleVerifyEmail,
   isEmailVerified,
   sendEmailVerificationEmail,
   useRecaptcha,
-  verifyEmail,
   verifyUserEnrolled,
   verifyUserMFA,
 } from "@/common"
@@ -76,37 +77,17 @@ export function Login() {
         startLoader()
         const mode = queryParams.get("mode")
         const oobCode = queryParams.get("oobCode") || ""
-        const apiKey = queryParams.get("apiKey") || ""
         if (mode == "verifyEmail") {
           appToast("Verifying Email", "info")
-          const response = await verifyEmail(oobCode, apiKey, "setAccountInfo")
-          if (response) {
-            appToast("Email Verified", "success")
-          }
-          if (!response) {
-            appToast("Unable to verify your email", "error")
-          }
+          handleVerifyEmail(oobCode)
         } else if (mode == "resetPassword") {
           let newPassword: string | null = ""
           newPassword = prompt("Enter new password")
           if (newPassword) {
-            const response = await verifyEmail(
-              oobCode,
-              apiKey,
-              mode,
-              newPassword,
-            )
-            if (response) {
-              appToast("Password changed", "success")
-            }
-            if (!response) {
-              appToast("Some error occured", "error")
-            }
+            handleResetPassword(oobCode, newPassword)
           }
-
-          navigate("/login")
         }
-
+        navigate("/login")
         stopLoader()
       }
     }
