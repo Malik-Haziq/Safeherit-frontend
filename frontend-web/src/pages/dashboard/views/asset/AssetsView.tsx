@@ -567,7 +567,6 @@ function Assets(_props: {
   viewBeneficiaries: (assetId: string) => void
   userRole: string
 }) {
-  console.log(_props.assetDetailsArr)
   return (
     <div className={styles.AppView}>
       <section className="px-7 pt-4 mx-auto">
