@@ -68,7 +68,7 @@ const PUT = async (DATA: {
 
 const DELETE = async (DATA: {
   ROUTE: string
-  Body: object
+  Body?: object
   toastType?: string
 }) => {
   const { ROUTE, Body } = DATA

@@ -23,6 +23,7 @@ import PulseView from "./pages/dashboard/views/pulse/PulseView"
 import AccountView from "./pages/dashboard/views/account/AccountView"
 import AssetsView from "./pages/dashboard/views/asset/AssetsView"
 import SettingView from "./pages/dashboard/views/setting/SettingView"
+import RequestsView from "./pages/dashboard/views/requests/RequestsView"
 
 const Pricing = lazy(() => import("./pages/pricing/Pricing"))
 const RegisterKey = lazy(() => import("./pages/register-key/RegisterKey"))
@@ -131,6 +132,10 @@ function AppRoutes() {
             </Route>
 
             <Route element={<ProtectedRoutes page="dashboard-admin" />}>
+              <Route
+                path={ROUTE_CONSTANTS.DASHBOARD_REQUESTS}
+                element={<RequestsView />}
+              />
               <Route
                 path={ROUTE_CONSTANTS.DASHBOARD_SETTINGS}
                 element={<SettingView />}
