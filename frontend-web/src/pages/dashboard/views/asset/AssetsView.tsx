@@ -414,6 +414,9 @@ export default function AssetsView() {
         setAssetBeneficiariesData(res.data.data.beneficiaries)
         setModalVisibility("beneficiaries-listing")
       })
+      .finally(()=>{
+        stopLoader()
+      })
   }
 
   return (
