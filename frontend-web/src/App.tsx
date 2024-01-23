@@ -34,11 +34,15 @@ function App() {
   const [fetchingData, setFetchingData] = useState(true)
 
   useEffect(() => {
-    dispatch<any>(getUser({ MuteToast: true }))
-      .unwrap()
-      .finally(() => {
-        setFetchingData(false)
-      })
+    try {
+      dispatch<any>(getUser({ MuteToast: true }))
+        .unwrap()
+        .finally(() => {
+          setFetchingData(false)
+        })
+    } catch (error) {
+      console.log("User not logged in")
+    }
   }, [])
 
   return fetchingData ? (
