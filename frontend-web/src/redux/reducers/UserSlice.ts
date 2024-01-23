@@ -13,6 +13,7 @@ type PulseDetails = {
   [key: string]: { heading: string; subHeading: string }[]
 }
 interface UserState {
+  uid: string
   email: string
   photo: string
   phone: string
@@ -44,6 +45,7 @@ interface UserState {
   startupWizardCompleted: boolean
 }
 const initialState: UserState = {
+  uid: "",
   email: "",
   photo: "",
   phone: "",
@@ -159,6 +161,7 @@ export const slice = createSlice({
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
       state.email = action.payload.data.data.email
+      state.uid = action.payload.data.data.uid
       state.startupWizardCompleted = action.payload.data.data.email
       state.displayName = action.payload.data.data.displayName
       state.isSuperAdmin = action.payload.data.data.isSuperAdmin
@@ -174,6 +177,7 @@ export const slice = createSlice({
     })
     builder.addCase(loginWithGoogle.fulfilled, (state, action) => {
       state.email = action.payload.data.data.email
+      state.uid = action.payload.data.data.uid
       state.startupWizardCompleted = action.payload.data.data.email
       state.displayName = action.payload.data.data.displayName
       state.isSuperAdmin = action.payload.data.data.isSuperAdmin
@@ -245,6 +249,7 @@ export const slice = createSlice({
       state.isValidator = action.payload.data.data.isValidator
       state.beneficiaryOf = action.payload.data.data._beneficiaryOf
       state.publicKey = action.payload.data.data?.publicKey || ""
+      state.uid = action.payload.data.data?.uid || ""
       state.paymentStatus = action.payload.data.data?.paymentStatus || ""
       state.role = localStorage.getItem("role") || "none"
 

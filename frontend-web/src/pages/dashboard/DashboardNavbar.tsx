@@ -1,3 +1,4 @@
+import React from "react"
 import userImg from "@images/user.svg"
 import arrowDown from "@images/chevron-down.svg"
 
