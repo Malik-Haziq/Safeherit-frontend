@@ -67,8 +67,8 @@ export default function PulseView() {
       : user.pulseCheckDays,
   ]
   const checkPUlseDateArr = {
-    lastPulseCheck: "April 12th, 2023",
-    nextPulseCheck: "22 days",
+    lastPulseCheck: user.lastPulseCheck,
+    nextPulseCheck: user.nextPulseCheckDueDays,
   }
   const checkAliveMethodArr = ["Email", "Phone", "Social media"]
 
@@ -178,7 +178,7 @@ export default function PulseView() {
     propertyName: string
     value: string
   }) => {
-    if (!value || value === "0" ) {
+    if (!value || value === "0") {
       toast("Please enter valid days", "error")
       return
     }

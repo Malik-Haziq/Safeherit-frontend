@@ -43,6 +43,8 @@ interface UserState {
   publicKey: string
   paymentStatus: string
   startupWizardCompleted: boolean
+  lastPulseCheck: string
+  nextPulseCheckDueDays: string
 }
 const initialState: UserState = {
   uid: "",
@@ -91,6 +93,8 @@ const initialState: UserState = {
   publicKey: "",
   paymentStatus: "",
   startupWizardCompleted: false,
+  lastPulseCheck: "",
+  nextPulseCheckDueDays: "",
 }
 
 export const slice = createSlice({
@@ -252,6 +256,16 @@ export const slice = createSlice({
       state.uid = action.payload.data.data?.uid || ""
       state.paymentStatus = action.payload.data.data?.paymentStatus || ""
       state.role = localStorage.getItem("role") || "none"
+      const pulseCheckLastResetAt =
+        action.payload.data.data?.pulseCheckLastResetAt
+
+      const milliseconds =
+        pulseCheckLastResetAt._seconds * 1000 +
+        pulseCheckLastResetAt._nanoseconds / 1e6
+      const date = new Date(milliseconds)
+      state.lastPulseCheck = date.toISOString().split("T")[0]
+      state.nextPulseCheckDueDays =
+        action.payload.data.data?.nextPulseCheckDueDays
 
       const beneficiaryOfArray: SelectOption[] = []
       const beneficiaryMapper: { [key: string]: any } = {}
