@@ -414,6 +414,9 @@ export default function AssetsView() {
         setAssetBeneficiariesData(res.data.data.beneficiaries)
         setModalVisibility("beneficiaries-listing")
       })
+      .finally(()=>{
+        stopLoader()
+      })
   }
 
   return (
@@ -564,6 +567,7 @@ function Assets(_props: {
   viewBeneficiaries: (assetId: string) => void
   userRole: string
 }) {
+  console.log(_props.assetDetailsArr)
   return (
     <div className={styles.AppView}>
       <section className="px-7 pt-4 mx-auto">
