@@ -13,7 +13,7 @@ import { NavBar, Spinner } from "./components"
 import { lazy } from "react"
 import { CustomAppToast, CustomToast } from "./components/customToast"
 import { useAppDispatch, useAppSelector } from "./redux/hooks"
-import { getUser } from "./redux/actions"
+import { authenticateSession, getUser } from "./redux/actions"
 import Dashboard from "./pages/dashboard/Dashboard"
 import DashboardControl from "./pages/dashboard/views/dashboardControl/DashboardControl"
 import HelpView from "./pages/dashboard/views/help/HelpView"
@@ -34,15 +34,20 @@ function App() {
   const [fetchingData, setFetchingData] = useState(true)
 
   useEffect(() => {
-    try {
-      dispatch<any>(getUser({ MuteToast: true }))
-        .unwrap()
-        .finally(() => {
+    dispatch<any>(authenticateSession({}))
+      .unwrap()
+      .then((response: { data: { data: { isSessionActive: boolean } } }) => {
+        if (response.data.data.isSessionActive) {
+          dispatch<any>(getUser({ MuteToast: true }))
+            .unwrap()
+            .finally(() => {
+              setFetchingData(false)
+            })
+            .catch()
+        } else {
           setFetchingData(false)
-        })
-    } catch (error) {
-      console.log("User not logged in")
-    }
+        }
+      })
   }, [])
 
   return fetchingData ? (

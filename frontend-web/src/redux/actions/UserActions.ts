@@ -22,6 +22,7 @@ import {
   SIGN_UP,
   LOGIN,
   LOGOUT,
+  AUTHENTICATE_SESSION,
 } from "@/common"
 import { setLoaderVisibility } from "../reducers/LoaderSlice"
 
@@ -242,6 +243,22 @@ export const updatePayment = createAsyncThunk(
       return response
     } catch (error) {
       return rejectWithValue(error)
+    }
+  },
+)
+
+export const authenticateSession = createAsyncThunk(
+  "authenticateSession",
+  async (Data: object, { dispatch, rejectWithValue }) => {
+    const params = { ROUTE: AUTHENTICATE_SESSION, Body: {} }
+    dispatch(setLoaderVisibility(true))
+    try {
+      const response = await GET(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    } finally {
+      dispatch(setLoaderVisibility(false))
     }
   },
 )

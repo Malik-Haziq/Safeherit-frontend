@@ -20,6 +20,8 @@ export const ALL_ASSETS = "/api-asset/list"
 
 export const GET_DATA = "/api-dashboard/data"
 
+export const AUTHENTICATE_SESSION = "/api-auth/sessionActive"
+
 export const GET_USER = "/api-auth"
 export const PUBLIC_KEY = "/api-auth/public-key"
 
