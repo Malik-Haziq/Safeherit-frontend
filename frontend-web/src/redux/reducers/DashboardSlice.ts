@@ -9,6 +9,8 @@ const initialState = {
   beneficiaries: [],
   validators: [],
   loading: false,
+  securityRating: "",
+  securityScore: "",
 }
 
 export const slice = createSlice({
@@ -24,6 +26,8 @@ export const slice = createSlice({
       state.assetCount = action.payload?.data?.data?.assetCount
       state.beneficiaryCount = action.payload?.data?.data?.beneficiaryCount
       state.validatorCount = action.payload?.data?.data?.validatorCount
+      state.securityRating = action.payload?.data?.data?.securityRating.rating
+      state.securityScore = action.payload?.data?.data?.securityRating.score
 
       state.assets = action.payload?.data?.data?.assets?.map((asset: any) => {
         const data = JSON.parse(asset.data)
