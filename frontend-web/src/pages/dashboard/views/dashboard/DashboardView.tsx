@@ -16,6 +16,7 @@ import { assetImages } from "../asset/data"
 export default function DashboardView() {
   const dispatch = useAppDispatch()
   const dashboardData = useAppSelector((state) => state.dashboard)
+  const user = useAppSelector((state) => state.user)
 
   const cardDetails = [
     {
@@ -33,7 +34,11 @@ export default function DashboardView() {
       numberOfItems: dashboardData.validatorCount,
       title: "Validators",
     },
-    { img: heart, numberOfItems: "22 Days", title: "Check due in" },
+    {
+      img: heart,
+      numberOfItems: user.nextPulseCheckDueDays,
+      title: "Check due in",
+    },
     {
       img: privateKeysIcon,
       numberOfItems: dashboardData.securityRating,
