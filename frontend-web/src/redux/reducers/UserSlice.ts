@@ -207,25 +207,25 @@ export const slice = createSlice({
         Email: [
           {
             heading: "Pulse Check Email 1",
-            subHeading: action.payload.data.data.pulseCheckEmail1,
+            subHeading: action.payload.data.data?.pulseCheckEmail1,
           },
           {
             heading: "Pulse Check Email 2",
-            subHeading: action.payload.data.data.pulseCheckEmail2,
+            subHeading: action.payload.data.data?.pulseCheckEmail2,
           },
           {
             heading: "Pulse Check Email 3",
-            subHeading: action.payload.data.data.pulseCheckEmail3,
+            subHeading: action.payload.data.data?.pulseCheckEmail3,
           },
         ],
         Phone: [
           {
             heading: "Primary Phone",
-            subHeading: action.payload.data.data.pulseCheckPhone1,
+            subHeading: action.payload.data.data?.pulseCheckPhone1,
           },
           {
             heading: "Backup Phone 1",
-            subHeading: action.payload.data.data.pulseCheckPhone2,
+            subHeading: action.payload.data.data?.pulseCheckPhone2,
           },
         ],
         "Social media": [
@@ -236,22 +236,22 @@ export const slice = createSlice({
       }
       state.pulseDetail = methodArr
       state.pulseCheckNonValidationMonths =
-        action.payload.data.data.pulseCheckNonValidationMonths
-      state.pulseCheckActive = action.payload.data.data.pulseCheckActive
-      state.pulseCheckDays = action.payload.data.data.pulseCheckDays
+        action.payload.data.data?.pulseCheckNonValidationMonths
+      state.pulseCheckActive = action.payload.data.data?.pulseCheckActive
+      state.pulseCheckDays = action.payload.data.data?.pulseCheckDays
       state.pulseCheckValidationRequired =
-        action.payload.data.data.pulseCheckValidationRequired
+        action.payload.data.data?.pulseCheckValidationRequired
       state.displayName =
-        action.payload.data.data.displayName || state.displayName
-      state.language = action.payload.data.data.language
+        action.payload.data.data?.displayName || state.displayName
+      state.language = action.payload.data.data?.language
       state.profile_image =
-        action.payload.data.data.profile_image || state.profile_image
-      state.isBeneficiary = action.payload.data.data.isBeneficiary
-      state.isOwner = action.payload.data.data.isOwner
-      state.isSuperAdmin = action.payload.data.data.isSuperAdmin
-      state.isAdmin = action.payload.data.data.isAdmin
-      state.isValidator = action.payload.data.data.isValidator
-      state.beneficiaryOf = action.payload.data.data._beneficiaryOf
+        action.payload.data.data?.profile_image || state.profile_image
+      state.isBeneficiary = action.payload.data.data?.isBeneficiary
+      state.isOwner = action.payload.data.data?.isOwner
+      state.isSuperAdmin = action.payload.data.data?.isSuperAdmin
+      state.isAdmin = action.payload.data.data?.isAdmin
+      state.isValidator = action.payload.data.data?.isValidator
+      state.beneficiaryOf = action.payload.data.data?._beneficiaryOf
       state.publicKey = action.payload.data.data?.publicKey || ""
       state.uid = action.payload.data.data?.uid || ""
       state.paymentStatus = action.payload.data.data?.paymentStatus || ""
@@ -260,8 +260,8 @@ export const slice = createSlice({
         action.payload.data.data?.pulseCheckLastResetAt
 
       const milliseconds =
-        pulseCheckLastResetAt._seconds * 1000 +
-        pulseCheckLastResetAt._nanoseconds / 1e6
+        pulseCheckLastResetAt?._seconds * 1000 +
+        pulseCheckLastResetAt?._nanoseconds / 1e6
       const date = new Date(milliseconds)
       state.lastPulseCheck = date.toISOString().split("T")[0]
       state.nextPulseCheckDueDays =
