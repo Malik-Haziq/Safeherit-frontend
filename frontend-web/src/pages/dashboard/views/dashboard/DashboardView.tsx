@@ -34,9 +34,13 @@ export default function DashboardView() {
       title: "Validators",
     },
     { img: heart, numberOfItems: "22 Days", title: "Check due in" },
-    { img: privateKeysIcon, numberOfItems: "Medium", title: "Security Score" },
+    {
+      img: privateKeysIcon,
+      numberOfItems: dashboardData.securityRating,
+      title: `Security Score (${dashboardData.securityScore})`,
+    },
   ]
-  
+
   const _dashboardData = [
     {
       title: "Assets",
@@ -119,8 +123,7 @@ function Cards(_props: {
   rowData: any
   navigationPath: string
   loading: boolean
-}) 
-{
+}) {
   return (
     <div className="h-[500px] min-w-[350px] rounded-lg shadow-lg">
       <div className="flex justify-between items-center h-14 bg-safe-green-light-1 p-4 rounded-t-lg">
@@ -160,7 +163,12 @@ function Cards(_props: {
   )
 }
 
-function Row(_props: { img: any; title: string; subTitle: string; type: string;}) {
+function Row(_props: {
+  img: any
+  title: string
+  subTitle: string
+  type: string
+}) {
   const [image, setImage] = useState<string>("")
   useEffect(() => {
     getFileFromFirebase(_props.img)
@@ -174,7 +182,9 @@ function Row(_props: { img: any; title: string; subTitle: string; type: string;}
   return (
     <div className="p-4 flex gap-4 border-b-[.5px] ">
       <img
-        src={_props.type === "Assets" ? assetImages[_props.title] : image || users}
+        src={
+          _props.type === "Assets" ? assetImages[_props.title] : image || users
+        }
         alt=""
         className="w-11 h-11 rounded-full object-contain"
       />
