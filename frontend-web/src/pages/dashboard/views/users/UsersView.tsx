@@ -9,7 +9,7 @@ import deleteIcon from "@images/delete.svg"
 import { NewUserDetail, NewUserModal, UserDetail } from "../users/modal_admin"
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { deleteUserRequest, getUsers } from "@/redux/actions/AdminAction"
+import { deleteUserRequest, getUsers, deleteUserFromSuperadmin } from "@/redux/actions/AdminAction"
 import { toast, Spinner } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
@@ -38,6 +38,7 @@ const userInitialState = {
 export default function UsersView() {
   const dispatch = useAppDispatch()
   const admin = useAppSelector((state) => state.admin)
+  const user = useAppSelector((state) => state.user)
   const startLoader = () => dispatch<any>(setLoaderVisibility(true))
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
@@ -119,26 +120,44 @@ export default function UsersView() {
   }
 
   const deleteUser = (email: string) => {
-    let reason: string | null = ""
-    reason = prompt("Please enter reason for user deletion")
-    if (reason === null) {
-      toast("User deletion request canceled", "info")
+    if (user.role == "super-admin") {
+        startLoader()
+        const data = {
+          email: email
+        }
+        dispatch<any>(deleteUserFromSuperadmin(data))
+          .unwrap()
+          .catch()
+          .then(() => {
+            toast("User deleted successfully", "success")
+          })
+          .finally(() => {
+            stopLoader()
+          })  
     } else {
-      startLoader()
-      const data = {
-        email: email,
-        reason: reason,
+      let reason: string | null = ""
+      reason = prompt("Please enter reason for user deletion")
+      if (reason === null) {
+        toast("User deletion request canceled", "info")
+      } else {
+        startLoader()
+        const data = {
+          email: email,
+          reason: reason,
+        }
+        
+        dispatch<any>(deleteUserRequest(data))
+          .unwrap()
+          .catch()
+          .then(() => {
+            toast("User deletion request submitted", "success")
+          })
+          .finally(() => {
+            stopLoader()
+          })
       }
-      dispatch<any>(deleteUserRequest(data))
-        .unwrap()
-        .catch()
-        .then(() => {
-          toast("User deletion request submitted", "success")
-        })
-        .finally(() => {
-          stopLoader()
-        })
     }
+   
   }
   const editUser = (id: string) => {
     id

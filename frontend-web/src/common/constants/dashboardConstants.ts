@@ -117,6 +117,11 @@ export const adminNavBarHeadings: Record<string, NavBarItem> = {
     title: CONSTANT.ADMIN_TITLE,
     id: CONSTANT.ADMIN,
   },
+  "/dashboard/requests": {
+    screen: CONSTANT.ADMIN_REQUESTS,
+    title: CONSTANT.ADMIN_REQUESTS_TITLE,
+    id: CONSTANT.ADMIN_REQUESTS,
+  },
   "/dashboard/setting": {
     screen: CONSTANT.SETTINGS,
     title: CONSTANT.SETTINGS_TITLE,
@@ -197,6 +202,11 @@ export const adminDrawerMenu = [
     icon: dashboardIcon,
     option: CONSTANT.ADMIN,
     navigate: `${ROUTE_CONSTANTS.DASHBOARD}`,
+  },
+  {
+    icon: dashboardIcon,
+    option: CONSTANT.ADMIN_REQUESTS,
+    navigate: `${ROUTE_CONSTANTS.DASHBOARD_REQUESTS}`,
   },
   {
     icon: setting,

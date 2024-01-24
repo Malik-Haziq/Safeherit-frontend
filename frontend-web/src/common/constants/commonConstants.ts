@@ -26,6 +26,8 @@ export const CONSTANT = {
   ADMIN_TITLE: "Admin Dashboard",
   SUPER_ADMIN: "Users",
   SUPER_ADMIN_TITLE: "Super Admin Dashboard",
+  ADMIN_REQUESTS: "Requests",
+  ADMIN_REQUESTS_TITLE: "User Deletion Requests",
   HELP: "Help",
   HELP_TITLE: "Get the help",
   SETTINGS: "Settings",

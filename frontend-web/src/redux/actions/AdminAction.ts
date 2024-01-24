@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { GET, PUT, GET_USERS, DELETE_USER_REQUEST } from "@/common"
+import { GET, PUT, GET_USERS, DELETE_USER_REQUEST, DELETE_USER, DELETE } from "@/common"
 
 export const getUsers = createAsyncThunk(
   "getUsers",
@@ -41,6 +41,19 @@ export const deleteUserRequest = createAsyncThunk(
     const params = { ROUTE: DELETE_USER_REQUEST, Body: Data, token: user.token }
     try {
       const response = await PUT(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+export const deleteUserFromSuperadmin = createAsyncThunk(
+  "deleteUser",
+  async (Data: {email: string}, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: { token: any } }
+    const params = { ROUTE: `${DELETE_USER}?userEmailToDelete=${Data?.email}`, token: user.token }
+    try {
+      const response = await DELETE(params)
       return response
     } catch (error) {
       return rejectWithValue(error)

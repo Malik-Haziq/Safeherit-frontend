@@ -29,6 +29,8 @@ export const GET_USERS = "/api-admin/users"
 export const CREATE_USER = "/api-admin/create-user"
 export const DELETE_USER_REQUEST = "/api-admin/delete-user-request"
 
+export const DELETE_USER = "/api-superAdmin/delete-user"
+
 export const PULSE_CHECK = "/api-pulseCheck"
 
 export const CREATE_PAYMENT_SESSION = "/api-payment/create-subscription-session"

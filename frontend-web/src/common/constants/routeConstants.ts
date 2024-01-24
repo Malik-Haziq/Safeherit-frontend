@@ -14,4 +14,5 @@ export const ROUTE_CONSTANTS = {
   DASHBOARD_ACCOUNT: "account",
   DASHBOARD_HELP: "help",
   DASHBOARD_SETTINGS: "setting",
+  DASHBOARD_REQUESTS: "requests",
 }
