@@ -58,6 +58,7 @@ const initialState = {
   personalized_video: "",
   profile_image: "",
   public_key: "",
+  inform_beneficiary: false
 }
 
 const initialStateForEncryptionKeys = {
