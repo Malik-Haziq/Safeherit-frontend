@@ -53,6 +53,7 @@ const initialState = {
   twitter_username: "",
   personalized_message: "",
   profile_image: "",
+  inform_validator: false
 }
 
 export default function ValidatorsView() {
