@@ -8,6 +8,7 @@ class Encryption {
   private rsaEncryptionScheme: forge.pki.rsa.EncryptionScheme = "RSA-OAEP"
   private aesEncryptionScheme: forge.cipher.Algorithm = "AES-CBC"
   private delimiter = "-"
+  private getIV = (text: string) => forge.util.createBuffer(text).getBytes()
 
   public encrypt(publicKey: string, data: string | Buffer): string {
     // Generate a random AES key and IV as byte arrays
@@ -73,6 +74,32 @@ class Encryption {
     // convert bytes to string
     const decryptedData = decipher.output.getBytes().toString()
     return decryptedData
+  }
+
+  public encryptKeys(data: string, uid: string) {
+    const key = forge.md.sha256.create().update(uid).digest().getBytes()
+    const iv = this.getIV(uid)
+
+    const cipher = forge.cipher.createCipher("AES-CBC", key)
+    cipher.start({ iv: iv })
+    cipher.update(forge.util.createBuffer(data, "utf8"))
+    cipher.finish()
+
+    const encrypted = forge.util.encode64(cipher.output.getBytes())
+    return encrypted
+  }
+
+  public decryptKeys(encryptedData: string, uid: string) {
+    const key = forge.md.sha256.create().update(uid).digest().getBytes()
+    const iv = this.getIV(uid)
+
+    const decipher = forge.cipher.createDecipher("AES-CBC", key)
+    decipher.start({ iv: iv })
+    decipher.update(forge.util.createBuffer(forge.util.decode64(encryptedData)))
+    decipher.finish()
+
+    const decryptedString = decipher.output.toString()
+    return decryptedString
   }
 
   public generateKeyPair(): {

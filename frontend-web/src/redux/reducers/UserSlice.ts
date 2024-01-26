@@ -106,7 +106,7 @@ export const slice = createSlice({
     },
     updateRole: (state, action) => {
       state.role = action.payload
-      localStorage.setItem("role", action.payload)
+      localStorage.setItem("role", btoa(action.payload))
     },
     updateRoleCheck: (state, action) => {
       switch (action.payload.role) {
@@ -177,7 +177,8 @@ export const slice = createSlice({
       state.isBeneficiary = action.payload.data.data.isBeneficiary
       state.paymentStatus = action.payload.data.data.paymentStatus
       state.isValidator = action.payload.data.data.isValidator
-      state.role = localStorage.getItem("role") || "none"
+      const _role = localStorage.getItem("role") || ""
+      state.role = atob(_role) || "none"
     })
     builder.addCase(loginWithGoogle.fulfilled, (state, action) => {
       state.email = action.payload.data.data.email
@@ -193,7 +194,8 @@ export const slice = createSlice({
       state.isBeneficiary = action.payload.data.data.isBeneficiary
       state.paymentStatus = action.payload.data.data.paymentStatus
       state.isValidator = action.payload.data.data.isValidator
-      state.role = localStorage.getItem("role") || "none"
+      const _role = localStorage.getItem("role") || ""
+      state.role = atob(_role) || "none"
     })
     builder.addCase(logout.fulfilled, () => {
       return initialState
@@ -255,7 +257,8 @@ export const slice = createSlice({
       state.publicKey = action.payload.data.data?.publicKey || ""
       state.uid = action.payload.data.data?.uid || ""
       state.paymentStatus = action.payload.data.data?.paymentStatus || ""
-      state.role = localStorage.getItem("role") || "none"
+      const _role = localStorage.getItem("role") || ""
+      state.role = atob(_role) || "none"
 
       if (action.payload.data.data?.pulseCheckActive) {
         const pulseCheckLastResetAt =

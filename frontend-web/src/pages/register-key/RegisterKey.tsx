@@ -75,7 +75,10 @@ export default function RegisterKey() {
       )
     ) {
       if (modalVisibility == "Load-PK") {
-        localStorage.setItem("privateKey", modalControl.privateKey)
+        const _privateKey = modalControl.privateKey
+          ? encryptionService.encryptKeys(modalControl.privateKey, user.uid)
+          : ""
+        localStorage.setItem("privateKey", _privateKey)
         navigate("/dashboard")
       } else {
         dispatch<any>(
@@ -87,7 +90,10 @@ export default function RegisterKey() {
           .unwrap()
           .then(() => {
             toast("Keys Registered", "success")
-            localStorage.setItem("privateKey", modalControl.privateKey)
+            const _privateKey = modalControl.privateKey
+              ? encryptionService.encryptKeys(modalControl.privateKey, user.uid)
+              : ""
+            localStorage.setItem("privateKey", _privateKey)
             navigate("/dashboard")
           })
           .catch((err: any) => {
