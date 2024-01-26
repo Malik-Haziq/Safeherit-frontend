@@ -67,7 +67,8 @@ export default function AccountView() {
 
   useEffect(() => {
     const key = localStorage.getItem("privateKey")
-    setModalControl({ ...modalControl, privateKey: key || "" })
+    const _privateKey = key ? encryptionService.decryptKeys(key, user.uid) : ""
+    setModalControl({ ...modalControl, privateKey: _privateKey })
   }, [modalControl.privateKey])
 
   useEffect(() => {
@@ -242,7 +243,13 @@ export default function AccountView() {
             .then(() => {
               toast("Keys Registered", "success")
               closeModal()
-              localStorage.setItem("privateKey", PKEditModalControl.privateKey)
+              const _privateKey = PKEditModalControl.privateKey
+                ? encryptionService.encryptKeys(
+                    PKEditModalControl.privateKey,
+                    user.uid,
+                  )
+                : ""
+              localStorage.setItem("privateKey", _privateKey)
             })
             .catch()
             .finally(() => {
@@ -449,7 +456,7 @@ function UserProfileDetails(_props: {
       <div className="p-5 flex justify-between items-center border-b-[1px]">
         <div>
           <p className="font-bold mb-2">Name</p>
-          
+
           <p className="text-[#061334] text-lg">{_props.userName}</p>
         </div>
         <img src={userIcon} alt="User Image" />
@@ -457,9 +464,7 @@ function UserProfileDetails(_props: {
       <div className="p-5 flex justify-between items-center border-b-[1px]">
         <div>
           <p className="font-bold mb-2">Email</p>
-          <p className="text-[#061334] text-lg">
-            {_props.userEmail}
-          </p>
+          <p className="text-[#061334] text-lg">{_props.userEmail}</p>
         </div>
         <img src={msgIcon} alt="Message icon" />
       </div>

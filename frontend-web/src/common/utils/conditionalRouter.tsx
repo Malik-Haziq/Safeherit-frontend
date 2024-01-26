@@ -11,7 +11,10 @@ export const ProtectedRoutes = (_props: { page: string }) => {
   const role = user.role
   const paymentStatus = user.paymentStatus
   const publicKey = user.publicKey
-  const privateKey = localStorage.getItem("privateKey") || ""
+  const _privateKey = localStorage.getItem("privateKey")
+  const privateKey = _privateKey
+    ? encryptionService.decryptKeys(_privateKey, user.uid)
+    : ""
 
   let redirectTo: string = ROUTE_CONSTANTS.LOGIN
 
