@@ -278,49 +278,6 @@ export default function UsersView() {
             parentRef={paginationRef}
             setCurrentPage={setCurrentPage}
           />
-          {/* <div className="flex items-center justify-between p-5">
-            <button
-              onClick={_previousPage}
-              disabled={currentPage == 1}
-              className={
-                currentPage > 1
-                  ? "px-4 py-2 text-[#04477B] border-[1px] border-[#04477B] rounded-lg flex items-center justify-center gap-2"
-                  : "px-4 py-2 text-[#E6EDF9] border-[1px] border-[#E6EDF2] rounded-lg flex items-center justify-center gap-2"
-              }
-            >
-              <img src={leftArrow} alt="left arrow" />
-              Previous
-            </button>
-            <div className="flex items-center justify-center">
-              {Array.from({ length: admin.totalPages }).map((_, index) => (
-                <div
-                  key={index}
-                  onClick={() => {
-                    _changePage(index + 1)
-                  }}
-                  className={
-                    currentPage == index + 1
-                      ? "w-12 h-12 text-[#04477B] bg-[#E6EDF2] flex items-center justify-center rounded-lg cursor-pointer"
-                      : "w-12 h-12 flex items-center justify-center cursor-pointer"
-                  }
-                >
-                  {index + 1}
-                </div>
-              ))}
-            </div>
-            <button
-              onClick={_nextPage}
-              disabled={currentPage == admin.totalPages}
-              className={
-                currentPage < admin.totalPages
-                  ? "px-4 py-2 text-[#04477B] border-[1px] border-[#04477B] rounded-lg flex items-center justify-center gap-2"
-                  : "px-4 py-2 text-[#E6EDF9] border-[1px] border-[#E6EDF2] rounded-lg flex items-center justify-center gap-2"
-              }
-            >
-              Next
-              <img src={rightArrow} alt="right arrow" />
-            </button>
-          </div> */}
         </section>
       </main>
     </div>

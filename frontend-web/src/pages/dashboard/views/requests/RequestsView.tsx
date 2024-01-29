@@ -22,6 +22,7 @@ export default function RequestsView() {
   useEffect(() => {
     fetchRequests()
   }, [])
+  // Integrate pagination api call in this effect
   useEffect(() => {
   }, [currentPage])
 
@@ -53,7 +54,7 @@ export default function RequestsView() {
           })
           .finally(() => {})
         break
-      case "ReAdd":
+      case "Read":
         dispatch<any>(reAddDeleteRequest(data))
           .unwrap()
           .catch(() => {
