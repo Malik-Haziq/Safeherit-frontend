@@ -25,3 +25,13 @@ export interface Beneficiary {
   profile_image: string
   public_key: string
 }
+
+export interface Request {
+  id: string
+  reason: string
+  requestedByEmail: string
+  userEmailToDelete: string
+  status: string
+  statusUpdates: []
+  createdAt: []
+}
