@@ -1,16 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getUsers } from "../actions/AdminAction"
-import { User } from "@/types"
+import { getDeleteRequests, getUsers } from "../actions/AdminAction"
+import { Request, User } from "@/types"
 
 interface UserState {
   totalUser: number
   totalPages: number
   users: User[]
+  requests: Request[]
 }
 const initialState: UserState = {
   totalUser: 0,
   totalPages: 0,
   users: [],
+  requests: [],
 }
 
 export const slice = createSlice({
@@ -42,6 +44,9 @@ export const slice = createSlice({
         }
       })
       state.users = temporary_array
+    }),
+    builder.addCase(getDeleteRequests.fulfilled, (state, action) => {
+      state.requests = action.payload.data.data
     })
   },
 })
