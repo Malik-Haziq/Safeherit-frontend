@@ -82,7 +82,7 @@ export function NavBar() {
         </div>
 
         {user.role == "none" ? (
-          <button className="primary-btn " onClick={_handleLoginPress}>
+          <button data-cy="login-register-button" className="primary-btn " onClick={_handleLoginPress}>
             Login / Register
           </button>
         ) : (

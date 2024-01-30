@@ -167,6 +167,7 @@ export function SignUp() {
           {isValidPassword && <PasswordValidation />}
           <div className="flex gap-2 text-safe-text-gray mt-2 mb-6">
             <input
+              data-cy="agree-to-terms-and-conditions-input"
               name="checkbox"
               type="checkbox"
               checked={agreeTermAndCondition}
@@ -184,7 +185,7 @@ export function SignUp() {
               </a>
             </small>
           </div>
-          <button className="primary-btn px-16 uppercase w-fit mx-auto">
+          <button data-cy="signup-button" className="primary-btn px-16 uppercase w-fit mx-auto">
             Sign up
           </button>
         </form>

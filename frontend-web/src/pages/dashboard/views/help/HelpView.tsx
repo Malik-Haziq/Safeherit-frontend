@@ -735,7 +735,7 @@ function Suggestions(_props: {
           className="bg-[#F5FAFD] h-[350px] outline-none resize-none w-full rounded-2xl p-4 text-[#6F767B] mb-4"
         ></textarea>
         <div className="flex items-center justify-center">
-          <button className="bg-[#0971AA] text-white font-semibold px-20 py-2 mx-auto rounded-xl inline-block">
+          <button data-cy="submit-suggestion-button" className="bg-[#0971AA] text-white font-semibold px-20 py-2 mx-auto rounded-xl inline-block">
             Submit
           </button>
         </div>
@@ -753,7 +753,7 @@ function Support() {
           placeholder="Enter your message..."
           className="w-full h-[336px] p-4 resize-none focus:outline-none shadow-md scrollbar rounded-2xl"
         ></textarea>
-        <button className="primary-btn mx-auto px-12 rounded-xl mt-10 bg-[#0971AA]">
+        <button data-cy="submit-user-question-button" className="primary-btn mx-auto px-12 rounded-xl mt-10 bg-[#0971AA]">
           Submit
         </button>
       </form>

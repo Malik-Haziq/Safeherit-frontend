@@ -148,6 +148,7 @@ function LoggedUser(_props: {
                 : _props.userName}
             </small>
             <button
+              data-cy="login-button"
               onClick={() => {
                 _props._handleUserRolesSubmit(_props.userRole)
               }}

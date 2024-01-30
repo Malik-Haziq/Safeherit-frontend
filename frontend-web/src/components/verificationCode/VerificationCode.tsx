@@ -71,12 +71,14 @@ export function VerificationCode({
         </div>
         <div className="flex mt-4 gap-x-4">
           <button
+            data-cy="cancel-mfa-button"
             onClick={() => _handleMFACancel()}
             className="rounded-xl flex gap-x-4 mb-8 h-11 w-1/2 items-center justify-center px-6 border border-[#04477B] text-[#04477B]"
           >
             Cancel
           </button>
           <button
+            data-cy="submit-mfa-code-button"
             onClick={() => _handleMFASubmit()}
             className="bg-safe-blue-tint rounded-xl flex h-11 w-1/2 items-center justify-center px-6 "
           >
@@ -111,6 +113,7 @@ function Input({
 
   return (
     <input
+      data-cy="verification-code-digit-input"
       value={value}
       disabled={index > 0}
       onChange={checkValue}

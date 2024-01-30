@@ -375,6 +375,7 @@ function PulseCheckView(_props: {
             {_props.newPulseCheckDays === "0" && (
               <div className="w-[100%] flex justify-end pe-2">
                 <button
+                  data-cy="update-pulse-check-days-button"
                   className="primary-btn text-[12px] rounded-2xl bg-[#0971AA]"
                   onClick={() => {
                     _props.submitUpdatedValue({
@@ -467,6 +468,7 @@ function CheckPulsePeriod(_props: {
       {_props.newPulseCheckDays == _props.days &&
       _props.newPulseCheckDays == "0" ? (
         <input
+          data-cy="pulse-check-days-input"
           type="number"
           placeholder="0"
           value={_props.pulseCheckCustomDays}
@@ -663,6 +665,7 @@ function SetUpPulseCheck(_props: {
           You should setup your pulse check so we can verify that you’re alive.
         </p>
         <button
+          data-cy="setup-pulse-check-button"
           onClick={_props.openStepZeroModal}
           className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
         >

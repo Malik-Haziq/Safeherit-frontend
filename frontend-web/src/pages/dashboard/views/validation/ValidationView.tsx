@@ -95,6 +95,7 @@ export default function ValidationView() {
               <div className="flex items-center justify-between px-10 pb-12">
                 {canMarkPassing == false ? (
                   <button
+                    data-cy="logout-button"
                     onClick={_handleLogout}
                     className="px-5 mt-12 mx-auto h-[80px] font-bold text-center w-[180px] bg-[#0971AA] text-white rounded-xl"
                   >
@@ -103,6 +104,7 @@ export default function ValidationView() {
                 ) : (
                   <>
                     <button
+                      data-cy="confirm-they-are-alive-button"
                       onClick={() => {
                         _handlePassedAway(false)
                       }}
@@ -111,6 +113,7 @@ export default function ValidationView() {
                       NO HE/SHE IS STILL ALIVE
                     </button>
                     <button
+                      data-cy="confirm-they-are-dead-button"
                       onClick={() => {
                         _handlePassedAway(true)
                       }}

@@ -414,6 +414,7 @@ function AddValidators(_props: {
           No registered validator yet
         </p>
         <button
+          data-cy="register-validator-button"
           onClick={_props.openStepZeroModal}
           className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
         >
@@ -463,7 +464,7 @@ function Validators(_props: {
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
               <div className="relative">
-                <input type="checkbox" id="checkbox" />
+                <input data-cy="select-all-validator-input" type="checkbox" id="checkbox" />
                 <label
                   htmlFor="checkbox"
                   className="checkbox-label ml-1 -top-1"

@@ -540,6 +540,7 @@ function AddAsset(_props: {
           There are no assets on your board. Please create assets.
         </p>
         <button
+          data-cy="create-asset-button"
           onClick={_props.openStepZeroModal}
           className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
         >
@@ -586,7 +587,7 @@ function Assets(_props: {
         <section className="">
           <div className="flex items-center gap-11 mb-2 pl-6">
             <div className="relative">
-              <input type="checkbox" id="checkbox" />
+              <input data-cy="select-all-assets-input" type="checkbox" id="checkbox" />
               <label htmlFor="checkbox" className="checkbox-label h-5 w-5">
                 <div className="check_mark"></div>
               </label>
@@ -746,6 +747,7 @@ function AssetDetails(_props: {
         {_props.userRole != "beneficiary" ? (
           <div className="flex justify-between items-center gap-3">
             <button
+              data-cy="view-beneficiary-button"
               onClick={() => _props.viewBeneficiaries(_props.assetId)}
               className="font-semibold"
             >

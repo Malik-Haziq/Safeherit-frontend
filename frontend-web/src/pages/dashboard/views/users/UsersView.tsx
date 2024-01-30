@@ -207,7 +207,7 @@ export default function UsersView() {
         modalControl={modalControl}
       />
       <main className="p-5 mx-auto w-[1101px]">
-        <button onClick={createAccount} className="mt-10 flex justify-end mb-8">
+        <button data-cy="create-new-user-account" onClick={createAccount} className="mt-10 flex justify-end mb-8">
           <a
             href="#"
             className="primary-btn bg-[#04477B] text-white rounded-md py-2 font-medium flex items-center gap-2"
@@ -265,6 +265,7 @@ export default function UsersView() {
           </table>
           <div className="flex items-center justify-between p-5">
             <button
+              data-cy="show-previous-pages-button"
               onClick={_previousPage}
               disabled={currentPage == 1}
               className={
@@ -294,6 +295,7 @@ export default function UsersView() {
               ))}
             </div>
             <button
+              data-cy="show-next-pages-button"
               onClick={_nextPage}
               disabled={currentPage == admin.totalPages}
               className={

@@ -394,6 +394,7 @@ export function Login() {
                 <div className="flex justify-between items-center ">
                   <div className="flex gap-2 text-safe-text-gray items-center justify-center  ">
                     <input
+                      data-cy="remember-user-credentials-input"
                       type="checkbox"
                       className="mr-2 block h-5 w-5"
                       checked={rememberMe}
@@ -415,6 +416,7 @@ export function Login() {
                   </p>
                 </div>
                 <button
+                  data-cy="login-button"
                   className={
                     logingin
                       ? "primary-btn rounded-md bg-safe-gray-shade-1 text-safe-gray-shade px-40"

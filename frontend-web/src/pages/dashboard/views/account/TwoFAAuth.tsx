@@ -95,6 +95,7 @@ export default function TwoFAAuth(_props: { hideTwoFA: () => void }) {
   return (
     <div className={styles.AppView + " relative"}>
       <button
+        data-cy="back-to-account-button"
         onClick={returnToAccountView}
         className=" mb-4 mt-2 p-2 hover:opacity-75 rounded-lg shadow-md my-[5px] w-[200px] mx-2"
       >
@@ -168,6 +169,7 @@ function PhoneRegistration({
         </div>
         <div className="flex justify-between mt-4 gap-x-4">
           <button
+            data-cy="send-sms-to-phone-number-button"
             onClick={handleClick}
             className="bg-safe-blue-tint rounded-xl flex h-11 w-1/2 items-center justify-center px-6"
           >
