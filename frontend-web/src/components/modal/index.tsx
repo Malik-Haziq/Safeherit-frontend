@@ -142,7 +142,10 @@ const MultiFieldComponent = (_props: {
 const RenderModal = (_props: { elements: any }) => {
   if (_props.elements.length > 0) {
     return _props.elements?.map((element: any, index: number) => {
-      if (element?.props.name === "Balance" || element?.props.name === "Acquisition cost") {
+      if (
+        element?.props?.name === "Balance" ||
+        element?.props?.name === "Acquisition cost"
+      ) {
         return element
       } else if (element?.type !== "multiFields") {
         return (

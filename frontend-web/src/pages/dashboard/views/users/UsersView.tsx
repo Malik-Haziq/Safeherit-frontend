@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef } from "react"
 import styles from "../../Dashboard.module.css"
 import eye from "@images/eye.svg"
 import userImg from "@images/user.svg"
@@ -9,8 +9,13 @@ import deleteIcon from "@images/delete.svg"
 import { NewUserDetail, NewUserModal, UserDetail } from "../users/modal_admin"
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { deleteUserRequest, getUsers, deleteUserFromSuperadmin } from "@/redux/actions/AdminAction"
-import { toast, Spinner } from "@/components"
+import {
+  deleteUserRequest,
+  getUsers,
+  deleteUserFromSuperadmin,
+  changeUserAccountStatus,
+} from "@/redux/actions/AdminAction"
+import { toast, Spinner, Pagination } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { getFileFromFirebase, isValidEmail } from "@/common"
@@ -47,6 +52,7 @@ export default function UsersView() {
   const [modalControl, setModalControl] = useState(initialState)
   const [userViewControl, setViewControl] = useState(userInitialState)
   const [modalVisibility, setModalVisibility] = useState("none")
+  const paginationRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetchUsers()
@@ -108,32 +114,21 @@ export default function UsersView() {
       })
   }
 
-  const _changePage = (page: number) => {
-    setLoading(true)
-    setCurrentPage(page)
-  }
-  const _previousPage = () => {
-    _changePage(currentPage - 1)
-  }
-  const _nextPage = () => {
-    _changePage(currentPage + 1)
-  }
-
   const deleteUser = (email: string) => {
     if (user.role == "super-admin") {
-        startLoader()
-        const data = {
-          email: email
-        }
-        dispatch<any>(deleteUserFromSuperadmin(data))
-          .unwrap()
-          .catch()
-          .then(() => {
-            toast("User deleted successfully", "success")
-          })
-          .finally(() => {
-            stopLoader()
-          })  
+      startLoader()
+      const data = {
+        email: email,
+      }
+      dispatch<any>(deleteUserFromSuperadmin(data))
+        .unwrap()
+        .catch()
+        .then(() => {
+          toast("User deleted successfully", "success")
+        })
+        .finally(() => {
+          stopLoader()
+        })
     } else {
       let reason: string | null = ""
       reason = prompt("Please enter reason for user deletion")
@@ -145,7 +140,7 @@ export default function UsersView() {
           email: email,
           reason: reason,
         }
-        
+
         dispatch<any>(deleteUserRequest(data))
           .unwrap()
           .catch()
@@ -157,12 +152,26 @@ export default function UsersView() {
           })
       }
     }
-   
   }
-  const editUser = (id: string) => {
-    id
-    toast("functionality not implemented", "error")
+  
+  const editUser = (email: string, currentStatus: string) => {
+    setLoading(true)
+    const data = {
+      userEmail: email,
+      currentlyActive: currentStatus === "Active" ? false : true,
+    }
+    dispatch<any>(changeUserAccountStatus(data))
+      .unwrap()
+      .catch(() => {
+        setLoading(false)
+      })
+      .then(() => {
+        toast("User account status updated successfully", "success")
+        fetchUsers()
+      })
+      .finally(() => {})
   }
+
   const viewUser = (_props: User) => {
     setViewControl({
       displayName: _props.displayName,
@@ -215,7 +224,7 @@ export default function UsersView() {
             <span className="text-3xl">+</span> Create Account
           </a>
         </button>
-        <section className="rounded-xl h-[676px] border-[1px] flex justify-between flex-col">
+        <section className="rounded-xl h-[676px] border-[1px] flex justify-between flex-col" ref={paginationRef}>
           <table className="rounded-3xl ">
             <thead className="bg-[#F2F2F2] px-5 py-3 rounded-t-xl text-sm uppercase border-[1px] border-[#E5E5E5]">
               <tr>
@@ -263,51 +272,12 @@ export default function UsersView() {
               </tbody>
             )}
           </table>
-          <div className="flex items-center justify-between p-5">
-            <button
-              data-cy="show-previous-pages-button"
-              onClick={_previousPage}
-              disabled={currentPage == 1}
-              className={
-                currentPage > 1
-                  ? "px-4 py-2 text-[#04477B] border-[1px] border-[#04477B] rounded-lg flex items-center justify-center gap-2"
-                  : "px-4 py-2 text-[#E6EDF9] border-[1px] border-[#E6EDF2] rounded-lg flex items-center justify-center gap-2"
-              }
-            >
-              <img src={leftArrow} alt="left arrow" />
-              Previous
-            </button>
-            <div className="flex items-center justify-center">
-              {Array.from({ length: admin.totalPages }).map((_, index) => (
-                <div
-                  key={index}
-                  onClick={() => {
-                    _changePage(index + 1)
-                  }}
-                  className={
-                    currentPage == index + 1
-                      ? "w-12 h-12 text-[#04477B] bg-[#E6EDF2] flex items-center justify-center rounded-lg cursor-pointer"
-                      : "w-12 h-12 flex items-center justify-center cursor-pointer"
-                  }
-                >
-                  {index + 1}
-                </div>
-              ))}
-            </div>
-            <button
-              data-cy="show-next-pages-button"
-              onClick={_nextPage}
-              disabled={currentPage == admin.totalPages}
-              className={
-                currentPage < admin.totalPages
-                  ? "px-4 py-2 text-[#04477B] border-[1px] border-[#04477B] rounded-lg flex items-center justify-center gap-2"
-                  : "px-4 py-2 text-[#E6EDF9] border-[1px] border-[#E6EDF2] rounded-lg flex items-center justify-center gap-2"
-              }
-            >
-              Next
-              <img src={rightArrow} alt="right arrow" />
-            </button>
-          </div>
+          <Pagination
+            totalPages={admin.totalPages}
+            currentPage={currentPage}
+            parentRef={paginationRef}
+            setCurrentPage={setCurrentPage}
+          />
         </section>
       </main>
     </div>
@@ -326,7 +296,7 @@ function UserView(_props: {
   pulse_status: string
   pulseStatusSubtile: string
   viewUser: (_props: User) => void
-  editUser: (id: string) => void
+  editUser: (email: string, status: string) => void
   deleteUser: (id: string) => void
 }) {
   const [userImage, setUserImage] = useState("")
@@ -424,7 +394,7 @@ function UserView(_props: {
             className="cy-edit-asset-btn cursor-pointer"
             id="cy-edit-asset-btn"
             onClick={() => {
-              _props.editUser(_props.id)
+              _props.editUser(_props.email, _props.account_status)
             }}
           />
           <img

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import facebook from "@images/facebook.svg"
 import instagram from "@images/insta.svg"
 import twitter from "@images/twitter.svg"
@@ -209,11 +209,28 @@ export function StepOneModal(_props: {
     backup_email2: string
     phone_number: string
     backup_phone_number: string
+    inform_beneficiary: boolean
   }
   _submitModal: () => void
   arrayLength: any
   showPreviousModal: () => void
-}) {
+}) 
+{
+  const [notifyBeneficiary, setNotifyBeneficiary] = useState(false)
+
+  const handleNotify = (e: any)=>{
+    e.preventDefault()
+    setNotifyBeneficiary(!notifyBeneficiary)
+
+    const customEvent: CustomChangeEvent = {
+      target: {
+        name: "inform_beneficiary",
+        value: e.target.checked,
+      },
+    }
+    _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+  }
+
   return (
     <Modal
       openModal={_props.openModal}
@@ -335,6 +352,7 @@ export function StepOneModal(_props: {
                   customViewContainer: "w-5 h-5",
                   CustomView: () => {
                     return <input data-cy="notify-user-input" type="checkbox" className="w-full h-full" />
+                    return <input type="checkbox" className="w-full h-full" checked={notifyBeneficiary} onChange={handleNotify} />
                   },
                 },
               },

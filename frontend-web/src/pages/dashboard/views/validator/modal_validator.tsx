@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import facebook from "@images/facebook.svg"
 import twitter from "@images/twitter.svg"
 import instagram from "@images/insta.svg"
@@ -120,10 +120,25 @@ export function StepOneModal(_props: {
     backup_email2: string
     phone_number: string
     backup_phone_number: string
+    inform_validator: boolean
   }
   _submitModal: () => void
   //   elements: objeect
 }) {
+  const [notifyValidator, setNotifyValidator] = useState(false)
+
+  const handleNotify = (e: any)=> {
+    e.preventDefault()
+    setNotifyValidator(!notifyValidator)
+
+    const customEvent: CustomChangeEvent = {
+      target: {
+        name: "inform_validator",
+        value: e.target.checked,
+      },
+    }
+    _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+  }
   return (
     <Modal
       openModal={_props.openModal}
@@ -240,6 +255,7 @@ export function StepOneModal(_props: {
                   customViewContainer: "w-5 h-5",
                   CustomView: () => {
                     return <input data-cy="notify-user-input" type="checkbox" className="w-full h-full" />
+                    return <input type="checkbox" className="w-full h-full" checked={notifyValidator} onChange={(e: any)=> handleNotify(e)}/>
                   },
                 },
               },
