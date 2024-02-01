@@ -511,8 +511,7 @@ export function SuccessModal(_props: {
                   </div>
                   <div className="flex flex-col gap-8 ">
                     <p className="w-[194px] text-center text-[#4F4F4F] leading-tight">
-                      Click here if you are done registering assets. This will
-                      take you to your Dashboard
+                      Click here if you are done registering assets.
                     </p>
                     <button
                       onClick={_props.submitModal}
