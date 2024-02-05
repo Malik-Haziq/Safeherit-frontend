@@ -1,6 +1,5 @@
 import React from "react"
 import dollar from "@images/dollar.svg"
-import realEstate from "@images/real-estate.svg"
 import bank from "@images/bank.svg"
 import eye from "@images/eye.svg"
 import edit from "@images/edit.svg"
@@ -414,7 +413,7 @@ export default function AssetsView() {
         setAssetBeneficiariesData(res.data.data.beneficiaries)
         setModalVisibility("beneficiaries-listing")
       })
-      .finally(()=>{
+      .finally(() => {
         stopLoader()
       })
   }

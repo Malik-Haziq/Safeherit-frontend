@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import tick from "@images/tick-blue.svg"
 import close from "@images/close-icon-red.svg"
 import edit from "@images/edit-icon.svg"
@@ -18,17 +18,16 @@ export default function RequestsView() {
   const [loading, setLoading] = useState<boolean>(true)
   const [currentPage, setCurrentPage] = useState(1)
   const paginationRef = useRef<HTMLDivElement>(null)
-  
+
   useEffect(() => {
     fetchRequests()
   }, [])
   // Integrate pagination api call in this effect
-  useEffect(() => {
-  }, [currentPage])
+  useEffect(() => {}, [currentPage])
 
   const fetchRequests = () => {
     setLoading(true)
-    dispatch<any>(getDeleteRequests({role: user.role, page: currentPage}))
+    dispatch<any>(getDeleteRequests({ role: user.role, page: currentPage }))
       .unwrap()
       .finally(() => {
         setLoading(false)
@@ -73,7 +72,10 @@ export default function RequestsView() {
   return (
     <div className={styles.AppView}>
       <main className="p-5 mx-auto w-[1101px]">
-        <section className="rounded-xl h-[676px] border-[1px] flex justify-between flex-col" ref={paginationRef}>
+        <section
+          className="rounded-xl h-[676px] border-[1px] flex justify-between flex-col"
+          ref={paginationRef}
+        >
           <table className="rounded-3xl ">
             <thead className="bg-[#F2F2F2] px-5 py-3 rounded-t-xl text-sm uppercase border-[1px] border-[#E5E5E5]">
               <tr>

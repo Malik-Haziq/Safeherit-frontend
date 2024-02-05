@@ -11,7 +11,7 @@ import { Login, SignUp, Home, About, Contact } from "./pages"
 import { ROUTE_CONSTANTS } from "./common"
 import { NavBar, Spinner } from "./components"
 import { lazy } from "react"
-import { CustomAppToast, CustomToast } from "./components/customToast"
+import { CustomToast } from "./components/customToast"
 import { useAppDispatch, useAppSelector } from "./redux/hooks"
 import { authenticateSession, getUser } from "./redux/actions"
 import Dashboard from "./pages/dashboard/Dashboard"
@@ -30,7 +30,6 @@ const RegisterKey = lazy(() => import("./pages/register-key/RegisterKey"))
 
 function App() {
   const loader = useAppSelector((state) => state.loader)
-  const user = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
   const [fetchingData, setFetchingData] = useState(true)
 
@@ -39,7 +38,7 @@ function App() {
       .unwrap()
       .then((response: { data: { data: { isSessionActive: boolean } } }) => {
         if (response.data.data.isSessionActive) {
-          dispatch<any>(getUser({ MuteToast: true }))
+          dispatch<any>(getUser({}))
             .unwrap()
             .finally(() => {
               setFetchingData(false)
@@ -56,7 +55,7 @@ function App() {
     <Spinner withOverlay={true} />
   ) : (
     <>
-      {user.role != "none" ? <CustomToast /> : <CustomAppToast />}
+      {<CustomToast />}
       {loader.loaderVisibility && <Spinner withOverlay={true} />}
       <AppRoutes />
     </>
