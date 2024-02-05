@@ -196,7 +196,7 @@ export function SignUp() {
         />
         <small className="text-sm text-safe-text-dark-gray">
           Already have an account?&nbsp;
-          <a href="/login" className="text-safe-text-dark-link-blue font-bold">
+          <a data-cy="login-button" href="/login" className="text-safe-text-dark-link-blue font-bold">
             Login
           </a>
         </small>

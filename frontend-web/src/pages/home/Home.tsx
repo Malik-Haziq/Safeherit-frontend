@@ -158,7 +158,7 @@ export function Home() {
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt.
               </p>
-              <a href="#">Learn more →</a>
+              <a data-cy="benefits-link" href="#">Learn more →</a>
             </div>
             <div>
               <div className="flex items-center gap-3">
@@ -197,7 +197,7 @@ export function Home() {
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt.
               </p>
-              <a href="#">Learn more →</a>
+              <a data-cy="benefits-link" href="#">Learn more →</a>
             </div>
             <div>
               <div className="flex items-center gap-3">
@@ -236,7 +236,7 @@ export function Home() {
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt.
               </p>
-              <a href="#">Learn more →</a>
+              <a data-cy="benefits-link" href="#">Learn more →</a>
             </div>
             <div>
               <div className="flex items-center gap-3">

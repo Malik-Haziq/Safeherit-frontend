@@ -53,7 +53,7 @@ const initialState = {
   twitter_username: "",
   personalized_message: "",
   profile_image: "",
-  inform_validator: false
+  inform_validator: false,
 }
 
 export default function ValidatorsView() {
@@ -143,17 +143,26 @@ export default function ValidatorsView() {
   }
 
   const _submitStepTwoModal = () => {
-    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i;
-    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i;
-    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i;
+    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i
+    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i
+    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i
 
-    if(modalControl.facebook_link && !(facebookRegex.test(modalControl.facebook_link))){
-      toast('Please enter a valid facebook link', 'error')
-    } else if(modalControl.instagram_username && !(instagramRegex.test(modalControl.instagram_username))){
-      toast('Please enter a valid instagram link', 'error')
-    } else if(modalControl.twitter_username && !(twitterRegex.test(modalControl.twitter_username))){
-      toast('Please enter a valid twitter link', 'error')
-    } else{
+    if (
+      modalControl.facebook_link &&
+      !facebookRegex.test(modalControl.facebook_link)
+    ) {
+      toast("Please enter a valid facebook link", "error")
+    } else if (
+      modalControl.instagram_username &&
+      !instagramRegex.test(modalControl.instagram_username)
+    ) {
+      toast("Please enter a valid instagram link", "error")
+    } else if (
+      modalControl.twitter_username &&
+      !twitterRegex.test(modalControl.twitter_username)
+    ) {
+      toast("Please enter a valid twitter link", "error")
+    } else {
       modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
     }
@@ -163,55 +172,54 @@ export default function ValidatorsView() {
     if (!modalControl.personalized_message) {
       modalControl.personalized_message = `Dear ${modalControl.name}, \n\nIf you receive this message it probably means I am gone. \n\nSince you’re one of the closest people to me, you probably know if am still alive or not. If I’m indeed dead, please confirm it as per the instructions of this platform (SafeHerit). \n\nThis will help me a lot in making sure that my family gets access to its inheritance as quickly as possible. \n\nThank you buddy, I’m counting on you! \n\n${user.displayName}`
     }
-      if (modalAction == "edit") {
-        startLoader()
-        toast("Updating validator", "info")
-        dispatch<any>(updateValidator(modalControl))
-          .unwrap()
-          .then(() => {
-            dispatch<any>(getAllValidator({}))
-              .unwrap()
-              .then((res: any) => {
-                closeModal()
-                updateValidatorArrayCount(res)
-              })
-              .catch(() => {
-                // TODO: show fallback page
-              })
-          })
-          .catch((err: any) => {
-            console.log(err)
-            // TODO: show fallback page
-          })
-          .finally(() => {
-            stopLoader()
-          })
-      } else if (modalAction == "create") {
-        startLoader()
-        toast("Creating validator", "info")
-        dispatch<any>(createValidator(modalControl))
-          .unwrap()
-          .then(() => {
-            dispatch<any>(getAllValidator({}))
-              .unwrap()
-              .then((res: any) => {
-                modalHistoryPush("Step-3")
-                setModalVisibility("Step-4")
-                updateValidatorArrayCount(res)
-              })
-              .catch(() => {
-                // TODO: show fallback page
-              })
-          })
-          .catch((err: any) => {
-            console.log(err)
-            // TODO: show fallback page
-          })
-          .finally(() => {
-            stopLoader()
-          })
-      }
-    
+    if (modalAction == "edit") {
+      startLoader()
+      toast("Updating validator", "info")
+      dispatch<any>(updateValidator(modalControl))
+        .unwrap()
+        .then(() => {
+          dispatch<any>(getAllValidator({}))
+            .unwrap()
+            .then((res: any) => {
+              closeModal()
+              updateValidatorArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
+        })
+        .catch((err: any) => {
+          console.log(err)
+          // TODO: show fallback page
+        })
+        .finally(() => {
+          stopLoader()
+        })
+    } else if (modalAction == "create") {
+      startLoader()
+      toast("Creating validator", "info")
+      dispatch<any>(createValidator(modalControl))
+        .unwrap()
+        .then(() => {
+          dispatch<any>(getAllValidator({}))
+            .unwrap()
+            .then((res: any) => {
+              modalHistoryPush("Step-3")
+              setModalVisibility("Step-4")
+              updateValidatorArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
+        })
+        .catch((err: any) => {
+          console.log(err)
+          // TODO: show fallback page
+        })
+        .finally(() => {
+          stopLoader()
+        })
+    }
   }
   const _submitDeleteModal = () => {
     dispatch<any>(deleteValidator({ id: modalControl.id }))
@@ -465,7 +473,11 @@ function Validators(_props: {
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
               <div className="relative">
-                <input data-cy="select-all-validator-input" type="checkbox" id="checkbox" />
+                <input
+                  data-cy="select-all-validator-input"
+                  type="checkbox"
+                  id="checkbox"
+                />
                 <label
                   htmlFor="checkbox"
                   className="checkbox-label ml-1 -top-1"
@@ -558,6 +570,7 @@ function Validator(_props: {
           // TODO add loading view
         }
         <p
+          data-cy="view-validator-button"
           className="font-semibold cursor-pointer"
           onClick={() => _props.viewValidator(_props.id)}
         >
@@ -576,6 +589,7 @@ function Validator(_props: {
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
           <a
+            data-cy="validator-facebook-link"
             href={_props.facebook_link || "https://www.facebook.com/login.php"}
             target="_blank"
             rel="noopener noreferrer"
@@ -587,6 +601,7 @@ function Validator(_props: {
             />
           </a>
           <a
+            data-cy="validator-facebook-link"
             href={`https://www.instagram.com/${_props.instagram_username}/`}
             target="_blank"
             rel="noopener noreferrer"
@@ -598,6 +613,7 @@ function Validator(_props: {
             />
           </a>
           <a
+            data-cy="validator-facebook-link"
             href={`https://twitter.com/${_props.twitter_username}/`}
             target="_blank"
             rel="noopener noreferrer"

@@ -714,6 +714,7 @@ function Beneficiary(_props: {
           // TODO add loading view
         }
         <p
+          data-cy="view-beneficiary-details-button"
           className="font-semibold cursor-pointer"
           onClick={() => _props.viewBeneficiary(_props.id)}
         >
@@ -732,6 +733,7 @@ function Beneficiary(_props: {
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
           <a
+            data-cy="beneficiary-facebook-account-link"
             href={_props.facebook_link || ""}
             target="_blank"
             rel="noopener noreferrer"
@@ -743,6 +745,7 @@ function Beneficiary(_props: {
             />
           </a>
           <a
+            data-cy="beneficiary-instagram-account-link"
             href={_props.instagram_username || ""}
             target="_blank"
             rel="noopener noreferrer"
@@ -754,6 +757,7 @@ function Beneficiary(_props: {
             />
           </a>
           <a
+            data-cy="beneficiary-twitter-account-link"
             href={_props.twitter_username || ""}
             target="_blank"
             rel="noopener noreferrer"

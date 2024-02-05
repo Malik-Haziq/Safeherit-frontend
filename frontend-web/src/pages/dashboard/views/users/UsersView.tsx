@@ -338,7 +338,7 @@ function UserView(_props: {
             : "w-[80px] text-[#F44336] font-medium text-sm"
         }
       >
-        {_props.payment_status}{" "}
+        {_props.payment_status}
       </td>
       <td
         className={
@@ -350,7 +350,7 @@ function UserView(_props: {
             : "w-[80px] text-[#000] font-medium text-sm"
         }
       >
-        {_props.account_status}{" "}
+        {_props.account_status}
       </td>
       <td className="w-[170px] text-[#4D4D4D] font-medium text-xs">
         <p>{_props.pulse_status}</p>
@@ -371,6 +371,7 @@ function UserView(_props: {
       <td>
         <div className="flex gap-1 w-[140px]">
           <img
+            data-cy="view-user-button"
             src={eye}
             alt="view icon"
             className="cy-view-asset-btn cursor-pointer"
@@ -390,6 +391,7 @@ function UserView(_props: {
             }}
           />
           <img
+            data-cy="edit-user-button"
             src={edit}
             alt="edit icon"
             className="cy-edit-asset-btn cursor-pointer"
@@ -399,6 +401,7 @@ function UserView(_props: {
             }}
           />
           <img
+            data-cy="delete-user-button"
             src={deleteIcon}
             alt="delete icon"
             className="cy-del-asset-btn cursor-pointer"

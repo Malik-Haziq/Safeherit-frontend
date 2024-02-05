@@ -454,6 +454,7 @@ function CheckPulsePeriod(_props: {
 }) {
   return (
     <div
+      data-cy="pulse-check-period-button"
       className={`
       w-[120px] flex items-center justify-center flex-col py-6  bg-[#F6F6F6] rounded-xl cursor-pointer ${
         (_props.pulseCheckDays == _props.days ||
@@ -520,7 +521,7 @@ function CheckPulseDates(_props: {
         <span className="font-bold text-[#065A93]">
           &nbsp;{_props.nextPulseCheck}&nbsp;
         </span>
-        {Number(_props.nextPulseCheck) > 1 ? 'days' : 'day'}
+        {Number(_props.nextPulseCheck) > 1 ? "days" : "day"}
       </p>
     </>
   )
@@ -610,6 +611,7 @@ function MethodRow(_props: {
             code={_inputValue?.split(" ")[0]}
           />
           <img
+            data-cy="save-edited-phone-number-button"
             src={tickIcon}
             onClick={_handleUpdate}
             alt="save icon"
@@ -629,6 +631,7 @@ function MethodRow(_props: {
             _handleChange={(e: any) => _setInputValue(e.target.value)}
           />
           <img
+            data-cy="save-edited-phone-number-button"
             src={tickIcon}
             onClick={_handleUpdate}
             alt="save icon"
@@ -639,6 +642,7 @@ function MethodRow(_props: {
         <>
           <p>{_props.subHeading}</p>
           <img
+            data-cy="edit-phone-number-button"
             src={editIcon}
             onClick={() =>
               _props.setEditDetailInput(convertToCamelCase(_props.heading))
