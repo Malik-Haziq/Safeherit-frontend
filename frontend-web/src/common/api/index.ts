@@ -87,11 +87,18 @@ const _handleErrors = (error: any, MuteToast?: boolean, toastType?: string) => {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       if (error?.response?.data?.message == "Unauthorized") {
+        toastType == "appToast"
+          ? appToast("Please login again to continue", "error")
+          : toast("Please login again to continue", "error")
         localStorage.clear()
+        setTimeout(() => {
+          window.location.reload()
+        }, 5000)
+      } else {
+        toastType == "appToast"
+          ? appToast(error?.response?.data?.message, "error")
+          : toast(error?.response?.data?.message, "error")
       }
-      toastType == "appToast"
-        ? appToast(error?.response?.data?.message, "error")
-        : toast(error?.response?.data?.message, "error")
     } else if (error.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
