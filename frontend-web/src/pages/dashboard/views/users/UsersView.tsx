@@ -3,8 +3,6 @@ import styles from "../../Dashboard.module.css"
 import eye from "@images/eye.svg"
 import userImg from "@images/user.svg"
 import edit from "@images/edit.svg"
-import leftArrow from "@images/left-arrow.svg"
-import rightArrow from "@images/right-arrow.svg"
 import deleteIcon from "@images/delete.svg"
 import { NewUserDetail, NewUserModal, UserDetail } from "../users/modal_admin"
 import { useCallback, useEffect, useState } from "react"
@@ -153,7 +151,7 @@ export default function UsersView() {
       }
     }
   }
-  
+
   const editUser = (email: string, currentStatus: string) => {
     setLoading(true)
     const data = {
@@ -224,7 +222,10 @@ export default function UsersView() {
             <span className="text-3xl">+</span> Create Account
           </a>
         </button>
-        <section className="rounded-xl h-[676px] border-[1px] flex justify-between flex-col" ref={paginationRef}>
+        <section
+          className="rounded-xl h-[676px] border-[1px] flex justify-between flex-col"
+          ref={paginationRef}
+        >
           <table className="rounded-3xl ">
             <thead className="bg-[#F2F2F2] px-5 py-3 rounded-t-xl text-sm uppercase border-[1px] border-[#E5E5E5]">
               <tr>

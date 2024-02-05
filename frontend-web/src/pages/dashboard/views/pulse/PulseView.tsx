@@ -518,8 +518,9 @@ function CheckPulseDates(_props: {
       <p className=" ml-8">
         Next Pulse Check is due in
         <span className="font-bold text-[#065A93]">
-          &nbsp;{_props.nextPulseCheck}
+          &nbsp;{_props.nextPulseCheck}&nbsp;
         </span>
+        {Number(_props.nextPulseCheck) > 1 ? 'days' : 'day'}
       </p>
     </>
   )

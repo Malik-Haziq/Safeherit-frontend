@@ -1,3 +1,4 @@
+import React from "react"
 import styles from "../../Dashboard.module.css"
 import addIcon from "@images/add.svg"
 import crossIcon from "@images/cross.svg"
@@ -747,7 +748,12 @@ function Suggestions(_props: {
 function Support() {
   return (
     <main className="flex flex-col gap-6 bg-white mx-8 py-10 px-8 rounded-2xl w-[1085px] shadow-sm">
-      <p className="text-[#838383] text-center">Need Assistance? Please fill out the form below with your support request or any questions you may have. Be as detailed as possible to help us assist you better. Our support team will get back to you as quickly as possible</p>
+      <p className="text-[#838383] text-center">
+        Need Assistance? Please fill out the form below with your support
+        request or any questions you may have. Be as detailed as possible to
+        help us assist you better. Our support team will get back to you as
+        quickly as possible
+      </p>
       <form className="mb-14">
         <textarea
           placeholder="Enter your message..."

@@ -9,7 +9,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getUser, loginWithGoogle, signup } from "@redux/actions"
 import { useAppDispatch } from "@redux/hooks"
-import { GoogleAuthButton, appToast } from "@/components"
+import { GoogleAuthButton, toast } from "@/components"
 import { updateRole, updateRoleCheck } from "@/redux/reducers/UserSlice"
 import { isStrongPassword } from "@/common"
 
@@ -49,7 +49,7 @@ export function SignUp() {
       agreeTermAndCondition
     ) {
       if (formControl.password !== formControl.confirm_password) {
-        appToast("password must match", "error")
+        toast("password must match", "error")
       } else if (!isStrongPassword(formControl.password)) {
         setIsValidPassword(true)
       } else {
@@ -63,11 +63,11 @@ export function SignUp() {
         )
           .unwrap()
           .then((res: { data: { message: string } }) => {
-            appToast(res.data.message, "success")
+            toast(res.data.message, "success")
             navigate("/login")
           })
           .catch((err: { code: string }) => {
-            appToast(err?.code, "error")
+            toast(err?.code, "error")
           })
       }
     }
@@ -86,7 +86,7 @@ export function SignUp() {
           })
       })
       .catch((err: { code: string }) => {
-        appToast(err?.code, "error")
+        toast(err?.code, "error")
       })
   }
 

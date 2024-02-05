@@ -1,5 +1,4 @@
-import React from 'react'
-import {useState, useEffect} from "react"
+import React, { useState, useEffect } from "react"
 import registerAssetsImg from "@images/register-assets.svg"
 import stepOne from "@images/step-1.svg"
 import stepTwo from "@images/step-2.svg"
@@ -178,13 +177,13 @@ const generateTextInputFieldProps = (
 }
 
 const generateTextView = (name: string) => {
-  return ({
+  return {
     type: "textView",
     props: {
       text: name,
       textStyles: "text-[#00192B] font-medium mb-4 px-7",
     },
-  })
+  }
 }
 
 export function StepOneModal(_props: {
@@ -203,13 +202,14 @@ export function StepOneModal(_props: {
 }) {
   const factoryElements = assetData[_props.modalControl?.category]?.[0]
   const conditionalElements = factoryElements
-    ? factoryElements.map((Asset) => {
+    ? factoryElements.map((Asset, index) => {
         if (Asset.name == "Currency") {
           return null
         }
-        if (Asset.name == "Balance" || Asset.name == "Acquisition cost" ) {
+        if (Asset.name == "Balance" || Asset.name == "Acquisition cost") {
           return (
             <CurrencyField
+              key={index}
               name={Asset.name}
               placeholder={Asset.placeholder}
               containerStyles="mx-7 mb-4"
@@ -375,14 +375,11 @@ export function StepTwoModal(_props: {
             )
           }
         } else if (Asset.type === "textView") {
-          return generateTextView(
-            Asset.name
-          )
+          return generateTextView(Asset.name)
         }
         return null // Return null for other types or handle as needed
       })
     : []
-
 
   const handleFileInputChange = (event: any) => {
     const file = event.target.files[0]
@@ -513,8 +510,7 @@ export function SuccessModal(_props: {
                   </div>
                   <div className="flex flex-col gap-8 ">
                     <p className="w-[194px] text-center text-[#4F4F4F] leading-tight">
-                      Click here if you are done registering assets. This will
-                      take you to your Dashboard
+                      Click here if you are done registering assets.
                     </p>
                     <button
                       data-cy="done-button-of-created-asset-modal"
@@ -630,7 +626,6 @@ export function AssetBeneficiaries(_props: {
   modalControl: ModalControl
   assetId: string
 }) {
-
   return (
     <Modal
       openModal={_props.openModal}
@@ -663,7 +658,13 @@ export function AssetBeneficiaries(_props: {
                   <tbody>
                     {_props.modalControl.map(
                       (beneficiary: any, index: number) => (
-                        <Beneficiary img={beneficiary.profile_image} name={beneficiary.name} email={beneficiary.primary_email} number={beneficiary.phone_number} key={index}/>
+                        <Beneficiary
+                          img={beneficiary.profile_image}
+                          name={beneficiary.name}
+                          email={beneficiary.primary_email}
+                          number={beneficiary.phone_number}
+                          key={index}
+                        />
                       ),
                     )}
                   </tbody>
@@ -677,8 +678,12 @@ export function AssetBeneficiaries(_props: {
   )
 }
 
-function Beneficiary(_props: {img: string; name: string; email: string; number: string; }){
-
+function Beneficiary(_props: {
+  img: string
+  name: string
+  email: string
+  number: string
+}) {
   const [image, setImage] = useState<string>(_props.img)
 
   useEffect(() => {
@@ -693,21 +698,18 @@ function Beneficiary(_props: {img: string; name: string; email: string; number: 
 
   return (
     <>
-        <tr
-          className="flex justify-between items-center px-5 py-3"
-        >
-          <td className="text-[#292929] font-sm min-w-[160px] px-1 flex gap-2 items-center">
-            <img src={image} alt="beneficiary image" className='w-10'/>
-            {_props.name.slice(0, 20)}
-          </td>
-          <td className="text-[#292929] font-sm min-w-[300px] text-left px-1">
-            {_props.email}
-          </td>
-          <td className="text-[#292929] font-sm min-w-[160px] text-left px-1">
-            {_props.number}
-          </td>
-        </tr>
-
+      <tr className="flex justify-between items-center px-5 py-3">
+        <td className="text-[#292929] font-sm min-w-[160px] px-1 flex gap-2 items-center">
+          <img src={image} alt="beneficiary image" className="w-10" />
+          {_props.name.slice(0, 20)}
+        </td>
+        <td className="text-[#292929] font-sm min-w-[300px] text-left px-1">
+          {_props.email}
+        </td>
+        <td className="text-[#292929] font-sm min-w-[160px] text-left px-1">
+          {_props.number}
+        </td>
+      </tr>
     </>
   )
 }
@@ -730,7 +732,8 @@ export function BeneficiaryWarning(_props: {
           type: "textView",
           props: {
             text: "Oops! It looks like you haven't registered any beneficiaries yet.",
-            textStyles: "text-[#00192B] text-xl font-bold mb-4 mt-14 px-7 text-center mx-auto w-fit",
+            textStyles:
+              "text-[#00192B] text-xl font-bold mb-4 mt-14 px-7 text-center mx-auto w-fit",
           },
         },
         {

@@ -16,7 +16,7 @@ import {
   confirmPasswordReset,
   verifyPasswordResetCode,
 } from "firebase/auth"
-import { appToast } from "@/components"
+import { toast } from "@/components"
 import { API } from ".."
 
 const storage = getStorage()
@@ -189,7 +189,7 @@ export async function verifyEmail(
 export const handleVerifyEmail = (actionCode: string) => {
   applyActionCode(auth, actionCode)
     .then(() => {
-      appToast("Email Verified", "success")
+      toast("Email Verified", "success")
     })
     .catch((error) => {
       toastFirebaseError(error)
@@ -205,7 +205,7 @@ export const handleResetPassword = async (
       confirmPasswordReset(auth, actionCode, newPassword)
         .then((resp) => {
           console.log(resp)
-          appToast("Password changed", "success")
+          toast("Password changed", "success")
         })
         .catch((error) => {
           toastFirebaseError(error)
@@ -224,6 +224,6 @@ export function toastFirebaseError(e: any) {
     errorWithCode.code &&
     errorWithCode.code != "auth/too-many-requests"
   ) {
-    appToast(errorWithCode.code, "error")
+    toast(errorWithCode.code, "error")
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { InputField, SelectField } from ".."
 import { currencyList } from "@/pages/dashboard/views/asset/data"
 import { SelectOption } from "@/types"
@@ -18,7 +18,7 @@ export function CurrencyField(_props: {
     value: string,
     currency?: SelectOption,
   ) => {
-    let customEvent = {
+    const customEvent = {
       target: {},
     }
 
