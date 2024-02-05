@@ -392,6 +392,7 @@ export default function AccountView() {
                       Delete Your Account
                     </p>
                     <button
+                      data-cy="delete-account-button"
                       className="primary-btn bg-[#D8D8D8] rounded-2xl text-[#686868] text-sm"
                       onClick={_handleUserDeletion}
                     >
@@ -432,6 +433,7 @@ function UserProfile(_props: {
           </div>
         </div>
         <button
+          data-cy="edit-user-profile-button"
           onClick={_props.editUser}
           className="primary-btn rounded-[14px] bg-[#0971AA] cursor-pointer"
         >
@@ -553,6 +555,7 @@ function MembershipPlan(_props: {
           </p>
         </div>
         <button
+          data-cy="pricing-plan-details-button"
           onClick={_props.showPlanView}
           className="primary-btn bg-[#0971AA] rounded-2xl"
         >

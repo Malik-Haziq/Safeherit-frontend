@@ -55,6 +55,7 @@ export function ForgotPasswordModal(_props: {
                     }}
                   >
                     <input
+                      data-cy="user-email-to-forget-password-input"
                       type={"email"}
                       name={"email"}
                       placeholder={"Enter email to reset password"}
@@ -66,6 +67,7 @@ export function ForgotPasswordModal(_props: {
                       className="bg-safe-white py-4 px-4 w-full divide-safe-color-gray border rounded-[6px]"
                     />
                     <button
+                      data-cy="forget-password-button"
                       type="submit"
                       className="mt-4 primary-btn rounded-md bg-safe-blue-shade px-40"
                     >

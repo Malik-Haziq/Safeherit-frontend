@@ -79,7 +79,7 @@ export function StepZeroInformationModal(_props: {
                   CustomView: () => {
                     return (
                       <div className="relative">
-                        <input type="checkbox" id="checkbox" />
+                        <input data-cy="don't-display-modal-next-time-input" type="checkbox" id="checkbox" />
                         <label htmlFor="checkbox" className="checkbox-label">
                           <div className="check_mark"></div>
                         </label>
@@ -254,6 +254,7 @@ export function StepOneModal(_props: {
                 props: {
                   customViewContainer: "w-5 h-5",
                   CustomView: () => {
+                    return <input data-cy="notify-user-input" type="checkbox" className="w-full h-full" />
                     return <input type="checkbox" className="w-full h-full" checked={notifyValidator} onChange={(e: any)=> handleNotify(e)}/>
                   },
                 },
@@ -439,6 +440,7 @@ export function StepTwoModal(_props: {
               return (
                 <div className="relative">
                   <input
+                    data-cy="validator-profile-pic-input"
                     type="file"
                     accept="image/*"
                     onChange={handleImageInputChange}
@@ -612,6 +614,7 @@ export function StepFourSuccessModal(_props: {
                       Click here if you want to register another validator.
                     </p>
                     <button
+                      data-cy="register-another-validator-button"
                       onClick={_props.registerAnother}
                       className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl"
                     >
@@ -624,6 +627,7 @@ export function StepFourSuccessModal(_props: {
                       done registering validators.{" "}
                     </p>
                     <button
+                      data-cy="setup-pulse-check-button"
                       onClick={_props.pulseCheck}
                       className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl"
                     >

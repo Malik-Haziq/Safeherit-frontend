@@ -85,6 +85,7 @@ export default function AuthenticateUser(_props: {
           </div>
           <div className="flex justify-between mt-4 gap-x-4">
             <button
+              data-cy="cancel-authentication-button"
               className="border-2 border-bg-safe-blue-tint rounded-xl flex h-11 w-1/2 items-center justify-center px-6"
               onClick={_handleCancel}
             >
@@ -93,6 +94,7 @@ export default function AuthenticateUser(_props: {
               </span>
             </button>
             <button
+              data-cy="confirm-authentication-button"
               className="bg-safe-blue-tint rounded-xl flex h-11 w-1/2 items-center justify-center px-6"
               disabled={!password}
               onClick={handleAuthentication}

@@ -53,12 +53,14 @@ export function ConfirmationModal(_props: {
                     </p>
                     <div className="flex gap-5 justify-between itmes-center">
                       <button
+                        data-cy="confirm-button"
                         onClick={_props._submitModal}
                         className="primary-btn rounded-xl flex-grow"
                       >
                         <span className="mx-auto">Yes</span>
                       </button>
                       <button
+                        data-cy="no-button"
                         onClick={_props.closeModal}
                         className="primary-btn rounded-xl bg-[#D8D8D8] text-[#00192B] flex-grow"
                       >

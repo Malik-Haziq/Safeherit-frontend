@@ -64,6 +64,7 @@ export function EditUserModal(_props: {
               return (
                 <div className="relative">
                   <input
+                    data-cy="select-profile-pic-input"
                     type="file"
                     accept="image/*"
                     onChange={handleImageInputChange}
