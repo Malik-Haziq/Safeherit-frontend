@@ -510,6 +510,7 @@ function AddValidators(_props: {
           No registered validator yet
         </p>
         <button
+          data-cy="register-validator-button"
           onClick={_props.openStepZeroModal}
           className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
         >
@@ -559,7 +560,11 @@ function Validators(_props: {
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
               <div className="relative">
-                <input type="checkbox" id="checkbox" />
+                <input
+                  data-cy="select-all-validator-input"
+                  type="checkbox"
+                  id="checkbox"
+                />
                 <label
                   htmlFor="checkbox"
                   className="checkbox-label ml-1 -top-1"
@@ -652,6 +657,7 @@ function Validator(_props: {
           // TODO add loading view
         }
         <p
+          data-cy="view-validator-button"
           className="font-semibold cursor-pointer"
           onClick={() => _props.viewValidator(_props.id)}
         >
@@ -670,6 +676,7 @@ function Validator(_props: {
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
           <a
+            data-cy="validator-facebook-link"
             href={_props.facebook_link || "https://www.facebook.com/login.php"}
             target="_blank"
             rel="noopener noreferrer"
@@ -681,6 +688,7 @@ function Validator(_props: {
             />
           </a>
           <a
+            data-cy="validator-facebook-link"
             href={`https://www.instagram.com/${_props.instagram_username}/`}
             target="_blank"
             rel="noopener noreferrer"
@@ -692,6 +700,7 @@ function Validator(_props: {
             />
           </a>
           <a
+            data-cy="validator-facebook-link"
             href={`https://twitter.com/${_props.twitter_username}/`}
             target="_blank"
             rel="noopener noreferrer"

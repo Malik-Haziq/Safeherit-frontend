@@ -414,6 +414,7 @@ export function StepTwoModal(_props: {
               return (
                 <div className="relative">
                   <input
+                    data-cy="asset-file-input"
                     type="file"
                     accept="image/*"
                     name="asset_file"
@@ -500,6 +501,7 @@ export function SuccessModal(_props: {
                       Click here if you want to register another Asset.
                     </p>
                     <button
+                      data-cy="register-another-asset--button"
                       onClick={_props.registerAnotherAsset}
                       className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl"
                     >
@@ -511,6 +513,7 @@ export function SuccessModal(_props: {
                       Click here if you are done registering assets.
                     </p>
                     <button
+                      data-cy="done-button-of-created-asset-modal"
                       onClick={_props.submitModal}
                       className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl"
                     >

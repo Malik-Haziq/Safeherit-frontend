@@ -539,6 +539,7 @@ function AddAsset(_props: {
           There are no assets on your board. Please create assets.
         </p>
         <button
+          data-cy="create-asset-button"
           onClick={_props.openStepZeroModal}
           className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
         >
@@ -585,7 +586,7 @@ function Assets(_props: {
         <section className="">
           <div className="flex items-center gap-11 mb-2 pl-6">
             <div className="relative">
-              <input type="checkbox" id="checkbox" />
+              <input data-cy="select-all-assets-input" type="checkbox" id="checkbox" />
               <label htmlFor="checkbox" className="checkbox-label h-5 w-5">
                 <div className="check_mark"></div>
               </label>
@@ -714,6 +715,7 @@ function AssetDetails(_props: {
             className="w-10 h-10"
           />
           <p
+            data-cy="view-asset-details-button"
             className="text-[#00192B] text-sm font-semibold cursor-pointer"
             onClick={() => {
               _props.viewAsset(_props.assetId)
@@ -726,6 +728,7 @@ function AssetDetails(_props: {
       <div className="flex justify-between items-center w-[268px] flex-grow">
         <div className="flex gap-4 items-center">
           <img
+            data-cy="view-asset-details-button"
             src={assetImages[_props.assetType]}
             alt="real estate icon"
             className="cursor-pointer w-10 h-10"
@@ -745,6 +748,7 @@ function AssetDetails(_props: {
         {_props.userRole != "beneficiary" ? (
           <div className="flex justify-between items-center gap-3">
             <button
+              data-cy="view-beneficiary-button"
               onClick={() => _props.viewBeneficiaries(_props.assetId)}
               className="font-semibold"
             >
@@ -757,6 +761,7 @@ function AssetDetails(_props: {
         )}
         <div className="flex gap-1 ">
           <img
+            data-cy="view-asset-details-button"
             src={eye}
             alt="view icon"
             className="cy-view-asset-btn cursor-pointer"
@@ -768,6 +773,7 @@ function AssetDetails(_props: {
           {_props.userRole == "owner" && (
             <>
               <img
+                data-cy="edit-asset-button"
                 src={edit}
                 alt="edit icon"
                 className="cy-edit-asset-btn cursor-pointer"
@@ -777,6 +783,7 @@ function AssetDetails(_props: {
                 }}
               />
               <img
+                data-cy="delete-asset-button"
                 src={deleteIcon}
                 alt="delete icon"
                 className="cy-del-asset-btn cursor-pointer"
