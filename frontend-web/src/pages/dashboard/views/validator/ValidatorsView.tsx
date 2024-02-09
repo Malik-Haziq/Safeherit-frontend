@@ -23,6 +23,7 @@ import {
   StepTwoModal,
   StepThreeModal,
   StepFourSuccessModal,
+  EditValidatorModal,
 } from "./modal_validator"
 import {
   getAllValidator,
@@ -36,6 +37,9 @@ import {
   isValidEmail,
   getFileFromFirebase,
   isValidPhoneWithRegion,
+  isValidFacebook,
+  isValidInstagram,
+  isValidTwitter,
   useArray,
 } from "@/common"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
@@ -143,23 +147,19 @@ export default function ValidatorsView() {
   }
 
   const _submitStepTwoModal = () => {
-    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i
-    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i
-    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i
-
     if (
       modalControl.facebook_link &&
-      !facebookRegex.test(modalControl.facebook_link)
+      !isValidFacebook(modalControl.facebook_link)
     ) {
       toast("Please enter a valid facebook link", "error")
     } else if (
       modalControl.instagram_username &&
-      !instagramRegex.test(modalControl.instagram_username)
+      !isValidInstagram(modalControl.instagram_username)
     ) {
       toast("Please enter a valid instagram link", "error")
     } else if (
       modalControl.twitter_username &&
-      !twitterRegex.test(modalControl.twitter_username)
+      !isValidTwitter(modalControl.twitter_username)
     ) {
       toast("Please enter a valid twitter link", "error")
     } else {
@@ -252,6 +252,7 @@ export default function ValidatorsView() {
     setModalVisibility("Step-1")
   }
   const editValidator = (id: string) => {
+    startLoader()
     dispatch<any>(findValidator({ id: id }))
       .unwrap()
       .then((res: any) => {
@@ -264,7 +265,10 @@ export default function ValidatorsView() {
           .catch(() => {
             setImageUpload("")
           })
-        setModalVisibility("Step-1")
+        setModalVisibility("edit-validator")
+      })
+      .finally(() => {
+        stopLoader()
       })
   }
   const destroyValidator = (id: string) => {
@@ -310,8 +314,87 @@ export default function ValidatorsView() {
     setModalControl({ ...modalControl, [name]: value })
   }
 
+  const _submitEditValidatorModal = () => {
+
+    if (!modalControl.name) {
+      toast("please enter a valid name", "error")
+    } else if (
+      (!isValidEmail(modalControl.primary_email) &&
+        !isValidEmail(modalControl.backup_email2) &&
+        !isValidEmail(modalControl.backup_email)) ||
+      (modalControl.primary_email &&
+        !isValidEmail(modalControl.primary_email)) ||
+      (modalControl.backup_email && !isValidEmail(modalControl.backup_email)) ||
+      (modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2))
+    ) {
+      toast("please enter a valid Email address", "error")
+    } else if (
+      modalControl.phone_number &&
+      !isValidPhoneWithRegion(modalControl.phone_number)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else if (
+      modalControl.backup_phone_number &&
+      !isValidPhoneWithRegion(modalControl.backup_phone_number)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else if (
+      modalControl.facebook_link &&
+      !isValidFacebook(modalControl.facebook_link)
+    ) {
+      toast("Please enter a valid facebook link", "error")
+    } else if (
+      modalControl.instagram_username &&
+      !isValidInstagram(modalControl.instagram_username)
+    ) {
+      toast("Please enter a valid instagram link", "error")
+    } else if (
+      modalControl.twitter_username &&
+      !isValidTwitter(modalControl.twitter_username)
+    ) {
+      toast("Please enter a valid twitter link", "error")
+    } else if (!modalControl.personalized_message) {
+      toast("Personalized message cannot be empty", "error")
+    } else {
+      startLoader()
+      toast("Updating validator", "info")
+      dispatch<any>(updateValidator(modalControl))
+        .unwrap()
+        .then(() => {
+          dispatch<any>(getAllValidator({}))
+            .unwrap()
+            .then((res: any) => {
+              updateValidatorArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
+        })
+        .catch((err: any) => {
+          console.log(err)
+          // TODO: show fallback page
+        })
+        .finally(() => {
+          closeModal()
+          stopLoader()
+        })
+    }
+  }
+
   return (
     <>
+      <EditValidatorModal
+        openModal={modalVisibility === "edit-validator"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        _handleChange={_handleChange}
+        setModalControl={setModalControl}
+        modalControl={modalControl}
+        handleSubmit={_submitEditValidatorModal}
+        setImageUpload={setImageUpload}
+        imageUpload={imageUpload}
+        _handleDiscard={_handleDiscard}
+      />
       <UserDetailsModal
         openModal={modalVisibility == "User-Info"}
         closeModal={closeModal}
