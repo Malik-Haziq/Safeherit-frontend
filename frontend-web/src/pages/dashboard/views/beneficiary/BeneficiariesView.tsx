@@ -12,6 +12,7 @@ import styles from "../../Dashboard.module.css"
 import {
   ValidatorDropDown,
   UserDetailsModal,
+  EditDetailsModal,
   Spinner,
   toast,
 } from "@/components"
@@ -319,8 +320,7 @@ export default function BeneficiariesView() {
           .catch(() => {
             setVideoUpload("")
           })
-
-        setModalVisibility("Step-1")
+        setModalVisibility("edit-beneficiary")
       })
   }
   const destroyBeneficiary = (id: string) => {
@@ -435,6 +435,73 @@ export default function BeneficiariesView() {
     }
   }, [modalEncryptionKeyControl.publicKey])
 
+  const _submitEditBeneficiaryModal = () => {
+
+    if (!modalControl.name) {
+      toast("please enter a valid name", "error")
+    } else if (
+      (!isValidEmail(modalControl.primary_email) &&
+        !isValidEmail(modalControl.backup_email2) &&
+        !isValidEmail(modalControl.backup_email)) ||
+      (modalControl.primary_email &&
+        !isValidEmail(modalControl.primary_email)) ||
+      (modalControl.backup_email && !isValidEmail(modalControl.backup_email)) ||
+      (modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2))
+    ) {
+      toast("please enter a valid Email address", "error")
+    } else if (
+      modalControl.phone_number &&
+      !isValidPhoneWithRegion(modalControl.phone_number)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else if (
+      modalControl.backup_phone_number &&
+      !isValidPhoneWithRegion(modalControl.backup_phone_number)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else if (
+      modalControl.facebook_link &&
+      !isValidFacebook(modalControl.facebook_link)
+    ) {
+      toast("Please enter a valid facebook link", "error")
+    } else if (
+      modalControl.instagram_username &&
+      !isValidInstagram(modalControl.instagram_username)
+    ) {
+      toast("Please enter a valid instagram link", "error")
+    } else if (
+      modalControl.twitter_username &&
+      !isValidTwitter(modalControl.twitter_username)
+    ) {
+      toast("Please enter a valid twitter link", "error")
+    } else if (!modalControl.personalized_message) {
+      toast("Personalized message cannot be empty", "error")
+    } else {
+      startLoader()
+      toast("Updating Beneficiary", "info")
+      dispatch<any>(updateBeneficiary(modalControl))
+        .unwrap()
+        .then(() => {
+          dispatch<any>(getAllBeneficiary({}))
+            .unwrap()
+            .then((res: any) => {
+              updateBeneficiaryArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
+        })
+        .catch((err: any) => {
+          console.log(err)
+          // TODO: show fallback page
+        })
+        .finally(() => {
+          closeModal()
+          stopLoader()
+        })
+    }
+  }
+
   return (
     <>
       <GeneratePrivateKey
@@ -451,7 +518,6 @@ export default function BeneficiariesView() {
         copyPrivateKey={copyPrivateKey}
         copyPublicKey={copyPublicKey}
       />
-
       <UserDetailsModal
         openModal={modalVisibility == "User-Info"}
         closeModal={closeModal}
@@ -461,6 +527,21 @@ export default function BeneficiariesView() {
         modalControl={modalControl}
         imageUpload={imageUpload}
         videoUpload={videoUpload}
+      />
+      <EditDetailsModal
+        openModal={modalVisibility === "edit-beneficiary"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        _handleChange={_handleChange}
+        isBeneficiary={true}
+        setModalControl={setModalControl}
+        modalControl={modalControl}
+        handleSubmit={_submitEditBeneficiaryModal}
+        setImageUpload={setImageUpload}
+        imageUpload={imageUpload}
+        videoUpload={videoUpload}
+        setVideoUpload={setVideoUpload}
+        _handleDiscard={_handleDiscard}
       />
       <StepOneModal
         openModal={modalVisibility == "Step-1"}

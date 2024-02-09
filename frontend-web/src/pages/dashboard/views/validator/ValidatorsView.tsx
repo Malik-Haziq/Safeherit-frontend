@@ -14,6 +14,7 @@ import {
   ValidatorDropDown,
   ConfirmationModal,
   UserDetailsModal,
+  EditDetailsModal,
   Spinner,
   toast,
 } from "@/components"
@@ -23,7 +24,6 @@ import {
   StepTwoModal,
   StepThreeModal,
   StepFourSuccessModal,
-  EditValidatorModal,
 } from "./modal_validator"
 import {
   getAllValidator,
@@ -383,10 +383,11 @@ export default function ValidatorsView() {
 
   return (
     <>
-      <EditValidatorModal
+      <EditDetailsModal
         openModal={modalVisibility === "edit-validator"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
+        isBeneficiary={false}
         _handleChange={_handleChange}
         setModalControl={setModalControl}
         modalControl={modalControl}
