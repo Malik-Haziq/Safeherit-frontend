@@ -37,6 +37,9 @@ import {
   isValidEmail,
   getFileFromFirebase,
   isValidPhoneWithRegion,
+  isValidFacebook,
+  isValidInstagram,
+  isValidTwitter,
   useArray,
 } from "@/common"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
@@ -144,23 +147,19 @@ export default function ValidatorsView() {
   }
 
   const _submitStepTwoModal = () => {
-    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i
-    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i
-    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i
-
     if (
       modalControl.facebook_link &&
-      !facebookRegex.test(modalControl.facebook_link)
+      !isValidFacebook(modalControl.facebook_link)
     ) {
       toast("Please enter a valid facebook link", "error")
     } else if (
       modalControl.instagram_username &&
-      !instagramRegex.test(modalControl.instagram_username)
+      !isValidInstagram(modalControl.instagram_username)
     ) {
       toast("Please enter a valid instagram link", "error")
     } else if (
       modalControl.twitter_username &&
-      !twitterRegex.test(modalControl.twitter_username)
+      !isValidTwitter(modalControl.twitter_username)
     ) {
       toast("Please enter a valid twitter link", "error")
     } else {
@@ -316,9 +315,6 @@ export default function ValidatorsView() {
   }
 
   const _submitEditValidatorModal = () => {
-    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i
-    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i
-    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i
 
     if (!modalControl.name) {
       toast("please enter a valid name", "error")
@@ -344,17 +340,17 @@ export default function ValidatorsView() {
       toast("Please enter a valid phone number", "error")
     } else if (
       modalControl.facebook_link &&
-      !facebookRegex.test(modalControl.facebook_link)
+      !isValidFacebook(modalControl.facebook_link)
     ) {
       toast("Please enter a valid facebook link", "error")
     } else if (
       modalControl.instagram_username &&
-      !instagramRegex.test(modalControl.instagram_username)
+      !isValidInstagram(modalControl.instagram_username)
     ) {
       toast("Please enter a valid instagram link", "error")
     } else if (
       modalControl.twitter_username &&
-      !twitterRegex.test(modalControl.twitter_username)
+      !isValidTwitter(modalControl.twitter_username)
     ) {
       toast("Please enter a valid twitter link", "error")
     } else if (!modalControl.personalized_message) {

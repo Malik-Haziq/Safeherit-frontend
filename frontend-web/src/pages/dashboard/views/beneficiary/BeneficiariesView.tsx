@@ -36,6 +36,9 @@ import {
   getFileFromFirebase,
   copyToClipboard,
   isValidPhoneWithRegion,
+  isValidFacebook,
+  isValidInstagram,
+  isValidTwitter,
   useArray,
   downloadPEM,
 } from "@/common"
@@ -158,23 +161,20 @@ export default function BeneficiariesView() {
     }
   }
   const _submitStepTwoModal = () => {
-    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i
-    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i
-    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i
 
     if (
       modalControl.facebook_link &&
-      !facebookRegex.test(modalControl.facebook_link)
+      !isValidFacebook(modalControl.facebook_link)
     ) {
       toast("Please enter a valid facebook link", "error")
     } else if (
       modalControl.instagram_username &&
-      !instagramRegex.test(modalControl.instagram_username)
+      !isValidInstagram(modalControl.instagram_username)
     ) {
       toast("Please enter a valid instagram link", "error")
     } else if (
       modalControl.twitter_username &&
-      !twitterRegex.test(modalControl.twitter_username)
+      !isValidTwitter(modalControl.twitter_username)
     ) {
       toast("Please enter a valid twitter link", "error")
     } else {

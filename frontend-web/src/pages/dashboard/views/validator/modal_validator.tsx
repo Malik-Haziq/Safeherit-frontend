@@ -696,7 +696,7 @@ export const EditValidatorModal = (_props: {
         <>
         <div className="bg-[#00000066] absolute top-0 left-0 h-screen w-screen z-10">
         </div>
-          <div className="absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="w-[1070px] bg-white rounded-2xl border border-[#04477B]">
               <div className="h-[56px] w-full bg-[#f6f6f6] flex items-center rounded-tl-3xl rounded-tr-3xl border border-b-[#04477B]">
                 <div className="text-[#00192b] font-bold text-center text-lg flex-1">Edit validator details</div>
