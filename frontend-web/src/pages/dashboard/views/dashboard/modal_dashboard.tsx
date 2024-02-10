@@ -1,13 +1,24 @@
-import React from "react"
+import React, { useEffect } from "react"
 import logo from "@images/vertical_Logo.png"
 import video from "@images/register_page_video.png"
 
 import { Modal } from "@/components"
+import { useAppSelector } from "@/redux/hooks"
+import { useDispatch } from "react-redux"
+import { setWizardStep } from "@/redux/reducers/UserSlice"
+import { useNavigate } from "react-router-dom"
+import { ROUTE_CONSTANTS } from "@/common"
 
 export function DashboardModal() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { startupWizardCompleted, wizardStep } = useAppSelector(
+    (state) => state.user
+  )
+
   return (
     <Modal
-      openModal={false}
+      openModal={!startupWizardCompleted && wizardStep === "Dashboard"}
       closeModal={() => {}}
       closeModalOnOverlayClick={false}
       modalTitle="Welcome to SafeHerit!"
@@ -52,7 +63,10 @@ export function DashboardModal() {
           type: "buttonView",
           props: {
             title: "Get Started",
-            onclick: () => {},
+            onclick: () => {
+              dispatch(setWizardStep("Beneficiary"))
+              navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}`)
+            },
             buttonStyle: "",
             buttonContainer: "mx-48 mb-10",
           },

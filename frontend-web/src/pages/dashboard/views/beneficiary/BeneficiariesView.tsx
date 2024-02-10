@@ -38,10 +38,12 @@ import {
   isValidPhoneWithRegion,
   useArray,
   downloadPEM,
+  ROUTE_CONSTANTS,
 } from "@/common"
 import { GeneratePrivateKey } from "@/pages/register-key/modal_register_key"
 import Encryption from "@/common/encryption/encryption"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
+import { setWizardStep } from "@/redux/reducers/UserSlice"
 
 const initialState = {
   id: "",
@@ -58,7 +60,7 @@ const initialState = {
   personalized_video: "",
   profile_image: "",
   public_key: "",
-  inform_beneficiary: false
+  inform_beneficiary: false,
 }
 
 const initialStateForEncryptionKeys = {
@@ -114,6 +116,12 @@ export default function BeneficiariesView() {
 
   useEffect(() => {
     modalHistoryPopAll()
+  }, [])
+
+  useEffect(() => {
+    if (!user.startupWizardCompleted && user.wizardStep === "Beneficiary") {
+      addBeneficiary()
+    }
   }, [])
 
   const closeModal = useCallback(() => {
@@ -250,6 +258,10 @@ export default function BeneficiariesView() {
 
   const _submitSuccessModal = () => {
     closeModal()
+    if(!user.startupWizardCompleted && user.wizardStep === "Beneficiary") {
+      dispatch(setWizardStep("Validators"))
+      navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}`)
+    }
   }
 
   const _submitDeleteModal = () => {
@@ -441,7 +453,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Generate-PK"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         modalControl={modalEncryptionKeyControl}
         _handleChange={_handleEncryptionKeyChange}
         _handleGeneratePKPair={_handleGeneratePKPair}
@@ -466,7 +478,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-1"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         action={modalAction}
         _handleChange={_handleChange}
         modalControl={modalControl}
@@ -478,7 +490,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-2"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         action={modalAction}
         _handleChange={_handleChange}
         modalControl={modalControl}
@@ -493,7 +505,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-3"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         action={modalAction}
         _handleChange={_handleChange}
         videoUpload={videoUpload}
@@ -508,7 +520,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-success"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         action={modalAction}
         registerAnotherBeneficiary={registerAnotherBeneficiary}
         gotoValidators={gotoValidators}
@@ -526,7 +538,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-0"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted} 
         action={modalAction}
         _submitModal={_submitStepZeroModal}
       />

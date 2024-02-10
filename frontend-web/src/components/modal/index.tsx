@@ -1,9 +1,13 @@
-import React from "react"
+import React, { useCallback } from "react"
+import { useDispatch } from "react-redux"
 import defaultIcon from "@images/safeherit_logo.svg"
 import closeIcon from "@images/close-icon.svg"
 import arrowLeft from "@images/left-arrow.png"
 import styles from "./Modal.module.css"
 import { SelectField, InputField, PhoneNumField } from ".."
+import { useAppSelector } from "@/redux/hooks"
+import { setWizardStep } from "@/redux/reducers/UserSlice"
+import { updateUser } from "@/redux/actions"
 
 const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   const element = _props.element
@@ -178,11 +182,25 @@ export const Modal = (_props: {
   showPreviousModal?: any
   modalCustomStyles?: string
 }) => {
+  const dispatch = useDispatch()
   const elements = _props?.elements
+  const _handleCloseWizard = useCallback(() => {
+    dispatch(setWizardStep("none"))
+    dispatch<any>(updateUser({ startupWizardCompleted: true }))
+    _props.closeModal()
+  }, [])
   return (
     <>
       {_props.openModal && (
         <div className={styles.backDrop}>
+          {!_props.closeIconVisibility && (
+            <ButtonView
+              title={"Close Wizard"}
+              onclick={_handleCloseWizard}
+              buttonStyle={styles.mutedButton}
+              buttonContainer={styles.buttonContainerPosition}
+            />
+          )}
           <div className={styles.modalContainer}>
             <div
               className={`${styles.modal} ${

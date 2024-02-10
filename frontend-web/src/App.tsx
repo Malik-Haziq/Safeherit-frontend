@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { ProtectedRoutes } from "./common"
+import { ProtectedRoutes, WizardProtectedRoutes } from "./common"
 import {
   BrowserRouter,
   Route,
@@ -100,36 +100,41 @@ function AppRoutes() {
 
         <Route element={<ProtectedRoutes page="dashboard" />}>
           <Route path={ROUTE_CONSTANTS.DASHBOARD} element={<Dashboard />}>
-            <Route path="" element={<DashboardControl />} />
-            <Route
-              path={ROUTE_CONSTANTS.DASHBOARD_HELP}
-              element={<HelpView />}
-            />
-
-            <Route element={<ProtectedRoutes page="dashboard-owner" />}>
+            <Route element={<WizardProtectedRoutes />}>
+              <Route path="" element={<DashboardControl />} />
               <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}
-                element={<BeneficiariesView />}
-              />
-              <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}
-                element={<ValidatorsView />}
-              />
-              <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
-                element={<PulseView />}
-              />
-              <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT}
-                element={<AccountView />}
+                path={ROUTE_CONSTANTS.DASHBOARD_HELP}
+                element={<HelpView />}
               />
             </Route>
 
+            <Route element={<ProtectedRoutes page="dashboard-owner" />}>
+              <Route element={<WizardProtectedRoutes />}>
+                <Route
+                  path={ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}
+                  element={<BeneficiariesView />}
+                />
+                <Route
+                  path={ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}
+                  element={<ValidatorsView />}
+                />
+                <Route
+                  path={ROUTE_CONSTANTS.DASHBOARD_PULSE}
+                  element={<PulseView />}
+                />
+                <Route
+                  path={ROUTE_CONSTANTS.DASHBOARD_ACCOUNT}
+                  element={<AccountView />}
+                />
+              </Route>
+            </Route>
             <Route element={<ProtectedRoutes page="dashboard-beneficiary" />}>
-              <Route
-                path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
-                element={<AssetsView />}
-              />
+              <Route element={<WizardProtectedRoutes />}>
+                <Route
+                  path={ROUTE_CONSTANTS.DASHBOARD_ASSETS}
+                  element={<AssetsView />}
+                />
+              </Route>
             </Route>
 
             <Route element={<ProtectedRoutes page="dashboard-admin" />}>

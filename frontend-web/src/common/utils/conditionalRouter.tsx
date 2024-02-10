@@ -1,5 +1,5 @@
 import React from "react"
-import { Navigate, Outlet } from "react-router-dom"
+import { Navigate, Outlet, useLocation } from "react-router-dom"
 import { ROUTE_CONSTANTS } from ".."
 import { useAppSelector } from "@redux/hooks"
 import Encryption from "../encryption/encryption"
@@ -104,3 +104,41 @@ export const ProtectedRoutes = (_props: { page: string }) => {
     }
   }
 }
+
+export const WizardProtectedRoutes = () => {
+  const location = useLocation()
+  const currentPath = location.pathname.split('/').pop()
+  const user = useAppSelector(state => state.user)
+  
+  let redirectTo: string | null = ''
+  if(user.startupWizardCompleted) {
+    redirectTo = null
+  } else {
+    switch (user.wizardStep) {
+      case 'Assets':
+        redirectTo = currentPath === 'assets' ? null : ROUTE_CONSTANTS.DASHBOARD_ASSETS
+        break
+      case 'Validators':
+        redirectTo = currentPath === 'validators' ? null : ROUTE_CONSTANTS.DASHBOARD_VALIDATORS
+        break
+      case 'Beneficiary':
+        redirectTo = currentPath === 'beneficiaries' ? null : ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES
+        break
+      case 'PulseCheck':
+        redirectTo = currentPath === 'pulse' ? null : ROUTE_CONSTANTS.DASHBOARD_PULSE
+        break
+      case 'Dashboard':
+        redirectTo = currentPath === 'dashboard' ? null : ''
+        break
+      case 'none':
+        redirectTo = null
+        break
+      default:
+        break
+    }
+  }
+  if (redirectTo === null) {
+    return <Outlet />
+  }
+  return <Navigate to={`${ROUTE_CONSTANTS.DASHBOARD}${redirectTo && `/${redirectTo}`}`} replace />
+ }

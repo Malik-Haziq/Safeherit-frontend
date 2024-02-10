@@ -147,7 +147,7 @@ export const getUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "updateUser",
-  async (Data: object, { rejectWithValue }) => {
+  async (Data: {startupWizardCompleted: Boolean}, { rejectWithValue }) => {
     const formData = jsonToFormData(Data)
     const params = { ROUTE: GET_USER, Body: formData }
     try {

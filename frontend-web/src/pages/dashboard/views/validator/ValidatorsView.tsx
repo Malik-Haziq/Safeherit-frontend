@@ -37,8 +37,10 @@ import {
   getFileFromFirebase,
   isValidPhoneWithRegion,
   useArray,
+  ROUTE_CONSTANTS,
 } from "@/common"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
+import { setWizardStep } from "@/redux/reducers/UserSlice"
 
 const initialState = {
   id: "",
@@ -53,7 +55,7 @@ const initialState = {
   twitter_username: "",
   personalized_message: "",
   profile_image: "",
-  inform_validator: false
+  inform_validator: false,
 }
 
 export default function ValidatorsView() {
@@ -102,6 +104,12 @@ export default function ValidatorsView() {
     modalHistoryPopAll()
   }, [])
 
+  useEffect(() => {
+    if (!user.startupWizardCompleted && user.wizardStep === "Validators") {
+      addValidator()
+    }
+  }, [])
+
   const closeModal = useCallback(() => {
     setModalControl(initialState)
     setModalVisibility("none")
@@ -143,17 +151,26 @@ export default function ValidatorsView() {
   }
 
   const _submitStepTwoModal = () => {
-    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i;
-    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i;
-    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i;
+    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i
+    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i
+    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i
 
-    if(modalControl.facebook_link && !(facebookRegex.test(modalControl.facebook_link))){
-      toast('Please enter a valid facebook link', 'error')
-    } else if(modalControl.instagram_username && !(instagramRegex.test(modalControl.instagram_username))){
-      toast('Please enter a valid instagram link', 'error')
-    } else if(modalControl.twitter_username && !(twitterRegex.test(modalControl.twitter_username))){
-      toast('Please enter a valid twitter link', 'error')
-    } else{
+    if (
+      modalControl.facebook_link &&
+      !facebookRegex.test(modalControl.facebook_link)
+    ) {
+      toast("Please enter a valid facebook link", "error")
+    } else if (
+      modalControl.instagram_username &&
+      !instagramRegex.test(modalControl.instagram_username)
+    ) {
+      toast("Please enter a valid instagram link", "error")
+    } else if (
+      modalControl.twitter_username &&
+      !twitterRegex.test(modalControl.twitter_username)
+    ) {
+      toast("Please enter a valid twitter link", "error")
+    } else {
       modalHistoryPush("Step-2")
       setModalVisibility("Step-3")
     }
@@ -163,55 +180,54 @@ export default function ValidatorsView() {
     if (!modalControl.personalized_message) {
       modalControl.personalized_message = `Dear ${modalControl.name}, \n\nIf you receive this message it probably means I am gone. \n\nSince you’re one of the closest people to me, you probably know if am still alive or not. If I’m indeed dead, please confirm it as per the instructions of this platform (SafeHerit). \n\nThis will help me a lot in making sure that my family gets access to its inheritance as quickly as possible. \n\nThank you buddy, I’m counting on you! \n\n${user.displayName}`
     }
-      if (modalAction == "edit") {
-        startLoader()
-        toast("Updating validator", "info")
-        dispatch<any>(updateValidator(modalControl))
-          .unwrap()
-          .then(() => {
-            dispatch<any>(getAllValidator({}))
-              .unwrap()
-              .then((res: any) => {
-                closeModal()
-                updateValidatorArrayCount(res)
-              })
-              .catch(() => {
-                // TODO: show fallback page
-              })
-          })
-          .catch((err: any) => {
-            console.log(err)
-            // TODO: show fallback page
-          })
-          .finally(() => {
-            stopLoader()
-          })
-      } else if (modalAction == "create") {
-        startLoader()
-        toast("Creating validator", "info")
-        dispatch<any>(createValidator(modalControl))
-          .unwrap()
-          .then(() => {
-            dispatch<any>(getAllValidator({}))
-              .unwrap()
-              .then((res: any) => {
-                modalHistoryPush("Step-3")
-                setModalVisibility("Step-4")
-                updateValidatorArrayCount(res)
-              })
-              .catch(() => {
-                // TODO: show fallback page
-              })
-          })
-          .catch((err: any) => {
-            console.log(err)
-            // TODO: show fallback page
-          })
-          .finally(() => {
-            stopLoader()
-          })
-      }
-    
+    if (modalAction == "edit") {
+      startLoader()
+      toast("Updating validator", "info")
+      dispatch<any>(updateValidator(modalControl))
+        .unwrap()
+        .then(() => {
+          dispatch<any>(getAllValidator({}))
+            .unwrap()
+            .then((res: any) => {
+              closeModal()
+              updateValidatorArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
+        })
+        .catch((err: any) => {
+          console.log(err)
+          // TODO: show fallback page
+        })
+        .finally(() => {
+          stopLoader()
+        })
+    } else if (modalAction == "create") {
+      startLoader()
+      toast("Creating validator", "info")
+      dispatch<any>(createValidator(modalControl))
+        .unwrap()
+        .then(() => {
+          dispatch<any>(getAllValidator({}))
+            .unwrap()
+            .then((res: any) => {
+              modalHistoryPush("Step-3")
+              setModalVisibility("Step-4")
+              updateValidatorArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
+        })
+        .catch((err: any) => {
+          console.log(err)
+          // TODO: show fallback page
+        })
+        .finally(() => {
+          stopLoader()
+        })
+    }
   }
   const _submitDeleteModal = () => {
     dispatch<any>(deleteValidator({ id: modalControl.id }))
@@ -272,7 +288,10 @@ export default function ValidatorsView() {
     newValidator()
   }
   const pulseCheck = () => {
-    navigate("/dashboard/pulse")
+    navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_PULSE}`)
+    if(!user.startupWizardCompleted && user.wizardStep === "Validators") {
+      dispatch(setWizardStep("PulseCheck"))
+    }
   }
   const viewValidator = (id: string) => {
     toast("showing user data", "info")
@@ -318,7 +337,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle={"Register Validators"}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         _submitModal={_submitStepZeroModal}
       />
       <StepFourSuccessModal
@@ -326,7 +345,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle={"Validator Registered"}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         registerAnother={registerAnotherValidator}
         pulseCheck={pulseCheck}
       />
@@ -343,7 +362,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepOneModal}
@@ -355,7 +374,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
@@ -370,7 +389,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepThreeModal}

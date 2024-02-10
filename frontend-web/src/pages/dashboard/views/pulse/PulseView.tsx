@@ -14,6 +14,7 @@ import {
   SuccessModal,
 } from "./modal_pulse"
 import {
+  ROUTE_CONSTANTS,
   convertToCamelCase,
   isValidEmail,
   isValidPhoneWithRegion,
@@ -23,6 +24,8 @@ import { InputField, PhoneNumField, Spinner, toast } from "@/components"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getUser, updatePulse } from "@/redux/actions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
+import { useNavigate } from "react-router-dom"
+import { setWizardStep } from "@/redux/reducers/UserSlice"
 
 const initialState = {
   pulseCheckDays: "30",
@@ -37,6 +40,7 @@ const initialState = {
 
 export default function PulseView() {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const user = useAppSelector((state) => state.user)
   const startLoader = () => dispatch<any>(setLoaderVisibility(true))
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
@@ -82,6 +86,12 @@ export default function PulseView() {
   useEffect(() => {
     setEditDetailInput("")
   }, [confirmationDetails])
+
+  useEffect(() => {
+    if (!user.startupWizardCompleted && user.wizardStep === "PulseCheck") {
+      setModalVisibility("Step-1")
+    }
+  }, [])
 
   const getUserDetails = () => {
     dispatch<any>(getUser({ HideLoader: true }))
@@ -156,6 +166,11 @@ export default function PulseView() {
 
   const _submitSuccessModal = () => {
     setModalVisibility("none")
+    if(!user.startupWizardCompleted && user.wizardStep === "PulseCheck") {
+      navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`)
+      dispatch(setWizardStep("Assets"))
+      return  
+    }
     getUserDetails()
   }
 
@@ -214,7 +229,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-1"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         action={""}
         _submitModal={_submitStepOneModal}
         _handleChange={() => {}}
@@ -223,7 +238,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-2"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         action={""}
         _submitModal={_submitStepTwoModal}
         _handleChange={_handleChange}
@@ -235,7 +250,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-3"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         action={""}
         _submitModal={_submitStepThreeModal}
         _handleChange={_handleChange}
@@ -246,7 +261,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-4"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         action={""}
         _submitModal={_submitStepFourModal}
         _handleChange={_handleChange}
@@ -258,7 +273,7 @@ export default function PulseView() {
         openModal={modalVisibility == "success-modal"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         action={""}
         _submitModal={_submitSuccessModal}
       />
