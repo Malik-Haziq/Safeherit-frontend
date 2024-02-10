@@ -10,7 +10,7 @@ import { setLoaderVisibility } from "@redux/reducers/LoaderSlice"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import {
   ForgotPasswordModal,
-  appToast,
+  toast,
   GoogleAuthButton,
   VerificationCode,
 } from "@/components"
@@ -78,7 +78,7 @@ export function Login() {
         const mode = queryParams.get("mode")
         const oobCode = queryParams.get("oobCode") || ""
         if (mode == "verifyEmail") {
-          appToast("Verifying Email", "info")
+          toast("Verifying Email", "info")
           handleVerifyEmail(oobCode)
         } else if (mode == "resetPassword") {
           let newPassword: string | null = ""
@@ -122,30 +122,30 @@ export function Login() {
                 getUserDetails()
               })
               .catch(() => {
-                appToast(
+                toast(
                   "Unable to obtain token from server, Please login again.",
                   "error",
                 )
               })
           } else {
-            appToast(
+            toast(
               "Unable to obtain token from server, Please login again.",
               "error",
             )
           }
         } else {
-          appToast("Something went wrong while verifing code.", "error")
+          toast("Something went wrong while verifing code.", "error")
         }
       } catch (err) {
         const errorWithCode = err as { code?: string }
         if (errorWithCode && errorWithCode.code) {
-          appToast(errorWithCode.code, "error")
+          toast(errorWithCode.code, "error")
         } else {
-          appToast("Something went wrong while verifing code.", "error")
+          toast("Something went wrong while verifing code.", "error")
         }
       }
     } else {
-      appToast("Something went wrong. Please try again.", "error")
+      toast("Something went wrong. Please try again.", "error")
     }
     setVerificationId("")
     setResolver(null)
@@ -205,7 +205,7 @@ export function Login() {
   }
 
   const _handleSubmit = () => {
-    appToast("logging in", "info")
+    toast("logging in", "info")
     if (formControl.email && formControl.password) {
       setLogingin(true)
       dispatch<any>(
@@ -221,10 +221,10 @@ export function Login() {
           if (verifiedEmail) {
             getUserDetails()
           } else {
-            appToast("Please verify your email", "error")
+            toast("Please verify your email", "error")
             const emailSent = await sendEmailVerificationEmail()
             if (emailSent) {
-              appToast("Verification Email Sent", "info")
+              toast("Verification Email Sent", "info")
             }
           }
         })
@@ -247,7 +247,7 @@ export function Login() {
         setResolver(resolver)
       }
     } else {
-      appToast(response?.code, "error")
+      toast(response?.code, "error")
     }
     stopLoader()
   }
@@ -310,7 +310,7 @@ export function Login() {
         .unwrap()
         .catch()
         .then(() => {
-          appToast("Email Sent", "info")
+          toast("Email Sent", "info")
         })
         .finally(() => {
           closeModal()
@@ -394,6 +394,7 @@ export function Login() {
                 <div className="flex justify-between items-center ">
                   <div className="flex gap-2 text-safe-text-gray items-center justify-center  ">
                     <input
+                      data-cy="remember-user-credentials-input"
                       type="checkbox"
                       className="mr-2 block h-5 w-5"
                       checked={rememberMe}
@@ -415,6 +416,7 @@ export function Login() {
                   </p>
                 </div>
                 <button
+                  data-cy="login-button"
                   className={
                     logingin
                       ? "primary-btn rounded-md bg-safe-gray-shade-1 text-safe-gray-shade px-40"

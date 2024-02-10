@@ -131,6 +131,7 @@ function PricingButtons(_props: {
     <div>
       {_props.selectedPlan === _props.paymentPlan ? (
         <button
+        data-cy="selected-payment-plan-button"
           className="px-5 py-2 rounded-[50px] bg-linear-gradient text-sm sm:text-base"
           onClick={() => {
             _props.onclick(_props.paymentPlan)
@@ -140,6 +141,7 @@ function PricingButtons(_props: {
         </button>
       ) : (
         <button
+          data-cy="payment-plan-button"
           className="px-5 py-2 rounded-[50px] opacity-80 text-sm sm:text-base"
           onClick={() => {
             _props.onclick(_props.paymentPlan)
@@ -195,6 +197,7 @@ function PricingCards(_props: {
       </ul>
       {_props.selectedPlan === _props.paymentPlan ? (
         <button
+          data-cy="choose-payment-plan-button"
           className="primary-btn text-lg px-[46px] py-2 mx-auto"
           onClick={() => {
             _props.onclick(_props.paymentPlan)
@@ -204,6 +207,7 @@ function PricingCards(_props: {
         </button>
       ) : (
         <button
+        data-cy="choose-payment-plan-button"
           className="primary-btn text-lg text-safe-text-blue-shade px-[46px] py-2 mx-auto bg-safe-blue-light"
           onClick={() => {
             _props.onclick(_props.paymentPlan)

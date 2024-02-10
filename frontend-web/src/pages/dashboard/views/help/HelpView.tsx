@@ -1,3 +1,4 @@
+import React from "react"
 import styles from "../../Dashboard.module.css"
 import addIcon from "@images/add.svg"
 import crossIcon from "@images/cross.svg"
@@ -21,6 +22,7 @@ export default function HelpView() {
         <div className="w-[1085px]">
           <div className="flex gap-2 p-2 rounded-full mx-auto bg-white w-fit">
             <h1
+              data-cy="open-faq-section-button"
               className={
                 openSection === "faq"
                   ? "px-6 py-2 bg-[#0971AA] rounded-full text-white font-semibold cursor-pointer"
@@ -31,6 +33,7 @@ export default function HelpView() {
               Tutorial video & FAQ
             </h1>
             <h1
+              data-cy="open-suggestions-section-button"
               className={
                 openSection === "suggestions"
                   ? "px-6 py-2 bg-[#0971AA] rounded-full text-white font-semibold cursor-pointer"
@@ -41,6 +44,7 @@ export default function HelpView() {
               Suggestions
             </h1>
             <h1
+              data-cy="open-support-section-button"
               className={
                 openSection === "support"
                   ? "px-6 py-2 bg-[#0971AA] rounded-full text-white font-semibold cursor-pointer"
@@ -689,7 +693,7 @@ function QuestionBox(_props: { question: string; children: any }) {
         </h1>
         {isOpen && _props.children}
       </div>
-      <a href="#" className="w-10 h-10" onClick={handleOpen}>
+      <a  data-cy="open-and-close-question-box-button" href="#" className="w-10 h-10" onClick={handleOpen}>
         {isOpen ? (
           <img src={crossIcon} alt="icon for closing box" className="w-full" />
         ) : (
@@ -735,7 +739,10 @@ function Suggestions(_props: {
           className="bg-[#F5FAFD] h-[350px] outline-none resize-none w-full rounded-2xl p-4 text-[#6F767B] mb-4"
         ></textarea>
         <div className="flex items-center justify-center">
-          <button className="bg-[#0971AA] text-white font-semibold px-20 py-2 mx-auto rounded-xl inline-block">
+          <button
+            data-cy="submit-suggestion-button"
+            className="bg-[#0971AA] text-white font-semibold px-20 py-2 mx-auto rounded-xl inline-block"
+          >
             Submit
           </button>
         </div>
@@ -747,13 +754,21 @@ function Suggestions(_props: {
 function Support() {
   return (
     <main className="flex flex-col gap-6 bg-white mx-8 py-10 px-8 rounded-2xl w-[1085px] shadow-sm">
-      <p className="text-[#838383] text-center">Need Assistance? Please fill out the form below with your support request or any questions you may have. Be as detailed as possible to help us assist you better. Our support team will get back to you as quickly as possible</p>
+      <p className="text-[#838383] text-center">
+        Need Assistance? Please fill out the form below with your support
+        request or any questions you may have. Be as detailed as possible to
+        help us assist you better. Our support team will get back to you as
+        quickly as possible
+      </p>
       <form className="mb-14">
         <textarea
           placeholder="Enter your message..."
           className="w-full h-[336px] p-4 resize-none focus:outline-none shadow-md scrollbar rounded-2xl"
         ></textarea>
-        <button className="primary-btn mx-auto px-12 rounded-xl mt-10 bg-[#0971AA]">
+        <button
+          data-cy="submit-user-question-button"
+          className="primary-btn mx-auto px-12 rounded-xl mt-10 bg-[#0971AA]"
+        >
           Submit
         </button>
       </form>

@@ -407,7 +407,7 @@ export function StepThreeModal(_props: {
                       src={linkFacebook}
                       alt="icon for linking facebook account"
                     />
-                    <a href="#" className="text-[#00192B] underline">
+                    <a data-cy="to-link-facebook-account-button" href="#" className="text-[#00192B] underline">
                       Click to link your Facebook account
                     </a>
                   </div>
@@ -416,7 +416,7 @@ export function StepThreeModal(_props: {
                       src={linkTwitter}
                       alt="icon for linking twitter account"
                     />
-                    <a href="#" className="text-[#00192B] underline">
+                    <a  data-cy="to-link-twitter-account-button" href="#" className="text-[#00192B] underline">
                       Click to link your Twitter account
                     </a>
                   </div>
@@ -425,7 +425,7 @@ export function StepThreeModal(_props: {
                       src={linkInsta}
                       alt="icon for linking instagram account"
                     />
-                    <a href="#" className="text-[#00192B] underline">
+                    <a data-cy="to-link-instagram-account-button" href="#" className="text-[#00192B] underline">
                       Click to link your instagram account
                     </a>
                   </div>

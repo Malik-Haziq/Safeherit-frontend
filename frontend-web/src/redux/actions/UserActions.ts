@@ -43,7 +43,7 @@ export const login = createAsyncThunk(
         csrfToken: "",
         rememberMe: rememberMe,
       })
-      const params = { ROUTE: LOGIN, Body: formData, toastType: "appToast" }
+      const params = { ROUTE: LOGIN, Body: formData }
       const _response = await POST(params)
       return _response
     } catch (error) {
@@ -65,7 +65,7 @@ export const loginWithGoogle = createAsyncThunk(
       const token = await response.user.getIdToken()
       dispatch(setToken(token))
       const formData = jsonToFormData({ idToken: token, csrfToken: "" })
-      const params = { ROUTE: LOGIN, Body: formData, toastType: "appToast" }
+      const params = { ROUTE: LOGIN, Body: formData }
       const _response = await POST(params)
       return _response
     } catch (error) {
@@ -84,7 +84,7 @@ export const signup = createAsyncThunk(
   ) => {
     dispatch(setLoaderVisibility(true))
     const formData = jsonToFormData(Data)
-    const params = { ROUTE: SIGN_UP, Body: formData, toastType: "appToast" }
+    const params = { ROUTE: SIGN_UP, Body: formData }
     try {
       const response = await POST(params)
       return response
@@ -101,7 +101,7 @@ export const logout = createAsyncThunk(
   async (Data: object, { dispatch, rejectWithValue }) => {
     try {
       dispatch(setLoaderVisibility(true))
-      const params = { ROUTE: LOGOUT, Body: {}, toastType: "appToast" }
+      const params = { ROUTE: LOGOUT, Body: {} }
       const response = await POST(params)
       localStorage.clear()
       return response
@@ -128,12 +128,9 @@ export const resetPassword = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
   "getUser",
-  async (
-    Data: { MuteToast?: boolean; HideLoader?: boolean },
-    { dispatch, rejectWithValue },
-  ) => {
-    const params = { ROUTE: GET_USER, Body: {}, MuteToast: Data?.MuteToast }
-    !Data.HideLoader && dispatch(setLoaderVisibility(true))
+  async (Data: object, { dispatch, rejectWithValue }) => {
+    const params = { ROUTE: GET_USER, Body: {} }
+    dispatch(setLoaderVisibility(true))
     try {
       const response = await GET(params)
       return response

@@ -18,6 +18,7 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
   return (
     <div className="flex items-center justify-center">
       <button
+        data-cy="login-signup-with-google-button"
         onClick={handleClick}
         className={`flex items-center justify-center border primary-btn bg-[#fff] text-[#000] gap-1 ${
           type === "login" && "rounded-md w-[100%]"

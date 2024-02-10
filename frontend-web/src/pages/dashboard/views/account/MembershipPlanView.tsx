@@ -49,6 +49,7 @@ export default function MembershipPlanView(_props: {
   return (
     <div className={styles.AppView}>
       <button
+        data-cy="back-to-account-view-button"
         onClick={_props.hidePlanView}
         className=" mb-4 mt-2 p-2 hover:opacity-75 rounded-lg shadow-md my-[5px] w-[200px] mx-2"
       >

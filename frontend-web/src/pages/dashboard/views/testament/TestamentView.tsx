@@ -60,6 +60,7 @@ export default function TestamentView() {
                   Your browser does not support the video tag.
                 </video>
                 <a
+                  data-cy="download-video-left-for-beneficiary-button"
                   target="blank"
                   className="text-[#04477B] border-b-[1px] border-[#04477B]"
                   href={videoUrl}

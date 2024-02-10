@@ -390,6 +390,7 @@ function PulseCheckView(_props: {
             {_props.newPulseCheckDays === "0" && (
               <div className="w-[100%] flex justify-end pe-2">
                 <button
+                  data-cy="update-pulse-check-days-button"
                   className="primary-btn text-[12px] rounded-2xl bg-[#0971AA]"
                   onClick={() => {
                     _props.submitUpdatedValue({
@@ -468,6 +469,7 @@ function CheckPulsePeriod(_props: {
 }) {
   return (
     <div
+      data-cy="pulse-check-period-button"
       className={`
       w-[120px] flex items-center justify-center flex-col py-6  bg-[#F6F6F6] rounded-xl cursor-pointer ${
         (_props.pulseCheckDays == _props.days ||
@@ -482,6 +484,7 @@ function CheckPulsePeriod(_props: {
       {_props.newPulseCheckDays == _props.days &&
       _props.newPulseCheckDays == "0" ? (
         <input
+          data-cy="pulse-check-days-input"
           type="number"
           placeholder="0"
           value={_props.pulseCheckCustomDays}
@@ -533,7 +536,7 @@ function CheckPulseDates(_props: {
         <span className="font-bold text-[#065A93]">
           &nbsp;{_props.nextPulseCheck}&nbsp;
         </span>
-        {Number(_props.nextPulseCheck) > 1 ? 'days' : 'day'}
+        {Number(_props.nextPulseCheck) > 1 ? "days" : "day"}
       </p>
     </>
   )
@@ -623,6 +626,7 @@ function MethodRow(_props: {
             code={_inputValue?.split(" ")[0]}
           />
           <img
+            data-cy="save-edited-phone-number-button"
             src={tickIcon}
             onClick={_handleUpdate}
             alt="save icon"
@@ -642,6 +646,7 @@ function MethodRow(_props: {
             _handleChange={(e: any) => _setInputValue(e.target.value)}
           />
           <img
+            data-cy="save-edited-phone-number-button"
             src={tickIcon}
             onClick={_handleUpdate}
             alt="save icon"
@@ -652,6 +657,7 @@ function MethodRow(_props: {
         <>
           <p>{_props.subHeading}</p>
           <img
+            data-cy="edit-phone-number-button"
             src={editIcon}
             onClick={() =>
               _props.setEditDetailInput(convertToCamelCase(_props.heading))
@@ -679,6 +685,7 @@ function SetUpPulseCheck(_props: {
           You should setup your pulse check so we can verify that you’re alive.
         </p>
         <button
+          data-cy="setup-pulse-check-button"
           onClick={_props.openStepZeroModal}
           className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
         >

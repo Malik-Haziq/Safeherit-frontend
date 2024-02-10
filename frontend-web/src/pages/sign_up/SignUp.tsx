@@ -9,7 +9,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getUser, loginWithGoogle, signup } from "@redux/actions"
 import { useAppDispatch } from "@redux/hooks"
-import { GoogleAuthButton, appToast } from "@/components"
+import { GoogleAuthButton, toast } from "@/components"
 import { updateRole, updateRoleCheck } from "@/redux/reducers/UserSlice"
 import { isStrongPassword } from "@/common"
 
@@ -49,7 +49,7 @@ export function SignUp() {
       agreeTermAndCondition
     ) {
       if (formControl.password !== formControl.confirm_password) {
-        appToast("password must match", "error")
+        toast("password must match", "error")
       } else if (!isStrongPassword(formControl.password)) {
         setIsValidPassword(true)
       } else {
@@ -63,11 +63,11 @@ export function SignUp() {
         )
           .unwrap()
           .then((res: { data: { message: string } }) => {
-            appToast(res.data.message, "success")
+            toast(res.data.message, "success")
             navigate("/login")
           })
           .catch((err: { code: string }) => {
-            appToast(err?.code, "error")
+            toast(err?.code, "error")
           })
       }
     }
@@ -86,7 +86,7 @@ export function SignUp() {
           })
       })
       .catch((err: { code: string }) => {
-        appToast(err?.code, "error")
+        toast(err?.code, "error")
       })
   }
 
@@ -167,6 +167,7 @@ export function SignUp() {
           {isValidPassword && <PasswordValidation />}
           <div className="flex gap-2 text-safe-text-gray mt-2 mb-6">
             <input
+              data-cy="agree-to-terms-and-conditions-input"
               name="checkbox"
               type="checkbox"
               checked={agreeTermAndCondition}
@@ -184,7 +185,7 @@ export function SignUp() {
               </a>
             </small>
           </div>
-          <button className="primary-btn px-16 uppercase w-fit mx-auto">
+          <button data-cy="signup-button" className="primary-btn px-16 uppercase w-fit mx-auto">
             Sign up
           </button>
         </form>
@@ -195,7 +196,7 @@ export function SignUp() {
         />
         <small className="text-sm text-safe-text-dark-gray">
           Already have an account?&nbsp;
-          <a href="/login" className="text-safe-text-dark-link-blue font-bold">
+          <a data-cy="login-button" href="/login" className="text-safe-text-dark-link-blue font-bold">
             Login
           </a>
         </small>

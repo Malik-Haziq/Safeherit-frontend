@@ -3,8 +3,6 @@ import styles from "../../Dashboard.module.css"
 import eye from "@images/eye.svg"
 import userImg from "@images/user.svg"
 import edit from "@images/edit.svg"
-import leftArrow from "@images/left-arrow.svg"
-import rightArrow from "@images/right-arrow.svg"
 import deleteIcon from "@images/delete.svg"
 import { NewUserDetail, NewUserModal, UserDetail } from "../users/modal_admin"
 import { useCallback, useEffect, useState } from "react"
@@ -153,7 +151,7 @@ export default function UsersView() {
       }
     }
   }
-  
+
   const editUser = (email: string, currentStatus: string) => {
     setLoading(true)
     const data = {
@@ -216,7 +214,7 @@ export default function UsersView() {
         modalControl={modalControl}
       />
       <main className="p-5 mx-auto w-[1101px]">
-        <button onClick={createAccount} className="mt-10 flex justify-end mb-8">
+        <button data-cy="create-new-user-account" onClick={createAccount} className="mt-10 flex justify-end mb-8">
           <a
             href="#"
             className="primary-btn bg-[#04477B] text-white rounded-md py-2 font-medium flex items-center gap-2"
@@ -224,7 +222,10 @@ export default function UsersView() {
             <span className="text-3xl">+</span> Create Account
           </a>
         </button>
-        <section className="rounded-xl h-[676px] border-[1px] flex justify-between flex-col" ref={paginationRef}>
+        <section
+          className="rounded-xl h-[676px] border-[1px] flex justify-between flex-col"
+          ref={paginationRef}
+        >
           <table className="rounded-3xl ">
             <thead className="bg-[#F2F2F2] px-5 py-3 rounded-t-xl text-sm uppercase border-[1px] border-[#E5E5E5]">
               <tr>
@@ -337,7 +338,7 @@ function UserView(_props: {
             : "w-[80px] text-[#F44336] font-medium text-sm"
         }
       >
-        {_props.payment_status}{" "}
+        {_props.payment_status}
       </td>
       <td
         className={
@@ -349,7 +350,7 @@ function UserView(_props: {
             : "w-[80px] text-[#000] font-medium text-sm"
         }
       >
-        {_props.account_status}{" "}
+        {_props.account_status}
       </td>
       <td className="w-[170px] text-[#4D4D4D] font-medium text-xs">
         <p>{_props.pulse_status}</p>
@@ -370,6 +371,7 @@ function UserView(_props: {
       <td>
         <div className="flex gap-1 w-[140px]">
           <img
+            data-cy="view-user-button"
             src={eye}
             alt="view icon"
             className="cy-view-asset-btn cursor-pointer"
@@ -389,6 +391,7 @@ function UserView(_props: {
             }}
           />
           <img
+            data-cy="edit-user-button"
             src={edit}
             alt="edit icon"
             className="cy-edit-asset-btn cursor-pointer"
@@ -398,6 +401,7 @@ function UserView(_props: {
             }}
           />
           <img
+            data-cy="delete-user-button"
             src={deleteIcon}
             alt="delete icon"
             className="cy-del-asset-btn cursor-pointer"

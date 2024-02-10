@@ -181,6 +181,7 @@ export default function RegisterKey() {
           to generate them yourself. The choice is yours!
         </p>
         <button
+          data-cy="import-private-key-button"
           className="primary-btn uppercase py-5 px-[86px] mb-28"
           onClick={_handleRegister}
         >

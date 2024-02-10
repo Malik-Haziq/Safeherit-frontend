@@ -17,14 +17,8 @@ export function isValidPhoneWithRegion(phone: string) {
   }
 }
 
-export function isValidFacebook(phone: string) {
-  const phoneRegex = /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9.]+\/?$/
-  return phoneRegex.test(phone)
-}
-
 export function isStrongPassword(password: any) {
-  const regex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/
   return regex.test(password)
 }
 
@@ -33,4 +27,19 @@ export function convertToCamelCase(input: string) {
   const camelCase =
     withoutSpaces.charAt(0).toLowerCase() + withoutSpaces.slice(1)
   return camelCase
+}
+
+export function isValidFacebook(phone: string) {
+  const regex = /^https?:\/\/(www\.)?facebook\.com\/.*/i
+  return regex.test(phone)
+}
+
+export function isValidInstagram(phone: string) {
+  const regex = /^https?:\/\/(www\.)?instagram\.com\/.*/i
+  return regex.test(phone)
+}
+
+export function isValidTwitter(phone: string) {
+  const regex = /^https?:\/\/(www\.)?twitter\.com\/.*/i
+  return regex.test(phone)
 }

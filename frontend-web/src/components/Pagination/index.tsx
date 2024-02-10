@@ -1,3 +1,4 @@
+import React from "react"
 import { RefObject, useEffect, useState } from "react"
 import leftArrow from "@images/left-arrow.svg"
 import rightArrow from "@images/right-arrow.svg"
@@ -45,6 +46,7 @@ export function Pagination(_props: {
   return (
     <div className="flex items-center justify-between p-5">
       <button
+        data-cy="show-previous-user-page-button"
         onClick={_previousPage}
         disabled={_props.currentPage == 1}
         className={
@@ -74,6 +76,7 @@ export function Pagination(_props: {
         ))}
       </div>
       <button
+        data-cy="show-next-user-page-button"
         onClick={_nextPage}
         disabled={_props.currentPage == _props.totalPages}
         className={

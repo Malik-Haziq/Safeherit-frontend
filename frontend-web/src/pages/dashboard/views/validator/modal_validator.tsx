@@ -79,7 +79,7 @@ export function StepZeroInformationModal(_props: {
                   CustomView: () => {
                     return (
                       <div className="relative">
-                        <input type="checkbox" id="checkbox" />
+                        <input data-cy="don't-display-modal-next-time-input" type="checkbox" id="checkbox" />
                         <label htmlFor="checkbox" className="checkbox-label">
                           <div className="check_mark"></div>
                         </label>
@@ -127,7 +127,7 @@ export function StepOneModal(_props: {
 }) {
   const [notifyValidator, setNotifyValidator] = useState(false)
 
-  const handleNotify = (e: any)=> {
+  const handleNotify = (e: any) => {
     e.preventDefault()
     setNotifyValidator(!notifyValidator)
 
@@ -358,17 +358,20 @@ export function StepTwoModal(_props: {
                 },
               },
               {
-                type: 'customView',
+                type: "customView",
                 props: {
-                  customViewContainer: '',
+                  customViewContainer: "",
                   CustomView: () => {
                     return (
-                      <div className="flex items-center justify-center bg-[#206392] w-7 h-7 rounded-md cursor-default" title="We request social media links for your beneficiaries and validators as a secondary means of contact. This information will only be used if we're unable to reach them through the primary contact details you provided.">
+                      <div
+                        className="flex items-center justify-center bg-[#206392] w-7 h-7 rounded-md cursor-default"
+                        title="We request social media links for your beneficiaries and validators as a secondary means of contact. This information will only be used if we're unable to reach them through the primary contact details you provided."
+                      >
                         <span className="text-white font-medium">?</span>
                       </div>
                     )
-                  }
-                }
+                  },
+                },
               },
             ],
           },
@@ -439,6 +442,7 @@ export function StepTwoModal(_props: {
               return (
                 <div className="relative">
                   <input
+                    data-cy="validator-profile-pic-input"
                     type="file"
                     accept="image/*"
                     onChange={handleImageInputChange}
@@ -546,8 +550,7 @@ export function StepThreeModal(_props: {
           props: {
             textAreaContainerStyles: "",
             name: "personalized_message",
-            placeholder:
-              `Dear ${_props.modalControl.name}, \n\nIf you receive this message it probably means I am gone. \n\nSince you’re one of the closest people to me, you probably know if am still alive or not. If I’m indeed dead, please confirm it as per the instructions of this platform (SafeHerit). \n\nThis will help me a lot in making sure that my family gets access to its inheritance as quickly as possible. \n\nThank you buddy, I’m counting on you! \n\n${_props.userName}`,
+            placeholder: `Dear ${_props.modalControl.name}, \n\nIf you receive this message it probably means I am gone. \n\nSince you’re one of the closest people to me, you probably know if am still alive or not. If I’m indeed dead, please confirm it as per the instructions of this platform (SafeHerit). \n\nThis will help me a lot in making sure that my family gets access to its inheritance as quickly as possible. \n\nThank you buddy, I’m counting on you! \n\n${_props.userName}`,
             _handleChange: _props._handleChange,
             value: _props.modalControl.personalized_message,
             inputStyles:
@@ -612,6 +615,7 @@ export function StepFourSuccessModal(_props: {
                       Click here if you want to register another validator.
                     </p>
                     <button
+                      data-cy="register-another-validator-button"
                       onClick={_props.registerAnother}
                       disabled={!_props.closeIconVisibility}
                       className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl"
@@ -625,6 +629,7 @@ export function StepFourSuccessModal(_props: {
                       done registering validators.{" "}
                     </p>
                     <button
+                      data-cy="setup-pulse-check-button"
                       onClick={_props.pulseCheck}
                       className="bg-[#0971AA] font-bold text-white px-4 py-4 w-[225px] rounded-2xl"
                     >

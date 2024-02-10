@@ -1,3 +1,4 @@
+import React from "react"
 import logo from "@images/safeherit_logo.svg"
 import userImg from "@images/user.svg"
 import arrowDown from "@images/chevron-down.svg"
@@ -82,7 +83,7 @@ export function NavBar() {
         </div>
 
         {user.role == "none" ? (
-          <button className="primary-btn " onClick={_handleLoginPress}>
+          <button data-cy="login-register-button" className="primary-btn " onClick={_handleLoginPress}>
             Login / Register
           </button>
         ) : (

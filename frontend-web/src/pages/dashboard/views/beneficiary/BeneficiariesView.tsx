@@ -12,6 +12,7 @@ import styles from "../../Dashboard.module.css"
 import {
   ValidatorDropDown,
   UserDetailsModal,
+  EditDetailsModal,
   Spinner,
   toast,
 } from "@/components"
@@ -36,6 +37,9 @@ import {
   getFileFromFirebase,
   copyToClipboard,
   isValidPhoneWithRegion,
+  isValidFacebook,
+  isValidInstagram,
+  isValidTwitter,
   useArray,
   downloadPEM,
   ROUTE_CONSTANTS,
@@ -166,23 +170,20 @@ export default function BeneficiariesView() {
     }
   }
   const _submitStepTwoModal = () => {
-    const facebookRegex = /^https?:\/\/(www\.)?facebook\.com\/.*/i
-    const instagramRegex = /^https?:\/\/(www\.)?instagram\.com\/.*/i
-    const twitterRegex = /^https?:\/\/(www\.)?twitter\.com\/.*/i
 
     if (
       modalControl.facebook_link &&
-      !facebookRegex.test(modalControl.facebook_link)
+      !isValidFacebook(modalControl.facebook_link)
     ) {
       toast("Please enter a valid facebook link", "error")
     } else if (
       modalControl.instagram_username &&
-      !instagramRegex.test(modalControl.instagram_username)
+      !isValidInstagram(modalControl.instagram_username)
     ) {
       toast("Please enter a valid instagram link", "error")
     } else if (
       modalControl.twitter_username &&
-      !twitterRegex.test(modalControl.twitter_username)
+      !isValidTwitter(modalControl.twitter_username)
     ) {
       toast("Please enter a valid twitter link", "error")
     } else {
@@ -331,8 +332,7 @@ export default function BeneficiariesView() {
           .catch(() => {
             setVideoUpload("")
           })
-
-        setModalVisibility("Step-1")
+        setModalVisibility("edit-beneficiary")
       })
   }
   const destroyBeneficiary = (id: string) => {
@@ -447,6 +447,73 @@ export default function BeneficiariesView() {
     }
   }, [modalEncryptionKeyControl.publicKey])
 
+  const _submitEditBeneficiaryModal = () => {
+
+    if (!modalControl.name) {
+      toast("please enter a valid name", "error")
+    } else if (
+      (!isValidEmail(modalControl.primary_email) &&
+        !isValidEmail(modalControl.backup_email2) &&
+        !isValidEmail(modalControl.backup_email)) ||
+      (modalControl.primary_email &&
+        !isValidEmail(modalControl.primary_email)) ||
+      (modalControl.backup_email && !isValidEmail(modalControl.backup_email)) ||
+      (modalControl.backup_email2 && !isValidEmail(modalControl.backup_email2))
+    ) {
+      toast("please enter a valid Email address", "error")
+    } else if (
+      modalControl.phone_number &&
+      !isValidPhoneWithRegion(modalControl.phone_number)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else if (
+      modalControl.backup_phone_number &&
+      !isValidPhoneWithRegion(modalControl.backup_phone_number)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else if (
+      modalControl.facebook_link &&
+      !isValidFacebook(modalControl.facebook_link)
+    ) {
+      toast("Please enter a valid facebook link", "error")
+    } else if (
+      modalControl.instagram_username &&
+      !isValidInstagram(modalControl.instagram_username)
+    ) {
+      toast("Please enter a valid instagram link", "error")
+    } else if (
+      modalControl.twitter_username &&
+      !isValidTwitter(modalControl.twitter_username)
+    ) {
+      toast("Please enter a valid twitter link", "error")
+    } else if (!modalControl.personalized_message) {
+      toast("Personalized message cannot be empty", "error")
+    } else {
+      startLoader()
+      toast("Updating Beneficiary", "info")
+      dispatch<any>(updateBeneficiary(modalControl))
+        .unwrap()
+        .then(() => {
+          dispatch<any>(getAllBeneficiary({}))
+            .unwrap()
+            .then((res: any) => {
+              updateBeneficiaryArrayCount(res)
+            })
+            .catch(() => {
+              // TODO: show fallback page
+            })
+        })
+        .catch((err: any) => {
+          console.log(err)
+          // TODO: show fallback page
+        })
+        .finally(() => {
+          closeModal()
+          stopLoader()
+        })
+    }
+  }
+
   return (
     <>
       <GeneratePrivateKey
@@ -463,7 +530,6 @@ export default function BeneficiariesView() {
         copyPrivateKey={copyPrivateKey}
         copyPublicKey={copyPublicKey}
       />
-
       <UserDetailsModal
         openModal={modalVisibility == "User-Info"}
         closeModal={closeModal}
@@ -473,6 +539,21 @@ export default function BeneficiariesView() {
         modalControl={modalControl}
         imageUpload={imageUpload}
         videoUpload={videoUpload}
+      />
+      <EditDetailsModal
+        openModal={modalVisibility === "edit-beneficiary"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        _handleChange={_handleChange}
+        isBeneficiary={true}
+        setModalControl={setModalControl}
+        modalControl={modalControl}
+        handleSubmit={_submitEditBeneficiaryModal}
+        setImageUpload={setImageUpload}
+        imageUpload={imageUpload}
+        videoUpload={videoUpload}
+        setVideoUpload={setVideoUpload}
+        _handleDiscard={_handleDiscard}
       />
       <StepOneModal
         openModal={modalVisibility == "Step-1"}
@@ -582,6 +663,7 @@ function AddBeneficiary(_props: {
           beneficiaries.
         </p>
         <button
+          data-cy="register-beneficiary-button"
           onClick={_props.openStepZeroModal}
           className="primary-btn rounded-2xl py-3 px-9 bg-[#0971AA]"
         >
@@ -631,7 +713,7 @@ function Beneficiaries(_props: {
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
               <div className="relative">
-                <input type="checkbox" id="checkbox" />
+                <input data-cy="select-all-beneficiaries-input" type="checkbox" id="checkbox" />
                 <label
                   htmlFor="checkbox"
                   className="checkbox-label ml-1 -top-1"
@@ -725,6 +807,7 @@ function Beneficiary(_props: {
           // TODO add loading view
         }
         <p
+          data-cy="view-beneficiary-details-button"
           className="font-semibold cursor-pointer"
           onClick={() => _props.viewBeneficiary(_props.id)}
         >
@@ -743,6 +826,7 @@ function Beneficiary(_props: {
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
           <a
+            data-cy="beneficiary-facebook-account-link"
             href={_props.facebook_link || ""}
             target="_blank"
             rel="noopener noreferrer"
@@ -754,6 +838,7 @@ function Beneficiary(_props: {
             />
           </a>
           <a
+            data-cy="beneficiary-instagram-account-link"
             href={_props.instagram_username || ""}
             target="_blank"
             rel="noopener noreferrer"
@@ -765,6 +850,7 @@ function Beneficiary(_props: {
             />
           </a>
           <a
+            data-cy="beneficiary-twitter-account-link"
             href={_props.twitter_username || ""}
             target="_blank"
             rel="noopener noreferrer"

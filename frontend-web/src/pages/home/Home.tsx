@@ -158,7 +158,7 @@ export function Home() {
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt.
               </p>
-              <a href="#">Learn more →</a>
+              <a data-cy="benefits-link" href="#">Learn more →</a>
             </div>
             <div>
               <div className="flex items-center gap-3">
@@ -197,7 +197,7 @@ export function Home() {
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt.
               </p>
-              <a href="#">Learn more →</a>
+              <a data-cy="benefits-link" href="#">Learn more →</a>
             </div>
             <div>
               <div className="flex items-center gap-3">
@@ -236,7 +236,7 @@ export function Home() {
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt.
               </p>
-              <a href="#">Learn more →</a>
+              <a data-cy="benefits-link" href="#">Learn more →</a>
             </div>
             <div>
               <div className="flex items-center gap-3">
@@ -275,11 +275,12 @@ export function Home() {
         <h2 className="text-[32px] font-semibold">Alternative Hero Headline</h2>
         <div className="flex gap-3">
           <input
+            data-cy="user-email-for-free-trial-input"
             type="text"
             placeholder="Enter email"
             className="px-8 py-5 text-[#082A44] font-medium bg-[#F5FAFD] focus:outline-none rounded-3xl"
           />
-          <button className="px-6 py-5 text-white font-semibold bg-[#0C8AC1] rounded-3xl">
+          <button data-cy="start-free-trial-button" className="px-6 py-5 text-white font-semibold bg-[#0C8AC1] rounded-3xl">
             Start free trial
           </button>
         </div>
