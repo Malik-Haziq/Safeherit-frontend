@@ -41,8 +41,10 @@ import {
   isValidInstagram,
   isValidTwitter,
   useArray,
+  ROUTE_CONSTANTS,
 } from "@/common"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
+import { setWizardStep } from "@/redux/reducers/UserSlice"
 
 const initialState = {
   id: "",
@@ -104,6 +106,12 @@ export default function ValidatorsView() {
 
   useEffect(() => {
     modalHistoryPopAll()
+  }, [])
+
+  useEffect(() => {
+    if (!user.startupWizardCompleted && user.wizardStep === "Validators") {
+      addValidator()
+    }
   }, [])
 
   const closeModal = useCallback(() => {
@@ -284,7 +292,10 @@ export default function ValidatorsView() {
     newValidator()
   }
   const pulseCheck = () => {
-    navigate("/dashboard/pulse")
+    navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_PULSE}`)
+    if(!user.startupWizardCompleted && user.wizardStep === "Validators") {
+      dispatch(setWizardStep("PulseCheck"))
+    }
   }
   const viewValidator = (id: string) => {
     toast("showing user data", "info")
@@ -410,7 +421,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle={"Register Validators"}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         _submitModal={_submitStepZeroModal}
       />
       <StepFourSuccessModal
@@ -418,7 +429,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle={"Validator Registered"}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         registerAnother={registerAnotherValidator}
         pulseCheck={pulseCheck}
       />
@@ -435,7 +446,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepOneModal}
@@ -447,7 +458,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
@@ -462,7 +473,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepThreeModal}

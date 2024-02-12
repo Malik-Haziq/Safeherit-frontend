@@ -32,6 +32,7 @@ import {
   getAllBeneficiary,
   getAllBeneficiaryAsset,
   findBeneficiaryAsset,
+  updateUser,
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
@@ -39,6 +40,7 @@ import { getRequiredFields, assetImages } from "./data"
 import { AxiosResponse } from "axios"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { SelectOption, Asset, Beneficiary } from "@/types"
+import { setWizardStep } from "@/redux/reducers/UserSlice"
 
 interface ModalControl {
   [key: string]: any // This index signature allows string keys with any value
@@ -54,7 +56,6 @@ export default function AssetsView() {
   const beneficiary = useAppSelector((state) => state.beneficiary)
   const startLoader = () => dispatch<any>(setLoaderVisibility(true))
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
-
   const [hasAssets, setHasAssets] = useState(-1)
   const [modalControl, setModalControl] = useState(initialState)
   const [modalVisibility, setModalVisibility] = useState("none")
@@ -109,6 +110,12 @@ export default function AssetsView() {
 
   useEffect(() => {
     modalHistoryPopAll()
+  }, [])
+
+  useEffect(() => {
+    if (!user.startupWizardCompleted && user.wizardStep === "Assets") {
+      setModalVisibility("Step-0")
+    }
   }, [])
 
   const closeModal = useCallback(() => {
@@ -317,6 +324,11 @@ export default function AssetsView() {
   }
   const _submitSuccessModal = () => {
     setModalVisibility("none")
+    if (!user.startupWizardCompleted) {
+      closeModal()
+      dispatch(setWizardStep("none"))
+      dispatch(updateUser({startupWizardCompleted: true}))
+    }
     navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`)
   }
   const _submitDeleteModal = () => {
@@ -431,14 +443,14 @@ export default function AssetsView() {
         openModal={modalVisibility == "Step-0"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         _submitModal={_submitStepZeroInformationModal}
       />
       <StepOneModal
         openModal={modalVisibility == "Step-1"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         action={modalAction}
         _handleChange={_handleChange}
         modalControl={modalControl}
@@ -452,7 +464,7 @@ export default function AssetsView() {
         openModal={modalVisibility == "Step-2"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         action={modalAction}
         _handleChange={_handleChange}
         modalControl={modalControl}
@@ -466,7 +478,7 @@ export default function AssetsView() {
         openModal={modalVisibility == "Step-Success"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={true}
+        closeIconVisibility={user.startupWizardCompleted}
         registerAnotherAsset={newAsset}
         submitModal={_submitSuccessModal}
       />

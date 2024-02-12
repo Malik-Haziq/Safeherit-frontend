@@ -503,6 +503,7 @@ export function SuccessModal(_props: {
                     <button
                       data-cy="register-another-asset--button"
                       onClick={_props.registerAnotherAsset}
+                      disabled={!_props.closeIconVisibility}
                       className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl"
                     >
                       Register another Asset

@@ -12,6 +12,7 @@ import { getFileFromFirebase, ROUTE_CONSTANTS } from "@/common"
 import { Spinner } from "@/components"
 import { Link } from "react-router-dom"
 import { assetImages } from "../asset/data"
+import { DashboardModal } from "./modal_dashboard"
 
 export default function DashboardView() {
   const dispatch = useAppDispatch()
@@ -99,6 +100,7 @@ export default function DashboardView() {
           )
         })}
       </section>
+      <DashboardModal />
     </div>
   )
 }

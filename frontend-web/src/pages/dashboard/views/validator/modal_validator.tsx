@@ -617,6 +617,7 @@ export function StepFourSuccessModal(_props: {
                     <button
                       data-cy="register-another-validator-button"
                       onClick={_props.registerAnother}
+                      disabled={!_props.closeIconVisibility}
                       className="bg-[#0971AA] font-bold text-white px-8 py-1 w-[225px] rounded-2xl"
                     >
                       Register another Validator
