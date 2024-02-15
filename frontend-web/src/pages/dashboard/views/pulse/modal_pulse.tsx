@@ -501,6 +501,13 @@ export function StepFourModal(_props: {
     _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
   }
 
+  const handleChange = (e: any)=>{
+    let value = e.target.value;
+    if(value == '' || value >= 1 && value <= 90 && !value.includes('.')){
+      setResponseMonths(value)
+    } 
+  }
+
   return (
     <Modal
       openModal={_props.openModal}
@@ -583,7 +590,7 @@ export function StepFourModal(_props: {
                     )}
 
                     <p className="text-start cursor-default">
-                      Make the data available to my beneficiaries after <input type="number" onChange={(e)=> setResponseMonths(e.target.value)} autoFocus={getResponseFromValidator === "opt-2"} disabled={getResponseFromValidator !== "opt-2"} value={responseMonths} className="inline h-7 w-16 px-3 text-safe-text-dark-gray rounded-md border-[1px] border-safe-color-gray outline-none" required/> months
+                      Make the data available to my beneficiaries after <input type="text" min={1} max={90} onChange={handleChange} autoFocus={getResponseFromValidator === "opt-2"} disabled={getResponseFromValidator !== "opt-2"} value={responseMonths} className="inline h-7 w-16 px-3 text-safe-text-dark-gray rounded-md border-[1px] border-safe-color-gray outline-none" required/> days
                       without a response from any validator.
                     </p>
                   </div>
