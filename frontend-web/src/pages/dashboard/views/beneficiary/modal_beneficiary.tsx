@@ -352,7 +352,6 @@ export function StepOneModal(_props: {
                 props: {
                   customViewContainer: "w-5 h-5",
                   CustomView: () => {
-                    return <input data-cy="notify-user-input" type="checkbox" className="w-full h-full" />
                     return <input type="checkbox" className="w-full h-full" checked={notifyBeneficiary} onChange={handleNotify} />
                   },
                 },
