@@ -32,6 +32,7 @@ interface UserState {
   isSuperAdmin: boolean
   isAdmin: boolean
   isValidator: boolean
+  numOfValidatorOfUser: number
   role: string
   selectedRoleUser: { [key: string]: any }
   userMap: { [key: string]: any }
@@ -67,6 +68,7 @@ const initialState: UserState = {
   isSuperAdmin: false,
   isAdmin: false,
   isValidator: false,
+  numOfValidatorOfUser: 0,
   role: "none",
   selectedRoleUser: {},
   userMap: {},
@@ -165,14 +167,17 @@ export const slice = createSlice({
     },
     setWizardStep: (state, action) => {
       state.wizardStep = action.payload
-    }
+    },
   },
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
       state.email = action.payload.data.data.email
       state.uid = action.payload.data.data.uid
-      state.startupWizardCompleted = action.payload.data.data.startupWizardCompleted
-      state.wizardStep = !action.payload.data.data.startupWizardCompleted ? "Dashboard" : "none"
+      state.startupWizardCompleted =
+        action.payload.data.data.startupWizardCompleted
+      state.wizardStep = !action.payload.data.data.startupWizardCompleted
+        ? "Dashboard"
+        : "none"
       state.displayName = action.payload.data.data.displayName
       state.isSuperAdmin = action.payload.data.data.isSuperAdmin
       state.language = action.payload.data.data.language
@@ -189,8 +194,11 @@ export const slice = createSlice({
     builder.addCase(loginWithGoogle.fulfilled, (state, action) => {
       state.email = action.payload.data.data.email
       state.uid = action.payload.data.data.uid
-      state.startupWizardCompleted = action.payload.data.data.startupWizardCompleted
-      state.wizardStep = !action.payload.data.data.startupWizardCompleted ? "Dashboard" : "none"
+      state.startupWizardCompleted =
+        action.payload.data.data.startupWizardCompleted
+      state.wizardStep = !action.payload.data.data.startupWizardCompleted
+        ? "Dashboard"
+        : "none"
       state.displayName = action.payload.data.data.displayName
       state.isSuperAdmin = action.payload.data.data.isSuperAdmin
       state.language = action.payload.data.data.language
@@ -243,6 +251,7 @@ export const slice = createSlice({
           { heading: "Social media 2", subHeading: "hard coded" },
         ],
       }
+      state.email = action.payload.data.data?.email
       state.pulseDetail = methodArr
       state.pulseCheckNonValidationMonths =
         action.payload.data.data?.pulseCheckNonValidationMonths
@@ -260,11 +269,16 @@ export const slice = createSlice({
       state.isSuperAdmin = action.payload.data.data?.isSuperAdmin
       state.isAdmin = action.payload.data.data?.isAdmin
       state.isValidator = action.payload.data.data?.isValidator
+      state.numOfValidatorOfUser =
+        action.payload.data.data?.numOfValidatorOfUser
       state.beneficiaryOf = action.payload.data.data?._beneficiaryOf
       state.publicKey = action.payload.data.data?.publicKey || ""
       state.uid = action.payload.data.data?.uid || ""
-      state.startupWizardCompleted = action.payload.data.data.startupWizardCompleted
-      state.wizardStep = !action.payload.data.data.startupWizardCompleted ? "Dashboard"   : "none"
+      state.startupWizardCompleted =
+        action.payload.data.data.startupWizardCompleted
+      state.wizardStep = !action.payload.data.data.startupWizardCompleted
+        ? "Dashboard"
+        : "none"
       state.paymentStatus = action.payload.data.data?.paymentStatus || ""
       const _role = localStorage.getItem("role") || ""
       state.role = atob(_role) || "none"
@@ -328,7 +342,8 @@ export const slice = createSlice({
         action.payload.data.data.displayName || state.displayName
       state.language = action.payload.data.data.language
       state.profile_image = action.payload.data.data.profile_image
-      state.startupWizardCompleted = action.payload.data.data.startupWizardCompleted
+      state.startupWizardCompleted =
+        action.payload.data.data.startupWizardCompleted
     })
     builder.addCase(updatePK.fulfilled, (state, action) => {
       state.publicKey = action.payload.data.data.publicKey
@@ -347,7 +362,7 @@ export const {
   resetValidatorOf,
   setCredentials,
   updateRoleCheck,
-  setWizardStep
+  setWizardStep,
 } = slice.actions
 
 export default slice.reducer

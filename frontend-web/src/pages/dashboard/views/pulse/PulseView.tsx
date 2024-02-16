@@ -34,8 +34,9 @@ const initialState = {
   pulseCheckEmail3: "",
   pulseCheckPhone1: "",
   pulseCheckPhone2: "",
+  pulseCheckPhone3: "",
   pulseCheckValidationRequired: "true",
-  pulseCheckNonValidationMonths: "0",
+  pulseCheckNonValidationDays: "0",
 }
 
 export default function PulseView() {
@@ -144,8 +145,12 @@ export default function PulseView() {
   }
 
   const _submitStepThreeModal = () => {
-    modalHistoryPush("Step-3")
-    setModalVisibility("Step-4")
+    if (user.numOfValidatorOfUser) {
+      modalHistoryPush("Step-3")
+      setModalVisibility("Step-4")
+    } else {
+      _submitStepFourModal()
+    }
   }
 
   const _submitStepFourModal = () => {
@@ -166,10 +171,12 @@ export default function PulseView() {
 
   const _submitSuccessModal = () => {
     setModalVisibility("none")
-    if(!user.startupWizardCompleted && user.wizardStep === "PulseCheck") {
-      navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`)
+    if (!user.startupWizardCompleted && user.wizardStep === "PulseCheck") {
+      navigate(
+        `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`,
+      )
       dispatch(setWizardStep("Assets"))
-      return  
+      return
     }
     getUserDetails()
   }
@@ -251,6 +258,7 @@ export default function PulseView() {
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={user.startupWizardCompleted}
+        numberOfValidators={user.numOfValidatorOfUser}
         action={""}
         _submitModal={_submitStepThreeModal}
         _handleChange={_handleChange}
