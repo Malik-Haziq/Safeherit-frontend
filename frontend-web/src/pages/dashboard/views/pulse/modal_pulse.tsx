@@ -169,7 +169,7 @@ export function StepTwoModal(_props: {
                           onClick={() => handleDays("30")}
                         >
                           <p className="text-[#00192B] font-semibold">
-                            30{" "}
+                            30
                             <span className=" font-medium text-sm">Days</span>
                           </p>
                           {selectedDays == "30" ? (
@@ -187,7 +187,7 @@ export function StepTwoModal(_props: {
                           onClick={() => handleDays("60")}
                         >
                           <p className="text-[#00192B] font-semibold">
-                            60{" "}
+                            60
                             <span className=" font-medium text-sm">Days</span>
                           </p>
                           {selectedDays == "60" ? (
@@ -625,7 +625,7 @@ export function StepFourModal(_props: {
                     )}
 
                     <p className="text-start cursor-default">
-                      Make the data available to my beneficiaries after{" "}
+                      Make the data available to my beneficiaries after
                       <input
                         type="text"
                         min={1}
@@ -636,7 +636,7 @@ export function StepFourModal(_props: {
                         value={responseMonths}
                         className="inline h-7 w-16 px-3 text-safe-text-dark-gray rounded-md border-[1px] border-safe-color-gray outline-none"
                         required
-                      />{" "}
+                      />
                       days without a response from any validator.
                     </p>
                   </div>

@@ -37,7 +37,7 @@ interface UserState {
   selectedRoleUser: { [key: string]: any }
   userMap: { [key: string]: any }
   pulseDetail: PulseDetails
-  pulseCheckNonValidationMonths: string
+  pulseCheckNonValidationDays: string
   pulseCheckDays: string
   pulseCheckActive: boolean
   pulseCheckValidationRequired: string
@@ -89,7 +89,7 @@ const initialState: UserState = {
       { heading: "Social media 2", subHeading: "hard coded" },
     ],
   },
-  pulseCheckNonValidationMonths: "",
+  pulseCheckNonValidationDays: "",
   pulseCheckDays: "",
   pulseCheckActive: false,
   pulseCheckValidationRequired: "",
@@ -244,6 +244,10 @@ export const slice = createSlice({
             heading: "Backup Phone 1",
             subHeading: action.payload.data.data?.pulseCheckPhone2,
           },
+          {
+            heading: "Backup Phone 2",
+            subHeading: action.payload.data.data?.pulseCheckPhone3,
+          },
         ],
         "Social media": [
           { heading: "Social media", subHeading: "hard coded" },
@@ -253,8 +257,8 @@ export const slice = createSlice({
       }
       state.email = action.payload.data.data?.email
       state.pulseDetail = methodArr
-      state.pulseCheckNonValidationMonths =
-        action.payload.data.data?.pulseCheckNonValidationMonths
+      state.pulseCheckNonValidationDays =
+        action.payload.data.data?.pulseCheckNonValidationDays
       state.pulseCheckActive = action.payload.data.data?.pulseCheckActive
       state.pulseCheckDays = action.payload.data.data?.pulseCheckDays
       state.pulseCheckValidationRequired =
