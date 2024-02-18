@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import {
   GET,
   PUT,
+  POST,
   GET_USERS,
   DELETE_USER_REQUEST,
   DELETE_USER,
@@ -12,6 +13,8 @@ import {
   APPROVE_DELETION_REQUEST,
   REJECT_DELETION_REQUEST,
   RE_ADD_DELETION_REQUEST,
+  OFFER_FREE_TRIAL,
+  jsonToFormData,
 } from "@/common"
 
 export const getUsers = createAsyncThunk(
@@ -77,13 +80,18 @@ export const changeUserAccountStatus = createAsyncThunk(
 
 export const getDeleteRequests = createAsyncThunk(
   "getDeleteRequests",
-  async (Data: {role: string, page: number}, { getState, rejectWithValue }) => {
+  async (
+    Data: { role: string; page: number },
+    { getState, rejectWithValue },
+  ) => {
     const { user } = getState() as { user: { token: any } }
     const params = {
       ROUTE: `${
-        Data.role === "admin" ? ADMIN_DELETE_REQUEST : SUPER_ADMIN_DELETE_REQUESTS
+        Data.role === "admin"
+          ? ADMIN_DELETE_REQUEST
+          : SUPER_ADMIN_DELETE_REQUESTS
       }`,
-      // /?page=${Data.page}&pageSize=8 
+      // /?page=${Data.page}&pageSize=8
       Body: {},
       token: user.token,
     }
@@ -147,6 +155,26 @@ export const reAddDeleteRequest = createAsyncThunk(
     }
     try {
       const response = await GET(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+
+export const offerFreeTrial = createAsyncThunk(
+  "offerFreeTrial",
+  async (
+    Data: { email: string; tillDate: string; reason: string },
+    { rejectWithValue },
+  ) => {
+    const formData = jsonToFormData(Data)
+    const params = {
+      ROUTE: OFFER_FREE_TRIAL,
+      Body: formData,
+    }
+    try {
+      const response = await POST(params)
       return response
     } catch (error) {
       return rejectWithValue(error)

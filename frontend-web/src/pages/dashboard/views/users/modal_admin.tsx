@@ -203,3 +203,135 @@ export function NewUserDetail(_props: {
     />
   )
 }
+
+export function EditUser(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  closeIconVisibility: boolean
+  toggleUserAccount: Function
+  offerFreeTrial: () => void
+}) {
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={"Your New User Credentials"}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "buttonView",
+          props: {
+            title: "Activate / Deactivate",
+            onclick: _props.toggleUserAccount,
+            buttonStyle: "",
+            buttonContainer: "mx-48 my-10",
+          },
+        },
+        {
+          type: "buttonView",
+          props: {
+            title: "Free trial",
+            onclick: _props.offerFreeTrial,
+            buttonStyle: "",
+            buttonContainer: "mx-48 mb-10",
+          },
+        },
+        {
+          type: "buttonView",
+          props: {
+            title: "Pulse Check",
+            onclick: () => {},
+            buttonStyle: "",
+            buttonContainer: "mx-48 mb-10",
+          },
+        },
+        {
+          type: "buttonView",
+          props: {
+            title: "Account",
+            onclick: () => {},
+            buttonStyle: "",
+            buttonContainer: "mx-48 mb-10",
+          },
+        },
+      ]}
+    />
+  )
+}
+
+export function FreeTrial(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  closeIconVisibility: boolean
+  offerFreeTrial: () => void
+  _handleChange: Function
+  modalControl: any
+}) {
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={"Create User"}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "inputView",
+          props: {
+            name: "email",
+            type: "email",
+            placeholder: "Email",
+            value: _props.modalControl.email,
+            _handleChange: _props._handleChange,
+            // required: true,
+            inputStyles: "rounded-3xl w-full border-2",
+            hasRightIcon: false,
+            inputContainerStyles: "mx-7 mt-7 mb-4 relative",
+            disabled: true,
+          },
+        },
+        {
+          type: "inputView",
+          props: {
+            name: "email",
+            type: "date",
+            placeholder: "Date",
+            value: _props.modalControl.tillDate,
+            _handleChange: _props._handleChange,
+            required: true,
+            inputStyles: "rounded-3xl w-full border-2",
+            hasRightIcon: false,
+            inputContainerStyles: "mx-7 mt-7 mb-4 relative",
+          },
+        },
+        {
+          type: "inputView",
+          props: {
+            name: "text",
+            type: "text",
+            placeholder: "Reason",
+            value: _props.modalControl.reason,
+            _handleChange: _props._handleChange,
+            required: true,
+            inputStyles: "rounded-3xl w-full border-2",
+            hasRightIcon: false,
+            inputContainerStyles: "mx-7 my-7 mb-4 relative",
+            pattern: "d{4}-d{2}-d{2}",
+          },
+        },
+        {
+          type: "buttonView",
+          props: {
+            title: "Give free trial",
+            // onclick: _props._submitModal,
+            buttonStyle: "",
+            buttonContainer: "mx-48 mb-10",
+          },
+        },
+      ]}
+    />
+  )
+}
