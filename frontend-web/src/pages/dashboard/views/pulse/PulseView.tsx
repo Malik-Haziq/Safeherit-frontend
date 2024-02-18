@@ -89,6 +89,7 @@ export default function PulseView() {
     modalHistoryPopAll()
     getUserDetails()
     initialState.pulseCheckEmail1 = user.email
+    initialState.pulseCheckNonValidationDays = user.pulseCheckNonValidationDays
     setModalControl(initialState)
   }, [])
 
@@ -354,9 +355,9 @@ function PulseCheckView(_props: {
   pulseCheckDays: string
   newPulseCheckDays: string
   modalControl: any
-  handleChange: Function
+  handleChange: any
   numOfValidator: number
-  _submitUpdateValidatorDays: Function
+  _submitUpdateValidatorDays: () => void
   setNewPulseCheckDays: React.Dispatch<React.SetStateAction<string>>
   pulseCheckCustomDays: string
   setPulseCheckCustomDays: React.Dispatch<React.SetStateAction<string>>
@@ -746,14 +747,13 @@ function ValidatorMonths(_props: {
   _submitUpdateValidatorDays: any
 }) {
   const [getResponseFromValidator, setGetResponseFromValidator] = useState(
-    _props.modalControl.pulseCheckNonValidationDays === "0" ? "opt-1" : "opt-2",
+    _props.modalControl.pulseCheckNonValidationDays === 0 ? "opt-1" : "opt-2",
   )
   const [validatorDays, setValidatorDays] = useState(
     _props.modalControl.pulseCheckNonValidationDays,
   )
   const [updateButton, setUpdateButton] = useState(false)
 
-  console.log(_props.modalControl)
   function handleClick(selectedOption: string) {
     setGetResponseFromValidator(selectedOption)
     setUpdateButton(true)
@@ -774,6 +774,7 @@ function ValidatorMonths(_props: {
   useEffect(() => {
     if (getResponseFromValidator == "opt-1") {
       triggerEvent("pulseCheckValidationRequired", "true")
+      triggerEvent("pulseCheckNonValidationDays", "0")
     } else {
       triggerEvent("pulseCheckNonValidationDays", validatorDays)
     }
@@ -794,6 +795,13 @@ function ValidatorMonths(_props: {
     if (value == "" || (value >= 1 && value <= 90 && !value.includes("."))) {
       setValidatorDays(value)
     }
+  }
+
+  const _handleSubmit = () => {
+    if (getResponseFromValidator == "opt-1") {
+      setValidatorDays(0)
+    }
+    _props._submitUpdateValidatorDays()
   }
 
   return (
@@ -852,7 +860,7 @@ function ValidatorMonths(_props: {
         <button
           data-cy="update-pulse-check-days-button"
           className="primary-btn text-[12px] rounded-2xl bg-[#0971AA] inline-block w-fit ml-auto"
-          onClick={_props._submitUpdateValidatorDays}
+          onClick={_handleSubmit}
         >
           Update
         </button>
