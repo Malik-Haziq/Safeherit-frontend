@@ -16,6 +16,7 @@ import {
   OFFER_FREE_TRIAL,
   jsonToFormData,
 } from "@/common"
+import { setLoaderVisibility } from "../reducers/LoaderSlice"
 
 export const getUsers = createAsyncThunk(
   "getUsers",
@@ -162,12 +163,13 @@ export const reAddDeleteRequest = createAsyncThunk(
   },
 )
 
-export const offerFreeTrial = createAsyncThunk(
-  "offerFreeTrial",
+export const offerTrial = createAsyncThunk(
+  "offerTrial",
   async (
     Data: { email: string; tillDate: string; reason: string },
-    { rejectWithValue },
+    { dispatch, rejectWithValue },
   ) => {
+    dispatch(setLoaderVisibility(true))
     const formData = jsonToFormData(Data)
     const params = {
       ROUTE: OFFER_FREE_TRIAL,
@@ -178,6 +180,8 @@ export const offerFreeTrial = createAsyncThunk(
       return response
     } catch (error) {
       return rejectWithValue(error)
+    } finally {
+      dispatch(setLoaderVisibility(false))
     }
   },
 )

@@ -18,6 +18,7 @@ import {
   getUsers,
   deleteUserFromSuperadmin,
   changeUserAccountStatus,
+  offerTrial,
 } from "@/redux/actions/AdminAction"
 import { toast, Spinner, Pagination } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
@@ -54,6 +55,7 @@ export default function UsersView() {
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [currentPage, setCurrentPage] = useState(1)
+  const [selectedUser, setSelectedUser] = useState<any>()
   const [loading, setLoading] = useState(true)
   const [modalControl, setModalControl] = useState(initialState)
   const [userViewControl, setViewControl] = useState(userInitialState)
@@ -161,8 +163,12 @@ export default function UsersView() {
     }
   }
 
-  const editUser = () => {
+  const editUser = (email: string, currentStatus: string) => {
     setModalVisibility("edit-user")
+    setSelectedUser({
+      email: email,
+      currentStatus: currentStatus,
+    })
   }
 
   const viewUser = (_props: User) => {
@@ -183,10 +189,10 @@ export default function UsersView() {
     setModalVisibility("create-user")
   }
 
-  const toggleUserAccount = (email: string, currentStatus: string) => {
+  const changeAccountStatus = () => {
     const data = {
-      userEmail: email,
-      currentlyActive: currentStatus === "Active" ? false : true,
+      userEmail: selectedUser.email,
+      currentlyActive: selectedUser.currentStatus === "Active" ? false : true,
     }
     dispatch<any>(changeUserAccountStatus(data))
       .unwrap()
@@ -194,6 +200,7 @@ export default function UsersView() {
         setLoading(false)
       })
       .then(() => {
+        setModalVisibility("")
         toast("User account status updated successfully", "success")
         fetchUsers()
       })
@@ -205,7 +212,25 @@ export default function UsersView() {
   }
 
   const _submitOfferFreeTrial = () => {
-    // dispatch
+    if (modalControl.tillDate) {
+      setModalVisibility("")
+      dispatch<any>(
+        offerTrial({
+          email: selectedUser.email,
+          tillDate: modalControl.tillDate,
+          reason: modalControl.reason,
+        }),
+      )
+        .unwrap()
+        .then(() => {
+          toast("Trial activated", "success")
+          setModalControl(initialState)
+          setSelectedUser("")
+          fetchUsers()
+        })
+    } else {
+      toast("Please enter a valid date", "error")
+    }
   }
 
   return (
@@ -224,7 +249,7 @@ export default function UsersView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={true}
-        toggleUserAccount={toggleUserAccount}
+        toggleUserAccount={changeAccountStatus}
         offerFreeTrial={offerFreeTrial}
       />
       <FreeTrial
@@ -234,6 +259,7 @@ export default function UsersView() {
         closeIconVisibility={true}
         offerFreeTrial={offerFreeTrial}
         _handleChange={_handleChange}
+        _submitModal={_submitOfferFreeTrial}
         modalControl={modalControl}
       />
       <UserDetail

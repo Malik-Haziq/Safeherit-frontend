@@ -209,7 +209,7 @@ export function EditUser(_props: {
   closeModal: any
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
-  toggleUserAccount: Function
+  toggleUserAccount: () => void
   offerFreeTrial: () => void
 }) {
   return (
@@ -267,7 +267,8 @@ export function FreeTrial(_props: {
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
   offerFreeTrial: () => void
-  _handleChange: Function
+  _handleChange: any
+  _submitModal: () => void
   modalControl: any
 }) {
   return (
@@ -275,28 +276,13 @@ export function FreeTrial(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={"Create User"}
+      modalTitle={"Free Trial"}
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {
           type: "inputView",
           props: {
-            name: "email",
-            type: "email",
-            placeholder: "Email",
-            value: _props.modalControl.email,
-            _handleChange: _props._handleChange,
-            // required: true,
-            inputStyles: "rounded-3xl w-full border-2",
-            hasRightIcon: false,
-            inputContainerStyles: "mx-7 mt-7 mb-4 relative",
-            disabled: true,
-          },
-        },
-        {
-          type: "inputView",
-          props: {
-            name: "email",
+            name: "tillDate",
             type: "date",
             placeholder: "Date",
             value: _props.modalControl.tillDate,
@@ -310,7 +296,7 @@ export function FreeTrial(_props: {
         {
           type: "inputView",
           props: {
-            name: "text",
+            name: "reason",
             type: "text",
             placeholder: "Reason",
             value: _props.modalControl.reason,
@@ -326,7 +312,7 @@ export function FreeTrial(_props: {
           type: "buttonView",
           props: {
             title: "Give free trial",
-            // onclick: _props._submitModal,
+            onclick: _props._submitModal,
             buttonStyle: "",
             buttonContainer: "mx-48 mb-10",
           },
