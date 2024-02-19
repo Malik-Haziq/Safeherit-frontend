@@ -5,6 +5,7 @@ import shieldIcon from "@images/Shield-done.svg"
 import tickIcon from "@images/tick-blue.svg"
 import editIcon from "@images/edit-icon.svg"
 import pulseImg from "@images/pulse-check-img.svg"
+import checkmark from "@images/checkmark.svg"
 import introVideo from "@videos/pulse-video.mp4"
 import {
   StepOneModal,
@@ -34,13 +35,21 @@ const initialState = {
   pulseCheckEmail3: "",
   pulseCheckPhone1: "",
   pulseCheckPhone2: "",
+  pulseCheckPhone3: "",
   pulseCheckValidationRequired: "true",
-  pulseCheckNonValidationMonths: "0",
+  pulseCheckNonValidationDays: "0",
+}
+
+interface CustomChangeEvent {
+  target: {
+    name: string
+    value: string | ArrayBuffer | null | undefined
+  }
 }
 
 export default function PulseView() {
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.user)
   const startLoader = () => dispatch<any>(setLoaderVisibility(true))
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
@@ -80,6 +89,7 @@ export default function PulseView() {
     modalHistoryPopAll()
     getUserDetails()
     initialState.pulseCheckEmail1 = user.email
+    initialState.pulseCheckNonValidationDays = user.pulseCheckNonValidationDays
     setModalControl(initialState)
   }, [])
 
@@ -144,8 +154,12 @@ export default function PulseView() {
   }
 
   const _submitStepThreeModal = () => {
-    modalHistoryPush("Step-3")
-    setModalVisibility("Step-4")
+    if (user.numOfValidatorOfUser) {
+      modalHistoryPush("Step-3")
+      setModalVisibility("Step-4")
+    } else {
+      _submitStepFourModal()
+    }
   }
 
   const _submitStepFourModal = () => {
@@ -166,10 +180,12 @@ export default function PulseView() {
 
   const _submitSuccessModal = () => {
     setModalVisibility("none")
-    if(!user.startupWizardCompleted && user.wizardStep === "PulseCheck") {
-      navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`)
+    if (!user.startupWizardCompleted && user.wizardStep === "PulseCheck") {
+      navigate(
+        `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`,
+      )
       dispatch(setWizardStep("Assets"))
-      return  
+      return
     }
     getUserDetails()
   }
@@ -205,7 +221,7 @@ export default function PulseView() {
         ? "pulseCheckPhone2"
         : propertyName]: value,
       pulseCheckValidationRequired: user.pulseCheckValidationRequired,
-      pulseCheckNonValidationMonths: user.pulseCheckNonValidationMonths,
+      pulseCheckNonValidationDays: user.pulseCheckNonValidationDays,
     }
     if (propertyName !== "pulseCheckDays") {
       updatedData["pulseCheckDays"] = user.pulseCheckDays
@@ -221,6 +237,17 @@ export default function PulseView() {
       .finally(() => {
         stopLoader()
       })
+  }
+
+  const _submitUpdateValidatorDays = () => {
+    toast("Updating", "info")
+    dispatch<any>(updatePulse(modalControl))
+      .unwrap()
+      .catch()
+      .then(() => {
+        getUserDetails()
+      })
+      .finally(() => {})
   }
 
   return (
@@ -251,6 +278,7 @@ export default function PulseView() {
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
         closeIconVisibility={user.startupWizardCompleted}
+        numberOfValidators={user.numOfValidatorOfUser}
         action={""}
         _submitModal={_submitStepThreeModal}
         _handleChange={_handleChange}
@@ -299,6 +327,10 @@ export default function PulseView() {
           pulseCheckCustomDays={pulseCheckCustomDays}
           setPulseCheckCustomDays={setPulseCheckCustomDays}
           submitUpdatedValue={submitUpdatedValue}
+          modalControl={modalControl}
+          handleChange={_handleChange}
+          numOfValidator={user.numOfValidatorOfUser}
+          _submitUpdateValidatorDays={_submitUpdateValidatorDays}
         />
       ) : (
         <SetUpPulseCheck
@@ -322,6 +354,10 @@ function PulseCheckView(_props: {
   setEditDetailInput: any
   pulseCheckDays: string
   newPulseCheckDays: string
+  modalControl: any
+  handleChange: any
+  numOfValidator: number
+  _submitUpdateValidatorDays: () => void
   setNewPulseCheckDays: React.Dispatch<React.SetStateAction<string>>
   pulseCheckCustomDays: string
   setPulseCheckCustomDays: React.Dispatch<React.SetStateAction<string>>
@@ -452,7 +488,14 @@ function PulseCheckView(_props: {
             controls
             className="w-[450px] h-[300px] rounded-xl"
           ></video>
-          <p className="text-xl">Learn how our Pulse Check system works</p>
+          <p className="text-xl mb-8">Learn how our Pulse Check system works</p>
+          {_props.numOfValidator && (
+            <ValidatorMonths
+              modalControl={_props.modalControl}
+              _handleChange={_props.handleChange}
+              _submitUpdateValidatorDays={_props._submitUpdateValidatorDays}
+            />
+          )}
         </section>
       </main>
     </div>
@@ -592,7 +635,8 @@ function MethodRow(_props: {
       toast("please enter a valid Email address", "error")
     } else if (
       (_props.editDetailInput === "primaryPhone" ||
-        _props.editDetailInput === "backupPhone1") &&
+        _props.editDetailInput === "backupPhone1" ||
+        _props.editDetailInput === "backupPhone2") &&
       !isValidPhoneWithRegion(_inputValue)
     ) {
       toast("please enter a valid Phone number", "error")
@@ -611,7 +655,8 @@ function MethodRow(_props: {
       <p>{_props.heading}</p>
       {_props.editDetailInput === convertToCamelCase(_props.heading) &&
       (_props.editDetailInput === "primaryPhone" ||
-        _props.editDetailInput === "backupPhone1") ? (
+        _props.editDetailInput === "backupPhone1" ||
+        _props.editDetailInput === "backupPhone2") ? (
         <>
           <PhoneNumField
             name="phone_number"
@@ -692,6 +737,134 @@ function SetUpPulseCheck(_props: {
           Set Up Pulse
         </button>
       </main>
+    </div>
+  )
+}
+
+function ValidatorMonths(_props: {
+  modalControl: any
+  _handleChange: any
+  _submitUpdateValidatorDays: any
+}) {
+  const [getResponseFromValidator, setGetResponseFromValidator] = useState(
+    _props.modalControl.pulseCheckNonValidationDays === 0 ? "opt-1" : "opt-2",
+  )
+  const [validatorDays, setValidatorDays] = useState(
+    _props.modalControl.pulseCheckNonValidationDays,
+  )
+  const [updateButton, setUpdateButton] = useState(false)
+
+  function handleClick(selectedOption: string) {
+    setGetResponseFromValidator(selectedOption)
+    setUpdateButton(true)
+  }
+
+  useEffect(() => {
+    if (_props.modalControl.pulseCheckValidationRequired == "true") {
+      triggerEvent("pulseCheckNonValidationDays", "0")
+    }
+  }, [_props.modalControl.pulseCheckValidationRequired])
+
+  useEffect(() => {
+    if (_props.modalControl.pulseCheckNonValidationDays == "3") {
+      triggerEvent("pulseCheckValidationRequired", "false")
+    }
+  }, [_props.modalControl.pulseCheckNonValidationDays])
+
+  useEffect(() => {
+    if (getResponseFromValidator == "opt-1") {
+      triggerEvent("pulseCheckValidationRequired", "true")
+      triggerEvent("pulseCheckNonValidationDays", "0")
+    } else {
+      triggerEvent("pulseCheckNonValidationDays", validatorDays)
+    }
+  }, [getResponseFromValidator, validatorDays])
+
+  const triggerEvent = (name: string, value: string) => {
+    const customEvent: CustomChangeEvent = {
+      target: {
+        name: name,
+        value: value,
+      },
+    }
+    _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+  }
+
+  const handleChange = (e: any) => {
+    const value = e.target.value
+    if (value == "" || (value >= 1 && value <= 90 && !value.includes("."))) {
+      setValidatorDays(value)
+    }
+  }
+
+  const _handleSubmit = () => {
+    if (getResponseFromValidator == "opt-1") {
+      setValidatorDays(0)
+    }
+    _props._submitUpdateValidatorDays()
+  }
+
+  return (
+    <div className="flex flex-col gap-3 mb-10">
+      <div
+        className={
+          getResponseFromValidator == "opt-1"
+            ? "flex items-center gap-3 text-sm font-semibold mb-3 text-[#474747]"
+            : "flex items-center gap-3 text-sm font-medium mb-3 text-[#8C8C8C]"
+        }
+        onClick={() => handleClick("opt-1")}
+      >
+        {getResponseFromValidator == "opt-1" ? (
+          <img src={checkmark} alt="checkmark" className="w-6 h-6" />
+        ) : (
+          <div className="w-6 h-6 border-2 shrink-0 rounded-sm"></div>
+        )}
+
+        <p className="text-start cursor-default">
+          Keep following up: do not contact my beneficiaries unless you get a
+          confirmation from a validator.
+        </p>
+      </div>
+
+      <div
+        className={
+          getResponseFromValidator == "opt-2"
+            ? "flex items-center gap-3 text-sm font-semibold mb-3 text-[#474747]"
+            : "flex items-center gap-3 text-sm font-medium mb-3 text-[#8C8C8C]"
+        }
+        onClick={() => handleClick("opt-2")}
+      >
+        {getResponseFromValidator == "opt-2" ? (
+          <img src={checkmark} alt="checkmark" className="w-6 h-6" />
+        ) : (
+          <div className="w-6 h-6 border-2 shrink-0 rounded-sm"></div>
+        )}
+
+        <p className="text-start cursor-default">
+          Make the data available to my beneficiaries after
+          <input
+            type="text"
+            min={1}
+            max={90}
+            onChange={handleChange}
+            autoFocus={getResponseFromValidator === "opt-2"}
+            disabled={getResponseFromValidator !== "opt-2"}
+            value={validatorDays}
+            className="inline h-7 w-16 px-3 text-safe-text-dark-gray rounded-md border-[1px] border-safe-color-gray outline-none"
+            required
+          />
+          days without a response from any validator.
+        </p>
+      </div>
+      {updateButton && (
+        <button
+          data-cy="update-pulse-check-days-button"
+          className="primary-btn text-[12px] rounded-2xl bg-[#0971AA] inline-block w-fit ml-auto"
+          onClick={_handleSubmit}
+        >
+          Update
+        </button>
+      )}
     </div>
   )
 }
