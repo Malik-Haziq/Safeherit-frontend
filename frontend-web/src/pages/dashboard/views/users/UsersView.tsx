@@ -10,6 +10,7 @@ import {
   UserDetail,
   EditUser,
   FreeTrial,
+  AdminUpdatePulseCheck,
 } from "../users/modal_admin"
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
@@ -19,11 +20,16 @@ import {
   deleteUserFromSuperadmin,
   changeUserAccountStatus,
   offerTrial,
+  adminUpdatePulseCheck,
 } from "@/redux/actions/AdminAction"
 import { toast, Spinner, Pagination } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
-import { getFileFromFirebase, isValidEmail } from "@/common"
+import {
+  getFileFromFirebase,
+  isValidEmail,
+  isValidPhoneWithRegion,
+} from "@/common"
 import { User } from "@/types"
 
 const initialState = {
@@ -47,6 +53,18 @@ const userInitialState = {
   profile_image: "",
 }
 
+const pulseCheckData = {
+  pulseCheckDays: 30,
+  pulseCheckEmail1: "",
+  pulseCheckEmail2: "",
+  pulseCheckEmail3: "",
+  pulseCheckPhone1: "",
+  pulseCheckPhone2: "",
+  pulseCheckValidationRequired: "false",
+  pulseCheckNonValidationMonths: 3,
+  ownerEmail: "",
+}
+
 export default function UsersView() {
   const dispatch = useAppDispatch()
   const admin = useAppSelector((state) => state.admin)
@@ -58,6 +76,7 @@ export default function UsersView() {
   const [selectedUser, setSelectedUser] = useState<any>()
   const [loading, setLoading] = useState(true)
   const [modalControl, setModalControl] = useState(initialState)
+  const [pulseCheckControl, setPulseCheckControl] = useState(pulseCheckData)
   const [userViewControl, setViewControl] = useState(userInitialState)
   const [modalVisibility, setModalVisibility] = useState("none")
   const paginationRef = useRef<HTMLDivElement>(null)
@@ -78,6 +97,11 @@ export default function UsersView() {
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
+  }
+
+  const _handlePulseChange = (event: { target: { name: any; value: any } }) => {
+    const { name, value } = event.target
+    setPulseCheckControl({ ...pulseCheckControl, [name]: value })
   }
 
   const createUserSubmit = () => {
@@ -233,6 +257,50 @@ export default function UsersView() {
     }
   }
 
+  const editPulseCheck = () => {
+    setModalVisibility("admin-update-pulse-check")
+  }
+
+  const _submitUpdatePulseCheck = () => {
+    const data = {
+      ...pulseCheckControl,
+      ownerEmail: selectedUser.email,
+    }
+    if (
+      (!isValidEmail(pulseCheckControl.pulseCheckEmail1) &&
+        !isValidEmail(pulseCheckControl.pulseCheckEmail2) &&
+        !isValidEmail(pulseCheckControl.pulseCheckEmail3)) ||
+      (pulseCheckControl.pulseCheckEmail1 &&
+        !isValidEmail(pulseCheckControl.pulseCheckEmail1)) ||
+      (pulseCheckControl.pulseCheckEmail3 &&
+        !isValidEmail(pulseCheckControl.pulseCheckEmail3)) ||
+      (pulseCheckControl.pulseCheckEmail2 &&
+        !isValidEmail(pulseCheckControl.pulseCheckEmail2))
+    ) {
+      toast("please enter a valid Email address", "error")
+    } else if (
+      pulseCheckControl.pulseCheckPhone1 &&
+      !isValidPhoneWithRegion(pulseCheckControl.pulseCheckPhone1)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else if (
+      pulseCheckControl.pulseCheckPhone2 &&
+      !isValidPhoneWithRegion(pulseCheckControl.pulseCheckPhone2)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else {
+      dispatch<any>(adminUpdatePulseCheck(data))
+        .unwrap()
+        .then(() => {
+          toast("pulse details has been updated", "success")
+          fetchUsers()
+          setSelectedUser("")
+          setPulseCheckControl(pulseCheckData)
+          setModalVisibility("")
+        })
+    }
+  }
+
   return (
     <div className={styles.AppView}>
       <NewUserModal
@@ -251,6 +319,7 @@ export default function UsersView() {
         closeIconVisibility={true}
         toggleUserAccount={changeAccountStatus}
         offerFreeTrial={offerFreeTrial}
+        editPulseCheck={editPulseCheck}
       />
       <FreeTrial
         openModal={modalVisibility == "free-trial-modal"}
@@ -261,6 +330,15 @@ export default function UsersView() {
         _handleChange={_handleChange}
         _submitModal={_submitOfferFreeTrial}
         modalControl={modalControl}
+      />
+      <AdminUpdatePulseCheck
+        openModal={modalVisibility == "admin-update-pulse-check"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        _handleChange={_handlePulseChange}
+        _submitModal={_submitUpdatePulseCheck}
+        modalControl={pulseCheckControl}
       />
       <UserDetail
         openModal={modalVisibility == "view-user"}
