@@ -22,6 +22,7 @@ export function EditUserModal(_props: {
     displayName: string
     language: string
     profile_image: string
+    currency: string
   }
   _submitModal: () => void
   imageUpload: string
@@ -30,6 +31,13 @@ export function EditUserModal(_props: {
   email: string
 }) {
   const Languages = [{ value: "en", label: "en" }]
+  const currencies = [
+    { value: "USD", label: "USD (United State Dollar)" },
+    { value: "AED", label: "AED (United Arab Emirates dirham)" },
+    { value: "PKR", label: "PKR (Pakistani rupee)" },
+    { value: "SGD", label: "SGD (Singapore dollar)" },
+  ]
+
   const handleImageInputChange = (event: any) => {
     const file = event.target.files[0]
     if (file) {
@@ -184,7 +192,44 @@ export function EditUserModal(_props: {
             hasRightIcon: true,
             rightIcon: arrowDown,
             rightIconAlt: "rightIcon",
-            // selectFieldWidth: 490,
+            selectContainer: "mx-7 mb-4 relative",
+            selectFieldStyles:
+              "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]",
+            rightIconStyles: "absolute right-4 top-4 cursor-pointer",
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "Currency",
+            textStyles: "text-[#00192B] font-medium mb-1 mx-7",
+          },
+        },
+        {
+          type: "selectView",
+          props: {
+            data: currencies,
+            value: {
+              value: _props.modalControl.currency,
+              label: _props.modalControl.currency,
+            },
+            selectProps: {
+              placeholder: "Select a currency",
+            },
+            setSelectedValue: (value: any) => {
+              const customEvent = {
+                target: {
+                  name: "currency",
+                  value: value.value,
+                },
+              }
+              _props._handleChange(
+                customEvent as React.ChangeEvent<HTMLInputElement>,
+              )
+            },
+            hasRightIcon: true,
+            rightIcon: arrowDown,
+            rightIconAlt: "rightIcon",
             selectContainer: "mx-7 mb-4 relative",
             selectFieldStyles:
               "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2 font-semibold px-2 text-[#6F767B] bg-[#F5FAFD]",
