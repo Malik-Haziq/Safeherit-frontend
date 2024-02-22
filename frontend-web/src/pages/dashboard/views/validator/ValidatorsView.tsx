@@ -6,6 +6,9 @@ import instagram from "@images/insta.svg"
 import twitter from "@images/twitter.svg"
 import userImg from "@images/user.svg"
 import validatorImage from "@images/validator-screen.svg"
+import coloredFacebook from "@images/coloredFacebook.svg"
+import coloredInstagram from "@images/instagram.svg"
+import coloredTwitter from "@images/coloredTwitter.svg"
 
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -293,7 +296,7 @@ export default function ValidatorsView() {
   }
   const pulseCheck = () => {
     navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_PULSE}`)
-    if(!user.startupWizardCompleted && user.wizardStep === "Validators") {
+    if (!user.startupWizardCompleted && user.wizardStep === "Validators") {
       dispatch(setWizardStep("PulseCheck"))
     }
   }
@@ -326,7 +329,6 @@ export default function ValidatorsView() {
   }
 
   const _submitEditValidatorModal = () => {
-
     if (!modalControl.name) {
       toast("please enter a valid name", "error")
     } else if (
@@ -683,42 +685,58 @@ function Validator(_props: {
       </li>
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
-          <a
-            data-cy="validator-facebook-link"
-            href={_props.facebook_link || "https://www.facebook.com/login.php"}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={facebook}
-              alt="facebook logo"
-              className="w-5 cursor-pointer"
-            />
-          </a>
-          <a
-            data-cy="validator-facebook-link"
-            href={`https://www.instagram.com/${_props.instagram_username}/`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={instagram}
-              alt="instagram logo"
-              className="w-5 cursor-pointer"
-            />
-          </a>
-          <a
-            data-cy="validator-facebook-link"
-            href={`https://twitter.com/${_props.twitter_username}/`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          {_props.facebook_link ? (
+            <a
+              data-cy="beneficiary-facebook-account-link"
+              href={_props.facebook_link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={coloredFacebook}
+                alt="facebook logo"
+                className="w-5 cursor-pointer "
+              />
+            </a>
+          ) : (
+            <img src={facebook} alt="facebook logo" className="w-5" />
+          )}
+          {_props.instagram_username ? (
+            <a
+              data-cy="beneficiary-facebook-account-link"
+              href={_props.instagram_username}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <img
+                src={coloredInstagram}
+                alt="instagram logo"
+                className="w-5 cursor-pointer"
+              />
+            </a>
+          ) : (
+            <img src={instagram} alt="instagram logo" className="w-5" />
+          )}
+          {_props.twitter_username ? (
+            <a
+              data-cy="beneficiary-facebook-account-link"
+              href={_props.twitter_username}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <img
+                src={coloredTwitter}
+                alt="twitter logo"
+                className="w-5 cursor-pointer"
+              />
+            </a>
+          ) : (
             <img
               src={twitter}
               alt="twitter logo"
-              className="w-5 cursor-pointer"
+              className="w-5 fill-[#948d8d]"
             />
-          </a>
+          )}
         </div>
         <div className="relative">
           <ValidatorDropDown

@@ -2,8 +2,11 @@ import React from "react"
 import userIcon from "@images/user-icon.svg"
 import addIcon from "@images/add-icon.svg"
 import facebook from "@images/facebook.svg"
+import coloredFacebook from "@images/coloredFacebook.svg"
 import instagram from "@images/insta.svg"
+import coloredInstagram from "@images/instagram.svg"
 import twitter from "@images/twitter.svg"
+import coloredTwitter from "@images/coloredTwitter.svg"
 import userImg from "@images/user.svg"
 import beneficiaryImg from "@images/beneficiaryScreen.svg"
 import { useCallback, useEffect, useState } from "react"
@@ -170,7 +173,6 @@ export default function BeneficiariesView() {
     }
   }
   const _submitStepTwoModal = () => {
-
     if (
       modalControl.facebook_link &&
       !isValidFacebook(modalControl.facebook_link)
@@ -259,9 +261,11 @@ export default function BeneficiariesView() {
 
   const _submitSuccessModal = () => {
     closeModal()
-    if(!user.startupWizardCompleted && user.wizardStep === "Beneficiary") {
+    if (!user.startupWizardCompleted && user.wizardStep === "Beneficiary") {
       dispatch(setWizardStep("Validators"))
-      navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}`)
+      navigate(
+        `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}`,
+      )
     }
   }
 
@@ -448,7 +452,6 @@ export default function BeneficiariesView() {
   }, [modalEncryptionKeyControl.publicKey])
 
   const _submitEditBeneficiaryModal = () => {
-
     if (!modalControl.name) {
       toast("please enter a valid name", "error")
     } else if (
@@ -619,7 +622,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-0"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted} 
+        closeIconVisibility={user.startupWizardCompleted}
         action={modalAction}
         _submitModal={_submitStepZeroModal}
       />
@@ -713,7 +716,11 @@ function Beneficiaries(_props: {
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
               <div className="relative">
-                <input data-cy="select-all-beneficiaries-input" type="checkbox" id="checkbox" />
+                <input
+                  data-cy="select-all-beneficiaries-input"
+                  type="checkbox"
+                  id="checkbox"
+                />
                 <label
                   htmlFor="checkbox"
                   className="checkbox-label ml-1 -top-1"
@@ -825,42 +832,58 @@ function Beneficiary(_props: {
       </li>
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
-          <a
-            data-cy="beneficiary-facebook-account-link"
-            href={_props.facebook_link || ""}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={facebook}
-              alt="facebook logo"
-              className="w-5 cursor-pointer"
-            />
-          </a>
-          <a
-            data-cy="beneficiary-instagram-account-link"
-            href={_props.instagram_username || ""}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={instagram}
-              alt="instagram logo"
-              className="w-5 cursor-pointer"
-            />
-          </a>
-          <a
-            data-cy="beneficiary-twitter-account-link"
-            href={_props.twitter_username || ""}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          {_props.facebook_link ? (
+            <a
+              data-cy="beneficiary-facebook-account-link"
+              href={_props.facebook_link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={coloredFacebook}
+                alt="facebook logo"
+                className="w-5 cursor-pointer "
+              />
+            </a>
+          ) : (
+            <img src={facebook} alt="facebook logo" className="w-5 " />
+          )}
+          {_props.instagram_username ? (
+            <a
+              data-cy="beneficiary-facebook-account-link"
+              href={_props.instagram_username}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <img
+                src={coloredInstagram}
+                alt="instagram logo"
+                className="w-5 cursor-pointer"
+              />
+            </a>
+          ) : (
+            <img src={instagram} alt="instagram logo" className="w-5" />
+          )}
+          {_props.twitter_username ? (
+            <a
+              data-cy="beneficiary-facebook-account-link"
+              href={_props.twitter_username}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <img
+                src={coloredTwitter}
+                alt="twitter logo"
+                className="w-5 cursor-pointer"
+              />
+            </a>
+          ) : (
             <img
               src={twitter}
               alt="twitter logo"
-              className="w-5 cursor-pointer"
+              className="w-5 fill-[#948d8d]"
             />
-          </a>
+          )}
         </div>
         <div className="relative">
           <ValidatorDropDown
