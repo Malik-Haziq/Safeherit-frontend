@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import dollar from "@images/dollar.svg"
 import bank from "@images/bank.svg"
 import eye from "@images/eye.svg"
@@ -21,7 +21,12 @@ import {
   AssetBeneficiaries,
   BeneficiaryWarning,
 } from "./modal_assets"
-import { ASSET_TYPES, ROUTE_CONSTANTS, useArray } from "@/common"
+import {
+  ASSET_TYPES,
+  ROUTE_CONSTANTS,
+  calculateTotalAssetsCost,
+  useArray,
+} from "@/common"
 
 import {
   findAsset,
@@ -33,6 +38,7 @@ import {
   getAllBeneficiaryAsset,
   findBeneficiaryAsset,
   updateUser,
+  getCurrencyRates,
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
@@ -66,6 +72,11 @@ export default function AssetsView() {
   const [assetFile, setAssetFile] = useState("")
   const [assetBeneficiariesData, setAssetBeneficiariesData] =
     useState(initialState)
+  const [assetCostFilter, setAssetCostFilter] = useState('All')
+  const assetTotalCost: number = useMemo(
+    () => calculateTotalAssetsCost(asset.Asset_array, asset.Currencies, assetCostFilter),
+    [asset.Asset_array, asset.Currencies, assetCostFilter],
+  )
   const [
     modalHistory,
     modalHistoryLength,
@@ -116,6 +127,10 @@ export default function AssetsView() {
     if (!user.startupWizardCompleted && user.wizardStep === "Assets") {
       setModalVisibility("Step-0")
     }
+  }, [])
+
+  useEffect(() => {
+    dispatch<any>(getCurrencyRates({}))
   }, [])
 
   const closeModal = useCallback(() => {
@@ -181,23 +196,23 @@ export default function AssetsView() {
   ]
 
   const options = [
-    { button: "All", action: () => {} },
-    { button: "Bank", action: () => {} },
-    { button: "Stock", action: () => {} },
-    { button: "Real Estate", action: () => {} },
-    { button: "Life Insurance", action: () => {} },
-    { button: "Cryptocurrency", action: () => {} },
+    { button: "All", action: setAssetCostFilter},
+    { button: "Bank Account", action: setAssetCostFilter},
+    { button: "Stocks", action: setAssetCostFilter},
+    { button: "Real Estate", action: setAssetCostFilter},
+    { button: "Life Insurance", action: setAssetCostFilter},
+    { button: "Cryptocurrency (Self-custody)", action: setAssetCostFilter},
   ]
 
   const AssetDetailsCardArr = [
     {
       img: dollar,
-      title: "USD 126,000",
+      title: `EUR ${assetTotalCost.toFixed(2)}`,
       subTitle: "Total Balance",
       element: (
         <DropDownButton
           className="flex gap-2"
-          title="All"
+          title={assetCostFilter}
           titleClassName="font-semibold cursor-pointer"
           arrowIcon={arrowDown}
           options={options}
@@ -327,7 +342,7 @@ export default function AssetsView() {
     if (!user.startupWizardCompleted) {
       closeModal()
       dispatch(setWizardStep("none"))
-      dispatch(updateUser({startupWizardCompleted: true}))
+      dispatch(updateUser({ startupWizardCompleted: true }))
     }
     navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`)
   }
@@ -598,7 +613,11 @@ function Assets(_props: {
         <section className="">
           <div className="flex items-center gap-11 mb-2 pl-6">
             <div className="relative">
-              <input data-cy="select-all-assets-input" type="checkbox" id="checkbox" />
+              <input
+                data-cy="select-all-assets-input"
+                type="checkbox"
+                id="checkbox"
+              />
               <label htmlFor="checkbox" className="checkbox-label h-5 w-5">
                 <div className="check_mark"></div>
               </label>
@@ -677,7 +696,7 @@ function AssetDetailsCard(_props: {
           <p className="text-[#828282] text-xs">{_props.subtitle}</p>
         </div>
       </div>
-      <div className="cursor-pointer">{_props.element}</div>
+      <div className="cursor-pointer">{_props.element}</  div>
     </div>
   )
 }
