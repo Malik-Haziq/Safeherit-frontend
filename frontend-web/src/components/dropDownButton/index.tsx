@@ -53,7 +53,7 @@ export function DropDownButton(_props: any) {
                         className={`${
                           active ? "bg-safe-blue text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-3 py-2 text-sm`}
-                        onClick={option.action}
+                        onClick={() => option.action(option.button)}
                       >
                         {option.button}
                       </button>

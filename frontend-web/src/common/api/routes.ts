@@ -17,6 +17,7 @@ export const TESTMENTS = "/api-beneficiary/as-beneficiary/testament"
 
 export const ASSETS = "/api-asset"
 export const ALL_ASSETS = "/api-asset/list"
+export const CURRENCY_RATES = "/api-asset/currency-rates"
 
 export const GET_DATA = "/api-dashboard/data"
 

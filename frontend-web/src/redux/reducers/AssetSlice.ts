@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getAllAsset, getAllBeneficiaryAsset } from "../actions/AssetAction"
-import { Asset } from "@/types"
+import { getAllAsset, getAllBeneficiaryAsset, getCurrencyRates } from "../actions/AssetAction"
+import { Asset, Currency } from "@/types"
 
 interface AssetState {
   // id: string,
@@ -8,6 +8,7 @@ interface AssetState {
   // assignedBeneficiaryId: string,
   // data: any,
   Asset_array: Asset[]
+  Currencies: Currency
 }
 const initialState: AssetState = {
   // id: "",
@@ -15,6 +16,11 @@ const initialState: AssetState = {
   // assignedBeneficiaryId: "",
   // data: {},
   Asset_array: [],
+  Currencies: {
+    base: '',
+    rates: {},
+    date: ''
+  }
 }
 
 export const slice = createSlice({
@@ -53,6 +59,9 @@ export const slice = createSlice({
         })
       })
       state.Asset_array = action?.payload?.data?.data
+    })
+    builder.addCase(getCurrencyRates.fulfilled, (state, action) => {
+      state.Currencies = action?.payload?.data?.data
     })
   },
 })
