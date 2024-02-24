@@ -67,16 +67,29 @@ export default function AssetsView() {
   const [modalVisibility, setModalVisibility] = useState("none")
   const isEditingAsset = useRef(false)
   const [modalAction, setModalAction] = useState("")
-  const [selected, setSelected] = useState("")
+  const [selected, setSelected] = useState<string>("All")
   const [selectedAsset, setSelectedAsset] = useState("")
   const [assetFile, setAssetFile] = useState("")
   const [assetBeneficiariesData, setAssetBeneficiariesData] =
     useState(initialState)
-  const [assetCostFilter, setAssetCostFilter] = useState('All')
+  const [assetCostFilter, setAssetCostFilter] = useState("All")
   const assetTotalCost: number = useMemo(
-    () => calculateTotalAssetsCost(asset.Asset_array, asset.Currencies, assetCostFilter),
+    () =>
+      calculateTotalAssetsCost(
+        asset.Asset_array,
+        asset.Currencies,
+        assetCostFilter,
+      ),
     [asset.Asset_array, asset.Currencies, assetCostFilter],
   )
+  const assetDetailsData = useMemo(() => {
+    if (selected === "All") {
+      return asset.Asset_array
+    } else {
+      return asset.Asset_array.filter((asset) => asset.category.toUpperCase() === selected.toUpperCase())
+    }
+  }, [selected, asset.Asset_array])
+
   const [
     modalHistory,
     modalHistoryLength,
@@ -84,6 +97,7 @@ export default function AssetsView() {
     modalHistoryPush,
     modalHistoryPopAll,
   ] = useArray()
+
   useEffect(() => {
     // reset values incase of creating an asset
     if (!isEditingAsset.current) {
@@ -153,11 +167,11 @@ export default function AssetsView() {
   }
   const assetCatagories = [
     "All",
-    "Bank",
-    "Stock",
+    "Bank Account",
+    "Stocks",
     "Real Estate",
     "Life Insurance",
-    "Cryptocurrency",
+    "Cryptocurrency (Self-custody)",
   ]
   const assetTypes = [
     { value: ASSET_TYPES.BANK_ACCOUNT, label: ASSET_TYPES.BANK_ACCOUNT },
@@ -196,12 +210,12 @@ export default function AssetsView() {
   ]
 
   const options = [
-    { button: "All", action: setAssetCostFilter},
-    { button: "Bank Account", action: setAssetCostFilter},
-    { button: "Stocks", action: setAssetCostFilter},
-    { button: "Real Estate", action: setAssetCostFilter},
-    { button: "Life Insurance", action: setAssetCostFilter},
-    { button: "Cryptocurrency (Self-custody)", action: setAssetCostFilter},
+    { button: "All", action: setAssetCostFilter },
+    { button: "Bank Account", action: setAssetCostFilter },
+    { button: "Stocks", action: setAssetCostFilter },
+    { button: "Real Estate", action: setAssetCostFilter },
+    { button: "Life Insurance", action: setAssetCostFilter },
+    { button: "Cryptocurrency (Self-custody)", action: setAssetCostFilter },
   ]
 
   const AssetDetailsCardArr = [
@@ -534,7 +548,7 @@ export default function AssetsView() {
           assetCatagories={assetCatagories}
           selected={selected}
           setSelected={setSelected}
-          assetDetailsArr={asset.Asset_array}
+          assetDetailsArr={assetDetailsData}
           destroyAsset={destroyAsset}
           editAsset={editAsset}
           viewAsset={viewAsset}
@@ -696,7 +710,7 @@ function AssetDetailsCard(_props: {
           <p className="text-[#828282] text-xs">{_props.subtitle}</p>
         </div>
       </div>
-      <div className="cursor-pointer">{_props.element}</  div>
+      <div className="cursor-pointer">{_props.element}</div>
     </div>
   )
 }
@@ -708,7 +722,7 @@ function AssetCategory(_props: {
   setSelected: any
 }) {
   return (
-    <a
+    <button
       onClick={() => {
         _props.setSelected(_props.category)
       }}
@@ -719,7 +733,7 @@ function AssetCategory(_props: {
       }
     >
       {_props.category}
-    </a>
+    </button>
   )
 }
 
