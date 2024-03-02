@@ -54,7 +54,7 @@ export default function NavigationDrawer(_props: {
             />
           ))}
         </div>
-        <div className="mt-24 sm:mt-36 cursor-pointer absolute bottom-16">
+        <div className="mt-24 sm:mt-36 cursor-pointer pb-4">
           <IconView
             icon={logoutIcon}
             option={CONSTANT.LOGOUT}

@@ -170,7 +170,6 @@ export default function BeneficiariesView() {
     }
   }
   const _submitStepTwoModal = () => {
-
     if (
       modalControl.facebook_link &&
       !isValidFacebook(modalControl.facebook_link)
@@ -259,9 +258,11 @@ export default function BeneficiariesView() {
 
   const _submitSuccessModal = () => {
     closeModal()
-    if(!user.startupWizardCompleted && user.wizardStep === "Beneficiary") {
+    if (!user.startupWizardCompleted && user.wizardStep === "Beneficiary") {
       dispatch(setWizardStep("Validators"))
-      navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}`)
+      navigate(
+        `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}`,
+      )
     }
   }
 
@@ -448,7 +449,6 @@ export default function BeneficiariesView() {
   }, [modalEncryptionKeyControl.publicKey])
 
   const _submitEditBeneficiaryModal = () => {
-
     if (!modalControl.name) {
       toast("please enter a valid name", "error")
     } else if (
@@ -619,7 +619,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-0"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted} 
+        closeIconVisibility={user.startupWizardCompleted}
         action={modalAction}
         _submitModal={_submitStepZeroModal}
       />
@@ -709,11 +709,15 @@ function Beneficiaries(_props: {
       </section>
 
       <section className={styles.beneficiaries}>
-        <div className="rounded-xl shadow-md h-full overflow-y-scroll no-scrollbar relative">
+        <div className="rounded-xl shadow-md h-full overflow-y-scroll scrollbar relative">
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
               <div className="relative">
-                <input data-cy="select-all-beneficiaries-input" type="checkbox" id="checkbox" />
+                <input
+                  data-cy="select-all-beneficiaries-input"
+                  type="checkbox"
+                  id="checkbox"
+                />
                 <label
                   htmlFor="checkbox"
                   className="checkbox-label ml-1 -top-1"

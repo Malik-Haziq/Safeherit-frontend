@@ -293,7 +293,7 @@ export default function ValidatorsView() {
   }
   const pulseCheck = () => {
     navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_PULSE}`)
-    if(!user.startupWizardCompleted && user.wizardStep === "Validators") {
+    if (!user.startupWizardCompleted && user.wizardStep === "Validators") {
       dispatch(setWizardStep("PulseCheck"))
     }
   }
@@ -326,7 +326,6 @@ export default function ValidatorsView() {
   }
 
   const _submitEditValidatorModal = () => {
-
     if (!modalControl.name) {
       toast("please enter a valid name", "error")
     } else if (
@@ -564,7 +563,7 @@ function Validators(_props: {
       </section>
 
       <section className={styles.validators}>
-        <div className="rounded-xl shadow-md h-full overflow-y-scroll no-scrollbar">
+        <div className="rounded-xl shadow-md h-full overflow-y-scroll scrollbar">
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
               <div className="relative">
