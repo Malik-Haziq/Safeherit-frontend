@@ -26,6 +26,7 @@ import {
   ROUTE_CONSTANTS,
   calculateTotalAssetsCost,
   useArray,
+  formatCurrency,
 } from "@/common"
 
 import {
@@ -209,14 +210,10 @@ export default function AssetsView() {
     { button: "Cryptocurrency (Self-custody)", action: setAssetCostFilter },
   ]
 
-  const FormattedAssetTotalCost = new Intl.NumberFormat("en-US").format(
-    Math.trunc(assetTotalCost),
-  )
-
   const AssetDetailsCardArr = [
     {
       img: dollar,
-      title: `EUR ${FormattedAssetTotalCost}`,
+      title: `EUR ${formatCurrency(assetTotalCost)}`,
       subTitle: "Total Balance",
       element: (
         <DropDownButton
