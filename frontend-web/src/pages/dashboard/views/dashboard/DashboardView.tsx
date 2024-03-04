@@ -145,7 +145,7 @@ function Cards(_props: {
         </Link>
       </div>
 
-      <div className="h-[444px] overflow-y-auto relative">
+      <div className="h-[444px] overflow-y-auto relative scrollbar">
         {_props.loading ? (
           <Spinner />
         ) : _props.rowData.length ? (

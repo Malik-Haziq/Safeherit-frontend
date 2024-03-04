@@ -712,7 +712,7 @@ function Beneficiaries(_props: {
       </section>
 
       <section className={styles.beneficiaries}>
-        <div className="rounded-xl shadow-md h-full overflow-y-scroll no-scrollbar relative">
+        <div className="rounded-xl shadow-md h-full overflow-y-scroll scrollbar relative">
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
               <div className="relative">
