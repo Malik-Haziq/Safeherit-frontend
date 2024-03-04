@@ -26,6 +26,7 @@ import {
   ROUTE_CONSTANTS,
   calculateTotalAssetsCost,
   useArray,
+  formatCurrency,
 } from "@/common"
 
 import {
@@ -72,9 +73,14 @@ export default function AssetsView() {
   const [assetFile, setAssetFile] = useState("")
   const [assetBeneficiariesData, setAssetBeneficiariesData] =
     useState(initialState)
-  const [assetCostFilter, setAssetCostFilter] = useState('All')
+  const [assetCostFilter, setAssetCostFilter] = useState("All")
   const assetTotalCost: number = useMemo(
-    () => calculateTotalAssetsCost(asset.Asset_array, asset.Currencies, assetCostFilter),
+    () =>
+      calculateTotalAssetsCost(
+        asset.Asset_array,
+        asset.Currencies,
+        assetCostFilter,
+      ),
     [asset.Asset_array, asset.Currencies, assetCostFilter],
   )
   const [
@@ -196,18 +202,18 @@ export default function AssetsView() {
   ]
 
   const options = [
-    { button: "All", action: setAssetCostFilter},
-    { button: "Bank Account", action: setAssetCostFilter},
-    { button: "Stocks", action: setAssetCostFilter},
-    { button: "Real Estate", action: setAssetCostFilter},
-    { button: "Life Insurance", action: setAssetCostFilter},
-    { button: "Cryptocurrency (Self-custody)", action: setAssetCostFilter},
+    { button: "All", action: setAssetCostFilter },
+    { button: "Bank Account", action: setAssetCostFilter },
+    { button: "Stocks", action: setAssetCostFilter },
+    { button: "Real Estate", action: setAssetCostFilter },
+    { button: "Life Insurance", action: setAssetCostFilter },
+    { button: "Cryptocurrency (Self-custody)", action: setAssetCostFilter },
   ]
 
   const AssetDetailsCardArr = [
     {
       img: dollar,
-      title: `EUR ${assetTotalCost.toFixed(2)}`,
+      title: `EUR ${formatCurrency(assetTotalCost)}`,
       subTitle: "Total Balance",
       element: (
         <DropDownButton
@@ -696,7 +702,7 @@ function AssetDetailsCard(_props: {
           <p className="text-[#828282] text-xs">{_props.subtitle}</p>
         </div>
       </div>
-      <div className="cursor-pointer">{_props.element}</  div>
+      <div className="cursor-pointer">{_props.element}</div>
     </div>
   )
 }
