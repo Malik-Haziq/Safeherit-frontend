@@ -88,6 +88,7 @@ export default function PulseView() {
   useEffect(() => {
     modalHistoryPopAll()
     getUserDetails()
+
     initialState.pulseCheckEmail1 = user.email
     initialState.pulseCheckNonValidationDays = user.pulseCheckNonValidationDays
     setModalControl(initialState)
@@ -104,16 +105,18 @@ export default function PulseView() {
   }, [])
 
   const getUserDetails = () => {
-    dispatch<any>(getUser({ HideLoader: true }))
-      .unwrap()
-      .catch()
-      .then((res: { data: { data: { pulseCheckActive: string } } }) => {
-        if (JSON.parse(res.data.data.pulseCheckActive)) {
-          setPulseCheck(true)
-        } else {
-          setPulseCheck(false)
-        }
-      })
+    if (user.startupWizardCompleted) {
+      dispatch<any>(getUser({ HideLoader: true }))
+        .unwrap()
+        .catch()
+        .then((res: { data: { data: { pulseCheckActive: string } } }) => {
+          if (JSON.parse(res.data.data.pulseCheckActive)) {
+            setPulseCheck(true)
+          } else {
+            setPulseCheck(false)
+          }
+        })
+    }
   }
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
@@ -187,7 +190,6 @@ export default function PulseView() {
       dispatch(setWizardStep("Assets"))
       return
     }
-    getUserDetails()
   }
 
   const _closeModal = useCallback(() => {
