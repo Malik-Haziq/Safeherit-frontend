@@ -88,7 +88,7 @@ export const EditDetailsModal = (_props: {
             <div className="w-[1070px] bg-white rounded-2xl border border-[#04477B]">
               <div className="h-[56px] w-full bg-[#f6f6f6] flex items-center rounded-tl-3xl rounded-tr-3xl border border-b-[#04477B]">
                 <div className="text-[#00192b] font-bold text-center text-lg flex-1">
-                  Edit Beneficiary details
+                 {_props.isBeneficiary ? "Edit beneficiary details" : "Edit validator details"} 
                 </div>
                 <div className="flex-[0.06]" onClick={_props.closeModal}>
                   <img
