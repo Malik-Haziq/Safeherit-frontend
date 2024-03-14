@@ -68,7 +68,7 @@ export default function AssetsView() {
   const [modalVisibility, setModalVisibility] = useState("none")
   const isEditingAsset = useRef(false)
   const [modalAction, setModalAction] = useState("")
-  const [selected, setSelected] = useState("")
+  const [selected, setSelected] = useState<string>("All")
   const [selectedAsset, setSelectedAsset] = useState("")
   const [assetFile, setAssetFile] = useState("")
   const [assetBeneficiariesData, setAssetBeneficiariesData] =
@@ -83,6 +83,14 @@ export default function AssetsView() {
       ),
     [asset.Asset_array, asset.Currencies, assetCostFilter],
   )
+  const assetDetailsData = useMemo(() => {
+    if (selected === "All") {
+      return asset.Asset_array
+    } else {
+      return asset.Asset_array.filter((asset) => asset.category.toUpperCase() === selected.toUpperCase())
+    }
+  }, [selected, asset.Asset_array])
+
   const [
     modalHistory,
     modalHistoryLength,
@@ -90,6 +98,7 @@ export default function AssetsView() {
     modalHistoryPush,
     modalHistoryPopAll,
   ] = useArray()
+
   useEffect(() => {
     // reset values incase of creating an asset
     if (!isEditingAsset.current) {
@@ -159,11 +168,11 @@ export default function AssetsView() {
   }
   const assetCatagories = [
     "All",
-    "Bank",
-    "Stock",
+    "Bank Account",
+    "Stocks",
     "Real Estate",
     "Life Insurance",
-    "Cryptocurrency",
+    "Cryptocurrency (Self-custody)",
   ]
   const assetTypes = [
     { value: ASSET_TYPES.BANK_ACCOUNT, label: ASSET_TYPES.BANK_ACCOUNT },
@@ -540,7 +549,7 @@ export default function AssetsView() {
           assetCatagories={assetCatagories}
           selected={selected}
           setSelected={setSelected}
-          assetDetailsArr={asset.Asset_array}
+          assetDetailsArr={assetDetailsData}
           destroyAsset={destroyAsset}
           editAsset={editAsset}
           viewAsset={viewAsset}
@@ -714,7 +723,7 @@ function AssetCategory(_props: {
   setSelected: any
 }) {
   return (
-    <a
+    <button
       onClick={() => {
         _props.setSelected(_props.category)
       }}
@@ -725,7 +734,7 @@ function AssetCategory(_props: {
       }
     >
       {_props.category}
-    </a>
+    </button>
   )
 }
 
