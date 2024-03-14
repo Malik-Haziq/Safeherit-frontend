@@ -639,16 +639,16 @@ function Assets(_props: {
             ))}
           </div>
           <section className="rounded-xl h-[650px] shadow-lg mb-5 overflow-auto scrollbar w-[1080px]">
-            <div className="bg-[#F2F2F2] flex justify-between gap-24 px-5 py-3 rounded-t-lg">
-              <div className="flex flex-grow justify-between">
+            <div className="bg-[#F2F2F2] flex justify-between px-5 py-3 rounded-t-lg">
+              <div className="flex flex-grow justify-between basis-80">
                 <p className="font-medium text-sm uppercase">Asset Name</p>
                 <p className="font-medium text-sm uppercase">Asset Type</p>
-                <p className="font-medium text-sm uppercase">Value</p>
+                <p className="font-medium text-sm uppercase mr-10">Value</p>
               </div>
-              <div className="flex flex-grow justify-between">
+              <div className="flex flex-grow justify-between ">
                 {_props.userRole != "beneficiary" ? (
-                  <p className="font-medium text-sm uppercase ">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Beneficiary
+                  <p className="font-medium text-sm uppercase basis-1/2 text-center">
+                    Beneficiary
                   </p>
                 ) : (
                   <></>
