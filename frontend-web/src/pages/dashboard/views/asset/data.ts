@@ -1,6 +1,10 @@
 import stock from "@images/stock.svg"
 import realEstate from "@images/real-estate.svg"
 import bank from "@images/bank.svg"
+import lifeInsurance from "@images/healthcare.png"
+import crypto from "@images/bitcoin.png"
+import others from "@images/menu.png"
+import goods from "@images/goods.png"
 export interface AssetData {
   [category: string]: {
     name: string
@@ -1102,20 +1106,20 @@ export const TypeOfInvestmentInInvestmentFunds = [
 
 export const assetImages: any = {
   "Bank Account": bank,
-  "Life insurance": realEstate,
+  "Life insurance": lifeInsurance,
   "Real Estate": realEstate,
   "Retirement Account": bank,
   "Brokerage Account": bank,
-  "Safety box": bank,
-  "Stocks": stock,
-  "Bonds": stock,
+  "Safety box": lifeInsurance,
+  Stocks: stock,
+  Bonds: stock,
   "Company Shares": stock,
   "Investment Funds": stock,
-  "Cryptocurrency (Self-custody)" : stock,
-  "Cryptocurrency (Online Exchange)": stock,
-  "Physical goods": realEstate,
+  "Cryptocurrency (Self-custody)": crypto,
+  "Cryptocurrency (Online Exchange)": crypto,
+  "Physical goods": goods,
   "Account passwords": bank,
-  "Others (Custom)": realEstate
+  "Others (Custom)": others,
 }
 
 export const assetData: AssetData = {
@@ -2389,7 +2393,6 @@ export const assetData: AssetData = {
         required: true,
         allFields: "",
       },
-      
     ],
     [
       {
