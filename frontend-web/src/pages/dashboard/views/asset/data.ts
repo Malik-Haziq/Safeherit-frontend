@@ -1102,20 +1102,20 @@ export const TypeOfInvestmentInInvestmentFunds = [
 
 export const assetImages: any = {
   "Bank Account": bank,
-  "Life insurance": "realEstate",
+  "Life insurance": realEstate,
   "Real Estate": realEstate,
   "Retirement Account": bank,
   "Brokerage Account": bank,
-  "Safety box": "realEstate",
+  "Safety box": bank,
   "Stocks": stock,
   "Bonds": stock,
   "Company Shares": stock,
   "Investment Funds": stock,
-  "Cryptocurrency (Self-custody)" : "realEstate",
-  "Cryptocurrency (Online Exchange)": "realEstate",
-  "Physical goods": "realEstate",
+  "Cryptocurrency (Self-custody)" : stock,
+  "Cryptocurrency (Online Exchange)": stock,
+  "Physical goods": realEstate,
   "Account passwords": bank,
-  "Others (Custom)": "realEstate"
+  "Others (Custom)": realEstate
 }
 
 export const assetData: AssetData = {

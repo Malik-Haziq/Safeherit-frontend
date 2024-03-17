@@ -168,8 +168,19 @@ export default function BeneficiariesView() {
     ) {
       toast("Please enter a valid phone number", "error")
     } else {
-      modalHistoryPush("Step-1")
-      setModalVisibility("Step-2")
+      if (
+        modalControl.primary_email &&
+        beneficiaryArray &&
+        beneficiaryArray.some(
+          (beneficiary: any) =>
+            beneficiary.primary_email === modalControl.primary_email,
+        )
+      ) {
+        toast("Beneficiary with this email already exist", "error")
+      } else {
+        modalHistoryPush("Step-1")
+        setModalVisibility("Step-2")
+      }
     }
   }
   const _submitStepTwoModal = () => {
