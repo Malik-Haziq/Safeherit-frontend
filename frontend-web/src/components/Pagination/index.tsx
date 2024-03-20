@@ -61,6 +61,7 @@ export function Pagination(_props: {
       <div className="flex items-center justify-around">
         {visiblePages.map((pageNumber, index) => (
           <div
+            data-cy={`pagination-page-${pageNumber}`}
             key={index}
             onClick={() => {
               _changePage(pageNumber)

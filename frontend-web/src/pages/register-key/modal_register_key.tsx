@@ -140,6 +140,7 @@ export function PrivateKeyModal(_props: {
                     className="opacity-0 border-0 absolute top-2 left-36 h-10 w-[0px]"
                   />
                   <div
+                    data-cy="upload-private-key"
                     onClick={() => file_upload?.current?.click()}
                     className="mx-[142px] mb-4"
                   >

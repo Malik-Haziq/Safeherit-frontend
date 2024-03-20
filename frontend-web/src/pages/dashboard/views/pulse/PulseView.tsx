@@ -594,6 +594,7 @@ function CheckAliveMethod(_props: {
 }) {
   return (
     <p
+      data-cy={`check-method-${_props.method}`}
       onClick={() => {
         _props.setConfirmationDetails(_props.method)
       }}

@@ -5,7 +5,6 @@ import closeIcon from "@images/close-icon.svg"
 import arrowLeft from "@images/left-arrow.png"
 import styles from "./Modal.module.css"
 import { SelectField, InputField, PhoneNumField } from ".."
-import { useAppSelector } from "@/redux/hooks"
 import { setWizardStep } from "@/redux/reducers/UserSlice"
 import { updateUser } from "@/redux/actions"
 
@@ -218,6 +217,7 @@ export const Modal = (_props: {
               {_props.arrayLength ? (
                 <div className="absolute bottom-12">
                   <img
+                    data-cy="show-previous-modal-icon"
                     src={arrowLeft}
                     alt="Back Arrow"
                     className="cursor-pointer ml-4 w-5"
@@ -246,7 +246,11 @@ function ModalHeader(_props: {
     <div className={styles.header}>
       <div className={styles.title}>{_props.title}</div>
       {_props.closeIconVisibility && (
-        <div className={styles.icon} onClick={_props.closeModal}>
+        <div
+          data-cy="close-modal-icon"
+          className={styles.icon}
+          onClick={_props.closeModal}
+        >
           <img src={closeIcon} alt="close icon" className="cursor-pointer" />
         </div>
       )}

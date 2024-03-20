@@ -405,6 +405,7 @@ export function Login() {
                     </small>
                   </div>
                   <p
+                    data-cy="forgot-password-button"
                     className={
                       "text-safe-text-blue-shade font-medium cursor-pointer"
                     }
