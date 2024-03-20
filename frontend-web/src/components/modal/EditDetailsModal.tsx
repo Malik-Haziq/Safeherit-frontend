@@ -21,14 +21,14 @@ export const EditDetailsModal = (_props: {
   closeModalOnOverlayClick: boolean
   isBeneficiary: boolean
   modalControl: any
-  setModalControl: () => void
-  handleSubmit: () => void
-  _handleChange: () => void
+  setModalControl: any
+  handleSubmit: any
+  _handleChange: any
   imageUpload: any
   setImageUpload: any
   videoUpload?: any
   setVideoUpload?: any
-  _handleDiscard: () => void
+  _handleDiscard: any
 }) => {
   const handleImageInputChange = (event: any) => {
     const file = event.target.files[0]
