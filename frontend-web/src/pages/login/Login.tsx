@@ -497,6 +497,7 @@ function InputField(_props: {
       <label className="text-safe-text-black font-semibold text-sm">
         {inputLable}*
         <input
+          data-cy={`${_props.type}-input-field`}
           type={type}
           name={name}
           placeholder={placeholder}

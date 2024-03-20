@@ -119,6 +119,7 @@ export function EditUserModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "edit-user-name-field",
             name: "displayName",
             type: "text",
             placeholder: "Name",
@@ -140,6 +141,7 @@ export function EditUserModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "edit-user-email-field",
             name: "email",
             type: "text",
             placeholder: "Email",
@@ -194,6 +196,7 @@ export function EditUserModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "save-changes-of-user-details-button",
             title: "Save Changes",
             onclick: _props._submitModal,
             buttonStyle: "",

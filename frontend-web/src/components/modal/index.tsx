@@ -42,6 +42,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "inputView") {
     return (
       <InputField
+        dataCy={element?.props?.dataCy}
         key={_props.index}
         name={element?.props?.name}
         type={element?.props?.type}
@@ -96,6 +97,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "buttonView") {
     return (
       <ButtonView
+        dataCy={element?.props?.dataCy}
         key={_props.index}
         title={element?.props?.title}
         onclick={element?.props?.onclick}
@@ -194,6 +196,7 @@ export const Modal = (_props: {
         <div className={styles.backDrop}>
           {!_props.closeIconVisibility && (
             <ButtonView
+              dataCy="close-wizard-modal-button"
               title={"Close Wizard"}
               onclick={_handleCloseWizard}
               buttonStyle={styles.mutedButton}
@@ -340,10 +343,12 @@ function ButtonView(_props: {
   buttonStyle: string
   onclick: React.MouseEventHandler<HTMLButtonElement>
   buttonContainer: string
+  dataCy?: string
 }) {
   return (
     <div className={_props.buttonContainer || styles.buttonContainer}>
       <button
+        data-cy={_props.dataCy}
         className={_props.buttonStyle || styles.buttonStyle}
         onClick={_props.onclick}
       >

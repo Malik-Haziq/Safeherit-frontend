@@ -476,14 +476,14 @@ function UserProfileDetails(_props: {
         </p>
         <div className="flex gap-1">
           <img
-            data-cy="view-user-icon"
+            data-cy="view-key-icon"
             src={viewIcon}
             alt="View icon"
             onClick={_props.handleKeysView}
             className="cursor-pointer"
           />
           <img
-            data-cy="edit-user-icon"
+            data-cy="edit-key-icon"
             src={editIcon}
             alt="Edit icon"
             onClick={_props.handleKeysEdit}
