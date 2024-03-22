@@ -155,6 +155,7 @@ function PhoneRegistration({
         <div className="mt-6">
           <div className="relative">
             <PhoneNumField
+              dataCy="phone-number-for-2fa"
               name="phone_number"
               placeholder="Phone Number"
               selectFieldStyles=""
