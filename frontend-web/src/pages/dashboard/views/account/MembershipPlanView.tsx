@@ -77,7 +77,7 @@ export default function MembershipPlanView(_props: {
           <h1 className="text-xl font-semibold mb-5">
             Registered Payment Methods
           </h1>
-          <div className="flex itmes-center gap-3">
+          <div className="flex items-center gap-3">
             {creditCardArr.map((card, index) => {
               return (
                 <CreditCard

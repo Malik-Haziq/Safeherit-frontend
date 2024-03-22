@@ -5,6 +5,7 @@ import { SelectOption } from "@/types"
 import iconDown from "@images/Arrow-Down-Circle.svg"
 
 export function PhoneNumField(_props: {
+  dataCy: string
   name: string
   value: string
   code: string
@@ -70,6 +71,7 @@ export function PhoneNumField(_props: {
         }
       />
       <InputField
+        dataCy={_props.dataCy}
         name={"phone_number"}
         type={"text"}
         placeholder={_props.placeholder}

@@ -6,9 +6,7 @@ import closeIcon from "@images/close-icon.svg"
 import { IoMdCloseCircle } from "react-icons/io"
 import uploadVideoIcon from "@images/upload-video.svg"
 
-import {
-  toast,
-} from "@/components"
+import { toast } from "@/components"
 
 interface CustomChangeEvent {
   target: {
@@ -23,16 +21,15 @@ export const EditDetailsModal = (_props: {
   closeModalOnOverlayClick: boolean
   isBeneficiary: boolean
   modalControl: any
-  setModalControl: Function
-  handleSubmit: Function
-  _handleChange: Function
+  setModalControl: any
+  handleSubmit: any
+  _handleChange: any
   imageUpload: any
   setImageUpload: any
   videoUpload?: any
   setVideoUpload?: any
-  _handleDiscard: Function
+  _handleDiscard: any
 }) => {
-
   const handleImageInputChange = (event: any) => {
     const file = event.target.files[0]
     if (file) {
@@ -88,7 +85,9 @@ export const EditDetailsModal = (_props: {
             <div className="w-[1070px] bg-white rounded-2xl border border-[#04477B]">
               <div className="h-[56px] w-full bg-[#f6f6f6] flex items-center rounded-tl-3xl rounded-tr-3xl border border-b-[#04477B]">
                 <div className="text-[#00192b] font-bold text-center text-lg flex-1">
-                 {_props.isBeneficiary ? "Edit beneficiary details" : "Edit validator details"} 
+                  {_props.isBeneficiary
+                    ? "Edit beneficiary details"
+                    : "Edit validator details"}
                 </div>
                 <div className="flex-[0.06]" onClick={_props.closeModal}>
                   <img
@@ -365,9 +364,7 @@ export const EditDetailsModal = (_props: {
                       </div>
                       <div className="flex flex-col gap-1">
                         <div className="flex justify-between items-center mb-2">
-                          <button
-                            className="primary-btn px-12 rounded-xl bg-[#47B29E]"
-                          >
+                          <button className="primary-btn px-12 rounded-xl bg-[#47B29E]">
                             Change
                           </button>
                           <TextView

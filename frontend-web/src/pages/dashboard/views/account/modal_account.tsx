@@ -119,6 +119,7 @@ export function EditUserModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "edit-user-name-field",
             name: "displayName",
             type: "text",
             placeholder: "Name",
@@ -140,6 +141,7 @@ export function EditUserModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "edit-user-email-field",
             name: "email",
             type: "text",
             placeholder: "Email",
@@ -162,6 +164,7 @@ export function EditUserModal(_props: {
         {
           type: "selectView",
           props: {
+            dataCy: "select-language-list",
             data: Languages,
             value: {
               value: _props.modalControl.language,
@@ -194,6 +197,7 @@ export function EditUserModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "save-changes-of-user-details-button",
             title: "Save Changes",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -236,6 +240,7 @@ export function ViewPrivateKey(_props: {
         {
           type: "TextAreaField",
           props: {
+            dataCy: "public-key",
             textAreaContainerStyles: "flex justify-between items-center",
             name: "publicKey",
             inputStyles:
@@ -262,6 +267,7 @@ export function ViewPrivateKey(_props: {
         {
           type: "TextAreaField",
           props: {
+            dataCy: "private-key",
             textAreaContainerStyles: "flex justify-between items-center",
             name: "privateKey",
             inputStyles:

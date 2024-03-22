@@ -59,6 +59,7 @@ export function StepZeroInformationModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "register-validator-button",
             title: "Register Validators",
             onclick: _props._submitModal,
             buttonStyle:
@@ -79,7 +80,11 @@ export function StepZeroInformationModal(_props: {
                   CustomView: () => {
                     return (
                       <div className="relative">
-                        <input data-cy="don't-display-modal-next-time-input" type="checkbox" id="checkbox" />
+                        <input
+                          data-cy="don't-display-modal-next-time-input"
+                          type="checkbox"
+                          id="checkbox"
+                        />
                         <label htmlFor="checkbox" className="checkbox-label">
                           <div className="check_mark"></div>
                         </label>
@@ -167,6 +172,7 @@ export function StepOneModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "validator-name-input-field",
             name: "name",
             type: "text",
             placeholder: "Name",
@@ -180,6 +186,7 @@ export function StepOneModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "validator-primary-email-input-field",
             name: "primary_email",
             type: "text",
             placeholder: "Email",
@@ -193,6 +200,7 @@ export function StepOneModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "validator-backup-email-input-field",
             name: "backup_email",
             type: "text",
             placeholder: "Backup email 1",
@@ -206,6 +214,7 @@ export function StepOneModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "validator-backup-email-2-input-field",
             name: "backup_email2",
             type: "text",
             placeholder: "Backup email 2",
@@ -219,6 +228,7 @@ export function StepOneModal(_props: {
         {
           type: "phoneNumberView",
           props: {
+            dataCy: "validator-phone-number",
             name: "phone_number",
             placeholder: "Phone number",
             value: _props?.modalControl?.phone_number?.split(" ")[1],
@@ -233,6 +243,7 @@ export function StepOneModal(_props: {
         {
           type: "phoneNumberView",
           props: {
+            dataCy: "validator-backup-phone-number",
             name: "backup_phone_number",
             placeholder: "Backup phone number",
             value: _props?.modalControl?.backup_phone_number?.split(" ")[1],
@@ -254,7 +265,14 @@ export function StepOneModal(_props: {
                 props: {
                   customViewContainer: "w-5 h-5",
                   CustomView: () => {
-                    return <input type="checkbox" className="w-full h-full" checked={notifyValidator} onChange={(e: any)=> handleNotify(e)}/>
+                    return (
+                      <input
+                        type="checkbox"
+                        className="w-full h-full"
+                        checked={notifyValidator}
+                        onChange={(e: any) => handleNotify(e)}
+                      />
+                    )
                   },
                 },
               },
@@ -271,6 +289,7 @@ export function StepOneModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-validator-modal-one-button",
             title: "Next",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -379,6 +398,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "validator-facebook-link-input-field",
             name: "facebook_link",
             type: "text",
             placeholder: "Facebook link",
@@ -396,6 +416,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "validator-instagram-link-input-field",
             name: "instagram_username",
             type: "text",
             placeholder: "Instagram link",
@@ -413,6 +434,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "validator-twitter-link-input-field",
             name: "twitter_username",
             type: "text",
             placeholder: "Twitter link",
@@ -486,6 +508,7 @@ export function StepTwoModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-validator-modal-two-button",
             title: "Continue",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -548,6 +571,7 @@ export function StepThreeModal(_props: {
         {
           type: "TextAreaField",
           props: {
+            dataCy: "validator-personalized-message",
             textAreaContainerStyles: "",
             name: "personalized_message",
             placeholder: `Dear ${_props.modalControl.name}, \n\nIf you receive this message it probably means I am gone. \n\nSince you’re one of the closest people to me, you probably know if am still alive or not. If I’m indeed dead, please confirm it as per the instructions of this platform (SafeHerit). \n\nThis will help me a lot in making sure that my family gets access to its inheritance as quickly as possible. \n\nThank you buddy, I’m counting on you! \n\n${_props.userName}`,
@@ -560,6 +584,7 @@ export function StepThreeModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-validator-modal-three-button",
             title: "Continue",
             onclick: _props._submitModal,
             buttonStyle: "",

@@ -87,7 +87,9 @@ export default function AssetsView() {
     if (selected === "All") {
       return asset.Asset_array
     } else {
-      return asset.Asset_array.filter((asset) => asset.category.toUpperCase() === selected.toUpperCase())
+      return asset.Asset_array.filter(
+        (asset) => asset.category.toUpperCase() === selected.toUpperCase(),
+      )
     }
   }, [selected, asset.Asset_array])
 
@@ -724,6 +726,7 @@ function AssetCategory(_props: {
 }) {
   return (
     <button
+      data-cy={`asset-category-${_props.category}`}
       onClick={() => {
         _props.setSelected(_props.category)
       }}

@@ -79,7 +79,9 @@ const IconView = memo(
   }) => {
     return (
       <div
-        data-cy="dashboard-view-button"
+        data-cy={`dashboard-view-${_props.option
+          .replaceAll(" ", "-")
+          .toLocaleLowerCase()}-button`}
         className={
           _props.trimmedPath === _props.route
             ? "flex items-center gap-5 w-full mb-5 py-2 px-3 sm:px-5 cursor-pointer selected"

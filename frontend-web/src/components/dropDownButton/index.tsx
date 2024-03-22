@@ -49,7 +49,9 @@ export function DropDownButton(_props: any) {
                   <Menu.Item key={index}>
                     {({ active }: { active: boolean }) => (
                       <button
-                        data-cy="drop-down-button"
+                        data-cy={`drop-down-${option.button
+                          .replaceAll(" ", "-")
+                          .toLocaleLowerCase()}-button`}
                         className={`${
                           active ? "bg-safe-blue text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-3 py-2 text-sm`}
@@ -74,16 +76,19 @@ export function NavDropDownButton(_props: any) {
   const navigate = useNavigate()
 
   const options = [
-    { button: "My Account", action: ()=>  navigate('/dashboard/account') },
-    { button: "Help", action: ()=>  navigate('/dashboard/help') },
-    { button: "Logout", action: ()=> {
-      dispatch<any>(logout({}))
-      .unwrap()
-      .catch()
-      .finally(() => {
-        navigate("/login")
-      })
-    } },
+    { button: "My Account", action: () => navigate("/dashboard/account") },
+    { button: "Help", action: () => navigate("/dashboard/help") },
+    {
+      button: "Logout",
+      action: () => {
+        dispatch<any>(logout({}))
+          .unwrap()
+          .catch()
+          .finally(() => {
+            navigate("/login")
+          })
+      },
+    },
   ]
 
   return (
@@ -126,7 +131,9 @@ export function NavDropDownButton(_props: any) {
                   <Menu.Item key={index}>
                     {({ active }: { active: boolean }) => (
                       <button
-                        data-cy="drop-down-button"
+                        data-cy={`drop-down-${option.button
+                          .replaceAll(" ", "-")
+                          .toLocaleLowerCase()}-button`}
                         className={`${
                           active ? "bg-safe-blue text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-3 py-2 text-sm`}
@@ -145,7 +152,6 @@ export function NavDropDownButton(_props: any) {
     </div>
   )
 }
-
 
 export function ValidatorDropDown(_props: {
   editValidator: (id: string) => void
@@ -175,7 +181,7 @@ export function ValidatorDropDown(_props: {
                 {({ active }: { active: boolean }) => (
                   <div>
                     <button
-                      data-cy="drop-down-button"
+                      data-cy="drop-down-edit-button"
                       className={`${
                         active ? "bg-safe-blue text-white" : "text-gray-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
@@ -192,7 +198,7 @@ export function ValidatorDropDown(_props: {
                 {({ active }: { active: boolean }) => (
                   <div>
                     <button
-                      data-cy="drop-down-button"
+                      data-cy="drop-down-delete-button"
                       className={`${
                         active ? "bg-safe-blue text-white" : "text-gray-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
