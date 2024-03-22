@@ -662,6 +662,7 @@ function MethodRow(_props: {
         _props.editDetailInput === "backupPhone2") ? (
         <>
           <PhoneNumField
+            dataCy="pulse-check-phone-number"
             name="phone_number"
             placeholder="Phone Number"
             selectFieldStyles="w-[90px] justify-between bg-[#F5FAFD] rounded-tl-[22px] rounded-bl-[22px] flex relative after:absolute after:content-[''] after:w-[1px] after:h-[22px] after:bg-[#B4B4B4] after:-right-3 after:top-4"
