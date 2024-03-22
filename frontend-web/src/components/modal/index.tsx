@@ -22,6 +22,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "iconView") {
     return (
       <IconView
+        dataCy={element?.props?.dataCy}
         key={_props.index}
         image={element?.props?.image}
         onclick={element?.props?.onclick}
@@ -64,6 +65,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "selectView") {
     return (
       <SelectField
+        dataCy={element?.props?.dataCy}
         key={_props.index}
         data={element?.props?.data}
         value={element?.props?.value}
@@ -81,6 +83,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "phoneNumberView") {
     return (
       <PhoneNumField
+        dataCy={element?.props?.dataCy}
         key={_props.index}
         name={element?.props?.name}
         placeholder={element?.props?.placeholder}
@@ -115,6 +118,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "TextAreaField") {
     return (
       <TextAreaField
+        dataCy={element?.props.dataCy}
         key={_props.index}
         name={element?.props?.name}
         placeholder={element?.props?.placeholder}
@@ -277,6 +281,7 @@ function TextView(_props: {
 }
 
 function IconView(_props: {
+  dataCy: string
   imageContainerStyles: string
   image: string
   imageStyles: string
@@ -285,6 +290,7 @@ function IconView(_props: {
   return (
     <div className={_props.imageContainerStyles || ""}>
       <img
+        data-cy={_props.dataCy}
         src={_props.image || defaultIcon}
         alt="icon"
         className={_props.imageStyles || ""}
@@ -314,6 +320,7 @@ function VideoView(_props: {
 }
 
 function TextAreaField(_props: {
+  dataCy: string
   name: string
   placeholder: string
   value: string
@@ -326,6 +333,7 @@ function TextAreaField(_props: {
   return (
     <div className={_props.textAreaContainerStyles}>
       <textarea
+        data-cy={_props.dataCy}
         name={_props.name || ""}
         placeholder={_props.placeholder || "Text Area"}
         value={_props.value}

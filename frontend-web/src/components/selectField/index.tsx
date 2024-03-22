@@ -85,6 +85,7 @@ const selectFieldTheme = (theme: any) => {
 }
 
 export const SelectField = (_props: {
+  dataCy?: string
   selectContainer?: any
   data: any
   value?: any
@@ -115,6 +116,7 @@ export const SelectField = (_props: {
       <div
         className={_props.selectFieldStyles || styles.selectFieldStyles}
         onClick={_handleSelect}
+        data-cy={_props.dataCy}
       >
         <Select
           onBlur={() => setOpenMenu(false)}

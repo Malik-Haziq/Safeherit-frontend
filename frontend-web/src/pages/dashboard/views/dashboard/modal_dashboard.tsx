@@ -13,7 +13,7 @@ export function DashboardModal() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { startupWizardCompleted, wizardStep } = useAppSelector(
-    (state) => state.user
+    (state) => state.user,
   )
 
   return (
@@ -36,7 +36,7 @@ export function DashboardModal() {
         {
           type: "textView",
           props: {
-            text: "Before you start, watch this shortvideo about how SafeHerit works:",
+            text: "Before you start, watch this short video about how SafeHerit works:",
             onclick: () => {},
             textStyles: "text-[#082A44] text-2xl font-bold px-16 text-center",
           },
@@ -62,10 +62,13 @@ export function DashboardModal() {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-intro-modal-button",
             title: "Get Started",
             onclick: () => {
               dispatch(setWizardStep("Beneficiary"))
-              navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}`)
+              navigate(
+                `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_BENEFICIARIES}`,
+              )
             },
             buttonStyle: "",
             buttonContainer: "mx-48 mb-10",

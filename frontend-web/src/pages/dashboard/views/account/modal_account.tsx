@@ -164,6 +164,7 @@ export function EditUserModal(_props: {
         {
           type: "selectView",
           props: {
+            dataCy: "select-language-list",
             data: Languages,
             value: {
               value: _props.modalControl.language,
@@ -239,6 +240,7 @@ export function ViewPrivateKey(_props: {
         {
           type: "TextAreaField",
           props: {
+            dataCy: "public-key",
             textAreaContainerStyles: "flex justify-between items-center",
             name: "publicKey",
             inputStyles:
@@ -265,6 +267,7 @@ export function ViewPrivateKey(_props: {
         {
           type: "TextAreaField",
           props: {
+            dataCy: "private-key",
             textAreaContainerStyles: "flex justify-between items-center",
             name: "privateKey",
             inputStyles:

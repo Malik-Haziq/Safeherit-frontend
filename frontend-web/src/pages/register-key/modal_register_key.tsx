@@ -282,6 +282,7 @@ export function GeneratePrivateKey(_props: {
         {
           type: "TextAreaField",
           props: {
+            dataCy: "publick-key",
             textAreaContainerStyles: "flex justify-between items-center",
             name: "publicKey",
             inputStyles:
@@ -327,6 +328,7 @@ export function GeneratePrivateKey(_props: {
         {
           type: "TextAreaField",
           props: {
+            dataCy: "private-key",
             textAreaContainerStyles: "flex justify-between items-center",
             name: "privateKey",
             inputStyles:
