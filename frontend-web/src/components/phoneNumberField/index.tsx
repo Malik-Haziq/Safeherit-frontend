@@ -48,6 +48,7 @@ export function PhoneNumField(_props: {
       }
     >
       <SelectField
+        dataCy="select-country-codes"
         data={countryCodes}
         value={
           _props.code
