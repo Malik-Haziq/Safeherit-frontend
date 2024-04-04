@@ -148,7 +148,7 @@ function LoggedUser(_props: {
                 : _props.userName}
             </small>
             <button
-              data-cy="login-button"
+              data-cy={`login-as-${_props.userRole}-button`}
               onClick={() => {
                 _props._handleUserRolesSubmit(_props.userRole)
               }}
@@ -161,6 +161,7 @@ function LoggedUser(_props: {
         <div className="cy-role-select-field flex flex-col gap-2">
           {_props.userRole.toLowerCase() == "beneficiary" ? (
             <SelectField
+              dataCy="select-beneficiary-owner"
               data={_props._beneficiaryOf}
               value={_props.selectedBeneficiary}
               selectProps={{ placeholder: "Select Owner", isSearchable: false }}
@@ -174,6 +175,7 @@ function LoggedUser(_props: {
             />
           ) : _props.userRole.toLowerCase() == "validator" ? (
             <SelectField
+              dataCy="select-validator-owner"
               data={_props._validatorOf}
               value={_props.selectedValidator}
               selectProps={{ placeholder: "Select Owner", isSearchable: false }}
