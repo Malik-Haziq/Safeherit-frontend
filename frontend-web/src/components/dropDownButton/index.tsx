@@ -163,7 +163,7 @@ export function ValidatorDropDown(_props: {
       <Menu as="div" className="inline-block text-left">
         <div>
           <Menu.Button as={React.Fragment}>
-            <img src={dots} alt="dots" className="w-6 cursor-pointer" />
+            <img src={dots} alt="dots" data-cy="drop-down-edit-button" className="w-6 cursor-pointer" />
           </Menu.Button>
         </div>
         <Transition
