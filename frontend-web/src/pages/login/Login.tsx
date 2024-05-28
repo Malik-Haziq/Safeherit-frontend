@@ -217,16 +217,16 @@ export function Login() {
       )
         .unwrap()
         .then(async () => {
-          const verifiedEmail = isEmailVerified()
-          if (verifiedEmail) {
-            getUserDetails()
-          } else {
-            toast("Please verify your email", "error")
-            const emailSent = await sendEmailVerificationEmail()
-            if (emailSent) {
-              toast("Verification Email Sent", "info")
-            }
-          }
+          getUserDetails()
+          // const verifiedEmail = isEmailVerified()
+          // if (verifiedEmail) {
+          // } else {
+          //   toast("Please verify your email", "error")
+          //   const emailSent = await sendEmailVerificationEmail()
+          //   if (emailSent) {
+          //     toast("Verification Email Sent", "info")
+          //   }
+          // }
         })
         .catch((err: any) => {
           _handleMFA(err)
