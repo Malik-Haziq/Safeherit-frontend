@@ -18,7 +18,8 @@ export function isValidPhoneWithRegion(phone: string) {
 }
 
 export function isStrongPassword(password: any) {
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/
+  const regex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]).{8,}$/
   return regex.test(password)
 }
 
@@ -42,4 +43,11 @@ export function isValidInstagram(phone: string) {
 export function isValidTwitter(phone: string) {
   const regex = /^https?:\/\/(www\.)?twitter\.com\/.*/i
   return regex.test(phone)
+}
+
+export function formatCurrency(price: number) {
+  const formattedValue = new Intl.NumberFormat("en-US").format(
+    Math.trunc(price),
+  )
+  return formattedValue
 }

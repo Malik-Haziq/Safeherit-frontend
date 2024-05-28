@@ -283,7 +283,11 @@ function ModalHeader(_props: {
     <div className="h-[56px] w-full bg-[#f6f6f6] flex items-center rounded-tl-3xl rounded-tr-3xl border border-b-[#04477B]">
       <div className={styles.title}>{_props.title}</div>
       {_props.closeIconVisibility && (
-        <div className={styles.icon} onClick={_props.closeModal}>
+        <div
+          className={styles.icon}
+          onClick={_props.closeModal}
+          data-cy="close-modal-icon"
+        >
           <img
             src={closeIcon}
             alt="close icon"

@@ -185,7 +185,10 @@ export function SignUp() {
               </a>
             </small>
           </div>
-          <button data-cy="signup-button" className="primary-btn px-16 uppercase w-fit mx-auto">
+          <button
+            data-cy="signup-button"
+            className="primary-btn px-16 uppercase w-fit mx-auto"
+          >
             Sign up
           </button>
         </form>
@@ -196,7 +199,11 @@ export function SignUp() {
         />
         <small className="text-sm text-safe-text-dark-gray">
           Already have an account?&nbsp;
-          <a data-cy="login-button" href="/login" className="text-safe-text-dark-link-blue font-bold">
+          <a
+            data-cy="login-button"
+            href="/login"
+            className="text-safe-text-dark-link-blue font-bold"
+          >
             Login
           </a>
         </small>
@@ -243,6 +250,7 @@ function InputField(_props: {
   return (
     <div className="relative">
       <input
+        data-cy={`${_props.name}-input-field`}
         name={name}
         type={type}
         placeholder={placeholder}

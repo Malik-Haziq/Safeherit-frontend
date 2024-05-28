@@ -64,6 +64,7 @@ export function StepOneModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-pulse-modal-one-button",
             title: "Next",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -89,6 +90,7 @@ export function StepTwoModal(_props: {
     pulseCheckEmail3: string
     pulseCheckPhone1: string
     pulseCheckPhone2: string
+    pulseCheckPhone3: string
   }
   _submitModal: () => void
   arrayLength: any
@@ -168,7 +170,7 @@ export function StepTwoModal(_props: {
                           onClick={() => handleDays("30")}
                         >
                           <p className="text-[#00192B] font-semibold">
-                            30{" "}
+                            30
                             <span className=" font-medium text-sm">Days</span>
                           </p>
                           {selectedDays == "30" ? (
@@ -186,7 +188,7 @@ export function StepTwoModal(_props: {
                           onClick={() => handleDays("60")}
                         >
                           <p className="text-[#00192B] font-semibold">
-                            60{" "}
+                            60
                             <span className=" font-medium text-sm">Days</span>
                           </p>
                           {selectedDays == "60" ? (
@@ -238,6 +240,7 @@ export function StepTwoModal(_props: {
               {
                 type: "inputView",
                 props: {
+                  dataCy: "pulse-check-days-input-field",
                   name: "pulseCheckDays",
                   type: "number",
                   placeholder: "Custom",
@@ -264,6 +267,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "pulse-check-email-input-field",
             name: "pulseCheckEmail1",
             type: "text",
             placeholder: "Email",
@@ -279,6 +283,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "pulse-check-email-2-input-field",
             name: "pulseCheckEmail2",
             type: "text",
             placeholder: "Backup email 1",
@@ -292,6 +297,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "pulse-check-email-3-input-field",
             name: "pulseCheckEmail3",
             type: "text",
             placeholder: "Backup email 2",
@@ -312,6 +318,7 @@ export function StepTwoModal(_props: {
         {
           type: "phoneNumberView",
           props: {
+            dataCy: "pulse-check-phone-number",
             name: "pulseCheckPhone1",
             placeholder: "Phone Number",
             value: _props?.modalControl?.pulseCheckPhone1?.split(" ")[1],
@@ -323,12 +330,12 @@ export function StepTwoModal(_props: {
             _handleChange: _props._handleChange,
           },
         },
-
         {
           type: "phoneNumberView",
           props: {
+            dataCy: "pulse-check-backup-phone-number",
             name: "pulseCheckPhone2",
-            placeholder: "Backup Phone Number",
+            placeholder: "Backup Phone Number 1",
             value: _props?.modalControl?.pulseCheckPhone2?.split(" ")[1],
             code: _props?.modalControl?.pulseCheckPhone2?.split(" ")[0],
             inputStyles: "",
@@ -339,8 +346,24 @@ export function StepTwoModal(_props: {
           },
         },
         {
+          type: "phoneNumberView",
+          props: {
+            dataCy: "pulse-check-backup-2-phone-number",
+            name: "pulseCheckPhone3",
+            placeholder: "Backup Phone Number 2",
+            value: _props?.modalControl?.pulseCheckPhone3?.split(" ")[1],
+            code: _props?.modalControl?.pulseCheckPhone3?.split(" ")[0],
+            inputStyles: "",
+            inputContainerStyles: "",
+            selectFieldStyles: "",
+            selectFieldMenuWidth: "",
+            _handleChange: _props._handleChange,
+          },
+        },
+        {
           type: "buttonView",
           props: {
+            dataCy: "submit-pulse-modal-two-button",
             title: "Confirm & Next",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -357,6 +380,7 @@ export function StepThreeModal(_props: {
   closeModal: any
   closeModalOnOverlayClick: boolean
   closeIconVisibility: boolean
+  numberOfValidators: number
   action: string
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   _submitModal: () => void
@@ -407,7 +431,11 @@ export function StepThreeModal(_props: {
                       src={linkFacebook}
                       alt="icon for linking facebook account"
                     />
-                    <a data-cy="to-link-facebook-account-button" href="#" className="text-[#00192B] underline">
+                    <a
+                      data-cy="to-link-facebook-account-button"
+                      href="#"
+                      className="text-[#00192B] underline"
+                    >
                       Click to link your Facebook account
                     </a>
                   </div>
@@ -416,7 +444,11 @@ export function StepThreeModal(_props: {
                       src={linkTwitter}
                       alt="icon for linking twitter account"
                     />
-                    <a  data-cy="to-link-twitter-account-button" href="#" className="text-[#00192B] underline">
+                    <a
+                      data-cy="to-link-twitter-account-button"
+                      href="#"
+                      className="text-[#00192B] underline"
+                    >
                       Click to link your Twitter account
                     </a>
                   </div>
@@ -425,7 +457,11 @@ export function StepThreeModal(_props: {
                       src={linkInsta}
                       alt="icon for linking instagram account"
                     />
-                    <a data-cy="to-link-instagram-account-button" href="#" className="text-[#00192B] underline">
+                    <a
+                      data-cy="to-link-instagram-account-button"
+                      href="#"
+                      className="text-[#00192B] underline"
+                    >
                       Click to link your instagram account
                     </a>
                   </div>
@@ -437,7 +473,8 @@ export function StepThreeModal(_props: {
         {
           type: "buttonView",
           props: {
-            title: "Confirm & Next",
+            dataCy: "submit-pulse-modal-three-button",
+            title: _props.numberOfValidators ? "Confirm & Next" : "Continue",
             onclick: _props._submitModal,
             buttonStyle: "",
             buttonContainer: "mx-48 mb-10",
@@ -457,7 +494,7 @@ export function StepFourModal(_props: {
   _handleChange: React.ChangeEventHandler<HTMLInputElement>
   modalControl: {
     pulseCheckValidationRequired: string
-    pulseCheckNonValidationMonths: string
+    pulseCheckNonValidationDays: string
   }
   _submitModal: () => void
   arrayLength: any
@@ -465,29 +502,29 @@ export function StepFourModal(_props: {
 }) {
   const [getResponseFromValidator, setGetResponseFromValidator] =
     useState("opt-1")
-  const [responseMonths, setResponseMonths] = useState('3')
-  
+  const [responseMonths, setResponseMonths] = useState("3")
+
   function handleClick(selectedOption: string) {
     setGetResponseFromValidator(selectedOption)
   }
 
   useEffect(() => {
     if (_props.modalControl.pulseCheckValidationRequired == "true") {
-      triggerEvent("pulseCheckNonValidationMonths", "0")
+      triggerEvent("pulseCheckNonValidationDays", "0")
     }
   }, [_props.modalControl.pulseCheckValidationRequired])
 
   useEffect(() => {
-    if (_props.modalControl.pulseCheckNonValidationMonths == "3") {
+    if (_props.modalControl.pulseCheckNonValidationDays == "3") {
       triggerEvent("pulseCheckValidationRequired", "false")
     }
-  }, [_props.modalControl.pulseCheckNonValidationMonths])
+  }, [_props.modalControl.pulseCheckNonValidationDays])
 
   useEffect(() => {
     if (getResponseFromValidator == "opt-1") {
       triggerEvent("pulseCheckValidationRequired", "true")
     } else {
-      triggerEvent("pulseCheckNonValidationMonths", responseMonths)
+      triggerEvent("pulseCheckNonValidationDays", responseMonths)
     }
   }, [getResponseFromValidator, responseMonths])
 
@@ -501,11 +538,11 @@ export function StepFourModal(_props: {
     _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
   }
 
-  const handleChange = (e: any)=>{
-    let value = e.target.value;
-    if(value == '' || value >= 1 && value <= 90 && !value.includes('.')){
+  const handleChange = (e: any) => {
+    const value = e.target.value
+    if (value == "" || (value >= 1 && value <= 90 && !value.includes("."))) {
       setResponseMonths(value)
-    } 
+    }
   }
 
   return (
@@ -564,9 +601,13 @@ export function StepFourModal(_props: {
                     onClick={() => handleClick("opt-1")}
                   >
                     {getResponseFromValidator == "opt-1" ? (
-                      <img src={checkmark} alt="checkmark" className="w-6 h-6"/>
-                      ) : (
-                        <div className="w-6 h-6 border-2 shrink-0 rounded-sm"></div>
+                      <img
+                        src={checkmark}
+                        alt="checkmark"
+                        className="w-6 h-6"
+                      />
+                    ) : (
+                      <div className="w-6 h-6 border-2 shrink-0 rounded-sm"></div>
                     )}
 
                     <p className="text-start cursor-default">
@@ -574,7 +615,7 @@ export function StepFourModal(_props: {
                       you get a confirmation from a validator.
                     </p>
                   </div>
-                  
+
                   <div
                     className={
                       getResponseFromValidator == "opt-2"
@@ -584,14 +625,29 @@ export function StepFourModal(_props: {
                     onClick={() => handleClick("opt-2")}
                   >
                     {getResponseFromValidator == "opt-2" ? (
-                      <img src={checkmark} alt="checkmark" className="w-6 h-6"/>
+                      <img
+                        src={checkmark}
+                        alt="checkmark"
+                        className="w-6 h-6"
+                      />
                     ) : (
                       <div className="w-6 h-6 border-2 shrink-0 rounded-sm"></div>
                     )}
 
                     <p className="text-start cursor-default">
-                      Make the data available to my beneficiaries after <input type="text" min={1} max={90} onChange={handleChange} autoFocus={getResponseFromValidator === "opt-2"} disabled={getResponseFromValidator !== "opt-2"} value={responseMonths} className="inline h-7 w-16 px-3 text-safe-text-dark-gray rounded-md border-[1px] border-safe-color-gray outline-none" required/> days
-                      without a response from any validator.
+                      Make the data available to my beneficiaries after
+                      <input
+                        type="text"
+                        min={1}
+                        max={90}
+                        onChange={handleChange}
+                        autoFocus={getResponseFromValidator === "opt-2"}
+                        disabled={getResponseFromValidator !== "opt-2"}
+                        value={responseMonths}
+                        className="inline h-7 w-16 px-3 text-safe-text-dark-gray rounded-md border-[1px] border-safe-color-gray outline-none"
+                        required
+                      />
+                      days without a response from any validator.
                     </p>
                   </div>
                 </div>
@@ -602,6 +658,7 @@ export function StepFourModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-pulse-modal-four-button",
             title: "Done",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -655,6 +712,7 @@ export function SuccessModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-pulse-success-modal-button",
             title: "Done",
             onclick: _props._submitModal,
             buttonStyle:

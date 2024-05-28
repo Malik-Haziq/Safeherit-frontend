@@ -10,3 +10,9 @@ export interface Asset {
   beneficiaries: Beneficiary[]
   asset_file: string
 }
+
+export interface Currency {
+  base: string
+  rates: {[key: string]: number}
+  date: string
+}

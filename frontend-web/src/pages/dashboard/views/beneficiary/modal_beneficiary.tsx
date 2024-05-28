@@ -54,6 +54,7 @@ export function StepZeroInformationModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "register-beneficiary-button",
             title: "Register Beneficiaries",
             onclick: _props._submitModal,
             buttonStyle:
@@ -74,7 +75,11 @@ export function StepZeroInformationModal(_props: {
                   CustomView: () => {
                     return (
                       <div className="relative">
-                        <input data-cy="don't-display-this-modal-input" type="checkbox" id="checkbox" />
+                        <input
+                          data-cy="don't-display-this-modal-input"
+                          type="checkbox"
+                          id="checkbox"
+                        />
                         <label htmlFor="checkbox" className="checkbox-label">
                           <div className="check_mark"></div>
                         </label>
@@ -184,6 +189,7 @@ export function SuccessModal(_props: {
           : {
               type: "buttonView",
               props: {
+                dataCy: "submit-beneficiary-success-modal-button",
                 title: "Done",
                 onclick: _props._submitModal,
                 buttonStyle:
@@ -215,11 +221,10 @@ export function StepOneModal(_props: {
   _submitModal: () => void
   arrayLength: any
   showPreviousModal: () => void
-}) 
-{
+}) {
   const [notifyBeneficiary, setNotifyBeneficiary] = useState(false)
 
-  const handleNotify = (e: any)=>{
+  const handleNotify = (e: any) => {
     e.preventDefault()
     setNotifyBeneficiary(!notifyBeneficiary)
 
@@ -264,6 +269,7 @@ export function StepOneModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "beneficiary-name-input-field",
             name: "name",
             type: "text",
             placeholder: "Enter Name",
@@ -277,6 +283,7 @@ export function StepOneModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "beneficiary-primary-email-input-field",
             name: "primary_email",
             type: "text",
             placeholder: "Email",
@@ -291,6 +298,7 @@ export function StepOneModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "beneficiary-backup-email-input-field",
             name: "backup_email",
             type: "text",
             placeholder: "Backup email 1",
@@ -304,6 +312,7 @@ export function StepOneModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "beneficiary-backup-email-2-input-field",
             name: "backup_email2",
             type: "text",
             placeholder: "Backup email 2",
@@ -317,6 +326,7 @@ export function StepOneModal(_props: {
         {
           type: "phoneNumberView",
           props: {
+            dataCy: "beneficiary-phone-number",
             name: "phone_number",
             placeholder: "Phone Number",
             value: _props?.modalControl?.phone_number?.split(" ")[1],
@@ -331,6 +341,7 @@ export function StepOneModal(_props: {
         {
           type: "phoneNumberView",
           props: {
+            dataCy: "beneficiary-backup-phone-number",
             name: "backup_phone_number",
             placeholder: "Backup Phone Number",
             value: _props?.modalControl?.backup_phone_number?.split(" ")[1],
@@ -352,7 +363,14 @@ export function StepOneModal(_props: {
                 props: {
                   customViewContainer: "w-5 h-5",
                   CustomView: () => {
-                    return <input type="checkbox" className="w-full h-full" checked={notifyBeneficiary} onChange={handleNotify} />
+                    return (
+                      <input
+                        type="checkbox"
+                        className="w-full h-full"
+                        checked={notifyBeneficiary}
+                        onChange={handleNotify}
+                      />
+                    )
                   },
                 },
               },
@@ -369,6 +387,7 @@ export function StepOneModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-beneficiary-modal-one-button",
             title: "Save & Next",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -482,6 +501,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "beneficiary-facebook-link-input-field",
             name: "facebook_link",
             type: "text",
             placeholder: "Facebook Profile",
@@ -499,6 +519,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "beneficiary-instagram-link-input-field",
             name: "instagram_username",
             type: "text",
             placeholder: "Instagram Handle",
@@ -516,6 +537,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "beneficiary-twitter-link-input-field",
             name: "twitter_username",
             type: "text",
             placeholder: "Twitter Handle",
@@ -589,6 +611,7 @@ export function StepTwoModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-beneficiary-modal-two-button",
             title: "Next",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -685,6 +708,7 @@ export function StepThreeModal(_props: {
         {
           type: "TextAreaField",
           props: {
+            dataCy: "beneficiary-personalized-message",
             textAreaContainerStyles: " ",
             name: "personalized_message",
             placeholder: `Dear ${_props.modalControl.name} \n\nIf you receive this message it probably means I am gone. If so go to my closet and you will find a piece of paper in the pocket or my blue leather jacket. The paper contains the codes you will need to login to this platform (SafeHerit) and have access to the list of my assets.`,
@@ -752,6 +776,7 @@ export function StepThreeModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-beneficiary-modal-three-button",
             title: "Continue",
             onclick: _props._submitModal,
             buttonStyle: "",

@@ -193,6 +193,7 @@ export default function RegisterKey() {
               Don’t have a Public/Private key yet?
             </small>
             <a
+              data-cy="generate-public-and-private-key-button"
               onClick={_handleGenerate}
               className="cy-add-generate-PK flex gap-3 justify-between items-center bg-white shadow-md py-2 px-4 rounded-lg cursor-pointer w-full"
             >

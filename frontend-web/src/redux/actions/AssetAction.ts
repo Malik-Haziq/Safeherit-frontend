@@ -3,6 +3,7 @@ import {
   ASSETS,
   BENEFICIARY_ASSETS,
   BENEFICIARY_ASSET_BY_ID,
+  CURRENCY_RATES,
   DELETE,
   GET,
   POST,
@@ -213,6 +214,21 @@ export const deleteAsset = createAsyncThunk(
     }
     try {
       const response = await DELETE(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  },
+)
+export const getCurrencyRates = createAsyncThunk(
+  "getCurrencyRates",
+  async (Data: { }, { getState, rejectWithValue }) => {
+    const params = {
+      ROUTE: CURRENCY_RATES,
+      Body: {},
+    }
+    try {
+      const response = await GET(params)
       return response
     } catch (error) {
       return rejectWithValue(error)

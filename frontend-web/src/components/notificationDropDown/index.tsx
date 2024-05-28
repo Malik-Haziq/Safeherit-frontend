@@ -54,6 +54,7 @@ export function Notifications() {
                 <li className="px-4 py-3 flex items-center justify-between border-b-2">
                   <h3 className="font-bold">Notifications</h3>
                   <a
+                    data-cy="clear-notification-button"
                     href="#"
                     className="text-[#9F9F9F] text-sm font-medium"
                     onClick={() => {}}

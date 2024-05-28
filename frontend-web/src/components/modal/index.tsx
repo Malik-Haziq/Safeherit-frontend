@@ -5,7 +5,6 @@ import closeIcon from "@images/close-icon.svg"
 import arrowLeft from "@images/left-arrow.png"
 import styles from "./Modal.module.css"
 import { SelectField, InputField, PhoneNumField } from ".."
-import { useAppSelector } from "@/redux/hooks"
 import { setWizardStep } from "@/redux/reducers/UserSlice"
 import { updateUser } from "@/redux/actions"
 
@@ -23,6 +22,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "iconView") {
     return (
       <IconView
+        dataCy={element?.props?.dataCy}
         key={_props.index}
         image={element?.props?.image}
         onclick={element?.props?.onclick}
@@ -43,6 +43,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "inputView") {
     return (
       <InputField
+        dataCy={element?.props?.dataCy}
         key={_props.index}
         name={element?.props?.name}
         type={element?.props?.type}
@@ -64,6 +65,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "selectView") {
     return (
       <SelectField
+        dataCy={element?.props?.dataCy}
         key={_props.index}
         data={element?.props?.data}
         value={element?.props?.value}
@@ -81,6 +83,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "phoneNumberView") {
     return (
       <PhoneNumField
+        dataCy={element?.props?.dataCy}
         key={_props.index}
         name={element?.props?.name}
         placeholder={element?.props?.placeholder}
@@ -97,6 +100,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "buttonView") {
     return (
       <ButtonView
+        dataCy={element?.props?.dataCy}
         key={_props.index}
         title={element?.props?.title}
         onclick={element?.props?.onclick}
@@ -114,6 +118,7 @@ const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   } else if (element?.type === "TextAreaField") {
     return (
       <TextAreaField
+        dataCy={element?.props.dataCy}
         key={_props.index}
         name={element?.props?.name}
         placeholder={element?.props?.placeholder}
@@ -195,6 +200,7 @@ export const Modal = (_props: {
         <div className={styles.backDrop}>
           {!_props.closeIconVisibility && (
             <ButtonView
+              dataCy="close-wizard-modal-button"
               title={"Close Wizard"}
               onclick={_handleCloseWizard}
               buttonStyle={styles.mutedButton}
@@ -218,6 +224,7 @@ export const Modal = (_props: {
               {_props.arrayLength ? (
                 <div className="absolute bottom-12">
                   <img
+                    data-cy="show-previous-modal-icon"
                     src={arrowLeft}
                     alt="Back Arrow"
                     className="cursor-pointer ml-4 w-5"
@@ -246,7 +253,11 @@ function ModalHeader(_props: {
     <div className={styles.header}>
       <div className={styles.title}>{_props.title}</div>
       {_props.closeIconVisibility && (
-        <div className={styles.icon} onClick={_props.closeModal}>
+        <div
+          data-cy="close-modal-icon"
+          className={styles.icon}
+          onClick={_props.closeModal}
+        >
           <img src={closeIcon} alt="close icon" className="cursor-pointer" />
         </div>
       )}
@@ -270,6 +281,7 @@ function TextView(_props: {
 }
 
 function IconView(_props: {
+  dataCy: string
   imageContainerStyles: string
   image: string
   imageStyles: string
@@ -278,6 +290,7 @@ function IconView(_props: {
   return (
     <div className={_props.imageContainerStyles || ""}>
       <img
+        data-cy={_props.dataCy}
         src={_props.image || defaultIcon}
         alt="icon"
         className={_props.imageStyles || ""}
@@ -307,6 +320,7 @@ function VideoView(_props: {
 }
 
 function TextAreaField(_props: {
+  dataCy: string
   name: string
   placeholder: string
   value: string
@@ -319,6 +333,7 @@ function TextAreaField(_props: {
   return (
     <div className={_props.textAreaContainerStyles}>
       <textarea
+        data-cy={_props.dataCy}
         name={_props.name || ""}
         placeholder={_props.placeholder || "Text Area"}
         value={_props.value}
@@ -336,10 +351,12 @@ function ButtonView(_props: {
   buttonStyle: string
   onclick: React.MouseEventHandler<HTMLButtonElement>
   buttonContainer: string
+  dataCy?: string
 }) {
   return (
     <div className={_props.buttonContainer || styles.buttonContainer}>
       <button
+        data-cy={_props.dataCy}
         className={_props.buttonStyle || styles.buttonStyle}
         onClick={_props.onclick}
       >

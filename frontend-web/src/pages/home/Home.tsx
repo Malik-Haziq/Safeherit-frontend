@@ -36,6 +36,7 @@ export function Home() {
             even in the afterlife.
           </p>
           <a
+            data-cy="register-generated-key-button"
             className="text-[#04477B] bg-white rounded-2xl px-8 py-5 w-fit font-bold cursor-pointer"
             onClick={() => navigate("/register")}
           >
@@ -158,7 +159,9 @@ export function Home() {
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt.
               </p>
-              <a data-cy="benefits-link" href="#">Learn more →</a>
+              <a data-cy="benefits-link" href="#">
+                Learn more →
+              </a>
             </div>
             <div>
               <div className="flex items-center gap-3">
@@ -197,7 +200,9 @@ export function Home() {
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt.
               </p>
-              <a data-cy="benefits-link" href="#">Learn more →</a>
+              <a data-cy="benefits-link" href="#">
+                Learn more →
+              </a>
             </div>
             <div>
               <div className="flex items-center gap-3">
@@ -236,7 +241,9 @@ export function Home() {
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt.
               </p>
-              <a data-cy="benefits-link" href="#">Learn more →</a>
+              <a data-cy="benefits-link" href="#">
+                Learn more →
+              </a>
             </div>
             <div>
               <div className="flex items-center gap-3">
@@ -280,7 +287,10 @@ export function Home() {
             placeholder="Enter email"
             className="px-8 py-5 text-[#082A44] font-medium bg-[#F5FAFD] focus:outline-none rounded-3xl"
           />
-          <button data-cy="start-free-trial-button" className="px-6 py-5 text-white font-semibold bg-[#0C8AC1] rounded-3xl">
+          <button
+            data-cy="start-free-trial-button"
+            className="px-6 py-5 text-white font-semibold bg-[#0C8AC1] rounded-3xl"
+          >
             Start free trial
           </button>
         </div>
@@ -350,6 +360,7 @@ function Carousel(_props: { slides: React.ReactNode[] }) {
       <div className="absolute bottom-0 py-4 flex justify-center gap-3 w-full">
         {_props.slides.map((_, i) => (
           <div
+            data-cy="carousel-slide-dot"
             onClick={() => {
               setCurrent(i)
             }}

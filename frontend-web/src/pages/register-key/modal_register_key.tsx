@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef } from "react"
 import uploadImg from "@images/upload.png"
 import copyIcon from "@images/copy-icon.svg"
 import downloadIcon from "@images/download.svg"
@@ -25,6 +25,7 @@ export function PrivateKeyModal(_props: {
   setFileName: any
   keyType: string
 }) {
+  const file_upload = useRef<HTMLInputElement>(null)
   const fileReader = (file: any) => {
     const reader = new FileReader()
     reader.onload = () => {
@@ -134,19 +135,27 @@ export function PrivateKeyModal(_props: {
                     type="file"
                     accept=".pem"
                     name="personalized_video"
+                    ref={file_upload}
                     onChange={handleFileChange}
-                    className="opacity-0 absolute top-2 left-36 h-10 w-[266px]"
+                    className="opacity-0 border-0 absolute top-2 left-36 h-10 w-[0px]"
                   />
-                  <div className="mx-[142px] mb-4">
+                  <div
+                    data-cy="upload-private-key"
+                    onClick={() => file_upload?.current?.click()}
+                    className="mx-[142px] mb-4"
+                  >
                     <input
-                      data-cy="selected-private-key-file-name-input"
+                      data-cy="browse-private-key-input"
                       type="text"
                       className="text-[#74777E] border-2 border-[#aab4b9] py-2 px-2 bg-white w-[150px]"
                       placeholder="Choose File"
                       value={_props.fileName}
                       disabled
                     />
-                    <button data-cy="browse-private-key-button" className="bg-[#DDE3E8] py-2 px-3 border-2 border-[#aab4b9] border-l-0 font-bold text-[#515D66]">
+                    <button
+                      data-cy="browse-private-key-button"
+                      className="bg-[#DDE3E8] py-2 px-3 border-2 border-[#aab4b9] border-l-0 font-bold text-[#515D66]"
+                    >
                       Browse File
                     </button>
                   </div>
@@ -233,6 +242,7 @@ export function GeneratePrivateKey(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "generate-public/private-key-button",
             title: "Generate Public/Private Key Pair",
             onclick: _props._handleGeneratePKPair,
             buttonStyle:
@@ -272,6 +282,7 @@ export function GeneratePrivateKey(_props: {
         {
           type: "TextAreaField",
           props: {
+            dataCy: "publick-key",
             textAreaContainerStyles: "flex justify-between items-center",
             name: "publicKey",
             inputStyles:
@@ -293,6 +304,7 @@ export function GeneratePrivateKey(_props: {
                   </p>
                   <div className="flex items-center gap-3 ">
                     <div
+                      data-cy="copy-private-key-button"
                       onClick={_props.copyPrivateKey}
                       className="flex items-center gap-1 cursor-pointer"
                     >
@@ -302,6 +314,7 @@ export function GeneratePrivateKey(_props: {
                     <div
                       onClick={_props.downloadPrivateKey}
                       className="cy-add-download-public-key flex items-center gap-1 cursor-pointer"
+                      data-cy="download-private-key-button"
                     >
                       <span>Download</span>
                       <img src={downloadIcon} alt="download icon" />
@@ -315,6 +328,7 @@ export function GeneratePrivateKey(_props: {
         {
           type: "TextAreaField",
           props: {
+            dataCy: "private-key",
             textAreaContainerStyles: "flex justify-between items-center",
             name: "privateKey",
             inputStyles:
@@ -342,6 +356,7 @@ export function GeneratePrivateKey(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "register-generated-public-key-button",
             title: "Register the Generated Public Key",
             onclick: _props._handleRegisterPK,
             buttonStyle:

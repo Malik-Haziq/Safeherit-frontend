@@ -4,7 +4,13 @@ import eye from "@images/eye.svg"
 import userImg from "@images/user.svg"
 import edit from "@images/edit.svg"
 import deleteIcon from "@images/delete.svg"
-import { NewUserDetail, NewUserModal, UserDetail } from "../users/modal_admin"
+import {
+  NewUserDetail,
+  NewUserModal,
+  UserDetail,
+  EditUser,
+  FreeTrial,
+} from "../users/modal_admin"
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import {
@@ -12,6 +18,7 @@ import {
   getUsers,
   deleteUserFromSuperadmin,
   changeUserAccountStatus,
+  offerTrial,
 } from "@/redux/actions/AdminAction"
 import { toast, Spinner, Pagination } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
@@ -24,6 +31,8 @@ const initialState = {
   phoneNumber: "",
   displayName: "",
   password: "",
+  tillDate: "",
+  reason: "",
 }
 
 const userInitialState = {
@@ -46,6 +55,7 @@ export default function UsersView() {
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   const [currentPage, setCurrentPage] = useState(1)
+  const [selectedUser, setSelectedUser] = useState<any>()
   const [loading, setLoading] = useState(true)
   const [modalControl, setModalControl] = useState(initialState)
   const [userViewControl, setViewControl] = useState(userInitialState)
@@ -84,6 +94,7 @@ export default function UsersView() {
             startLoader()
             fetchUsers()
             setModalControl({
+              ...modalControl,
               email: modalControl.email,
               phoneNumber: modalControl.phoneNumber,
               displayName: modalControl.displayName,
@@ -153,21 +164,11 @@ export default function UsersView() {
   }
 
   const editUser = (email: string, currentStatus: string) => {
-    setLoading(true)
-    const data = {
-      userEmail: email,
-      currentlyActive: currentStatus === "Active" ? false : true,
-    }
-    dispatch<any>(changeUserAccountStatus(data))
-      .unwrap()
-      .catch(() => {
-        setLoading(false)
-      })
-      .then(() => {
-        toast("User account status updated successfully", "success")
-        fetchUsers()
-      })
-      .finally(() => {})
+    setModalVisibility("edit-user")
+    setSelectedUser({
+      email: email,
+      currentStatus: currentStatus,
+    })
   }
 
   const viewUser = (_props: User) => {
@@ -188,6 +189,50 @@ export default function UsersView() {
     setModalVisibility("create-user")
   }
 
+  const changeAccountStatus = () => {
+    const data = {
+      userEmail: selectedUser.email,
+      currentlyActive: selectedUser.currentStatus === "Active" ? false : true,
+    }
+    dispatch<any>(changeUserAccountStatus(data))
+      .unwrap()
+      .catch(() => {
+        setLoading(false)
+      })
+      .then(() => {
+        setModalVisibility("")
+        toast("User account status updated successfully", "success")
+        fetchUsers()
+      })
+      .finally(() => {})
+  }
+
+  const offerFreeTrial = () => {
+    setModalVisibility("free-trial-modal")
+  }
+
+  const _submitOfferFreeTrial = () => {
+    if (modalControl.tillDate) {
+      setModalVisibility("")
+      dispatch<any>(
+        offerTrial({
+          email: selectedUser.email,
+          tillDate: modalControl.tillDate,
+          reason: modalControl.reason,
+        }),
+      )
+        .unwrap()
+        .then(() => {
+          toast("Trial activated", "success")
+          setModalControl(initialState)
+          setSelectedUser("")
+          fetchUsers()
+        })
+    } else {
+      toast("Please enter a valid date", "error")
+    }
+  }
+
   return (
     <div className={styles.AppView}>
       <NewUserModal
@@ -197,6 +242,24 @@ export default function UsersView() {
         closeIconVisibility={true}
         _handleChange={_handleChange}
         _submitModal={createUserSubmit}
+        modalControl={modalControl}
+      />
+      <EditUser
+        openModal={modalVisibility == "edit-user"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        toggleUserAccount={changeAccountStatus}
+        offerFreeTrial={offerFreeTrial}
+      />
+      <FreeTrial
+        openModal={modalVisibility == "free-trial-modal"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        offerFreeTrial={offerFreeTrial}
+        _handleChange={_handleChange}
+        _submitModal={_submitOfferFreeTrial}
         modalControl={modalControl}
       />
       <UserDetail
@@ -214,7 +277,11 @@ export default function UsersView() {
         modalControl={modalControl}
       />
       <main className="p-5 mx-auto w-[1101px]">
-        <button data-cy="create-new-user-account" onClick={createAccount} className="mt-10 flex justify-end mb-8">
+        <button
+          data-cy="create-new-user-account"
+          onClick={createAccount}
+          className="mt-10 flex justify-end mb-8"
+        >
           <a
             href="#"
             className="primary-btn bg-[#04477B] text-white rounded-md py-2 font-medium flex items-center gap-2"
