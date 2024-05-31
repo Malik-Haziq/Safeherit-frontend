@@ -37,7 +37,7 @@ export default function DashboardView() {
     },
     {
       img: heart,
-      numberOfItems: user.nextPulseCheckDueDays,
+      numberOfItems: user.nextPulseCheckDueDays || 0,
       title: "Check due in",
     },
     {
