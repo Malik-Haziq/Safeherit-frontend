@@ -100,6 +100,9 @@ export const EditDetailsModal = (_props: {
               <main className="flex flex-col pl-11 pr-7 py-7">
                 <div className="relative">
                   <input
+                    data-cy={`${
+                      _props.isBeneficiary ? "beneficiary" : "validator"
+                    }-profile-pic-input`}
                     type="file"
                     accept="image/*"
                     onChange={handleImageInputChange}
@@ -113,11 +116,17 @@ export const EditDetailsModal = (_props: {
                     {_props.imageUpload ? (
                       <div className="relative">
                         <img
+                          data-cy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-profile-pic`}
                           src={_props.imageUpload || profilePic}
                           alt="user image"
                           className="w-20 h-20 rounded-full object-contain"
                         />
                         <span
+                          data-cy={`remove-${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-profile-pic`}
                           className="absolute top-0 right-0 text-red-900 cursor-pointer"
                           onClick={() => {
                             _props.setImageUpload("")
@@ -149,6 +158,9 @@ export const EditDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-name-input`}
                           hasRightIcon={false}
                           name={"name"}
                           type={"text"}
@@ -164,6 +176,9 @@ export const EditDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-primary_email-input`}
                           hasRightIcon={false}
                           name={"primary_email"}
                           type={"text"}
@@ -179,6 +194,9 @@ export const EditDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-backup_email-input`}
                           hasRightIcon={false}
                           name={"backup_email"}
                           type={"text"}
@@ -194,6 +212,9 @@ export const EditDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-backup_email2-input`}
                           hasRightIcon={false}
                           name={"backup_email2"}
                           type={"text"}
@@ -209,6 +230,9 @@ export const EditDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-phone_number-input`}
                           hasRightIcon={false}
                           name={"phone_number"}
                           type={"text"}
@@ -224,6 +248,9 @@ export const EditDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-backup_phone_number-input`}
                           hasRightIcon={false}
                           name={"backup_phone_number"}
                           type={"text"}
@@ -241,6 +268,9 @@ export const EditDetailsModal = (_props: {
                       />
                       <div>
                         <InputField
+                          dataCy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-facebook_link-input`}
                           hasRightIcon={true}
                           name={"facebook_link"}
                           type={"text"}
@@ -255,6 +285,9 @@ export const EditDetailsModal = (_props: {
                       </div>
                       <div>
                         <InputField
+                          dataCy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-instagram_username-input`}
                           hasRightIcon={true}
                           name={"instagram_username"}
                           type={"text"}
@@ -269,6 +302,9 @@ export const EditDetailsModal = (_props: {
                       </div>
                       <div>
                         <InputField
+                          dataCy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-twitter_username-input`}
                           hasRightIcon={true}
                           name={"twitter_username"}
                           type={"text"}
@@ -291,6 +327,9 @@ export const EditDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-bold"
                         />
                         <TextArea
+                          dataCy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-personalized_message-input`}
                           name="personalized_message"
                           modalControl={_props.modalControl}
                           setModalControl={_props.setModalControl}
@@ -373,6 +412,9 @@ export const EditDetailsModal = (_props: {
                           />
                         </div>
                         <TextArea
+                          dataCy={`${
+                            _props.isBeneficiary ? "beneficiary" : "validator"
+                          }-public_key-input`}
                           name="public_key"
                           disabled={true}
                           modalControl={_props.modalControl}
@@ -394,6 +436,9 @@ export const EditDetailsModal = (_props: {
                         textStyles="text-[#00192B] font-bold"
                       />
                       <TextArea
+                        dataCy={`${
+                          _props.isBeneficiary ? "beneficiary" : "validator"
+                        }-personalized_message-input`}
                         name={"personalized_message"}
                         modalControl={_props.modalControl}
                         setModalControl={_props.setModalControl}
@@ -432,6 +477,7 @@ function TextView(_props: {
 }
 
 function InputField(_props: {
+  dataCy: string
   name: string
   type: string
   inputStyles?: string
@@ -452,6 +498,7 @@ function InputField(_props: {
   return (
     <div className={_props.inputContainerStyles}>
       <input
+        data-cy={_props.dataCy}
         name={_props.name || ""}
         type={_props.type || "text"}
         value={_props.modalControl[_props.name]}
@@ -476,6 +523,7 @@ function InputField(_props: {
 }
 
 function TextArea(_props: {
+  dataCy: string
   name: string
   modalControl: any
   setModalControl: any
@@ -492,6 +540,7 @@ function TextArea(_props: {
 
   return (
     <textarea
+      data-cy={_props.dataCy}
       name={_props.name}
       value={_props.modalControl[_props.name]}
       onChange={_handleChange}

@@ -800,12 +800,14 @@ function Beneficiary(_props: {
         {
           image ? (
             <img
+              data-cy="beneficiary-profile-img"
               src={image || userImg}
               alt="user image"
               className="rounded-full h-11 w-11 object-contain"
             />
           ) : (
             <img
+              data-cy="beneficiary-profile-img"
               src={userImg}
               alt="user image"
               className="rounded-full h-11 w-11 object-contain"
@@ -821,13 +823,22 @@ function Beneficiary(_props: {
           {_props.userName}
         </p>
       </li>
-      <li className="font-semibold text-sm max-w-48 justify-self-center pr-9">
+      <li
+        data-cy="beneficiary-email"
+        className="font-semibold text-sm max-w-48 justify-self-center pr-9"
+      >
         {_props.email}
       </li>
-      <li className="font-semibold text-sm max-w-48 justify-self-center">
+      <li
+        data-cy="beneficiary-phone-number"
+        className="font-semibold text-sm max-w-48 justify-self-center"
+      >
         {_props.phoneNumber}
       </li>
-      <li className="font-semibold text-sm max-w-48 justify-self-center">
+      <li
+        data-cy="beneficiary-backup-phone-number"
+        className="font-semibold text-sm max-w-48 justify-self-center"
+      >
         {_props.backupPhoneNumber}
       </li>
       <li className="flex gap-10 max-w-56 justify-self-end">
