@@ -7,6 +7,7 @@ import styles from "./Modal.module.css"
 import { SelectField, InputField, PhoneNumField } from ".."
 import { setWizardStep } from "@/redux/reducers/UserSlice"
 import { updateUser } from "@/redux/actions"
+import { useAppSelector } from "@/redux/hooks"
 
 const DisplayFieldComponent = (_props: { element: any; index: number }) => {
   const element = _props.element
@@ -187,6 +188,7 @@ export const Modal = (_props: {
   showPreviousModal?: any
   modalCustomStyles?: string
 }) => {
+  const { startupWizardCompleted } = useAppSelector((state) => state.user)
   const dispatch = useDispatch()
   const elements = _props?.elements
   const _handleCloseWizard = useCallback(() => {
@@ -194,19 +196,11 @@ export const Modal = (_props: {
     dispatch<any>(updateUser({ startupWizardCompleted: true }))
     _props.closeModal()
   }, [])
+
   return (
     <>
       {_props.openModal && (
         <div className={styles.backDrop}>
-          {!_props.closeIconVisibility && (
-            <ButtonView
-              dataCy="close-wizard-modal-button"
-              title={"Close Wizard"}
-              onclick={_handleCloseWizard}
-              buttonStyle={styles.mutedButton}
-              buttonContainer={styles.buttonContainerPosition}
-            />
-          )}
           <div className={styles.modalContainer}>
             <div
               className={`${styles.modal} ${
@@ -219,6 +213,8 @@ export const Modal = (_props: {
                 closeIconVisibility={_props.closeIconVisibility}
                 arrayLength={_props.arrayLength}
                 showPreviousModal={_props.showPreviousModal}
+                _handleCloseWizard={_handleCloseWizard}
+                startupWizardCompleted={startupWizardCompleted}
               />
               <RenderModal elements={elements} />
               {_props.arrayLength ? (
@@ -248,6 +244,8 @@ function ModalHeader(_props: {
   closeIconVisibility: boolean
   arrayLength?: any
   showPreviousModal?: any
+  _handleCloseWizard: any
+  startupWizardCompleted: any
 }) {
   return (
     <div className={styles.header}>
@@ -256,7 +254,10 @@ function ModalHeader(_props: {
         <div
           data-cy="close-modal-icon"
           className={styles.icon}
-          onClick={_props.closeModal}
+          onClick={() => {
+            !_props.startupWizardCompleted && _props._handleCloseWizard()
+            _props.closeModal()
+          }}
         >
           <img src={closeIcon} alt="close icon" className="cursor-pointer" />
         </div>
