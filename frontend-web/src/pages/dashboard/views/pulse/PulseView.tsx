@@ -258,7 +258,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-1"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitStepOneModal}
         _handleChange={() => {}}
@@ -267,7 +267,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-2"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitStepTwoModal}
         _handleChange={_handleChange}
@@ -279,7 +279,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-3"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         numberOfValidators={user.numOfValidatorOfUser}
         action={""}
         _submitModal={_submitStepThreeModal}
@@ -291,7 +291,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-4"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitStepFourModal}
         _handleChange={_handleChange}
@@ -303,7 +303,7 @@ export default function PulseView() {
         openModal={modalVisibility == "success-modal"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitSuccessModal}
       />

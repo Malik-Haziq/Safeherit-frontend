@@ -423,7 +423,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle={"Register Validators"}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         _submitModal={_submitStepZeroModal}
       />
       <StepFourSuccessModal
@@ -431,7 +431,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle={"Validator Registered"}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         registerAnother={registerAnotherValidator}
         pulseCheck={pulseCheck}
       />
@@ -448,7 +448,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepOneModal}
@@ -460,7 +460,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
@@ -475,7 +475,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepThreeModal}
