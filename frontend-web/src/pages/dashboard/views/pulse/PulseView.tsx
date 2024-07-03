@@ -685,6 +685,7 @@ function MethodRow(_props: {
       ) : _props.editDetailInput === convertToCamelCase(_props.heading) ? (
         <>
           <InputField
+            dataCy="pulse-check-email-address-input"
             name="email"
             type="email"
             placeholder="Email Address"
