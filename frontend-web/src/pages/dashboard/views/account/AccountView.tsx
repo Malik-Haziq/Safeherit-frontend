@@ -40,7 +40,7 @@ const initialState = {
   profile_image: "",
   privateKey: "",
   publicKey: "",
-  currency: "",
+  defaultCurrency: "",
 }
 
 const initialPKState = {
