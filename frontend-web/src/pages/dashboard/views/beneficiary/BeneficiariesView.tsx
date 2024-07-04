@@ -693,7 +693,10 @@ function Beneficiaries(_props: {
               <img src={userIcon} alt="user icon" />
             </div>
             <div className="ml-2 flex flex-col justify-center">
-              <p className="text-black font-semibold">
+              <p
+                data-cy="number-of-beneficiaries"
+                className="text-black font-semibold"
+              >
                 {_props.beneficiaryArray.length}
               </p>
               <small className="text-safe-text-light-gray-tint text-xm">
