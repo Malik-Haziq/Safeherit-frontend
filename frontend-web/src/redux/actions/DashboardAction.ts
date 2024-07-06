@@ -10,7 +10,7 @@ export const getData = createAsyncThunk(
   async (Data: object, { getState, rejectWithValue }) => {
     const { user } = getState() as { user: { token: string; uid: string } }
     const params = { ROUTE: GET_DATA, Body: {}, token: user.token }
-    const ownerPrivateKey = localStorage.getItem("privateKey")
+    const ownerPrivateKey = localStorage.getItem("_privateKey")
     const _ownerPrivateKey = ownerPrivateKey
       ? encryptionService.decryptKeys(ownerPrivateKey, user.uid)
       : ""

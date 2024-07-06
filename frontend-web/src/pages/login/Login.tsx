@@ -154,7 +154,8 @@ export function Login() {
   const closeModal = useCallback(() => {
     setModalVisibility("none")
     setResetEmail("")
-    localStorage.clear()
+    localStorage.removeItem('_privateKey')
+    localStorage.removeItem('role')
   }, [])
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {

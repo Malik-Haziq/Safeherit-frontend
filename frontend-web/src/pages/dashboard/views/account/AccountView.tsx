@@ -67,7 +67,7 @@ export default function AccountView() {
   const [auth2FAEnabled, setAuth2FAEnabled] = useState(false)
 
   useEffect(() => {
-    const key = localStorage.getItem("privateKey")
+    const key = localStorage.getItem("_privateKey")
     const _privateKey = key ? encryptionService.decryptKeys(key, user.uid) : ""
     setModalControl({ ...modalControl, privateKey: _privateKey })
   }, [modalControl.privateKey])
@@ -172,6 +172,19 @@ export default function AccountView() {
       })
   }
 
+  const _handleForgetKey = () => {
+    const storageKey = encryptionService.basicEncryption(user.email + user.role)
+    const _key = localStorage.getItem(storageKey)
+    if (_key) {
+      localStorage.setItem('_privateKey', _key)
+      localStorage.removeItem(storageKey)
+      toast("Operation Successful", "success")
+    }
+    else {
+      toast("Device not saved", "error")
+    }
+  }
+
   const _handleUserDeletion = () => {
     setModalVisibility("delete-user")
   }
@@ -250,7 +263,9 @@ export default function AccountView() {
                     user.uid,
                   )
                 : ""
-              localStorage.setItem("privateKey", _privateKey)
+              const storageKey = encryptionService.basicEncryption(user.email + user.role)
+              localStorage.setItem(storageKey, _privateKey)
+              localStorage.setItem('_privateKey', _privateKey)
             })
             .catch()
             .finally(() => {
@@ -398,6 +413,20 @@ export default function AccountView() {
                       onClick={_handleUserDeletion}
                     >
                       Delete Account
+                    </button>
+                  </div>
+                </section>
+                <section className="rounded-2xl shadow-md mb-4 ">
+                  <div className="p-5 flex justify-between items-center border-b-[1px]">
+                    <p className="text-[#061334] text-lg font-semibold">
+                      Forget this device
+                    </p>
+                    <button
+                      data-cy="delete-account-button"
+                      className="primary-btn bg-[#D8D8D8] rounded-2xl text-[#686868] text-sm"
+                      onClick={_handleForgetKey}
+                    >
+                      Forget device
                     </button>
                   </div>
                 </section>

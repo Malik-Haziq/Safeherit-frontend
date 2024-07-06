@@ -9,9 +9,11 @@ export const ProtectedRoutes = (_props: { page: string }) => {
   const user = useAppSelector((state) => state.user)
 
   const role = user.role
+  const email = user.email
   const paymentStatus = user.paymentStatus
   const publicKey = user.publicKey
-  const _privateKey = localStorage.getItem("privateKey")
+  const storageKey = email + role ? encryptionService.basicEncryption(email + role) : ''
+  let _privateKey = localStorage.getItem(storageKey) || localStorage.getItem('_privateKey')
   const privateKey = _privateKey
     ? encryptionService.decryptKeys(_privateKey, user.uid)
     : ""
@@ -34,6 +36,7 @@ export const ProtectedRoutes = (_props: { page: string }) => {
         role != "super-admin" &&
         role != "admin" &&
         privateKey == "" &&
+        role != "none" &&
         paymentStatus !== "Pending" ? (
         <Outlet />
       ) : (
@@ -109,7 +112,7 @@ export const WizardProtectedRoutes = () => {
   const location = useLocation()
   const currentPath = location.pathname.split('/').pop()
   const user = useAppSelector(state => state.user)
-  
+
   let redirectTo: string | null = ''
   if(user.startupWizardCompleted) {
     redirectTo = null
