@@ -1,4 +1,4 @@
-import React from "react"
+import React, { FormEvent } from "react"
 import styles from "../../Dashboard.module.css"
 import addIcon from "@images/add.svg"
 import crossIcon from "@images/cross.svg"
@@ -7,13 +7,36 @@ import downArrow from "@images/Arrow-Down-Circle.svg"
 import { useState } from "react"
 import { SelectField } from "@/components/selectField"
 import { SelectOption } from "@/types"
+import { createTicket } from "@/redux/actions"
+import { useDispatch } from "react-redux"
+import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
+import { toast } from "@/components"
 
 export default function HelpView() {
+  const dispatch = useDispatch()
   const [openSection, setOpenSection] = useState("faq")
   const [selectedCategory, setSelectedCategory] = useState<SelectOption>()
+  const [contactSupportMessage, setContactSupportMessage] = useState<string>("")
+  const startLoader = () => dispatch<any>(setLoaderVisibility(true))
+  const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
 
   function handleSection(section: string) {
     setOpenSection(section)
+  }
+
+  const handleContactFormSubmission = async (e: FormEvent) => {
+    e.preventDefault()
+    startLoader()
+    dispatch<any>(createTicket(contactSupportMessage))
+      .unwrap()
+      .then((res: any) => {
+        setContactSupportMessage("")
+        toast("Ticket created successfully", "info")
+      })
+      .catch(() => [toast("Some error occured", "error")])
+      .finally(() => {
+        stopLoader()
+      })
   }
 
   return (
@@ -57,7 +80,13 @@ export default function HelpView() {
           </div>
         </div>
         {openSection === "faq" && <FAQ />}
-        {openSection === "support" && <Support />}
+        {openSection === "support" && (
+          <Support
+            contactSupportMessage={contactSupportMessage}
+            setContactSupportMessage={setContactSupportMessage}
+            submitHandler={handleContactFormSubmission}
+          />
+        )}
         {openSection === "suggestions" && (
           <Suggestions
             selectedCategory={selectedCategory}
@@ -693,7 +722,12 @@ function QuestionBox(_props: { question: string; children: any }) {
         </h1>
         {isOpen && _props.children}
       </div>
-      <a  data-cy="open-and-close-question-box-button" href="#" className="w-10 h-10" onClick={handleOpen}>
+      <a
+        data-cy="open-and-close-question-box-button"
+        href="#"
+        className="w-10 h-10"
+        onClick={handleOpen}
+      >
         {isOpen ? (
           <img src={crossIcon} alt="icon for closing box" className="w-full" />
         ) : (
@@ -751,7 +785,11 @@ function Suggestions(_props: {
   )
 }
 
-function Support() {
+function Support(_props: {
+  contactSupportMessage: string
+  setContactSupportMessage: React.Dispatch<React.SetStateAction<string>>
+  submitHandler: (e: FormEvent) => void
+}) {
   return (
     <main className="flex flex-col gap-6 bg-white mx-8 py-10 px-8 rounded-2xl w-[1085px] shadow-sm">
       <p className="text-[#838383] text-center">
@@ -760,14 +798,17 @@ function Support() {
         help us assist you better. Our support team will get back to you as
         quickly as possible
       </p>
-      <form className="mb-14">
+      <form className="mb-14" onSubmit={_props.submitHandler}>
         <textarea
           placeholder="Enter your message..."
           className="w-full h-[336px] p-4 resize-none focus:outline-none shadow-md scrollbar rounded-2xl"
+          value={_props.contactSupportMessage}
+          onChange={(e) => _props.setContactSupportMessage(e.target.value)}
         ></textarea>
         <button
           data-cy="submit-user-question-button"
           className="primary-btn mx-auto px-12 rounded-xl mt-10 bg-[#0971AA]"
+          type="submit"
         >
           Submit
         </button>

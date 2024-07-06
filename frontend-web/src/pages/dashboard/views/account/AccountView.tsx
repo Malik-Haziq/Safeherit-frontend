@@ -21,6 +21,7 @@ import {
   updatePK,
 } from "@redux/actions"
 import {
+  convertTimestampsToPlanDuration,
   copyToClipboard,
   downloadPEM,
   getFileFromFirebase,
@@ -65,6 +66,7 @@ export default function AccountView() {
   const [modalVisibility, setModalVisibility] = useState("none")
   // const [modalVisibility, setModalVisibility] = useState("none")
   const [auth2FAEnabled, setAuth2FAEnabled] = useState(false)
+  const memberhipPlanDetail = React.useMemo(() => convertTimestampsToPlanDuration(user.periodEnd, user.periodStart), [user])
 
   useEffect(() => {
     const key = localStorage.getItem("_privateKey")
@@ -397,9 +399,9 @@ export default function AccountView() {
                   reauthenticateUser={showUserAuthenticate}
                 />
                 <MembershipPlan
-                  plan={"Monthly"}
-                  duration={"1 Month"}
-                  date={"May 18, 2023"}
+                  plan={user.plan}
+                  duration={`${memberhipPlanDetail.duration} days`}
+                  date={memberhipPlanDetail.renewalDate}
                   showPlanView={updatePlan}
                 />
                 <section className="rounded-2xl shadow-md mb-4 ">

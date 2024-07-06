@@ -133,6 +133,7 @@ export default function UsersView() {
         .unwrap()
         .catch()
         .then(() => {
+          fetchUsers()
           toast("User deleted successfully", "success")
         })
         .finally(() => {
@@ -154,6 +155,7 @@ export default function UsersView() {
           .unwrap()
           .catch()
           .then(() => {
+            fetchUsers()
             toast("User deletion request submitted", "success")
           })
           .finally(() => {
