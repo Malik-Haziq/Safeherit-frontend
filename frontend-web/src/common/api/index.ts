@@ -70,7 +70,8 @@ const _handleErrors = (error: any) => {
     // that falls out of the range of 2xx
     if (error?.response?.data?.message == "Unauthorized") {
       toast("Please login again to continue", "error")
-      localStorage.clear()
+      localStorage.removeItem('_privateKey')
+      localStorage.removeItem('role')
       setTimeout(() => {
         window.location.reload()
       }, 5000)

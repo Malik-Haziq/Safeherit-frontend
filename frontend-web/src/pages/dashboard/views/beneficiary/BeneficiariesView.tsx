@@ -290,7 +290,6 @@ export default function BeneficiariesView() {
   }
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
-    // debugger
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
   }
