@@ -7,11 +7,11 @@ import deleteIcon from "@images/delete.svg"
 import arrowDown from "@images/arrow-down.svg"
 import AddAssetImg from "@images/beneficiaryScreen.svg"
 import addIcon from "@images/add-icon.svg"
-
+import userImg from "@images/user.svg"
 import styles from "../../Dashboard.module.css"
-
 import { useEffect, useCallback, useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
+import { getFileFromFirebase } from "@/common"
 import {
   StepZeroInformationModal,
   SuccessModal,
@@ -46,7 +46,7 @@ import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
 import { getRequiredFields, assetImages } from "./data"
 import { AxiosResponse } from "axios"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
-import { SelectOption, Asset, Beneficiary } from "@/types"
+import { SelectOption, Asset, Beneficiary, ImageType } from "@/types"
 import { setWizardStep } from "@/redux/reducers/UserSlice"
 
 interface ModalControl {
@@ -463,7 +463,6 @@ export default function AssetsView() {
         stopLoader()
       })
   }
-
   return (
     <>
       <BeneficiaryWarning
@@ -477,14 +476,14 @@ export default function AssetsView() {
         openModal={modalVisibility == "Step-0"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         _submitModal={_submitStepZeroInformationModal}
       />
       <StepOneModal
         openModal={modalVisibility == "Step-1"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={modalAction}
         _handleChange={_handleChange}
         modalControl={modalControl}
@@ -498,7 +497,7 @@ export default function AssetsView() {
         openModal={modalVisibility == "Step-2"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={modalAction}
         _handleChange={_handleChange}
         modalControl={modalControl}
@@ -512,7 +511,7 @@ export default function AssetsView() {
         openModal={modalVisibility == "Step-Success"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         registerAnotherAsset={newAsset}
         submitModal={_submitSuccessModal}
       />
@@ -614,6 +613,34 @@ function Assets(_props: {
   viewBeneficiaries: (assetId: string) => void
   userRole: string
 }) {
+  const [images, setImages] = useState<ImageType[][]>([])
+
+  const beneficiaries = _props.assetDetailsArr[0].beneficiaries.map(
+    (beneficiary) => {
+      return {
+        profile_image: beneficiary.profile_image,
+        name: beneficiary.name,
+      }
+    },
+  )
+
+  useEffect(() => {
+    const arr: ImageType[] = []
+    beneficiaries.forEach((el) => {
+      getFileFromFirebase(el.profile_image)
+        .then((res) => {
+          arr.push({ profile_image: res, name: el.name })
+        })
+        .catch(() => {
+          arr.push({ profile_image: userImg, name: el.name })
+        })
+    })
+    const firstImages = arr.slice(0, 3)
+    const remainingBeneficiary = arr.slice(3)
+    setImages([firstImages, remainingBeneficiary])
+    console.log(arr)
+  }, [])
+
   return (
     <div className={styles.AppView}>
       <section className="px-7 pt-4 mx-auto">
@@ -649,7 +676,6 @@ function Assets(_props: {
                 category={category}
                 selected={_props.selected}
                 setSelected={_props.setSelected}
-                // onClick={() => {}}
               />
             ))}
           </div>
@@ -690,6 +716,7 @@ function Assets(_props: {
                   viewAsset={_props.viewAsset}
                   viewBeneficiaries={_props.viewBeneficiaries}
                   userRole={_props.userRole}
+                  images={images}
                 />
               )
             })}
@@ -760,10 +787,17 @@ function AssetDetails(_props: {
   viewAsset: (assetId: string) => void
   viewBeneficiaries: (assetId: string) => void
   userRole: string
+  images: ImageType[][]
 }) {
+  const [showDropdown, setShowDropdown] = useState(false)
+
+  const handleToggleDropdown = () => {
+    setShowDropdown(!showDropdown)
+  }
+
   return (
     <div className="flex justify-between gap-24 px-5 py-3">
-      <div className="flex justify-between items-center w-[50px]   flex-grow">
+      <div className="flex justify-between items-center w-[50px] flex-grow">
         <div className="flex gap-4 items-center">
           <img
             src={assetImages[_props.assetType]}
@@ -808,14 +842,51 @@ function AssetDetails(_props: {
       </div>
       <div className="flex justify-between items-center flex-grow w-[278px]">
         {_props.userRole != "beneficiary" ? (
-          <div className="flex justify-between items-center gap-3">
-            <button
-              data-cy="view-beneficiary-button"
-              onClick={() => _props.viewBeneficiaries(_props.assetId)}
-              className="font-semibold"
-            >
-              View Beneficiary
-            </button>
+          <div className="flex justify-between items-center">
+            {_props.images[0]?.map((el, i) => {
+              return (
+                <div className="relative group" key={i}>
+                  <img
+                    src={el.profile_image}
+                    alt="beneficiary image"
+                    className={`w-8 h-8 rounded-full border-2 border-white -mr-2`}
+                    key={i}
+                  />
+                  <div className="absolute top-0 -translate-y-10 text-white bg-slate-700 px-3 py-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                    {el.name}
+                  </div>
+                </div>
+              )
+            })}
+            {_props.images[1]?.length > 0 && (
+              <div className="relative">
+                <div
+                  className="w-8 h-8 rounded-full border-2 border-white -mr-2 flex items-center justify-center bg-gray-300 cursor-pointer"
+                  onClick={handleToggleDropdown}
+                >
+                  +
+                </div>
+                {showDropdown && (
+                  <div className="absolute top-10 left-0 bg-white shadow-lg rounded-lg py-2 w-32">
+                    {_props.images[1]?.map((el, i) => {
+                      return (
+                        <div
+                          className="px-1 flex gap-2 items-center hover:bg-slate-200 cursor-default"
+                          key={i}
+                        >
+                          <img
+                            src={el.profile_image}
+                            alt="beneficiary image"
+                            className="w-8 h-8 rounded-full border-2 border-white my-1"
+                          />
+                          <p>{el.name}</p>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
             {/* TODO ADD Beneficiray listing modal */}
           </div>
         ) : (
