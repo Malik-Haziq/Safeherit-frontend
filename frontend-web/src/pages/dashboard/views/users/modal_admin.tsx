@@ -221,7 +221,7 @@ export function EditUser(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={"Your New User Credentials"}
+      modalTitle={"Edit User"}
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {
