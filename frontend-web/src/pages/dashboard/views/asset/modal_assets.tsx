@@ -560,7 +560,7 @@ export function AssetDetail(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={_props.action == "create" ? "Create Assets" : "Edit Assets"}
+      modalTitle={_props.action == "create" ? "Create Assets" : _props.action == "view" ? "View Asset" : "Edit Asset"}
       closeIconVisibility={_props.closeIconVisibility}
       arrayLength={_props.arrayLength}
       showPreviousModal={_props.showPreviousModal}

@@ -46,7 +46,8 @@ function App() {
             .catch()
         } else {
           setFetchingData(false)
-          localStorage.clear()
+          localStorage.removeItem('_privateKey')
+          localStorage.removeItem('role')
         }
       })
   }, [])

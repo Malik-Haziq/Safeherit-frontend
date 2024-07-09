@@ -211,7 +211,7 @@ export default function PulseView() {
     propertyName: string
     value: string
   }) => {
-    if (!value || value === "0") {
+    if ((propertyName !== "pulseCheckEmail2" && propertyName !== "pulseCheckEmail3") && !value || value === "0") {
       toast("Please enter valid days", "error")
       return
     }
@@ -633,6 +633,7 @@ function MethodRow(_props: {
       (_props.editDetailInput === "pulseCheckEmail1" ||
         _props.editDetailInput === "pulseCheckEmail2" ||
         _props.editDetailInput === "pulseCheckEmail3") &&
+       _inputValue &&
       !isValidEmail(_inputValue)
     ) {
       toast("please enter a valid Email address", "error")
@@ -685,6 +686,7 @@ function MethodRow(_props: {
       ) : _props.editDetailInput === convertToCamelCase(_props.heading) ? (
         <>
           <InputField
+            dataCy="pulse-check-email-address-input"
             name="email"
             type="email"
             placeholder="Email Address"

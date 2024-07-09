@@ -9,6 +9,15 @@ class Encryption {
   private aesEncryptionScheme: forge.cipher.Algorithm = "AES-CBC"
   private delimiter = "-"
   private getIV = (text: string) => forge.util.createBuffer(text).getBytes()
+  private basicEncrypt = (value: string) => btoa(value)
+  private basicDecrypt = (value: string) => atob(value)
+
+  public basicEncryption(value: string) {
+    return this.basicEncrypt(value);
+  }
+  public basicDecryption(value: string) {
+    return this.basicDecrypt(value);
+  }
 
   public encrypt(publicKey: string, data: string | Buffer): string {
     // Generate a random AES key and IV as byte arrays

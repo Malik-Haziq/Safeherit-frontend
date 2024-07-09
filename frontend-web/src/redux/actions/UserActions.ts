@@ -96,7 +96,8 @@ export const logout = createAsyncThunk(
       dispatch(setLoaderVisibility(true))
       const params = { ROUTE: LOGOUT, Body: {} }
       const response = await POST(params)
-      localStorage.clear()
+      localStorage.removeItem('_privateKey')
+      localStorage.removeItem('role')
       return response
     } catch (error) {
       return rejectWithValue(error)
