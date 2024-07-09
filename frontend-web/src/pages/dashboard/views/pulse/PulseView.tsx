@@ -211,7 +211,7 @@ export default function PulseView() {
     propertyName: string
     value: string
   }) => {
-    if (!value || value === "0") {
+    if ((propertyName !== "pulseCheckEmail2" && propertyName !== "pulseCheckEmail3") && !value || value === "0") {
       toast("Please enter valid days", "error")
       return
     }
@@ -258,7 +258,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-1"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitStepOneModal}
         _handleChange={() => {}}
@@ -267,7 +267,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-2"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitStepTwoModal}
         _handleChange={_handleChange}
@@ -279,7 +279,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-3"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         numberOfValidators={user.numOfValidatorOfUser}
         action={""}
         _submitModal={_submitStepThreeModal}
@@ -291,7 +291,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-4"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitStepFourModal}
         _handleChange={_handleChange}
@@ -303,7 +303,7 @@ export default function PulseView() {
         openModal={modalVisibility == "success-modal"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitSuccessModal}
       />
@@ -633,6 +633,7 @@ function MethodRow(_props: {
       (_props.editDetailInput === "pulseCheckEmail1" ||
         _props.editDetailInput === "pulseCheckEmail2" ||
         _props.editDetailInput === "pulseCheckEmail3") &&
+       _inputValue &&
       !isValidEmail(_inputValue)
     ) {
       toast("please enter a valid Email address", "error")
@@ -685,6 +686,7 @@ function MethodRow(_props: {
       ) : _props.editDetailInput === convertToCamelCase(_props.heading) ? (
         <>
           <InputField
+            dataCy="pulse-check-email-address-input"
             name="email"
             type="email"
             placeholder="Email Address"

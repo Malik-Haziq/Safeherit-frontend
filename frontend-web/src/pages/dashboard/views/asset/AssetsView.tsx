@@ -235,6 +235,7 @@ export default function AssetsView() {
           options={options}
         />
       ),
+      dataCy: "total-balance",
     },
     {
       img: bank,
@@ -250,6 +251,7 @@ export default function AssetsView() {
           }}
         />
       ),
+      dataCy: "number-of-assets",
     },
   ]
 
@@ -600,6 +602,7 @@ function Assets(_props: {
     title: string | number
     subTitle: string
     element: any
+    dataCy: string
   }[]
   assetCatagories: string[]
   selected: string
@@ -623,6 +626,7 @@ function Assets(_props: {
                 title={data.title}
                 subtitle={data.subTitle}
                 element={data.element}
+                dataCy={data.dataCy}
               />
             )
           })}
@@ -701,6 +705,7 @@ function AssetDetailsCard(_props: {
   title: string | number
   subtitle: string
   element: any
+  dataCy: string
 }) {
   return (
     <div className="shadow-md flex-grow rounded-xl px-4 py-3 flex justify-between items-center max-w-[535px]">
@@ -709,7 +714,9 @@ function AssetDetailsCard(_props: {
           <img src={_props.img} alt="dollar icon" className="" />
         </div>
         <div>
-          <h3 className="text-black font-semibold">{_props.title}</h3>
+          <h3 data-cy={_props.dataCy} className="text-black font-semibold">
+            {_props.title}
+          </h3>
           <p className="text-[#828282] text-xs">{_props.subtitle}</p>
         </div>
       </div>
@@ -785,11 +792,17 @@ function AssetDetails(_props: {
               _props.viewAsset(_props.assetId)
             }}
           />
-          <p className="text-[#00192B] text-sm font-semibold">
+          <p
+            data-cy="asset-type"
+            className="text-[#00192B] text-sm font-semibold"
+          >
             {_props.assetType}
           </p>
         </div>
-        <p className="text-[#00192B] text-sm font-semibold">
+        <p
+          data-cy="asset-value"
+          className="text-[#00192B] text-sm font-semibold"
+        >
           <span>{_props.assetValue}</span>
         </p>
       </div>

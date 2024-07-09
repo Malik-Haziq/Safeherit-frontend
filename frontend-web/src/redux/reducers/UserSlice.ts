@@ -47,6 +47,9 @@ interface UserState {
   lastPulseCheck: string
   nextPulseCheckDueDays: string
   wizardStep: string
+  periodEnd: number
+  periodStart: number
+  plan: string
 }
 const initialState: UserState = {
   uid: "",
@@ -99,6 +102,9 @@ const initialState: UserState = {
   wizardStep: "none",
   lastPulseCheck: "",
   nextPulseCheckDueDays: "",
+  periodEnd: 0,
+  periodStart: 0,
+  plan: '',
 }
 
 export const slice = createSlice({
@@ -286,6 +292,10 @@ export const slice = createSlice({
       state.paymentStatus = action.payload.data.data?.paymentStatus || ""
       const _role = localStorage.getItem("role") || ""
       state.role = atob(_role) || "none"
+      state.periodEnd = action.payload.data.data?.periodEnd
+      state.periodStart = action.payload.data.data?.periodStart
+      state.plan = action.payload.data.data?.plan
+    
 
       if (action.payload.data.data?.pulseCheckActive) {
         const pulseCheckLastResetAt =

@@ -23,7 +23,7 @@ export const getAllAsset = createAsyncThunk(
     const { user } = getState() as { user: { token: string; uid: string } }
     const params = { ROUTE: ALL_ASSETS, Body: {}, token: user.token }
     // user logged in would be owner
-    const ownerPrivateKey = localStorage.getItem("privateKey")
+    const ownerPrivateKey = localStorage.getItem("_privateKey")
     const _ownerPrivateKey = ownerPrivateKey
       ? encryptionService.decryptKeys(ownerPrivateKey, user.uid)
       : ""
@@ -61,7 +61,7 @@ export const getAllBeneficiaryAsset = createAsyncThunk(
       token: user.token,
     }
     // user logged in would be beneficiary
-    const beneficiaryPrivateKey = localStorage.getItem("privateKey")
+    const beneficiaryPrivateKey = localStorage.getItem("_privateKey")
     const _beneficiaryPrivateKey = beneficiaryPrivateKey
       ? encryptionService.decryptKeys(beneficiaryPrivateKey, user.uid)
       : ""
@@ -88,7 +88,7 @@ export const createAsset = createAsyncThunk(
       user: { token: string; publicKey: string; uid: string }
     }
     const ownerPublicKey = user.publicKey
-    const ownerPrivateKey = localStorage.getItem("privateKey")
+    const ownerPrivateKey = localStorage.getItem("_privateKey")
     const _ownerPrivateKey = ownerPrivateKey
       ? encryptionService.decryptKeys(ownerPrivateKey, user.uid)
       : ""
@@ -123,7 +123,7 @@ export const findAsset = createAsyncThunk(
       Body: {},
       token: user.token,
     }
-    const ownerPrivateKey = localStorage.getItem("privateKey")
+    const ownerPrivateKey = localStorage.getItem("_privateKey")
     const _ownerPrivateKey = ownerPrivateKey
       ? encryptionService.decryptKeys(ownerPrivateKey, user.uid)
       : ""
@@ -152,7 +152,7 @@ export const findBeneficiaryAsset = createAsyncThunk(
       Body: {},
       token: user.token,
     }
-    const beneficiaryPrivateKey = localStorage.getItem("privateKey")
+    const beneficiaryPrivateKey = localStorage.getItem("_privateKey")
     const _beneficiaryPrivateKey = beneficiaryPrivateKey
       ? encryptionService.decryptKeys(beneficiaryPrivateKey, user.uid)
       : ""
@@ -177,7 +177,7 @@ export const updateAsset = createAsyncThunk(
       user: { token: string; publicKey: string; uid: string }
     }
     const ownerPublicKey = user.publicKey
-    const ownerPrivateKey = localStorage.getItem("privateKey")
+    const ownerPrivateKey = localStorage.getItem("_privateKey")
     const _ownerPrivateKey = ownerPrivateKey
       ? encryptionService.decryptKeys(ownerPrivateKey, user.uid)
       : ""
@@ -222,7 +222,7 @@ export const deleteAsset = createAsyncThunk(
 )
 export const getCurrencyRates = createAsyncThunk(
   "getCurrencyRates",
-  async (Data: { }, { getState, rejectWithValue }) => {
+  async (Data: {}, { getState, rejectWithValue }) => {
     const params = {
       ROUTE: CURRENCY_RATES,
       Body: {},

@@ -168,8 +168,19 @@ export default function BeneficiariesView() {
     ) {
       toast("Please enter a valid phone number", "error")
     } else {
-      modalHistoryPush("Step-1")
-      setModalVisibility("Step-2")
+      if (
+        modalControl.primary_email &&
+        beneficiaryArray &&
+        beneficiaryArray.some(
+          (beneficiary: any) =>
+            beneficiary.primary_email === modalControl.primary_email,
+        )
+      ) {
+        toast("Beneficiary with this email already exist", "error")
+      } else {
+        modalHistoryPush("Step-1")
+        setModalVisibility("Step-2")
+      }
     }
   }
   const _submitStepTwoModal = () => {
@@ -290,7 +301,6 @@ export default function BeneficiariesView() {
   }
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
-    // debugger
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
   }
@@ -523,7 +533,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Generate-PK"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         modalControl={modalEncryptionKeyControl}
         _handleChange={_handleEncryptionKeyChange}
         _handleGeneratePKPair={_handleGeneratePKPair}
@@ -562,7 +572,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-1"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={modalAction}
         _handleChange={_handleChange}
         modalControl={modalControl}
@@ -574,7 +584,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-2"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={modalAction}
         _handleChange={_handleChange}
         modalControl={modalControl}
@@ -589,7 +599,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-3"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={modalAction}
         _handleChange={_handleChange}
         videoUpload={videoUpload}
@@ -604,7 +614,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-success"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={modalAction}
         registerAnotherBeneficiary={registerAnotherBeneficiary}
         gotoValidators={gotoValidators}
@@ -622,7 +632,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-0"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={modalAction}
         _submitModal={_submitStepZeroModal}
       />
@@ -693,7 +703,10 @@ function Beneficiaries(_props: {
               <img src={userIcon} alt="user icon" />
             </div>
             <div className="ml-2 flex flex-col justify-center">
-              <p className="text-black font-semibold">
+              <p
+                data-cy="number-of-beneficiaries"
+                className="text-black font-semibold"
+              >
                 {_props.beneficiaryArray.length}
               </p>
               <small className="text-safe-text-light-gray-tint text-xm">

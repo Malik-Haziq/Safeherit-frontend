@@ -24,26 +24,31 @@ export default function DashboardView() {
       img: diamond,
       numberOfItems: dashboardData.assetCount,
       title: "Total Assets",
+      dataCy: "total-assets",
     },
     {
       img: shield,
       numberOfItems: dashboardData.beneficiaryCount,
       title: "Beneficiaries",
+      dataCy: "number-of-beneficiaries",
     },
     {
       img: users,
       numberOfItems: dashboardData.validatorCount,
       title: "Validators",
+      dataCy: "numbe-of-validator",
     },
     {
       img: heart,
       numberOfItems: user.nextPulseCheckDueDays || 0,
       title: "Check due in",
+      dataCy: "check-due-days",
     },
     {
       img: privateKeysIcon,
       numberOfItems: dashboardData.securityRating,
       title: `Security Score (${dashboardData.securityScore})`,
+      dataCy: "user-security-score",
     },
   ]
 
@@ -83,6 +88,7 @@ export default function DashboardView() {
               img={detail.img}
               numberOfItems={detail.numberOfItems}
               title={detail.title}
+              dataCy={detail.dataCy}
             />
           )
         })}
@@ -109,6 +115,7 @@ function DetailsCard(_props: {
   img: any
   numberOfItems: string | number
   title: string
+  dataCy: string
 }) {
   return (
     <div className="h-full min-w-[200px] p-3 flex flex-col gap-8 bg-white rounded-xl shadow-lg">
@@ -116,7 +123,9 @@ function DetailsCard(_props: {
         <img src={_props.img} alt="icon" />
       </div>
       <div className="flex items-center justify-center flex-col">
-        <p className="text-[28px] font-bold">{_props.numberOfItems}</p>
+        <p data-cy={_props.dataCy} className="text-[28px] font-bold">
+          {_props.numberOfItems}
+        </p>
         <small className="text-lg text-safe-text-light-gray-1">
           {_props.title}
         </small>

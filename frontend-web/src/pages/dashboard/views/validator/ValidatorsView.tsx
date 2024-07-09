@@ -423,7 +423,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle={"Register Validators"}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         _submitModal={_submitStepZeroModal}
       />
       <StepFourSuccessModal
@@ -431,7 +431,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle={"Validator Registered"}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         registerAnother={registerAnotherValidator}
         pulseCheck={pulseCheck}
       />
@@ -448,7 +448,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepOneModal}
@@ -460,7 +460,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepTwoModal}
@@ -475,7 +475,7 @@ export default function ValidatorsView() {
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
         modalTitle="Register Validators"
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         _handleChange={_handleChange}
         modalControl={modalControl}
         _submitModal={_submitStepThreeModal}
@@ -677,13 +677,22 @@ function Validator(_props: {
           {_props.userName}
         </p>
       </li>
-      <li className="font-semibold text-sm max-w-48 justify-self-center pr-9">
+      <li
+        data-cy="validator-email"
+        className="font-semibold text-sm max-w-48 justify-self-center pr-9"
+      >
         {_props.email}
       </li>
-      <li className="font-semibold text-sm max-w-48 justify-self-center">
+      <li
+        data-cy="validator-phone-number"
+        className="font-semibold text-sm max-w-48 justify-self-center"
+      >
         {_props.phoneNumber}
       </li>
-      <li className="font-semibold text-sm max-w-48 justify-self-center">
+      <li
+        data-cy="validator-backup-phone-number"
+        className="font-semibold text-sm max-w-48 justify-self-center"
+      >
         {_props.backupPhoneNumber}
       </li>
       <li className="flex gap-10 max-w-56 justify-self-end">
