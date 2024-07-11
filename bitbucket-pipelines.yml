@@ -31,6 +31,8 @@ pipelines:
           image: cypress/browsers:latest
           script:
             - cd frontend-web
+            - npm install -g corepack
+            - corepack enable
             - yarn set version stable
             - yarn config set -H enableImmutableInstalls false
             - yarn
