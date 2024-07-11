@@ -29,6 +29,7 @@ pipelines:
           name: "Running Cypress Tests"
           trigger: 'manual'
           script:
+            - cd frontend-web
             - yarn config set -H enableImmutableInstalls false
             - yarn
             - npm run test:e2e:headless
