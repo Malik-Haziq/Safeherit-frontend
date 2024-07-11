@@ -31,6 +31,7 @@ pipelines:
           image: cypress/browsers:latest
           script:
             - cd frontend-web
+            - yarn set version stable
             - yarn config set -H enableImmutableInstalls false
             - yarn
             - npm run test:e2e:headless
