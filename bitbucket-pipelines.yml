@@ -25,3 +25,13 @@ pipelines:
             - firebase deploy --only hosting:testing --token $FIREBASE_TOKEN --project $FIREBASE_PROJECT_ID
           services:
             - docker
+      - step:
+          name: "Running Cypress Tests"
+          trigger: 'manual'
+          script:
+            - yarn config set -H enableImmutableInstalls false
+            - yarn
+            - npm run test:e2e:headless
+            - npm run test:integration:headless
+          artifacts:
+            - cypress/screenshots/**
