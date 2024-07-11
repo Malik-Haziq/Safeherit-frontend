@@ -28,6 +28,7 @@ pipelines:
       - step:
           name: "Running Cypress Tests"
           trigger: 'manual'
+          image: cypress/browsers:latest
           script:
             - cd frontend-web
             - yarn config set -H enableImmutableInstalls false
