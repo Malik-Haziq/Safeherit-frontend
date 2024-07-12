@@ -1,8 +1,6 @@
 import '@4tw/cypress-drag-drop';
 import 'cypress-file-upload';
 
-
-
 describe('Automated Test for Asset create, edit or delete', () => {
 
     const dataFiller = () => {
@@ -18,9 +16,6 @@ describe('Automated Test for Asset create, edit or delete', () => {
         cy.get(':nth-child(7) > .rounded-3xl > .absolute').click();
         cy.get('#react-select-3-option-1').click();
         cy.get(':nth-child(8) > .rounded-3xl').type('345678990');
-        // cy.get(':nth-child(9) > .rounded-3xl > .absolute').click();
-        // cy.get('#react-select-4-option-0').click();
-        // cy.get(':nth-child(9) > .rounded-3xl').type('123456789');
         cy.get('[data-cy="submit-asset-modal-one-button"]').click();
 
         cy.get(':nth-child(4) > .rounded-3xl').type('12345');
@@ -36,29 +31,22 @@ describe('Automated Test for Asset create, edit or delete', () => {
       
     };
     const OldAssets = () => {
-        cy.get('.mt-11 > :nth-child(2) > .px-auto').click();
+        cy.get('[data-cy="dashboard-view-my-assets-button"]').should('be.visible').click();
         cy.wait(2000);
         cy.get('#cy-add-asset-button').click();
         dataFiller();
     };
     const NewAssets = () => {
-        cy.get('.mt-11 > :nth-child(2) > .px-auto').click();
+        cy.get('[data-cy="dashboard-view-my-assets-button"]').should('be.visible').click();
         cy.wait(2000);
         cy.get('.primary-btn').click();
-        // cy.wait(5000); // Adjust the wait time as needed
         cy.contains('Create Assets').click();
         dataFiller();
         cy.wait(1000);
-        
-        //form
     };
-    const assetscheck = () => {
-        cy.wait(1000);
-        // Remove the 'it' block from here
-        cy.get('.mt-11 > :nth-child(1) > .px-auto').click();
-        cy.wait(1000);
-        // Select the element
-        cy.get('.gap-5 > :nth-child(1) > .flex-col').invoke('text').then((value) => {
+    const createAsset = () => {
+        cy.wait(2000);
+        cy.get('[data-cy="total-assets"]').invoke('text').then((value) => {
             // Convert the extracted value to an integer
             const intValue = parseInt(value, 10);
             // Conditionally run the appropriate function
@@ -68,16 +56,14 @@ describe('Automated Test for Asset create, edit or delete', () => {
             NewAssets(); // Call the custom Cypress command
             }
         });
-    // Add an assertion to ensure the element is visible
     };
     const deleteAsset = () => {
-        cy.get('.mt-11 > :nth-child(2) > .px-auto').click();
         cy.get('[data-cy="delete-asset-button"]').eq(0).click();
         cy.get('[data-cy="confirm-button"]').click();
         cy.wait(2000);
     };
     const editAsset = ()=>{
-        cy.get('[data-cy="edit-asset-button"]').click({multiple:true})
+        cy.get('[data-cy="edit-asset-button"]').first().click()
         cy.get(':nth-child(4) > .rounded-3xl').clear().type('12345');
         cy.get(':nth-child(5) > .rounded-3xl').clear().type('13');
         cy.get(':nth-child(6) > .rounded-3xl').clear().type('15');
@@ -95,7 +81,7 @@ describe('Automated Test for Asset create, edit or delete', () => {
         // Use the static username and password for login
         cy.login('naseerhunter5@gmail.com', 'Naseerhunter5@gmail.com');
         cy.importPrivateKey();
-        assetscheck();
+        createAsset();
         editAsset();
         deleteAsset();
     });
