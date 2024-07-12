@@ -387,18 +387,28 @@ function UserView(_props: {
           alt="user image"
           className="w-9 h-9 rounded-full object-contain"
         />
-        <p className="text-[#00192B] text-lg font-semibold">
+        <p
+          data-cy={`${_props.displayName}-user`}
+          className="text-[#00192B] text-lg font-semibold"
+        >
           {_props.displayName}
         </p>
       </td>
-      <td className="w-[120px] text-[#4D4D4D] font-medium text-sm">
+      <td
+        data-cy={`user-${_props.joining_date}`}
+        className="w-[120px] text-[#4D4D4D] font-medium text-sm"
+      >
         {_props.joining_date}
       </td>
-      <td className="w-[80px] text-[#4D4D4D] font-medium text-sm">
+      <td
+        data-cy={`user-${_props.plan}`}
+        className="w-[80px] text-[#4D4D4D] font-medium text-sm"
+      >
         {_props.plan}
       </td>
 
       <td
+        data-cy={`user-${_props.payment_status}`}
         className={
           _props.payment_status.toLowerCase() === "paid"
             ? "w-[80px] text-[#27AE60] font-medium text-sm"
@@ -410,6 +420,7 @@ function UserView(_props: {
         {_props.payment_status}
       </td>
       <td
+        data-cy={`user-${_props.account_status}`}
         className={
           _props.account_status.toLowerCase() === "active"
             ? "w-[80px] text-[#27AE60] font-medium text-sm"
@@ -422,8 +433,9 @@ function UserView(_props: {
         {_props.account_status}
       </td>
       <td className="w-[170px] text-[#4D4D4D] font-medium text-xs">
-        <p>{_props.pulse_status}</p>
+        <p data-cy={`user-${_props.pulse_status}`}>{_props.pulse_status}</p>
         <span
+          data-cy={`user-${_props.pulseStatusSubtile}`}
           className={
             _props.pulseStatusSubtile.toLowerCase() === "waiting for answer"
               ? "w-[80px] text-[#52CEB7] font-medium text-xs"
