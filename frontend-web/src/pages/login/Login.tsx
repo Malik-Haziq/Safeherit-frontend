@@ -14,7 +14,7 @@ import {
   GoogleAuthButton,
   VerificationCode,
 } from "@/components"
-import { UserRolesModal } from "./modal_login"
+import { UserRolesModal, ResetPassword } from "./modal_login"
 import {
   resetBeneficiaryOf,
   resetMapper,
@@ -28,6 +28,7 @@ import {
   handleResetPassword,
   handleVerifyEmail,
   isEmailVerified,
+  isStrongPassword,
   sendEmailVerificationEmail,
   useRecaptcha,
   verifyUserEnrolled,
@@ -59,6 +60,7 @@ export function Login() {
   const [formControl, setFormControl] = useState({
     email: "",
     password: "",
+    newPassword: "",
   })
   const [rememberMe, setRememberMe] = useState(false)
   const [modalVisibility, setModalVisibility] = useState("none")
@@ -69,8 +71,8 @@ export function Login() {
   const [resolver, setResolver] = useState<MultiFactorResolver | null>()
   const [logingin, setLogingin] = useState(false)
   const code = new Array<string>(6).fill("")
-
   // verify email
+
   useEffect(() => {
     const verifyOrUpdateUser = async () => {
       if (queryParams.size) {
@@ -81,11 +83,7 @@ export function Login() {
           toast("Verifying Email", "info")
           handleVerifyEmail(oobCode)
         } else if (mode == "resetPassword") {
-          let newPassword: string | null = ""
-          newPassword = prompt("Enter new password")
-          if (newPassword) {
-            handleResetPassword(oobCode, newPassword)
-          }
+          setModalVisibility("reset-password")
         }
         navigate("/login")
         stopLoader()
@@ -93,6 +91,18 @@ export function Login() {
     }
     verifyOrUpdateUser()
   }, [])
+
+  function _handleResetPassword() {
+    const oobCode = queryParams.get("oobCode") || ""
+    if (isStrongPassword(formControl.newPassword)) {
+      handleResetPassword(oobCode, formControl.newPassword)
+    } else {
+      toast(
+        "The password should consist minimum 8 letters, uppercase letters, special characters, and numbers",
+        "error",
+      )
+    }
+  }
 
   async function getCode(code: string) {
     if (verificationId && resolver) {
@@ -154,8 +164,8 @@ export function Login() {
   const closeModal = useCallback(() => {
     setModalVisibility("none")
     setResetEmail("")
-    localStorage.removeItem('_privateKey')
-    localStorage.removeItem('role')
+    localStorage.removeItem("_privateKey")
+    localStorage.removeItem("role")
   }, [])
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
@@ -349,6 +359,15 @@ export function Login() {
             selectedValidator={selectedValidator}
             setSelectedValidator={setSelectedValidator}
             _handleUserRolesSubmit={_handleUserRolesSubmit}
+          />
+          <ResetPassword
+            openModal={modalVisibility === "reset-password"}
+            closeModal={true}
+            closeModalOnOverlayClick={false}
+            closeIconVisibility={true}
+            value={formControl.newPassword}
+            _handleChange={_handleChange}
+            _handleSubmit={_handleResetPassword}
           />
           <ForgotPasswordModal
             openModal={modalVisibility == "forgot-password"}
