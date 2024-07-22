@@ -547,7 +547,10 @@ function Validators(_props: {
               <img src={userIcon} alt="user icon" />
             </div>
             <div className="ml-2 flex flex-col justify-center">
-              <p className="text-black font-semibold">
+              <p
+                className="text-black font-semibold"
+                data-cy="total-validators"
+              >
                 {_props.validatorArray.length}
               </p>
               <small className="text-safe-text-light-gray-tint text-xm">

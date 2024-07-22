@@ -792,7 +792,7 @@ function AssetDetails(_props: {
       <div className="flex justify-between items-center w-[268px] flex-grow">
         <div className="flex gap-4 items-center">
           <img
-            data-cy="view-asset-details-button"
+            data-cy="view-asset-details-button-type-icon"
             src={assetImages[_props.assetType]}
             alt="real estate icon"
             className="cursor-pointer w-10 h-10"
@@ -831,7 +831,7 @@ function AssetDetails(_props: {
         )}
         <div className="flex gap-1 ">
           <img
-            data-cy="view-asset-details-button"
+            data-cy="view-asset-details-icon"
             src={eye}
             alt="view icon"
             className="cy-view-asset-btn cursor-pointer"

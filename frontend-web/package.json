@@ -13,7 +13,11 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "type-check": "tsc",
-    "compile": "tsc --noEmit --watch"
+    "compile": "tsc --noEmit --watch",
+    "test:e2e": "cypress open --e2e",
+    "test:e2e:headless": "cypress run --e2e --browser chrome",
+    "test:integration": "cypress open -C cypress.integration.ts",
+    "test:integration:headless": "cypress run -C cypress.integration.ts --browser chrome"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
@@ -37,6 +41,8 @@
     "vite-plugin-mkcert": "^1.17.2"
   },
   "devDependencies": {
+    "@4tw/cypress-drag-drop": "^2.2.5",
+    "@faker-js/faker": "^8.4.1",
     "@testing-library/dom": "^9.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
@@ -51,6 +57,9 @@
     "@typescript-eslint/parser": "^6.15.0",
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.14",
+    "cypress": "^13.13.0",
+    "cypress-file-upload": "^5.0.8",
+    "cypress-intercept-formdata": "^0.6.0",
     "eslint": "^8.0.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-import": "^2.29.1",
@@ -79,5 +88,6 @@
       "react/jsx-no-target-blank": "off"
     }
   },
-  "prettier": "prettier-config-nick"
+  "prettier": "prettier-config-nick",
+  "packageManager": "yarn@4.3.1"
 }

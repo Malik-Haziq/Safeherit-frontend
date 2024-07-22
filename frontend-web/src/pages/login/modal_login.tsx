@@ -195,3 +195,64 @@ function LoggedUser(_props: {
     </div>
   )
 }
+
+export function ResetPassword(_props: {
+  openModal: boolean
+  closeModal: any
+  closeModalOnOverlayClick: boolean
+  closeIconVisibility: boolean
+  value: string
+  _handleChange: (event: { target: { name: any; value: any } }) => void
+  _handleSubmit: (selectedRole: string) => void
+}) {
+  return (
+    <Modal
+      openModal={_props.openModal}
+      closeModal={_props.closeModal}
+      closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
+      modalTitle={"Reset Password"}
+      closeIconVisibility={_props.closeIconVisibility}
+      elements={[
+        {
+          type: "iconView",
+          props: {
+            image: logo,
+            imageStyles: "mx-auto",
+            imageContainerStyles: "mt-7 mb-10",
+          },
+        },
+        {
+          type: "textView",
+          props: {
+            text: "Enter new password",
+            textStyles: "text-[#00192B] font-semibold pl-7 mb-3",
+          },
+        },
+        {
+          type: "inputView",
+          props: {
+            dataCy: "beneficiary-name-input-field",
+            name: "newPassword",
+            type: "text",
+            placeholder: "Enter Password",
+            value: _props.value,
+            _handleChange: _props._handleChange,
+            required: false,
+            inputStyles: "rounded-3xl border-[rgba(6, 90, 147, 0.30)] border-2",
+            inputContainerStyles: "mx-7 mb-4",
+          },
+        },
+        {
+          type: "buttonView",
+          props: {
+            dataCy: "submit-beneficiary-modal-one-button",
+            title: "Save Password",
+            onclick: _props._handleSubmit,
+            buttonStyle: "",
+            buttonContainer: "mx-48 mb-10",
+          },
+        },
+      ]}
+    />
+  )
+}
