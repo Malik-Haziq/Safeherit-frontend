@@ -36,6 +36,7 @@ import {
 } from "@/common"
 import { MultiFactorResolver } from "@firebase/auth"
 import { auth } from "@/firebase"
+import { setCookie } from "@/common/utils/cookie"
 
 export function Login() {
   const dispatch = useAppDispatch()
@@ -191,9 +192,11 @@ export function Login() {
               isAdmin: any
               isSuperAdmin: any
               paymentStatus: string
+              defaultCurrency: string
             }
           }
         }) => {
+          setCookie("defaultCurrency", res.data.data.defaultCurrency)
           if (
             res.data.data.isOwner &&
             !res.data.data.isBeneficiary &&

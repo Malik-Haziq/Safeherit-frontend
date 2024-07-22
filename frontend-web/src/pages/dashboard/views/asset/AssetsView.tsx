@@ -48,6 +48,7 @@ import { AxiosResponse } from "axios"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { SelectOption, Asset, Beneficiary } from "@/types"
 import { setWizardStep } from "@/redux/reducers/UserSlice"
+import { getCookie } from "@/common/utils/cookie"
 
 interface ModalControl {
   [key: string]: any // This index signature allows string keys with any value
@@ -74,6 +75,7 @@ export default function AssetsView() {
   const [assetBeneficiariesData, setAssetBeneficiariesData] =
     useState(initialState)
   const [assetCostFilter, setAssetCostFilter] = useState("All")
+  const [userCurrency, setUserCurrency] = useState("")
   const assetTotalCost: number = useMemo(
     () =>
       calculateTotalAssetsCost(
@@ -148,6 +150,10 @@ export default function AssetsView() {
 
   useEffect(() => {
     dispatch<any>(getCurrencyRates({}))
+    const defaultCurrency = getCookie("defaultCurrency")
+    if (defaultCurrency) {
+      setUserCurrency(defaultCurrency)
+    }
   }, [])
 
   const closeModal = useCallback(() => {
@@ -224,7 +230,7 @@ export default function AssetsView() {
   const AssetDetailsCardArr = [
     {
       img: dollar,
-      title: `EUR ${formatCurrency(assetTotalCost)}`,
+      title: `${userCurrency} ${formatCurrency(assetTotalCost)}`,
       subTitle: "Total Balance",
       element: (
         <DropDownButton
@@ -559,6 +565,7 @@ export default function AssetsView() {
           viewAsset={viewAsset}
           viewBeneficiaries={viewBeneficiaries}
           userRole={user.role}
+          userCurrency={userCurrency}
         />
       ) : hasAssets == 0 ? (
         <AddAsset openStepZeroModal={addAsset} />
@@ -613,6 +620,7 @@ function Assets(_props: {
   viewAsset: (assetId: string) => void
   viewBeneficiaries: (assetId: string) => void
   userRole: string
+  userCurrency: string
 }) {
   return (
     <div className={styles.AppView}>
@@ -683,7 +691,7 @@ function Assets(_props: {
                   assetId={asset?.id || ""}
                   assetType={asset?.category || ""}
                   assetName={asset?.data?.["Asset Name"] || ""}
-                  assetValue={`${asset?.data?.Currency || "USD"} ${assetValue}`}
+                  assetValue={`${_props.userCurrency} ${assetValue}`}
                   beneficiaries={asset?.beneficiaries}
                   destroyAsset={_props.destroyAsset}
                   editAsset={_props.editAsset}

@@ -6,6 +6,7 @@ import { logout } from "@redux/actions"
 import React, { Fragment } from "react"
 // eslint-disable
 import { Menu, Transition } from "@headlessui/react"
+import { removeCookie } from "@/common/utils/cookie"
 // eslint-enable
 
 export function DropDownButton(_props: any) {
@@ -81,6 +82,7 @@ export function NavDropDownButton(_props: any) {
     {
       button: "Logout",
       action: () => {
+        removeCookie("defaultCurrency")
         dispatch<any>(logout({}))
           .unwrap()
           .catch()
@@ -163,7 +165,12 @@ export function ValidatorDropDown(_props: {
       <Menu as="div" className="inline-block text-left">
         <div>
           <Menu.Button as={React.Fragment}>
-            <img src={dots} alt="dots" data-cy="beneficiary-drop-down-button" className="w-6 cursor-pointer" />
+            <img
+              src={dots}
+              alt="dots"
+              data-cy="beneficiary-drop-down-button"
+              className="w-6 cursor-pointer"
+            />
           </Menu.Button>
         </div>
         <Transition

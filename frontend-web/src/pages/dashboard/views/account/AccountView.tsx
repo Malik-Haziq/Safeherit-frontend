@@ -34,6 +34,7 @@ import AuthenticateUser from "./AuthenticateUser"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { GeneratePrivateKey } from "@/pages/register-key/modal_register_key"
 import Encryption from "@/common/encryption/encryption"
+import { setCookie } from "@/common/utils/cookie"
 
 const initialState = {
   displayName: "",
@@ -41,7 +42,7 @@ const initialState = {
   profile_image: "",
   privateKey: "",
   publicKey: "",
-  currency: "",
+  defaultCurrency: "",
 }
 
 const initialPKState = {
@@ -131,6 +132,7 @@ export default function AccountView() {
   const _submitEditUserModal = () => {
     startLoader()
     toast("Updating user information", "info")
+    setCookie("defaultCurrency", modalControl.defaultCurrency)
     dispatch<any>(updateUser(modalControl))
       .unwrap()
       .then(() => {
