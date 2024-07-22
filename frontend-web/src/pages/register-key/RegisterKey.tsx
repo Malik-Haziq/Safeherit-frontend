@@ -30,6 +30,7 @@ export default function RegisterKey() {
 
   const [modalVisibility, setModalVisibility] = useState("none")
   const [modalControl, setModalControl] = useState(initialState)
+  const [rememberMe, setRememberMe] = useState(false)
   const [filePresent, setFilePresent] = useState(false)
   const [fileName, setFileName] = useState("")
 
@@ -78,7 +79,9 @@ export default function RegisterKey() {
         const _privateKey = modalControl.privateKey
           ? encryptionService.encryptKeys(modalControl.privateKey, user.uid)
           : ""
-        localStorage.setItem("privateKey", _privateKey)
+        const storageKey = encryptionService.basicEncryption(user.email + user.role)
+        rememberMe ? localStorage.setItem(storageKey, _privateKey) : ""
+        localStorage.setItem('_privateKey', _privateKey)
         navigate("/dashboard")
       } else {
         dispatch<any>(
@@ -93,7 +96,9 @@ export default function RegisterKey() {
             const _privateKey = modalControl.privateKey
               ? encryptionService.encryptKeys(modalControl.privateKey, user.uid)
               : ""
-            localStorage.setItem("privateKey", _privateKey)
+            const storageKey = encryptionService.basicEncryption(user.email + user.role)
+            rememberMe ? localStorage.setItem(storageKey, _privateKey) : ""
+            localStorage.setItem('_privateKey', _privateKey)
             navigate("/dashboard")
           })
           .catch((err: any) => {
@@ -140,6 +145,10 @@ export default function RegisterKey() {
       toast("Kindly Generate Public Key", "error")
     }
   }, [modalControl.publicKey])
+
+  const _setRememberMe = (event: { target: { checked: boolean } }) => {
+    setRememberMe(event.target.checked)
+  }
 
   return (
     <main className="flex  min-h-[calc(100vh-80px)] ">
@@ -193,6 +202,7 @@ export default function RegisterKey() {
               Don’t have a Public/Private key yet?
             </small>
             <a
+              data-cy="generate-public-and-private-key-button"
               onClick={_handleGenerate}
               className="cy-add-generate-PK flex gap-3 justify-between items-center bg-white shadow-md py-2 px-4 rounded-lg cursor-pointer w-full"
             >
@@ -206,6 +216,20 @@ export default function RegisterKey() {
             </a>
           </>
         )}
+        <div className="flex justify-between items-center ">
+          <div className="flex gap-2 text-safe-text-gray items-center justify-center  ">
+            <input
+              data-cy="remember-user-credentials-input"
+              type="checkbox"
+              className="mr-2 block h-5 w-5"
+              checked={rememberMe}
+              onChange={_setRememberMe}
+            />
+            <small className="text-base text-safe-text-black font-medium">
+              Remember this device
+            </small>
+          </div>
+        </div>
       </section>
       <section className="basis-3/5 bg-linear-gradient flex justify-center items-center ">
         <div className="bg-white rounded-2xl  ">

@@ -34,6 +34,7 @@ export function NewUserModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "user-email-input-field",
             name: "email",
             type: "text",
             placeholder: "Email",
@@ -48,6 +49,7 @@ export function NewUserModal(_props: {
         {
           type: "phoneNumberView",
           props: {
+            dataCy: "new-user-phone-number",
             name: "phoneNumber",
             placeholder: "Phone Number",
             value: _props?.modalControl?.phoneNumber?.split(" ")[1],
@@ -62,6 +64,7 @@ export function NewUserModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "user-name-input-field",
             name: "displayName",
             type: "text",
             placeholder: "Name",
@@ -76,6 +79,7 @@ export function NewUserModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "create-new-user-button",
             title: "Next",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -225,12 +229,13 @@ export function EditUser(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={"Your New User Credentials"}
+      modalTitle={"Edit User"}
       closeIconVisibility={_props.closeIconVisibility}
       elements={[
         {
           type: "buttonView",
           props: {
+            dataCy: "activate-and-deactivate-user-account-button",
             title: "Activate / Deactivate",
             onclick: _props.toggleUserAccount,
             buttonStyle: "",
@@ -240,6 +245,7 @@ export function EditUser(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "offer-free-trial-button",
             title: "Free trial",
             onclick: _props.offerFreeTrial,
             buttonStyle: "",
@@ -249,6 +255,7 @@ export function EditUser(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "set-pulse-check-button",
             title: "Pulse Check",
             onclick: _props.editPulseCheck,
             buttonStyle: "",
@@ -258,6 +265,7 @@ export function EditUser(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "update-account-details-button",
             title: "Account",
             onclick: () => {},
             buttonStyle: "",
@@ -290,6 +298,7 @@ export function FreeTrial(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "pulse-free-trial-till-data-input-field",
             name: "tillDate",
             type: "date",
             placeholder: "Date",
@@ -304,6 +313,7 @@ export function FreeTrial(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "pulse-check-free-trial-reason-input-field",
             name: "reason",
             type: "text",
             placeholder: "Reason",
@@ -318,6 +328,7 @@ export function FreeTrial(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "give-free-trial-button",
             title: "Give free trial",
             onclick: _props._submitModal,
             buttonStyle: "",

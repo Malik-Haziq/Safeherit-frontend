@@ -6,6 +6,7 @@ import { useAppDispatch } from "@redux/hooks"
 import { logout } from "@redux/actions"
 import NavigationDrawer from "./NavigationDrawer"
 import DashboardNavbar from "./DashboardNavbar"
+import { removeCookie } from "@/common/utils/cookie"
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -13,6 +14,7 @@ export default function Dashboard() {
 
   // TODO manually terminate the session on catch
   const _handleLogout = useCallback(() => {
+    removeCookie("defaultCurrency")
     dispatch<any>(logout({}))
       .unwrap()
       .catch()

@@ -1,5 +1,6 @@
 export const SIGN_UP = "/api-auth/signup"
 export const LOGIN = "/api-auth/sessionLogin"
+export const LOGIN_WITH_EMAIL_PASSWORD = "/api-auth/login"
 export const LOGOUT = "/api-auth/sessionLogout"
 
 export const VALIDATORS = "/api-validator"
@@ -17,6 +18,7 @@ export const TESTMENTS = "/api-beneficiary/as-beneficiary/testament"
 
 export const ASSETS = "/api-asset"
 export const ALL_ASSETS = "/api-asset/list"
+export const CURRENCY_RATES = "/api-asset/currency-rates"
 
 export const GET_DATA = "/api-dashboard/data"
 

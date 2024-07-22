@@ -75,6 +75,11 @@ export const UserDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.view == "validator"
+                              ? "validator"
+                              : "beneficiary"
+                          }-name`}
                           value={_props.modalControl.name}
                           _handleChange={() => {}}
                           hasRightIcon={false}
@@ -90,6 +95,11 @@ export const UserDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.view == "validator"
+                              ? "validator"
+                              : "beneficiary"
+                          }-primary_email`}
                           value={_props.modalControl.primary_email}
                           _handleChange={() => {}}
                           hasRightIcon={false}
@@ -105,6 +115,11 @@ export const UserDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.view == "validator"
+                              ? "validator"
+                              : "beneficiary"
+                          }-backup_email`}
                           value={_props.modalControl.backup_email}
                           _handleChange={() => {}}
                           hasRightIcon={false}
@@ -120,6 +135,11 @@ export const UserDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.view == "validator"
+                              ? "validator"
+                              : "beneficiary"
+                          }-backup_email2`}
                           value={_props.modalControl.backup_email2}
                           _handleChange={() => {}}
                           hasRightIcon={false}
@@ -135,6 +155,11 @@ export const UserDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.view == "validator"
+                              ? "validator"
+                              : "beneficiary"
+                          }-phone_number`}
                           value={_props.modalControl.phone_number}
                           _handleChange={() => {}}
                           hasRightIcon={false}
@@ -150,6 +175,11 @@ export const UserDetailsModal = (_props: {
                           textStyles="text-[#00192B] font-medium"
                         />
                         <InputField
+                          dataCy={`${
+                            _props.view == "validator"
+                              ? "validator"
+                              : "beneficiary"
+                          }-backup_phone_number`}
                           value={_props.modalControl.backup_phone_number}
                           _handleChange={() => {}}
                           hasRightIcon={false}
@@ -167,6 +197,11 @@ export const UserDetailsModal = (_props: {
                       />
                       <div>
                         <InputField
+                          dataCy={`${
+                            _props.view == "validator"
+                              ? "validator"
+                              : "beneficiary"
+                          }-facebook_link`}
                           value={_props.modalControl.facebook_link}
                           _handleChange={() => {}}
                           hasRightIcon={true}
@@ -181,6 +216,11 @@ export const UserDetailsModal = (_props: {
                       </div>
                       <div>
                         <InputField
+                          dataCy={`${
+                            _props.view == "validator"
+                              ? "validator"
+                              : "beneficiary"
+                          }-instagram_username`}
                           value={_props.modalControl.instagram_username}
                           _handleChange={() => {}}
                           hasRightIcon={true}
@@ -195,6 +235,11 @@ export const UserDetailsModal = (_props: {
                       </div>
                       <div>
                         <InputField
+                          dataCy={`${
+                            _props.view == "validator"
+                              ? "validator"
+                              : "beneficiary"
+                          }-twitter_username`}
                           value={_props.modalControl.twitter_username}
                           _handleChange={() => {}}
                           hasRightIcon={true}
@@ -215,7 +260,14 @@ export const UserDetailsModal = (_props: {
                         text="Personalized Message"
                         textStyles="text-[#00192B] font-bold"
                       />
-                      <div className="w-[446px] h-[510px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-7 px-5 overflow-auto border-[rgba(6, 90, 147, 0.30)] border-2">
+                      <div
+                        data-cy={`${
+                          _props.view == "validator"
+                            ? "validator"
+                            : "beneficiary"
+                        }-personalized_message`}
+                        className="w-[446px] h-[510px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-7 px-5 overflow-auto border-[rgba(6, 90, 147, 0.30)] border-2"
+                      >
                         {_props.modalControl.personalized_message}
                       </div>
                     </aside>
@@ -226,7 +278,14 @@ export const UserDetailsModal = (_props: {
                           text="Personalized Message"
                           textStyles="text-[#00192B] font-bold"
                         />
-                        <div className="w-[446px] h-[112px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-2 px-4 overflow-auto border-[rgba(6, 90, 147, 0.30)]  border-2 ">
+                        <div
+                          data-cy={`${
+                            _props.view == "validator"
+                              ? "validator"
+                              : "beneficiary"
+                          }-personalized_message`}
+                          className="w-[446px] h-[112px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-2 px-4 overflow-auto border-[rgba(6, 90, 147, 0.30)]  border-2 "
+                        >
                           {_props.modalControl.personalized_message}
                         </div>
                       </div>
@@ -258,7 +317,14 @@ export const UserDetailsModal = (_props: {
                             textStyles="text-[#00192B] font-bold"
                           />
                         </div>
-                        <div className="w-[446px] h-[112px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-2 px-4 overflow-auto border-[rgba(6, 90, 147, 0.30)]  border-2  ">
+                        <div
+                          data-cy={`${
+                            _props.view == "validator"
+                              ? "validator"
+                              : "beneficiary"
+                          }-public_key`}
+                          className="w-[446px] h-[112px] bg-[#F2F2F2] rounded-3xl text-[#6F767B] py-2 px-4 overflow-auto border-[rgba(6, 90, 147, 0.30)]  border-2  "
+                        >
                           {_props.modalControl.public_key}
                         </div>
                       </div>
@@ -283,7 +349,11 @@ function ModalHeader(_props: {
     <div className="h-[56px] w-full bg-[#f6f6f6] flex items-center rounded-tl-3xl rounded-tr-3xl border border-b-[#04477B]">
       <div className={styles.title}>{_props.title}</div>
       {_props.closeIconVisibility && (
-        <div className={styles.icon} onClick={_props.closeModal}>
+        <div
+          className={styles.icon}
+          onClick={_props.closeModal}
+          data-cy="close-modal-icon"
+        >
           <img
             src={closeIcon}
             alt="close icon"
@@ -311,6 +381,7 @@ function TextView(_props: {
 }
 
 function InputField(_props: {
+  dataCy: string
   name: string
   type: string
   value: string
@@ -326,6 +397,7 @@ function InputField(_props: {
   return (
     <div className={_props.inputContainerStyles}>
       <input
+        data-cy={_props.dataCy}
         name={_props.name || ""}
         type={_props.type || "text"}
         value={_props.value}

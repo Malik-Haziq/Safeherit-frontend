@@ -21,6 +21,7 @@ import {
   updatePK,
 } from "@redux/actions"
 import {
+  convertTimestampsToPlanDuration,
   copyToClipboard,
   downloadPEM,
   getFileFromFirebase,
@@ -33,6 +34,7 @@ import AuthenticateUser from "./AuthenticateUser"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { GeneratePrivateKey } from "@/pages/register-key/modal_register_key"
 import Encryption from "@/common/encryption/encryption"
+import { setCookie } from "@/common/utils/cookie"
 
 const initialState = {
   displayName: "",
@@ -40,6 +42,7 @@ const initialState = {
   profile_image: "",
   privateKey: "",
   publicKey: "",
+  defaultCurrency: "",
 }
 
 const initialPKState = {
@@ -64,9 +67,10 @@ export default function AccountView() {
   const [modalVisibility, setModalVisibility] = useState("none")
   // const [modalVisibility, setModalVisibility] = useState("none")
   const [auth2FAEnabled, setAuth2FAEnabled] = useState(false)
+  const memberhipPlanDetail = React.useMemo(() => convertTimestampsToPlanDuration(user.periodEnd, user.periodStart), [user])
 
   useEffect(() => {
-    const key = localStorage.getItem("privateKey")
+    const key = localStorage.getItem("_privateKey")
     const _privateKey = key ? encryptionService.decryptKeys(key, user.uid) : ""
     setModalControl({ ...modalControl, privateKey: _privateKey })
   }, [modalControl.privateKey])
@@ -128,6 +132,7 @@ export default function AccountView() {
   const _submitEditUserModal = () => {
     startLoader()
     toast("Updating user information", "info")
+    setCookie("defaultCurrency", modalControl.defaultCurrency)
     dispatch<any>(updateUser(modalControl))
       .unwrap()
       .then(() => {
@@ -169,6 +174,19 @@ export default function AccountView() {
         stopLoader()
         closeModal()
       })
+  }
+
+  const _handleForgetKey = () => {
+    const storageKey = encryptionService.basicEncryption(user.email + user.role)
+    const _key = localStorage.getItem(storageKey)
+    if (_key) {
+      localStorage.setItem('_privateKey', _key)
+      localStorage.removeItem(storageKey)
+      toast("Operation Successful", "success")
+    }
+    else {
+      toast("Device not saved", "error")
+    }
   }
 
   const _handleUserDeletion = () => {
@@ -249,7 +267,9 @@ export default function AccountView() {
                     user.uid,
                   )
                 : ""
-              localStorage.setItem("privateKey", _privateKey)
+              const storageKey = encryptionService.basicEncryption(user.email + user.role)
+              localStorage.setItem(storageKey, _privateKey)
+              localStorage.setItem('_privateKey', _privateKey)
             })
             .catch()
             .finally(() => {
@@ -381,9 +401,9 @@ export default function AccountView() {
                   reauthenticateUser={showUserAuthenticate}
                 />
                 <MembershipPlan
-                  plan={"Monthly"}
-                  duration={"1 Month"}
-                  date={"May 18, 2023"}
+                  plan={user.plan}
+                  duration={`${memberhipPlanDetail.duration} days`}
+                  date={memberhipPlanDetail.renewalDate}
                   showPlanView={updatePlan}
                 />
                 <section className="rounded-2xl shadow-md mb-4 ">
@@ -397,6 +417,20 @@ export default function AccountView() {
                       onClick={_handleUserDeletion}
                     >
                       Delete Account
+                    </button>
+                  </div>
+                </section>
+                <section className="rounded-2xl shadow-md mb-4 ">
+                  <div className="p-5 flex justify-between items-center border-b-[1px]">
+                    <p className="text-[#061334] text-lg font-semibold">
+                      Forget this device
+                    </p>
+                    <button
+                      data-cy="delete-account-button"
+                      className="primary-btn bg-[#D8D8D8] rounded-2xl text-[#686868] text-sm"
+                      onClick={_handleForgetKey}
+                    >
+                      Forget device
                     </button>
                   </div>
                 </section>
@@ -428,8 +462,12 @@ function UserProfile(_props: {
             />
           </div>
           <div className="ml-28">
-            <h2 className="text-xl font-semibold ">{_props.userName}</h2>
-            <small className="text-[#707070]">{_props.userEmail}</small>
+            <h2 data-cy="user-name" className="text-xl font-semibold ">
+              {_props.userName}
+            </h2>
+            <small data-cy="user-email" className="text-[#707070]">
+              {_props.userEmail}
+            </small>
           </div>
         </div>
         <button
@@ -459,14 +497,18 @@ function UserProfileDetails(_props: {
         <div>
           <p className="font-bold mb-2">Name</p>
 
-          <p className="text-[#061334] text-lg">{_props.userName}</p>
+          <p data-cy="user-name" className="text-[#061334] text-lg">
+            {_props.userName}
+          </p>
         </div>
         <img src={userIcon} alt="User Image" />
       </div>
       <div className="p-5 flex justify-between items-center border-b-[1px]">
         <div>
           <p className="font-bold mb-2">Email</p>
-          <p className="text-[#061334] text-lg">{_props.userEmail}</p>
+          <p data-cy="user-email" className="text-[#061334] text-lg">
+            {_props.userEmail}
+          </p>
         </div>
         <img src={msgIcon} alt="Message icon" />
       </div>
@@ -476,12 +518,14 @@ function UserProfileDetails(_props: {
         </p>
         <div className="flex gap-1">
           <img
+            data-cy="view-key-icon"
             src={viewIcon}
             alt="View icon"
             onClick={_props.handleKeysView}
             className="cursor-pointer"
           />
           <img
+            data-cy="edit-key-icon"
             src={editIcon}
             alt="Edit icon"
             onClick={_props.handleKeysEdit}
@@ -515,7 +559,10 @@ function UserProfileDetails(_props: {
         </div>
       </div>
       <div className="p-5 flex justify-between items-center border-b-[1px]">
-        <p className="text-[#061334] text-lg font-semibold">
+        <p
+          data-cy="user-language"
+          className="text-[#061334] text-lg font-semibold"
+        >
           {_props.userLanguage}
         </p>
         <img src={languageIcon} alt="Language icon" />
@@ -545,11 +592,17 @@ function MembershipPlan(_props: {
       </div>
       <div className="flex justify-between px-5 pb-5">
         <div>
-          <p className="text-[#707070] text-sm font-medium">
+          <p
+            data-cy="membership-duration"
+            className="text-[#707070] text-sm font-medium"
+          >
             Membership Duration:
             <span className="text-[#00192B] font-bold"> {_props.duration}</span>
           </p>
-          <p className="text-[#707070] text-sm font-medium">
+          <p
+            data-cy="membership-renewal-date"
+            className="text-[#707070] text-sm font-medium"
+          >
             Next Renewal Date:
             <span className="text-[#00192B] font-bold"> {_props.date}</span>
           </p>

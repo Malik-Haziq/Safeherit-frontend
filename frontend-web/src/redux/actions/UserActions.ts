@@ -23,6 +23,7 @@ import {
   LOGIN,
   LOGOUT,
   AUTHENTICATE_SESSION,
+  LOGIN_WITH_EMAIL_PASSWORD,
 } from "@/common"
 import { setLoaderVisibility } from "../reducers/LoaderSlice"
 
@@ -32,18 +33,10 @@ export const login = createAsyncThunk(
     Data: { email: string; password: string; rememberMe: boolean },
     { dispatch, rejectWithValue },
   ) => {
-    const { email, password, rememberMe } = Data
     try {
       dispatch(setLoaderVisibility(true))
-      const response = await signInWithEmailAndPassword(auth, email, password)
-      const token = await response.user.getIdToken()
-      dispatch(setToken(token))
-      const formData = jsonToFormData({
-        idToken: token,
-        csrfToken: "",
-        rememberMe: rememberMe,
-      })
-      const params = { ROUTE: LOGIN, Body: formData }
+      const formData = jsonToFormData(Data)
+      const params = { ROUTE: LOGIN_WITH_EMAIL_PASSWORD, Body: formData }
       const _response = await POST(params)
       return _response
     } catch (error) {
@@ -103,7 +96,8 @@ export const logout = createAsyncThunk(
       dispatch(setLoaderVisibility(true))
       const params = { ROUTE: LOGOUT, Body: {} }
       const response = await POST(params)
-      localStorage.clear()
+      localStorage.removeItem('_privateKey')
+      localStorage.removeItem('role')
       return response
     } catch (error) {
       return rejectWithValue(error)

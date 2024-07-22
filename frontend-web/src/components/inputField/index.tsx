@@ -16,6 +16,7 @@ export function InputField(_props: {
   inputContainerStyles: string
   disabled?: boolean
   mask?: "card" | "currency" | "date" | "time" | "tel"
+  dataCy?: string
   // mask?: string
 }) {
   const _handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,6 +108,7 @@ export function InputField(_props: {
   return (
     <div className={_props.inputContainerStyles}>
       <input
+        data-cy={_props.dataCy}
         name={_props.name || ""}
         type={_props.type || "text"}
         placeholder={_props.placeholder || "input field"}

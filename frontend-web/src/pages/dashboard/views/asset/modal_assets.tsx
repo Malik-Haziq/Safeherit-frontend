@@ -65,6 +65,7 @@ export function StepZeroInformationModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "create-asset-button",
             title: "Create Assets",
             onclick: _props._submitModal,
             buttonStyle:
@@ -91,6 +92,7 @@ const generateSelectFieldProps = (
   return {
     type: "selectView",
     props: {
+      dataCy: "asset-types-list",
       data: assetTypes,
       value: value,
       selectProps: {
@@ -128,6 +130,7 @@ const generateMultiSelectFieldProps = (
   return {
     type: "selectView",
     props: {
+      dataCy: "asset-types-list",
       data: assetTypes,
       value: value,
       selectProps: {
@@ -163,6 +166,7 @@ const generateTextInputFieldProps = (
   return {
     type: "inputView",
     props: {
+      dataCy: "generate-text-input-field",
       name: name,
       type: "text",
       placeholder: placeholder,
@@ -275,6 +279,7 @@ export function StepOneModal(_props: {
         {
           type: "selectView",
           props: {
+            dataCy: "asset-types-list",
             data: _props.assetTypes,
             value: _props.modalControl.category
               ? {
@@ -310,6 +315,7 @@ export function StepOneModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-asset-modal-one-button",
             title: _props.action == "create" ? "Next" : "Save & Next",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -446,6 +452,7 @@ export function StepTwoModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-asset-modal-two-button",
             title: "Confirm",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -553,7 +560,7 @@ export function AssetDetail(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={_props.action == "create" ? "Create Assets" : "Edit Assets"}
+      modalTitle={_props.action == "create" ? "Create Assets" : _props.action == "view" ? "View Asset" : "Edit Asset"}
       closeIconVisibility={_props.closeIconVisibility}
       arrayLength={_props.arrayLength}
       showPreviousModal={_props.showPreviousModal}
@@ -747,6 +754,7 @@ export function BeneficiaryWarning(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "register-beneficiary-button",
             title: "Register Beneficiary",
             onclick: _props._submitModal,
             buttonStyle:

@@ -88,6 +88,7 @@ export default function PulseView() {
   useEffect(() => {
     modalHistoryPopAll()
     getUserDetails()
+
     initialState.pulseCheckEmail1 = user.email
     initialState.pulseCheckNonValidationDays = user.pulseCheckNonValidationDays
     setModalControl(initialState)
@@ -104,16 +105,18 @@ export default function PulseView() {
   }, [])
 
   const getUserDetails = () => {
-    dispatch<any>(getUser({ HideLoader: true }))
-      .unwrap()
-      .catch()
-      .then((res: { data: { data: { pulseCheckActive: string } } }) => {
-        if (JSON.parse(res.data.data.pulseCheckActive)) {
-          setPulseCheck(true)
-        } else {
-          setPulseCheck(false)
-        }
-      })
+    if (user.startupWizardCompleted) {
+      dispatch<any>(getUser({ HideLoader: true }))
+        .unwrap()
+        .catch()
+        .then((res: { data: { data: { pulseCheckActive: string } } }) => {
+          if (JSON.parse(res.data.data.pulseCheckActive)) {
+            setPulseCheck(true)
+          } else {
+            setPulseCheck(false)
+          }
+        })
+    }
   }
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
@@ -187,7 +190,6 @@ export default function PulseView() {
       dispatch(setWizardStep("Assets"))
       return
     }
-    getUserDetails()
   }
 
   const _closeModal = useCallback(() => {
@@ -209,7 +211,7 @@ export default function PulseView() {
     propertyName: string
     value: string
   }) => {
-    if (!value || value === "0") {
+    if ((propertyName !== "pulseCheckEmail2" && propertyName !== "pulseCheckEmail3") && !value || value === "0") {
       toast("Please enter valid days", "error")
       return
     }
@@ -256,7 +258,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-1"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitStepOneModal}
         _handleChange={() => {}}
@@ -265,7 +267,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-2"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitStepTwoModal}
         _handleChange={_handleChange}
@@ -277,7 +279,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-3"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         numberOfValidators={user.numOfValidatorOfUser}
         action={""}
         _submitModal={_submitStepThreeModal}
@@ -289,7 +291,7 @@ export default function PulseView() {
         openModal={modalVisibility == "Step-4"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitStepFourModal}
         _handleChange={_handleChange}
@@ -301,7 +303,7 @@ export default function PulseView() {
         openModal={modalVisibility == "success-modal"}
         closeModal={_closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={""}
         _submitModal={_submitSuccessModal}
       />
@@ -592,6 +594,7 @@ function CheckAliveMethod(_props: {
 }) {
   return (
     <p
+      data-cy={`check-method-${_props.method}`}
       onClick={() => {
         _props.setConfirmationDetails(_props.method)
       }}
@@ -630,6 +633,7 @@ function MethodRow(_props: {
       (_props.editDetailInput === "pulseCheckEmail1" ||
         _props.editDetailInput === "pulseCheckEmail2" ||
         _props.editDetailInput === "pulseCheckEmail3") &&
+       _inputValue &&
       !isValidEmail(_inputValue)
     ) {
       toast("please enter a valid Email address", "error")
@@ -659,6 +663,7 @@ function MethodRow(_props: {
         _props.editDetailInput === "backupPhone2") ? (
         <>
           <PhoneNumField
+            dataCy="pulse-check-phone-number"
             name="phone_number"
             placeholder="Phone Number"
             selectFieldStyles="w-[90px] justify-between bg-[#F5FAFD] rounded-tl-[22px] rounded-bl-[22px] flex relative after:absolute after:content-[''] after:w-[1px] after:h-[22px] after:bg-[#B4B4B4] after:-right-3 after:top-4"
@@ -681,6 +686,7 @@ function MethodRow(_props: {
       ) : _props.editDetailInput === convertToCamelCase(_props.heading) ? (
         <>
           <InputField
+            dataCy="pulse-check-email-address-input"
             name="email"
             type="email"
             placeholder="Email Address"

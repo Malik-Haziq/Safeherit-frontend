@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import dollar from "@images/dollar.svg"
 import bank from "@images/bank.svg"
 import eye from "@images/eye.svg"
@@ -21,7 +21,13 @@ import {
   AssetBeneficiaries,
   BeneficiaryWarning,
 } from "./modal_assets"
-import { ASSET_TYPES, ROUTE_CONSTANTS, useArray } from "@/common"
+import {
+  ASSET_TYPES,
+  ROUTE_CONSTANTS,
+  calculateTotalAssetsCost,
+  useArray,
+  formatCurrency,
+} from "@/common"
 
 import {
   findAsset,
@@ -33,6 +39,7 @@ import {
   getAllBeneficiaryAsset,
   findBeneficiaryAsset,
   updateUser,
+  getCurrencyRates,
 } from "@redux/actions"
 import { useAppDispatch, useAppSelector } from "@redux/hooks"
 import { DropDownButton, ConfirmationModal, Spinner, toast } from "@/components"
@@ -41,6 +48,7 @@ import { AxiosResponse } from "axios"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
 import { SelectOption, Asset, Beneficiary } from "@/types"
 import { setWizardStep } from "@/redux/reducers/UserSlice"
+import { getCookie } from "@/common/utils/cookie"
 
 interface ModalControl {
   [key: string]: any // This index signature allows string keys with any value
@@ -61,11 +69,32 @@ export default function AssetsView() {
   const [modalVisibility, setModalVisibility] = useState("none")
   const isEditingAsset = useRef(false)
   const [modalAction, setModalAction] = useState("")
-  const [selected, setSelected] = useState("")
+  const [selected, setSelected] = useState<string>("All")
   const [selectedAsset, setSelectedAsset] = useState("")
   const [assetFile, setAssetFile] = useState("")
   const [assetBeneficiariesData, setAssetBeneficiariesData] =
     useState(initialState)
+  const [assetCostFilter, setAssetCostFilter] = useState("All")
+  const [userCurrency, setUserCurrency] = useState("")
+  const assetTotalCost: number = useMemo(
+    () =>
+      calculateTotalAssetsCost(
+        asset.Asset_array,
+        asset.Currencies,
+        assetCostFilter,
+      ),
+    [asset.Asset_array, asset.Currencies, assetCostFilter],
+  )
+  const assetDetailsData = useMemo(() => {
+    if (selected === "All") {
+      return asset.Asset_array
+    } else {
+      return asset.Asset_array.filter(
+        (asset) => asset.category.toUpperCase() === selected.toUpperCase(),
+      )
+    }
+  }, [selected, asset.Asset_array])
+
   const [
     modalHistory,
     modalHistoryLength,
@@ -73,6 +102,7 @@ export default function AssetsView() {
     modalHistoryPush,
     modalHistoryPopAll,
   ] = useArray()
+
   useEffect(() => {
     // reset values incase of creating an asset
     if (!isEditingAsset.current) {
@@ -118,6 +148,14 @@ export default function AssetsView() {
     }
   }, [])
 
+  useEffect(() => {
+    dispatch<any>(getCurrencyRates({}))
+    const defaultCurrency = getCookie("defaultCurrency")
+    if (defaultCurrency) {
+      setUserCurrency(defaultCurrency)
+    }
+  }, [])
+
   const closeModal = useCallback(() => {
     // close modal
     setModalControl(initialState)
@@ -138,11 +176,11 @@ export default function AssetsView() {
   }
   const assetCatagories = [
     "All",
-    "Bank",
-    "Stock",
+    "Bank Account",
+    "Stocks",
     "Real Estate",
     "Life Insurance",
-    "Cryptocurrency",
+    "Cryptocurrency (Self-custody)",
   ]
   const assetTypes = [
     { value: ASSET_TYPES.BANK_ACCOUNT, label: ASSET_TYPES.BANK_ACCOUNT },
@@ -181,28 +219,29 @@ export default function AssetsView() {
   ]
 
   const options = [
-    { button: "All", action: () => {} },
-    { button: "Bank", action: () => {} },
-    { button: "Stock", action: () => {} },
-    { button: "Real Estate", action: () => {} },
-    { button: "Life Insurance", action: () => {} },
-    { button: "Cryptocurrency", action: () => {} },
+    { button: "All", action: setAssetCostFilter },
+    { button: "Bank Account", action: setAssetCostFilter },
+    { button: "Stocks", action: setAssetCostFilter },
+    { button: "Real Estate", action: setAssetCostFilter },
+    { button: "Life Insurance", action: setAssetCostFilter },
+    { button: "Cryptocurrency (Self-custody)", action: setAssetCostFilter },
   ]
 
   const AssetDetailsCardArr = [
     {
       img: dollar,
-      title: "USD 126,000",
+      title: `${userCurrency} ${formatCurrency(assetTotalCost)}`,
       subTitle: "Total Balance",
       element: (
         <DropDownButton
           className="flex gap-2"
-          title="All"
+          title={assetCostFilter}
           titleClassName="font-semibold cursor-pointer"
           arrowIcon={arrowDown}
           options={options}
         />
       ),
+      dataCy: "total-balance",
     },
     {
       img: bank,
@@ -218,6 +257,7 @@ export default function AssetsView() {
           }}
         />
       ),
+      dataCy: "number-of-assets",
     },
   ]
 
@@ -327,7 +367,7 @@ export default function AssetsView() {
     if (!user.startupWizardCompleted) {
       closeModal()
       dispatch(setWizardStep("none"))
-      dispatch(updateUser({startupWizardCompleted: true}))
+      dispatch(updateUser({ startupWizardCompleted: true }))
     }
     navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_ASSETS}`)
   }
@@ -519,12 +559,13 @@ export default function AssetsView() {
           assetCatagories={assetCatagories}
           selected={selected}
           setSelected={setSelected}
-          assetDetailsArr={asset.Asset_array}
+          assetDetailsArr={assetDetailsData}
           destroyAsset={destroyAsset}
           editAsset={editAsset}
           viewAsset={viewAsset}
           viewBeneficiaries={viewBeneficiaries}
           userRole={user.role}
+          userCurrency={userCurrency}
         />
       ) : hasAssets == 0 ? (
         <AddAsset openStepZeroModal={addAsset} />
@@ -568,6 +609,7 @@ function Assets(_props: {
     title: string | number
     subTitle: string
     element: any
+    dataCy: string
   }[]
   assetCatagories: string[]
   selected: string
@@ -578,6 +620,7 @@ function Assets(_props: {
   viewAsset: (assetId: string) => void
   viewBeneficiaries: (assetId: string) => void
   userRole: string
+  userCurrency: string
 }) {
   return (
     <div className={styles.AppView}>
@@ -591,6 +634,7 @@ function Assets(_props: {
                 title={data.title}
                 subtitle={data.subTitle}
                 element={data.element}
+                dataCy={data.dataCy}
               />
             )
           })}
@@ -598,7 +642,11 @@ function Assets(_props: {
         <section className="">
           <div className="flex items-center gap-11 mb-2 pl-6">
             <div className="relative">
-              <input data-cy="select-all-assets-input" type="checkbox" id="checkbox" />
+              <input
+                data-cy="select-all-assets-input"
+                type="checkbox"
+                id="checkbox"
+              />
               <label htmlFor="checkbox" className="checkbox-label h-5 w-5">
                 <div className="check_mark"></div>
               </label>
@@ -614,16 +662,16 @@ function Assets(_props: {
             ))}
           </div>
           <section className="rounded-xl h-[650px] shadow-lg mb-5 overflow-auto scrollbar w-[1080px]">
-            <div className="bg-[#F2F2F2] flex justify-between gap-24 px-5 py-3 rounded-t-lg">
-              <div className="flex flex-grow justify-between">
+            <div className="bg-[#F2F2F2] flex justify-between px-5 py-3 rounded-t-lg">
+              <div className="flex flex-grow justify-between basis-80">
                 <p className="font-medium text-sm uppercase">Asset Name</p>
                 <p className="font-medium text-sm uppercase">Asset Type</p>
-                <p className="font-medium text-sm uppercase">Value</p>
+                <p className="font-medium text-sm uppercase mr-10">Value</p>
               </div>
-              <div className="flex flex-grow justify-between">
+              <div className="flex flex-grow justify-between ">
                 {_props.userRole != "beneficiary" ? (
-                  <p className="font-medium text-sm uppercase ">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Beneficiary
+                  <p className="font-medium text-sm uppercase basis-1/2 text-center">
+                    Beneficiary
                   </p>
                 ) : (
                   <></>
@@ -643,7 +691,7 @@ function Assets(_props: {
                   assetId={asset?.id || ""}
                   assetType={asset?.category || ""}
                   assetName={asset?.data?.["Asset Name"] || ""}
-                  assetValue={`${asset?.data?.Currency || "USD"} ${assetValue}`}
+                  assetValue={`${_props.userCurrency} ${assetValue}`}
                   beneficiaries={asset?.beneficiaries}
                   destroyAsset={_props.destroyAsset}
                   editAsset={_props.editAsset}
@@ -665,6 +713,7 @@ function AssetDetailsCard(_props: {
   title: string | number
   subtitle: string
   element: any
+  dataCy: string
 }) {
   return (
     <div className="shadow-md flex-grow rounded-xl px-4 py-3 flex justify-between items-center max-w-[535px]">
@@ -673,7 +722,9 @@ function AssetDetailsCard(_props: {
           <img src={_props.img} alt="dollar icon" className="" />
         </div>
         <div>
-          <h3 className="text-black font-semibold">{_props.title}</h3>
+          <h3 data-cy={_props.dataCy} className="text-black font-semibold">
+            {_props.title}
+          </h3>
           <p className="text-[#828282] text-xs">{_props.subtitle}</p>
         </div>
       </div>
@@ -689,7 +740,8 @@ function AssetCategory(_props: {
   setSelected: any
 }) {
   return (
-    <a
+    <button
+      data-cy={`asset-category-${_props.category}`}
       onClick={() => {
         _props.setSelected(_props.category)
       }}
@@ -700,7 +752,7 @@ function AssetCategory(_props: {
       }
     >
       {_props.category}
-    </a>
+    </button>
   )
 }
 
@@ -740,7 +792,7 @@ function AssetDetails(_props: {
       <div className="flex justify-between items-center w-[268px] flex-grow">
         <div className="flex gap-4 items-center">
           <img
-            data-cy="view-asset-details-button"
+            data-cy="view-asset-details-button-type-icon"
             src={assetImages[_props.assetType]}
             alt="real estate icon"
             className="cursor-pointer w-10 h-10"
@@ -748,11 +800,17 @@ function AssetDetails(_props: {
               _props.viewAsset(_props.assetId)
             }}
           />
-          <p className="text-[#00192B] text-sm font-semibold">
+          <p
+            data-cy="asset-type"
+            className="text-[#00192B] text-sm font-semibold"
+          >
             {_props.assetType}
           </p>
         </div>
-        <p className="text-[#00192B] text-sm font-semibold">
+        <p
+          data-cy="asset-value"
+          className="text-[#00192B] text-sm font-semibold"
+        >
           <span>{_props.assetValue}</span>
         </p>
       </div>
@@ -773,7 +831,7 @@ function AssetDetails(_props: {
         )}
         <div className="flex gap-1 ">
           <img
-            data-cy="view-asset-details-button"
+            data-cy="view-asset-details-icon"
             src={eye}
             alt="view icon"
             className="cy-view-asset-btn cursor-pointer"

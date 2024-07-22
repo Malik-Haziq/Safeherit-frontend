@@ -64,6 +64,7 @@ export function StepOneModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-pulse-modal-one-button",
             title: "Next",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -239,6 +240,7 @@ export function StepTwoModal(_props: {
               {
                 type: "inputView",
                 props: {
+                  dataCy: "pulse-check-days-input-field",
                   name: "pulseCheckDays",
                   type: "number",
                   placeholder: "Custom",
@@ -265,6 +267,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "pulse-check-email-input-field",
             name: "pulseCheckEmail1",
             type: "text",
             placeholder: "Email",
@@ -280,6 +283,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "pulse-check-email-2-input-field",
             name: "pulseCheckEmail2",
             type: "text",
             placeholder: "Backup email 1",
@@ -293,6 +297,7 @@ export function StepTwoModal(_props: {
         {
           type: "inputView",
           props: {
+            dataCy: "pulse-check-email-3-input-field",
             name: "pulseCheckEmail3",
             type: "text",
             placeholder: "Backup email 2",
@@ -313,6 +318,7 @@ export function StepTwoModal(_props: {
         {
           type: "phoneNumberView",
           props: {
+            dataCy: "pulse-check-phone-number",
             name: "pulseCheckPhone1",
             placeholder: "Phone Number",
             value: _props?.modalControl?.pulseCheckPhone1?.split(" ")[1],
@@ -327,6 +333,7 @@ export function StepTwoModal(_props: {
         {
           type: "phoneNumberView",
           props: {
+            dataCy: "pulse-check-backup-phone-number",
             name: "pulseCheckPhone2",
             placeholder: "Backup Phone Number 1",
             value: _props?.modalControl?.pulseCheckPhone2?.split(" ")[1],
@@ -341,6 +348,7 @@ export function StepTwoModal(_props: {
         {
           type: "phoneNumberView",
           props: {
+            dataCy: "pulse-check-backup-2-phone-number",
             name: "pulseCheckPhone3",
             placeholder: "Backup Phone Number 2",
             value: _props?.modalControl?.pulseCheckPhone3?.split(" ")[1],
@@ -355,6 +363,7 @@ export function StepTwoModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-pulse-modal-two-button",
             title: "Confirm & Next",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -464,6 +473,7 @@ export function StepThreeModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-pulse-modal-three-button",
             title: _props.numberOfValidators ? "Confirm & Next" : "Continue",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -648,6 +658,7 @@ export function StepFourModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-pulse-modal-four-button",
             title: "Done",
             onclick: _props._submitModal,
             buttonStyle: "",
@@ -701,6 +712,7 @@ export function SuccessModal(_props: {
         {
           type: "buttonView",
           props: {
+            dataCy: "submit-pulse-success-modal-button",
             title: "Done",
             onclick: _props._submitModal,
             buttonStyle:

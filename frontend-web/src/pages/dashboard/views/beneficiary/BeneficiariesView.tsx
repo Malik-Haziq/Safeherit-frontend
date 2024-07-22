@@ -2,8 +2,11 @@ import React from "react"
 import userIcon from "@images/user-icon.svg"
 import addIcon from "@images/add-icon.svg"
 import facebook from "@images/facebook.svg"
+import coloredFacebook from "@images/coloredFacebook.svg"
 import instagram from "@images/insta.svg"
+import coloredInstagram from "@images/instagram.svg"
 import twitter from "@images/twitter.svg"
+import coloredTwitter from "@images/coloredTwitter.svg"
 import userImg from "@images/user.svg"
 import beneficiaryImg from "@images/beneficiaryScreen.svg"
 import { useCallback, useEffect, useState } from "react"
@@ -165,12 +168,22 @@ export default function BeneficiariesView() {
     ) {
       toast("Please enter a valid phone number", "error")
     } else {
-      modalHistoryPush("Step-1")
-      setModalVisibility("Step-2")
+      if (
+        modalControl.primary_email &&
+        beneficiaryArray &&
+        beneficiaryArray.some(
+          (beneficiary: any) =>
+            beneficiary.primary_email === modalControl.primary_email,
+        )
+      ) {
+        toast("Beneficiary with this email already exist", "error")
+      } else {
+        modalHistoryPush("Step-1")
+        setModalVisibility("Step-2")
+      }
     }
   }
   const _submitStepTwoModal = () => {
-
     if (
       modalControl.facebook_link &&
       !isValidFacebook(modalControl.facebook_link)
@@ -259,9 +272,11 @@ export default function BeneficiariesView() {
 
   const _submitSuccessModal = () => {
     closeModal()
-    if(!user.startupWizardCompleted && user.wizardStep === "Beneficiary") {
+    if (!user.startupWizardCompleted && user.wizardStep === "Beneficiary") {
       dispatch(setWizardStep("Validators"))
-      navigate(`${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}`)
+      navigate(
+        `${ROUTE_CONSTANTS.DASHBOARD}/${ROUTE_CONSTANTS.DASHBOARD_VALIDATORS}`,
+      )
     }
   }
 
@@ -286,7 +301,6 @@ export default function BeneficiariesView() {
   }
 
   const _handleChange = (event: { target: { name: any; value: any } }) => {
-    // debugger
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
   }
@@ -448,7 +462,6 @@ export default function BeneficiariesView() {
   }, [modalEncryptionKeyControl.publicKey])
 
   const _submitEditBeneficiaryModal = () => {
-
     if (!modalControl.name) {
       toast("please enter a valid name", "error")
     } else if (
@@ -520,7 +533,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Generate-PK"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         modalControl={modalEncryptionKeyControl}
         _handleChange={_handleEncryptionKeyChange}
         _handleGeneratePKPair={_handleGeneratePKPair}
@@ -559,7 +572,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-1"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={modalAction}
         _handleChange={_handleChange}
         modalControl={modalControl}
@@ -571,7 +584,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-2"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={modalAction}
         _handleChange={_handleChange}
         modalControl={modalControl}
@@ -586,7 +599,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-3"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={modalAction}
         _handleChange={_handleChange}
         videoUpload={videoUpload}
@@ -601,7 +614,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-success"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted}
+        closeIconVisibility={true}
         action={modalAction}
         registerAnotherBeneficiary={registerAnotherBeneficiary}
         gotoValidators={gotoValidators}
@@ -619,7 +632,7 @@ export default function BeneficiariesView() {
         openModal={modalVisibility == "Step-0"}
         closeModal={closeModal}
         closeModalOnOverlayClick={false}
-        closeIconVisibility={user.startupWizardCompleted} 
+        closeIconVisibility={true}
         action={modalAction}
         _submitModal={_submitStepZeroModal}
       />
@@ -690,7 +703,10 @@ function Beneficiaries(_props: {
               <img src={userIcon} alt="user icon" />
             </div>
             <div className="ml-2 flex flex-col justify-center">
-              <p className="text-black font-semibold">
+              <p
+                data-cy="number-of-beneficiaries"
+                className="text-black font-semibold"
+              >
                 {_props.beneficiaryArray.length}
               </p>
               <small className="text-safe-text-light-gray-tint text-xm">
@@ -709,11 +725,15 @@ function Beneficiaries(_props: {
       </section>
 
       <section className={styles.beneficiaries}>
-        <div className="rounded-xl shadow-md h-full overflow-y-scroll no-scrollbar relative">
+        <div className="rounded-xl shadow-md h-full overflow-y-scroll scrollbar relative">
           <ul className="flex items-center justify-between border-b-[1px] py-3 px-7 ">
             <li className="text-safe-text-gray-shade flex gap-10">
               <div className="relative">
-                <input data-cy="select-all-beneficiaries-input" type="checkbox" id="checkbox" />
+                <input
+                  data-cy="select-all-beneficiaries-input"
+                  type="checkbox"
+                  id="checkbox"
+                />
                 <label
                   htmlFor="checkbox"
                   className="checkbox-label ml-1 -top-1"
@@ -793,12 +813,14 @@ function Beneficiary(_props: {
         {
           image ? (
             <img
+              data-cy="beneficiary-profile-img"
               src={image || userImg}
               alt="user image"
               className="rounded-full h-11 w-11 object-contain"
             />
           ) : (
             <img
+              data-cy="beneficiary-profile-img"
               src={userImg}
               alt="user image"
               className="rounded-full h-11 w-11 object-contain"
@@ -814,53 +836,78 @@ function Beneficiary(_props: {
           {_props.userName}
         </p>
       </li>
-      <li className="font-semibold text-sm max-w-48 justify-self-center pr-9">
+      <li
+        data-cy="beneficiary-email"
+        className="font-semibold text-sm max-w-48 justify-self-center pr-9"
+      >
         {_props.email}
       </li>
-      <li className="font-semibold text-sm max-w-48 justify-self-center">
+      <li
+        data-cy="beneficiary-phone-number"
+        className="font-semibold text-sm max-w-48 justify-self-center"
+      >
         {_props.phoneNumber}
       </li>
-      <li className="font-semibold text-sm max-w-48 justify-self-center">
+      <li
+        data-cy="beneficiary-backup-phone-number"
+        className="font-semibold text-sm max-w-48 justify-self-center"
+      >
         {_props.backupPhoneNumber}
       </li>
       <li className="flex gap-10 max-w-56 justify-self-end">
         <div className="flex gap-3">
-          <a
-            data-cy="beneficiary-facebook-account-link"
-            href={_props.facebook_link || ""}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={facebook}
-              alt="facebook logo"
-              className="w-5 cursor-pointer"
-            />
-          </a>
-          <a
-            data-cy="beneficiary-instagram-account-link"
-            href={_props.instagram_username || ""}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={instagram}
-              alt="instagram logo"
-              className="w-5 cursor-pointer"
-            />
-          </a>
-          <a
-            data-cy="beneficiary-twitter-account-link"
-            href={_props.twitter_username || ""}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          {_props.facebook_link ? (
+            <a
+              data-cy="beneficiary-facebook-account-link"
+              href={_props.facebook_link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={coloredFacebook}
+                alt="facebook logo"
+                className="w-5 cursor-pointer "
+              />
+            </a>
+          ) : (
+            <img src={facebook} alt="facebook logo" className="w-5 " />
+          )}
+          {_props.instagram_username ? (
+            <a
+              data-cy="beneficiary-facebook-account-link"
+              href={_props.instagram_username}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <img
+                src={coloredInstagram}
+                alt="instagram logo"
+                className="w-5 cursor-pointer"
+              />
+            </a>
+          ) : (
+            <img src={instagram} alt="instagram logo" className="w-5" />
+          )}
+          {_props.twitter_username ? (
+            <a
+              data-cy="beneficiary-facebook-account-link"
+              href={_props.twitter_username}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <img
+                src={coloredTwitter}
+                alt="twitter logo"
+                className="w-5 cursor-pointer"
+              />
+            </a>
+          ) : (
             <img
               src={twitter}
               alt="twitter logo"
-              className="w-5 cursor-pointer"
+              className="w-5 fill-[#948d8d]"
             />
-          </a>
+          )}
         </div>
         <div className="relative">
           <ValidatorDropDown

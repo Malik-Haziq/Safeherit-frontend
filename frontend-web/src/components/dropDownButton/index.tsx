@@ -6,6 +6,7 @@ import { logout } from "@redux/actions"
 import React, { Fragment } from "react"
 // eslint-disable
 import { Menu, Transition } from "@headlessui/react"
+import { removeCookie } from "@/common/utils/cookie"
 // eslint-enable
 
 export function DropDownButton(_props: any) {
@@ -49,11 +50,13 @@ export function DropDownButton(_props: any) {
                   <Menu.Item key={index}>
                     {({ active }: { active: boolean }) => (
                       <button
-                        data-cy="drop-down-button"
+                        data-cy={`drop-down-${option.button
+                          .replaceAll(" ", "-")
+                          .toLocaleLowerCase()}-button`}
                         className={`${
                           active ? "bg-safe-blue text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-3 py-2 text-sm`}
-                        onClick={option.action}
+                        onClick={() => option.action(option.button)}
                       >
                         {option.button}
                       </button>
@@ -74,16 +77,20 @@ export function NavDropDownButton(_props: any) {
   const navigate = useNavigate()
 
   const options = [
-    { button: "My Account", action: ()=>  navigate('/dashboard/account') },
-    { button: "Help", action: ()=>  navigate('/dashboard/help') },
-    { button: "Logout", action: ()=> {
-      dispatch<any>(logout({}))
-      .unwrap()
-      .catch()
-      .finally(() => {
-        navigate("/login")
-      })
-    } },
+    { button: "My Account", action: () => navigate("/dashboard/account") },
+    { button: "Help", action: () => navigate("/dashboard/help") },
+    {
+      button: "Logout",
+      action: () => {
+        removeCookie("defaultCurrency")
+        dispatch<any>(logout({}))
+          .unwrap()
+          .catch()
+          .finally(() => {
+            navigate("/login")
+          })
+      },
+    },
   ]
 
   return (
@@ -126,7 +133,9 @@ export function NavDropDownButton(_props: any) {
                   <Menu.Item key={index}>
                     {({ active }: { active: boolean }) => (
                       <button
-                        data-cy="drop-down-button"
+                        data-cy={`drop-down-${option.button
+                          .replaceAll(" ", "-")
+                          .toLocaleLowerCase()}-button`}
                         className={`${
                           active ? "bg-safe-blue text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-3 py-2 text-sm`}
@@ -146,7 +155,6 @@ export function NavDropDownButton(_props: any) {
   )
 }
 
-
 export function ValidatorDropDown(_props: {
   editValidator: (id: string) => void
   deleteValidator: (id: string) => void
@@ -157,7 +165,12 @@ export function ValidatorDropDown(_props: {
       <Menu as="div" className="inline-block text-left">
         <div>
           <Menu.Button as={React.Fragment}>
-            <img src={dots} alt="dots" className="w-6 cursor-pointer" />
+            <img
+              src={dots}
+              alt="dots"
+              data-cy="beneficiary-drop-down-button"
+              className="w-6 cursor-pointer"
+            />
           </Menu.Button>
         </div>
         <Transition
@@ -175,7 +188,7 @@ export function ValidatorDropDown(_props: {
                 {({ active }: { active: boolean }) => (
                   <div>
                     <button
-                      data-cy="drop-down-button"
+                      data-cy="drop-down-edit-button"
                       className={`${
                         active ? "bg-safe-blue text-white" : "text-gray-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
@@ -192,7 +205,7 @@ export function ValidatorDropDown(_props: {
                 {({ active }: { active: boolean }) => (
                   <div>
                     <button
-                      data-cy="drop-down-button"
+                      data-cy="drop-down-delete-button"
                       className={`${
                         active ? "bg-safe-blue text-white" : "text-gray-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
