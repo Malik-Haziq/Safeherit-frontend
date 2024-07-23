@@ -633,20 +633,21 @@ function Assets(_props: {
   )
 
   useEffect(() => {
-    const arr: ImageType[] = []
-    beneficiaries.forEach((el) => {
-      getFileFromFirebase(el.profile_image)
-        .then((res) => {
-          arr.push({ profile_image: res, name: el.name })
-        })
-        .catch(() => {
-          arr.push({ profile_image: userImg, name: el.name })
-        })
-    })
-    const firstImages = arr.slice(0, 3)
-    const remainingBeneficiary = arr.slice(3)
-    setImages([firstImages, remainingBeneficiary])
-    console.log(arr)
+    const fetchImages = async () => {
+      const promises = beneficiaries.map((el) =>
+        getFileFromFirebase(el.profile_image)
+          .then((res) => ({ profile_image: res, name: el.name }))
+          .catch(() => ({ profile_image: userImg, name: el.name })),
+      )
+
+      const arr = await Promise.all(promises)
+
+      const firstImages = arr.slice(0, 3)
+      const remainingBeneficiary = arr.slice(3)
+      setImages([firstImages, remainingBeneficiary])
+    }
+
+    fetchImages()
   }, [])
 
   return (
@@ -853,11 +854,11 @@ function AssetDetails(_props: {
           <div className="flex justify-between items-center">
             {_props.images[0]?.map((el, i) => {
               return (
-                <div className="relative group" key={i}>
+                <div className="relative group -mr-3" key={i}>
                   <img
                     src={el.profile_image}
                     alt="beneficiary image"
-                    className={`w-8 h-8 rounded-full border-2 border-white -mr-2`}
+                    className={`w-8 rounded-full border-2 border-white`}
                     key={i}
                   />
                   <div className="absolute top-0 -translate-y-10 text-white bg-slate-700 px-3 py-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
@@ -872,7 +873,7 @@ function AssetDetails(_props: {
                   className="w-8 h-8 rounded-full border-2 border-white -mr-2 flex items-center justify-center bg-gray-300 cursor-pointer"
                   onClick={handleToggleDropdown}
                 >
-                  +
+                  +{_props.images[1].length}
                 </div>
                 {showDropdown && (
                   <div className="absolute top-10 left-0 bg-white shadow-lg rounded-lg py-2 w-32">
