@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import userImg from "@images/user.svg"
 import uploadIcon from "@images/upload-icon.svg"
 import arrowDown from "@images/arrow-down.svg"
@@ -22,7 +22,7 @@ export function EditUserModal(_props: {
     displayName: string
     language: string
     profile_image: string
-    currency: string
+    defaultCurrency: string
   }
   _submitModal: () => void
   imageUpload: string
@@ -213,8 +213,8 @@ export function EditUserModal(_props: {
           props: {
             data: currencies,
             value: {
-              value: _props.modalControl.currency,
-              label: _props.modalControl.currency,
+              value: _props.modalControl.defaultCurrency,
+              label: _props.modalControl.defaultCurrency,
             },
             selectProps: {
               placeholder: "Select a currency",
@@ -222,7 +222,7 @@ export function EditUserModal(_props: {
             setSelectedValue: (value: any) => {
               const customEvent = {
                 target: {
-                  name: "currency",
+                  name: "defaultCurrency",
                   value: value.value,
                 },
               }

@@ -15,6 +15,7 @@ import {
   RE_ADD_DELETION_REQUEST,
   OFFER_FREE_TRIAL,
   jsonToFormData,
+  ADMIN_UPDATE_PULSE_CHECK,
 } from "@/common"
 import { setLoaderVisibility } from "../reducers/LoaderSlice"
 
@@ -182,6 +183,24 @@ export const offerTrial = createAsyncThunk(
       return rejectWithValue(error)
     } finally {
       dispatch(setLoaderVisibility(false))
+    }
+  },
+)
+
+export const adminUpdatePulseCheck = createAsyncThunk(
+  "adminUpdatePulseCheck",
+  async (Data: object, { getState, rejectWithValue }) => {
+    const { user } = getState() as { user: { token: any } }
+    const params = {
+      ROUTE: ADMIN_UPDATE_PULSE_CHECK,
+      Body: Data,
+      token: user.token,
+    }
+    try {
+      const response = await PUT(params)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
     }
   },
 )

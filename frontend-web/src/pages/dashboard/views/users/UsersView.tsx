@@ -10,6 +10,7 @@ import {
   UserDetail,
   EditUser,
   FreeTrial,
+  AdminUpdatePulseCheck,
 } from "../users/modal_admin"
 import { useCallback, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
@@ -19,11 +20,16 @@ import {
   deleteUserFromSuperadmin,
   changeUserAccountStatus,
   offerTrial,
+  adminUpdatePulseCheck,
 } from "@/redux/actions/AdminAction"
 import { toast, Spinner, Pagination } from "@/components"
 import { createUser } from "@/redux/actions/UserActions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
-import { getFileFromFirebase, isValidEmail } from "@/common"
+import {
+  getFileFromFirebase,
+  isValidEmail,
+  isValidPhoneWithRegion,
+} from "@/common"
 import { User } from "@/types"
 
 const initialState = {
@@ -47,6 +53,18 @@ const userInitialState = {
   profile_image: "",
 }
 
+const pulseCheckData = {
+  pulseCheckDays: 30,
+  pulseCheckEmail1: "",
+  pulseCheckEmail2: "",
+  pulseCheckEmail3: "",
+  pulseCheckPhone1: "",
+  pulseCheckPhone2: "",
+  pulseCheckValidationRequired: "false",
+  pulseCheckNonValidationMonths: 3,
+  ownerEmail: "",
+}
+
 export default function UsersView() {
   const dispatch = useAppDispatch()
   const admin = useAppSelector((state) => state.admin)
@@ -58,6 +76,7 @@ export default function UsersView() {
   const [selectedUser, setSelectedUser] = useState<any>()
   const [loading, setLoading] = useState(true)
   const [modalControl, setModalControl] = useState(initialState)
+  const [pulseCheckControl, setPulseCheckControl] = useState(pulseCheckData)
   const [userViewControl, setViewControl] = useState(userInitialState)
   const [modalVisibility, setModalVisibility] = useState("none")
   const paginationRef = useRef<HTMLDivElement>(null)
@@ -78,6 +97,11 @@ export default function UsersView() {
   const _handleChange = (event: { target: { name: any; value: any } }) => {
     const { name, value } = event.target
     setModalControl({ ...modalControl, [name]: value })
+  }
+
+  const _handlePulseChange = (event: { target: { name: any; value: any } }) => {
+    const { name, value } = event.target
+    setPulseCheckControl({ ...pulseCheckControl, [name]: value })
   }
 
   const createUserSubmit = () => {
@@ -235,6 +259,50 @@ export default function UsersView() {
     }
   }
 
+  const editPulseCheck = () => {
+    setModalVisibility("admin-update-pulse-check")
+  }
+
+  const _submitUpdatePulseCheck = () => {
+    const data = {
+      ...pulseCheckControl,
+      ownerEmail: selectedUser.email,
+    }
+    if (
+      (!isValidEmail(pulseCheckControl.pulseCheckEmail1) &&
+        !isValidEmail(pulseCheckControl.pulseCheckEmail2) &&
+        !isValidEmail(pulseCheckControl.pulseCheckEmail3)) ||
+      (pulseCheckControl.pulseCheckEmail1 &&
+        !isValidEmail(pulseCheckControl.pulseCheckEmail1)) ||
+      (pulseCheckControl.pulseCheckEmail3 &&
+        !isValidEmail(pulseCheckControl.pulseCheckEmail3)) ||
+      (pulseCheckControl.pulseCheckEmail2 &&
+        !isValidEmail(pulseCheckControl.pulseCheckEmail2))
+    ) {
+      toast("please enter a valid Email address", "error")
+    } else if (
+      pulseCheckControl.pulseCheckPhone1 &&
+      !isValidPhoneWithRegion(pulseCheckControl.pulseCheckPhone1)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else if (
+      pulseCheckControl.pulseCheckPhone2 &&
+      !isValidPhoneWithRegion(pulseCheckControl.pulseCheckPhone2)
+    ) {
+      toast("Please enter a valid phone number", "error")
+    } else {
+      dispatch<any>(adminUpdatePulseCheck(data))
+        .unwrap()
+        .then(() => {
+          toast("pulse details has been updated", "success")
+          fetchUsers()
+          setSelectedUser("")
+          setPulseCheckControl(pulseCheckData)
+          setModalVisibility("")
+        })
+    }
+  }
+
   return (
     <div className={styles.AppView}>
       <NewUserModal
@@ -253,6 +321,7 @@ export default function UsersView() {
         closeIconVisibility={true}
         toggleUserAccount={changeAccountStatus}
         offerFreeTrial={offerFreeTrial}
+        editPulseCheck={editPulseCheck}
       />
       <FreeTrial
         openModal={modalVisibility == "free-trial-modal"}
@@ -263,6 +332,15 @@ export default function UsersView() {
         _handleChange={_handleChange}
         _submitModal={_submitOfferFreeTrial}
         modalControl={modalControl}
+      />
+      <AdminUpdatePulseCheck
+        openModal={modalVisibility == "admin-update-pulse-check"}
+        closeModal={closeModal}
+        closeModalOnOverlayClick={false}
+        closeIconVisibility={true}
+        _handleChange={_handlePulseChange}
+        _submitModal={_submitUpdatePulseCheck}
+        modalControl={pulseCheckControl}
       />
       <UserDetail
         openModal={modalVisibility == "view-user"}
@@ -387,18 +465,28 @@ function UserView(_props: {
           alt="user image"
           className="w-9 h-9 rounded-full object-contain"
         />
-        <p className="text-[#00192B] text-lg font-semibold">
+        <p
+          data-cy={`${_props.displayName}-user`}
+          className="text-[#00192B] text-lg font-semibold"
+        >
           {_props.displayName}
         </p>
       </td>
-      <td className="w-[120px] text-[#4D4D4D] font-medium text-sm">
+      <td
+        data-cy={`user-${_props.joining_date}`}
+        className="w-[120px] text-[#4D4D4D] font-medium text-sm"
+      >
         {_props.joining_date}
       </td>
-      <td className="w-[80px] text-[#4D4D4D] font-medium text-sm">
+      <td
+        data-cy={`user-${_props.plan}`}
+        className="w-[80px] text-[#4D4D4D] font-medium text-sm"
+      >
         {_props.plan}
       </td>
 
       <td
+        data-cy={`user-${_props.payment_status}`}
         className={
           _props.payment_status.toLowerCase() === "paid"
             ? "w-[80px] text-[#27AE60] font-medium text-sm"
@@ -410,6 +498,7 @@ function UserView(_props: {
         {_props.payment_status}
       </td>
       <td
+        data-cy={`user-${_props.account_status}`}
         className={
           _props.account_status.toLowerCase() === "active"
             ? "w-[80px] text-[#27AE60] font-medium text-sm"
@@ -422,8 +511,9 @@ function UserView(_props: {
         {_props.account_status}
       </td>
       <td className="w-[170px] text-[#4D4D4D] font-medium text-xs">
-        <p>{_props.pulse_status}</p>
+        <p data-cy={`user-${_props.pulse_status}`}>{_props.pulse_status}</p>
         <span
+          data-cy={`user-${_props.pulseStatusSubtile}`}
           className={
             _props.pulseStatusSubtile.toLowerCase() === "waiting for answer"
               ? "w-[80px] text-[#52CEB7] font-medium text-xs"
