@@ -11,6 +11,7 @@ import { copyToClipboard, downloadPEM } from "@/common/utils"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { updatePK } from "@/redux/actions"
 import { setLoaderVisibility } from "@/redux/reducers/LoaderSlice"
+import privateKeyVideo from "@assets/videos/private-key-video.mp4"
 
 const initialState = {
   publicKey: "",
@@ -79,9 +80,11 @@ export default function RegisterKey() {
         const _privateKey = modalControl.privateKey
           ? encryptionService.encryptKeys(modalControl.privateKey, user.uid)
           : ""
-        const storageKey = encryptionService.basicEncryption(user.email + user.role)
+        const storageKey = encryptionService.basicEncryption(
+          user.email + user.role,
+        )
         rememberMe ? localStorage.setItem(storageKey, _privateKey) : ""
-        localStorage.setItem('_privateKey', _privateKey)
+        localStorage.setItem("_privateKey", _privateKey)
         navigate("/dashboard")
       } else {
         dispatch<any>(
@@ -96,9 +99,11 @@ export default function RegisterKey() {
             const _privateKey = modalControl.privateKey
               ? encryptionService.encryptKeys(modalControl.privateKey, user.uid)
               : ""
-            const storageKey = encryptionService.basicEncryption(user.email + user.role)
+            const storageKey = encryptionService.basicEncryption(
+              user.email + user.role,
+            )
             rememberMe ? localStorage.setItem(storageKey, _privateKey) : ""
-            localStorage.setItem('_privateKey', _privateKey)
+            localStorage.setItem("_privateKey", _privateKey)
             navigate("/dashboard")
           })
           .catch((err: any) => {
@@ -243,7 +248,10 @@ export default function RegisterKey() {
             <p className="text-center mb-12">
               Learn how private keys keep your data safe.
             </p>
-            <img src={registerPageVideo} alt="register video screenshot" />
+            <video width="490" height="264" controls className="rounded-2xl">
+              <source src={privateKeyVideo} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
       </section>
