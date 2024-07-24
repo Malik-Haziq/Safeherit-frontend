@@ -718,7 +718,7 @@ function Assets(_props: {
                   assetId={asset?.id || ""}
                   assetType={asset?.category || ""}
                   assetName={asset?.data?.["Asset Name"] || ""}
-                  assetValue={`${_props.userCurrency} ${assetValue}`}
+                  assetValue={`${asset?.data?.Currency} ${assetValue}`}
                   beneficiaries={asset?.beneficiaries}
                   destroyAsset={_props.destroyAsset}
                   editAsset={_props.editAsset}
