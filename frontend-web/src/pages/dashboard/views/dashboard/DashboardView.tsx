@@ -13,6 +13,7 @@ import { Spinner } from "@/components"
 import { Link } from "react-router-dom"
 import { assetImages } from "../asset/data"
 import { DashboardModal } from "./modal_dashboard"
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
 
 export default function DashboardView() {
   const dispatch = useAppDispatch()
@@ -77,7 +78,7 @@ export default function DashboardView() {
         // TODO: show fallback page
       })
   }, [])
-
+  const percentageUsed = (40 / 100) * 100
   return (
     <div className="flex flex-col px-8 gap-8 mt-8 max-w-[1200px] mx-auto">
       <section className="flex gap-5 h-[240px] justify-between">
@@ -92,6 +93,32 @@ export default function DashboardView() {
             />
           )
         })}
+
+        <div className="h-full min-w-[200px] p-3 flex flex-col gap-8 bg-white rounded-xl shadow-lg">
+          <div className="bg-safe-light-blue-tint-1 flex items-center justify-center py-7 rounded-xl h-28">
+            <div className="w-[90px] h-[90px] relative">
+              <CircularProgressbar
+                value={percentageUsed}
+                styles={buildStyles({
+                  pathColor: "#0971AA",
+                  trailColor: "#d6d6d6",
+                })}
+                className="flex items-center justify-center"
+              />
+              <div className="absolute inset-0 flex items-center justify-center text-[#333]">
+                {percentageUsed}%
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-center flex-col">
+            <p className="text-[28px] font-bold">
+              {`${(40 / 1000000).toFixed(0)}`} MB used
+            </p>
+            <small className="text-lg text-safe-text-light-gray-1">
+              1GB Total
+            </small>
+          </div>
+        </div>
       </section>
       <section className=" flex gap-4 px-auto mx-auto">
         {_dashboardData.map((data, index) => {
