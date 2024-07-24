@@ -665,15 +665,17 @@ export function AssetBeneficiaries(_props: {
                   </thead>
                   <tbody>
                     {_props.modalControl.map(
-                      (beneficiary: any, index: number) => (
-                        <Beneficiary
-                          img={beneficiary.profile_image}
-                          name={beneficiary.name}
-                          email={beneficiary.primary_email}
-                          number={beneficiary.phone_number}
-                          key={index}
-                        />
-                      ),
+                      (beneficiary: any, index: number, arr: any) => {
+                        return (
+                          <Beneficiary
+                            img={beneficiary.profile_image}
+                            name={beneficiary.name}
+                            email={beneficiary.primary_email}
+                            number={beneficiary.phone_number}
+                            key={index}
+                          />
+                        )
+                      },
                     )}
                   </tbody>
                 </table>

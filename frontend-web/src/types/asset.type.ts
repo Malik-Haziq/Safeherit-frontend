@@ -16,3 +16,5 @@ export interface Currency {
   rates: {[key: string]: number}
   date: string
 }
+
+export type ImageType = { profile_image: string; name: string }
