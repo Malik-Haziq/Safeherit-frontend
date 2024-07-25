@@ -1,9 +1,10 @@
 import { Asset, Currency } from "@/types"
+import { getCookie } from "./cookie"
 
 function convert(
   amount: number,
   currentCurrency: string,
-  convertToCurrency: string,
+  convertToCurrency: any,
   currencies: Currency,
 ): number {
   const resData = currencies
@@ -34,6 +35,7 @@ export const calculateTotalAssetsCost = (
   currencies: Currency,
   assetCostFilter: string,
 ): number => {
+  const defaultCurrency = getCookie('defaultCurrency')
   let sum = 0
   let filteredAssets: Asset[] =
     assetCostFilter !== "All"
@@ -44,7 +46,7 @@ export const calculateTotalAssetsCost = (
     filteredAssets.forEach((asset) => {
       const amount = asset.data["Acquisition cost"] || asset.data["Balance"] || 0
       if (amount) {
-        sum = sum + convert(amount, asset?.data?.Currency, "EUR", currencies)
+        sum = sum + convert(amount, asset?.data?.Currency, defaultCurrency, currencies)
       }
     })
   }
