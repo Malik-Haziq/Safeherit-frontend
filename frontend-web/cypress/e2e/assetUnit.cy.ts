@@ -27,7 +27,7 @@ describe('Asset unit testing',()=>{
         cy.get(':nth-child(7) > .rounded-3xl').type('67');
         cy.get('.rounded-3xl > .absolute').click();
         cy.get('#react-select-5-option-0').click();
-        cy.get(':nth-child(9) > .rounded-3xl').type('hey This is my Asset');
+        cy.get(':nth-child(9) > .rounded-3xl').type('Hey This is my Asset');
         cy.get('[data-cy="submit-asset-modal-two-button"]').click();      
     };
     const dataFillerForEdit = ()=>{
