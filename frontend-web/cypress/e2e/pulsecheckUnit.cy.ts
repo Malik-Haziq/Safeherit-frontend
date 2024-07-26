@@ -51,7 +51,7 @@ describe('Pulse check unit testing',()=>{
         cy.get('[data-cy="submit-pulse-modal-one-button"]').click()
         cy.get(':nth-child(11) > :nth-child(1) > [data-cy="select-country-codes"] > ._rightIconStyles_qr9qf_13').click()
         cy.get('#react-select-2-listbox').contains('+92').click()
-        cy.get('[data-cy="pulse-check-phone-number"]').type('3270948941')
+        cy.get('[data-cy="pulse-check-phone-number"]').type('3255115996')
         cy.get('[data-cy="submit-pulse-modal-two-button"]').click()
         cy.get('[data-cy="submit-pulse-modal-three-button"]').click()
         cy.get('[data-cy="submit-pulse-modal-four-button"]').click()

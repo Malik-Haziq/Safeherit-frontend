@@ -9,16 +9,16 @@ describe('Asset unit testing',()=>{
         cy.get('[data-cy="asset-types-list"] > .absolute')
         cy.get('.css-b62m3t-container').click();
         cy.get('#react-select-2-listbox').contains('Bank Account').click();
-        cy.get('input[placeholder="Asset Name"]').type('my asset')
+        cy.get('input[placeholder="Asset Name"]').type('My asset')
 
         cy.get(':nth-child(5) > .rounded-3xl').type('swiss');
         cy.get(':nth-child(6) > .rounded-3xl').type('florida');
         cy.get(':nth-child(7) > .rounded-3xl > .absolute').click();
         cy.get('#react-select-3-option-1').click();
         cy.get(':nth-child(8) > .rounded-3xl').type('345678990');
-        // cy.get(':nth-child(9) > .rounded-3xl > .absolute').click();
-        // cy.get('#react-select-4-option-0').click();
-        // cy.get(':nth-child(9) > .rounded-3xl').type('123456789');
+        cy.get('#react-select-4-input').type('usd').click()
+        cy.get("input[name='Balance']").type('670')      
+        cy.get("input[name='Debit Card PIN']").clear().type('5416')
         cy.get('[data-cy="submit-asset-modal-one-button"]').click();
 
         cy.get(':nth-child(4) > .rounded-3xl').type('12345');
@@ -27,7 +27,7 @@ describe('Asset unit testing',()=>{
         cy.get(':nth-child(7) > .rounded-3xl').type('67');
         cy.get('.rounded-3xl > .absolute').click();
         cy.get('#react-select-5-option-0').click();
-        cy.get(':nth-child(9) > .rounded-3xl').type('heya');
+        cy.get(':nth-child(9) > .rounded-3xl').type('hey This is my Asset');
         cy.get('[data-cy="submit-asset-modal-two-button"]').click();      
     };
     const dataFillerForEdit = ()=>{
@@ -35,7 +35,7 @@ describe('Asset unit testing',()=>{
         cy.get(':nth-child(4) > .rounded-3xl').clear().type('12345');
         cy.get(':nth-child(5) > .rounded-3xl').clear().type('13');
         cy.get(':nth-child(6) > .rounded-3xl').clear().type('15');
-        cy.get("input[name='Balance']").clear().type('670000')      
+        cy.get("input[name='Balance']").type('7000')      
         cy.get("input[name='Debit Card PIN']").clear().type('5416')
         cy.get("[data-cy='submit-asset-modal-one-button']").click()
         cy.get('input[name="Website"]').clear().type('executers.surge.sh')
@@ -126,9 +126,9 @@ describe('Asset unit testing',()=>{
                 expect(intercept.response.statusCode ).to.equal(200);
             })
             cy.get('[data-cy="number-of-assets"]').contains('1')
-            cy.get('[data-cy="view-asset-details-button"]').contains('my asset')
+            cy.get('[data-cy="view-asset-details-button"]').contains('My Bank Asset')
             cy.get('[data-cy="asset-type"]').contains('Bank Account')
-            cy.get('[data-cy="asset-value"]').contains('USD 0')
+            cy.get('[data-cy="asset-value"]').contains('USD 6,700')
             cy.get('[data-cy="view-asset-details-button-type-icon"]')
             .should('have.attr', 'src', '/assets/bank-80f490d7.svg')
             .should('have.attr', 'alt', 'real estate icon');
@@ -400,7 +400,7 @@ describe('Asset unit testing',()=>{
             }).as('assetList');
             cy.intercept({
                 method: 'GET',
-                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-asset?id=20OSW7ueOVGfoeVyQFgb',
+                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-asset?id=I1d22FwHYtSqR6FxD6q4',
             }, {
                 statusCode: 200,
                 body: {
@@ -521,7 +521,7 @@ describe('Asset unit testing',()=>{
             }).as('assetList');
             cy.intercept({
                 method: 'GET',
-                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-asset?id=20OSW7ueOVGfoeVyQFgb',
+                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-asset?id=I1d22FwHYtSqR6FxD6q4',
             }, {
                 statusCode: 200,
                 body: {

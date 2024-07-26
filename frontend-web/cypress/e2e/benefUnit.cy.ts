@@ -323,7 +323,7 @@ describe('Beneficiary Unit Testing', () => {
             
             cy.intercept({
                 method: 'GET',
-                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=qd9zW12m2WVXL4ksN1c3',
+                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=avVocyJpWBrYg0txEIso',
             }, {
                 statusCode: 200,
                 body: {
@@ -401,7 +401,7 @@ describe('Beneficiary Unit Testing', () => {
             
             cy.intercept({
                 method: 'GET',
-                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=qd9zW12m2WVXL4ksN1c3',
+                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=avVocyJpWBrYg0txEIso',
             }, {
                 statusCode: 200,
                 body: {
@@ -495,7 +495,7 @@ describe('Beneficiary Unit Testing', () => {
             
             cy.intercept({
                 method: 'GET',
-                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=qd9zW12m2WVXL4ksN1c3',
+                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=avVocyJpWBrYg0txEIso',
             }, {
                 statusCode: 200,
                 body: {
@@ -577,7 +577,7 @@ describe('Beneficiary Unit Testing', () => {
             
             cy.intercept({
                 method: 'GET',
-                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=qd9zW12m2WVXL4ksN1c3',
+                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=avVocyJpWBrYg0txEIso',
             }, {
                 statusCode: 200,
                 body: {
@@ -587,7 +587,7 @@ describe('Beneficiary Unit Testing', () => {
             }).as('getBenefById');
             cy.intercept({
                 method: 'DELETE',
-                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=qd9zW12m2WVXL4ksN1c3',
+                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=avVocyJpWBrYg0txEIso',
             }, {
                 statusCode: 200,
                 body: {"success":true,"message":"Beneficiary deleted"}
@@ -614,7 +614,7 @@ describe('Beneficiary Unit Testing', () => {
         cy.get('[data-cy="confirm-button"]').click();
         cy.wait("@deleteBenef").then((intercept) => {
             assert(intercept.response.statusCode ==200);
-            cy.get('#notistack-snackbar').should('be.visible').contains("deleting Beneficiary Joshua Reichert");
+            cy.get('#notistack-snackbar').should('be.visible').contains("deleting Beneficiary Clifton Sipes");
         });
     });
     it('Delete beneficiary with server error 500 ', () => {
@@ -656,7 +656,7 @@ describe('Beneficiary Unit Testing', () => {
             
             cy.intercept({
                 method: 'GET',
-                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=qd9zW12m2WVXL4ksN1c3',
+                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=avVocyJpWBrYg0txEIso',
             }, {
                 statusCode: 200,
                 body: {
@@ -665,7 +665,7 @@ describe('Beneficiary Unit Testing', () => {
                 }
             }).as('getBenefById');
             cy.intercept('DELETE', 
-            'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=qd9zW12m2WVXL4ksN1c3', (req) => {
+            'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=avVocyJpWBrYg0txEIso', (req) => {
                 req.reply({
                 statusCode: 500
                 })
@@ -706,7 +706,7 @@ describe('Beneficiary Unit Testing', () => {
         cy.get('[data-cy="confirm-button"]').click();
         cy.wait("@deleteRequest500").then((intercept) => {
             assert(intercept.response.statusCode == 500);
-            cy.get('#notistack-snackbar').should('exist').contains("deleting Beneficiary Joshua Reichert");
+            cy.get('#notistack-snackbar').should('exist').contains("deleting Beneficiary Clifton Sipes");
         });
     });
     it('Delete beneficiary with unauthorized 401 ', () => {
@@ -748,7 +748,7 @@ describe('Beneficiary Unit Testing', () => {
             
             cy.intercept({
                 method: 'GET',
-                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=qd9zW12m2WVXL4ksN1c3',
+                url: 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=avVocyJpWBrYg0txEIso',
             }, {
                 statusCode: 200,
                 body: {
@@ -756,7 +756,7 @@ describe('Beneficiary Unit Testing', () => {
                     "data": beneficiaryListData
                 }
             }).as('getBenefById');
-            cy.intercept('DELETE', 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=qd9zW12m2WVXL4ksN1c3', (req) => {
+            cy.intercept('DELETE', 'https://us-central1-safeherit-431c4.cloudfunctions.net/api-beneficiary?id=avVocyJpWBrYg0txEIso', (req) => {
                 req.reply({
                 statusCode: 401,
                 body: {
@@ -799,7 +799,7 @@ describe('Beneficiary Unit Testing', () => {
         cy.get('[data-cy="confirm-button"]').click();
         cy.wait("@deleteRequest401").then((intercept) => {
             assert(intercept.response.statusCode == 401);
-            cy.get('#notistack-snackbar').should('exist').contains("deleting Beneficiary Joshua Reichert");
+            cy.get('#notistack-snackbar').should('exist').contains("deleting Beneficiary Clifton Sipes");
 
         });
 

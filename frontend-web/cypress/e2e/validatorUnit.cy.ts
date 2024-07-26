@@ -58,7 +58,7 @@ describe('Validator unit testing',()=>{
         cy.get('.primary-btn').click()
     };
 
-    it.only('List beneficiary with success 200 verify loaded data on frontend', () => {
+    it('List beneficiary with success 200 verify loaded data on frontend', () => {
         cy.fixture('auth.json').then((authData) => {
             cy.intercept({
                 method: 'GET',
