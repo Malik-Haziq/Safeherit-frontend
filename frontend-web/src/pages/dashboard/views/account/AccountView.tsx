@@ -43,6 +43,7 @@ const initialState = {
   privateKey: "",
   publicKey: "",
   defaultCurrency: "",
+  fileSize: 0,
 }
 
 const initialPKState = {
@@ -67,7 +68,10 @@ export default function AccountView() {
   const [modalVisibility, setModalVisibility] = useState("none")
   // const [modalVisibility, setModalVisibility] = useState("none")
   const [auth2FAEnabled, setAuth2FAEnabled] = useState(false)
-  const memberhipPlanDetail = React.useMemo(() => convertTimestampsToPlanDuration(user.periodEnd, user.periodStart), [user])
+  const memberhipPlanDetail = React.useMemo(
+    () => convertTimestampsToPlanDuration(user.periodEnd, user.periodStart),
+    [user],
+  )
 
   useEffect(() => {
     const key = localStorage.getItem("_privateKey")
@@ -133,6 +137,7 @@ export default function AccountView() {
     startLoader()
     toast("Updating user information", "info")
     setCookie("defaultCurrency", modalControl.defaultCurrency)
+    console.log("modalControl", modalControl)
     dispatch<any>(updateUser(modalControl))
       .unwrap()
       .then(() => {
@@ -180,11 +185,10 @@ export default function AccountView() {
     const storageKey = encryptionService.basicEncryption(user.email + user.role)
     const _key = localStorage.getItem(storageKey)
     if (_key) {
-      localStorage.setItem('_privateKey', _key)
+      localStorage.setItem("_privateKey", _key)
       localStorage.removeItem(storageKey)
       toast("Operation Successful", "success")
-    }
-    else {
+    } else {
       toast("Device not saved", "error")
     }
   }
@@ -267,9 +271,11 @@ export default function AccountView() {
                     user.uid,
                   )
                 : ""
-              const storageKey = encryptionService.basicEncryption(user.email + user.role)
+              const storageKey = encryptionService.basicEncryption(
+                user.email + user.role,
+              )
               localStorage.setItem(storageKey, _privateKey)
-              localStorage.setItem('_privateKey', _privateKey)
+              localStorage.setItem("_privateKey", _privateKey)
             })
             .catch()
             .finally(() => {

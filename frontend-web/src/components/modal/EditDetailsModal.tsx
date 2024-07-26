@@ -5,8 +5,7 @@ import profilePic from "@images/profile-pic.svg"
 import closeIcon from "@images/close-icon.svg"
 import { IoMdCloseCircle } from "react-icons/io"
 import uploadVideoIcon from "@images/upload-video.svg"
-
-import { toast } from "@/components"
+import { useImageFileUpload, useVideoFileUpload } from "@/common"
 
 interface CustomChangeEvent {
   target: {
@@ -30,48 +29,28 @@ export const EditDetailsModal = (_props: {
   setVideoUpload?: any
   _handleDiscard: any
 }) => {
-  const handleImageInputChange = (event: any) => {
-    const file = event.target.files[0]
+  const { handleImageFileUpload } = useImageFileUpload(10, _props)
+  const handleImageInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const dataURL = e.target?.result
-        _props.setImageUpload(dataURL)
-        const customEvent: CustomChangeEvent = {
-          target: {
-            name: "profile_image",
-            value: file,
-          },
-        }
-        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+      const result = handleImageFileUpload(file)
+      if (result.file) {
+        _props.modalControl.fileSize = result.fileSize
       }
-      reader.readAsDataURL(file)
     }
   }
 
-  const handleVideoInputChange = (event: any) => {
-    const maxSize = 100 * 1024 * 1024
-    const file = event.target.files[0]
-
+  const { handleVideoFileUpload } = useVideoFileUpload(100, _props)
+  const handleVideoInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0]
     if (file) {
-      if (file.size > maxSize) {
-        toast("Video's size should be less than 100MBs", "error")
-      } else {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          const dataURL = e.target?.result
-          _props.setVideoUpload(dataURL)
-          const customEvent: CustomChangeEvent = {
-            target: {
-              name: "personalized_video",
-              value: file,
-            },
-          }
-          _props._handleChange(
-            customEvent as React.ChangeEvent<HTMLInputElement>,
-          )
-        }
-        reader.readAsDataURL(file)
+      const result = handleVideoFileUpload(file)
+      if (result.file) {
+        _props.modalControl.fileSize = result.fileSize
       }
     }
   }

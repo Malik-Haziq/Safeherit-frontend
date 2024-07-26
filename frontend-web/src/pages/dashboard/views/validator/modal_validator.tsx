@@ -10,6 +10,7 @@ import stepThree from "@images/step_3_of_3.svg"
 
 import { Modal } from "@/components"
 import { IoMdCloseCircle } from "react-icons/io"
+import { useImageFileUpload } from "@/common"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
@@ -320,6 +321,7 @@ export function StepTwoModal(_props: {
     instagram_username: string
     twitter_username: string
     profile_image: string
+    fileSize: number
   }
   _submitModal: () => void
   _handleDiscard: (name: string, value: any) => void
@@ -328,22 +330,16 @@ export function StepTwoModal(_props: {
   arrayLength: any
   showPreviousModal: any
 }) {
-  const handleImageInputChange = (event: any) => {
-    const file = event.target.files[0]
+  const { handleImageFileUpload } = useImageFileUpload(10, _props)
+  const handleImageInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const dataURL = e.target?.result
-        _props.setImageUpload(dataURL)
-        const customEvent: CustomChangeEvent = {
-          target: {
-            name: "profile_image",
-            value: file,
-          },
-        }
-        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+      const result = handleImageFileUpload(file)
+      if (result.file) {
+        _props.modalControl.fileSize = result.fileSize
       }
-      reader.readAsDataURL(file)
     }
   }
   return (

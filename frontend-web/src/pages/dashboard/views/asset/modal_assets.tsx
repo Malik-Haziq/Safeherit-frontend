@@ -6,7 +6,7 @@ import uploadVideoIcon from "@images/upload-video.svg"
 import arrowDown from "@images/arrow-down.svg"
 import userImg from "@images/user.svg"
 
-import { Modal } from "@/components"
+import { Modal, toast } from "@/components"
 import { assetData } from "./data"
 import { useAppSelector } from "@redux/hooks"
 import { getFileFromFirebase } from "@/common"
@@ -388,11 +388,19 @@ export function StepTwoModal(_props: {
     : []
 
   const handleFileInputChange = (event: any) => {
+    const maxSize = 10
     const file = event.target.files[0]
     if (file) {
-      _props.setAssetFile(file)
+      const fileSizeInMB = file.size / (1024 * 1024)
+      if (fileSizeInMB > maxSize) {
+        toast(`File too large. Maximum allowed size is ${maxSize} MB.`, "error")
+      } else {
+        _props.setAssetFile(file)
+        _props.modalControl.fileSize = fileSizeInMB
+      }
     }
   }
+
   return (
     <Modal
       openModal={_props.openModal}
@@ -560,7 +568,13 @@ export function AssetDetail(_props: {
       openModal={_props.openModal}
       closeModal={_props.closeModal}
       closeModalOnOverlayClick={_props.closeModalOnOverlayClick}
-      modalTitle={_props.action == "create" ? "Create Assets" : _props.action == "view" ? "View Asset" : "Edit Asset"}
+      modalTitle={
+        _props.action == "create"
+          ? "Create Assets"
+          : _props.action == "view"
+          ? "View Asset"
+          : "Edit Asset"
+      }
       closeIconVisibility={_props.closeIconVisibility}
       arrayLength={_props.arrayLength}
       showPreviousModal={_props.showPreviousModal}

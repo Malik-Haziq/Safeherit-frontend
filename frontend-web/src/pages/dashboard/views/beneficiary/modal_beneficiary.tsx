@@ -12,6 +12,7 @@ import stepFour from "@images/step_4_of_4.svg"
 import { IoMdCloseCircle } from "react-icons/io"
 
 import { Modal, toast } from "@/components"
+import { useImageFileUpload, useVideoFileUpload } from "@/common"
 
 export function StepZeroInformationModal(_props: {
   openModal: boolean
@@ -217,6 +218,7 @@ export function StepOneModal(_props: {
     phone_number: string
     backup_phone_number: string
     inform_beneficiary: boolean
+    fileSize: number
   }
   _submitModal: () => void
   arrayLength: any
@@ -418,6 +420,7 @@ export function StepTwoModal(_props: {
     instagram_username: string
     twitter_username: string
     profile_image: string
+    fileSize: number
   }
   _submitModal: () => void
   _handleDiscard: (name: string, value: any) => void
@@ -426,22 +429,16 @@ export function StepTwoModal(_props: {
   arrayLength: any
   showPreviousModal: () => void
 }) {
-  const handleImageInputChange = (event: any) => {
-    const file = event.target.files[0]
+  const { handleImageFileUpload } = useImageFileUpload(10, _props)
+  const handleImageInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const dataURL = e.target?.result
-        _props.setImageUpload(dataURL)
-        const customEvent: CustomChangeEvent = {
-          target: {
-            name: "profile_image",
-            value: file,
-          },
-        }
-        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+      const result = handleImageFileUpload(file)
+      if (result.file) {
+        _props.modalControl.fileSize = result.fileSize
       }
-      reader.readAsDataURL(file)
     }
   }
   return (
@@ -636,35 +633,22 @@ export function StepThreeModal(_props: {
     name: string
     personalized_message: string
     personalized_video: string
+    fileSize: number
   }
   _handleDiscard: (name: string, value: any) => void
   _submitModal: () => void
   arrayLength: any
   showPreviousModal: () => void
 }) {
-  const handleImageInputChange = (event: any) => {
-    const maxSize = 100 * 1024 * 1024
-    const file = event.target.files[0]
-
+  const { handleVideoFileUpload } = useVideoFileUpload(100, _props)
+  const handleVideoInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0]
     if (file) {
-      if (file.size > maxSize) {
-        toast("Video's size should be less than 100MBs", "error")
-      } else {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          const dataURL = e.target?.result
-          _props.setVideoUpload(dataURL)
-          const customEvent: CustomChangeEvent = {
-            target: {
-              name: "personalized_video",
-              value: file,
-            },
-          }
-          _props._handleChange(
-            customEvent as React.ChangeEvent<HTMLInputElement>,
-          )
-        }
-        reader.readAsDataURL(file)
+      const result = handleVideoFileUpload(file)
+      if (result.file) {
+        _props.modalControl.fileSize = result.fileSize
       }
     }
   }
@@ -737,7 +721,7 @@ export function StepThreeModal(_props: {
                     type="file"
                     accept="video/*"
                     name="personalized_video"
-                    onChange={handleImageInputChange}
+                    onChange={handleVideoInputChange}
                     className="opacity-0 absolute top-0 left-44 h-20 w-[220px]"
                   />
                   <div className="flex items-center justify-center gap-2 mb-8">
