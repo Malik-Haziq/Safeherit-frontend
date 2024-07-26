@@ -1,21 +1,25 @@
 import '@4tw/cypress-drag-drop';
 import 'cypress-file-upload';
+import { faker } from '@faker-js/faker';
+
 
 describe('Automated Test for Asset create, edit or delete', () => {
 
     const dataFiller = () => {
-        
+        const num = faker.number.int({ min: 1, max: 100 });
         cy.get('[data-cy="asset-types-list"] > .absolute')
         cy.wait(4000);
         cy.get('.css-b62m3t-container').click();
         cy.get('#react-select-2-listbox').contains('Bank Account').click();
-        cy.get('input[placeholder="Asset Name"]').type('my asset')
+        cy.get('input[placeholder="Asset Name"]').type('My Bank asset ')
 
         cy.get(':nth-child(5) > .rounded-3xl').type('swiss');
         cy.get(':nth-child(6) > .rounded-3xl').type('florida');
         cy.get(':nth-child(7) > .rounded-3xl > .absolute').click();
         cy.get('#react-select-3-option-1').click();
         cy.get(':nth-child(8) > .rounded-3xl').type('345678990');
+        cy.get('#react-select-4-input').type('usd')
+        cy.get("input[name='Balance']").clear().type(num.toString()) 
         cy.get('[data-cy="submit-asset-modal-one-button"]').click();
 
         cy.get(':nth-child(4) > .rounded-3xl').type('12345');
@@ -63,11 +67,13 @@ describe('Automated Test for Asset create, edit or delete', () => {
         cy.wait(2000);
     };
     const editAsset = ()=>{
+        cy.get('[data-cy="dashboard-view-my-assets-button"]').should('be.visible').click();
+        const balance = faker.number.int({ min: 1, max: 500 });
         cy.get('[data-cy="edit-asset-button"]').first().click()
-        cy.get(':nth-child(4) > .rounded-3xl').clear().type('12345');
+        cy.get(':nth-child(4) > .rounded-3xl').clear().type('My Bank Asset');
         cy.get(':nth-child(5) > .rounded-3xl').clear().type('13');
         cy.get(':nth-child(6) > .rounded-3xl').clear().type('15');
-        cy.get("input[name='Balance']").clear().type('670000')      
+        cy.get("input[name='Balance']").clear().type(balance.toString())      
         cy.get("input[name='Debit Card PIN']").clear().type('5416')
         cy.get("[data-cy='submit-asset-modal-one-button']").click()
         cy.get('input[name="Website"]').clear().type('executers.surge.sh')
