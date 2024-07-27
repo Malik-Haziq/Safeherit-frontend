@@ -4,11 +4,12 @@ import uploadIcon from "@images/upload-icon.svg"
 import arrowDown from "@images/arrow-down.svg"
 
 import { Modal } from "@/components"
+import { useImageFileUpload } from "@/common"
 
 interface CustomChangeEvent {
   target: {
     name: string
-    value: string | ArrayBuffer | null | undefined
+    value: string | ArrayBuffer | null | undefined | number
   }
 }
 
@@ -23,6 +24,7 @@ export function EditUserModal(_props: {
     language: string
     profile_image: string
     defaultCurrency: string
+    fileSize: number
   }
   _submitModal: () => void
   imageUpload: string
@@ -38,24 +40,19 @@ export function EditUserModal(_props: {
     { value: "SGD", label: "SGD (Singapore dollar)" },
   ]
 
-  const handleImageInputChange = (event: any) => {
-    const file = event.target.files[0]
+  const { handleImageFileUpload } = useImageFileUpload(10, _props)
+  const handleImageInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const dataURL = e.target?.result
-        _props.setImageUpload(dataURL)
-        const customEvent: CustomChangeEvent = {
-          target: {
-            name: "profile_image",
-            value: file,
-          },
-        }
-        _props._handleChange(customEvent as React.ChangeEvent<HTMLInputElement>)
+      const result = handleImageFileUpload(file)
+      if (result.file) {
+        _props.modalControl.fileSize = result.fileSize
       }
-      reader.readAsDataURL(file)
     }
   }
+
   return (
     <Modal
       openModal={_props.openModal}

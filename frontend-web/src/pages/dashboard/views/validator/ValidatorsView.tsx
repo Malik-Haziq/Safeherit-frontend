@@ -63,6 +63,7 @@ const initialState = {
   personalized_message: "",
   profile_image: "",
   inform_validator: false,
+  fileSize: 0,
 }
 
 export default function ValidatorsView() {
