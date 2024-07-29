@@ -316,12 +316,14 @@ export default function AssetsView() {
       data: string
       asset_file: any
       beneficirayPublicKeys: any
+      fileSize: number
     } = {
       category: modalControl.category,
       assignedBeneficiaryIds: beneficiaryIds || [],
       data: JSON.stringify(modalControl),
       asset_file: assetFile,
       beneficirayPublicKeys: beneficiary.beneficiary_mapper || {},
+      fileSize: modalControl.fileSize || 0,
     }
     if (validateRequiredFields(modalControl, 1)) {
       startLoader()
