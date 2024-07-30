@@ -19,7 +19,6 @@ export default function DashboardView() {
   const dispatch = useAppDispatch()
   const dashboardData = useAppSelector((state) => state.dashboard)
   const user = useAppSelector((state) => state.user)
-
   const cardDetails = [
     {
       img: diamond,
@@ -78,7 +77,13 @@ export default function DashboardView() {
         // TODO: show fallback page
       })
   }, [])
-  const percentageUsed = (40 / 100) * 100
+
+  const totalDataInMB = 1000 // 1GB = 1000MB
+  const dataLimitUsed = parseFloat((user?.dataLimit || 0).toFixed(2))
+  const percentageUsed = parseFloat(
+    ((dataLimitUsed / totalDataInMB) * 100).toFixed(2),
+  )
+
   return (
     <div className="flex flex-col px-8 gap-8 mt-8 max-w-[1200px] mx-auto">
       <section className="flex gap-5 h-[240px] justify-between">
@@ -112,7 +117,7 @@ export default function DashboardView() {
           </div>
           <div className="flex items-center justify-center flex-col">
             <p className="text-[28px] font-bold">
-              {`${(40 / 1000000).toFixed(0)}`} MB used
+              {`${dataLimitUsed}`} MB used
             </p>
             <small className="text-lg text-safe-text-light-gray-1">
               1GB Total
