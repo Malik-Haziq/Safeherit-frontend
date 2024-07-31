@@ -325,6 +325,7 @@ export default function AssetsView() {
       beneficirayPublicKeys: beneficiary.beneficiary_mapper || {},
       fileSize: modalControl.fileSize || 0,
     }
+
     if (validateRequiredFields(modalControl, 1)) {
       startLoader()
       if (modalAction == "edit") {
