@@ -68,6 +68,7 @@ const initialState = {
   profile_image: "",
   public_key: "",
   inform_beneficiary: false,
+  fileSize: 0,
 }
 
 const initialStateForEncryptionKeys = {

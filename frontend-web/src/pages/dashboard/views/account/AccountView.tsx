@@ -43,6 +43,7 @@ const initialState = {
   privateKey: "",
   publicKey: "",
   defaultCurrency: "",
+  fileSize: 0,
 }
 
 const initialPKState = {
@@ -136,6 +137,7 @@ export default function AccountView() {
     startLoader()
     toast("Updating user information", "info")
     setCookie("defaultCurrency", modalControl.defaultCurrency)
+    console.log("modalControl", modalControl)
     dispatch<any>(updateUser(modalControl))
       .unwrap()
       .then(() => {

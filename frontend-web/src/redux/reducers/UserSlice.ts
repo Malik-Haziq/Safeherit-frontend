@@ -50,6 +50,7 @@ interface UserState {
   periodEnd: number
   periodStart: number
   plan: string
+  dataLimit: number
 }
 const initialState: UserState = {
   uid: "",
@@ -104,7 +105,8 @@ const initialState: UserState = {
   nextPulseCheckDueDays: "",
   periodEnd: 0,
   periodStart: 0,
-  plan: '',
+  plan: "",
+  dataLimit: 0,
 }
 
 export const slice = createSlice({
@@ -217,6 +219,7 @@ export const slice = createSlice({
       state.isValidator = action.payload.data.data.isValidator
       const _role = localStorage.getItem("role") || ""
       state.role = atob(_role) || "none"
+      state.dataLimit = action.payload.data.data.dataLimit || 0
     })
     builder.addCase(logout.fulfilled, () => {
       return initialState
@@ -295,8 +298,7 @@ export const slice = createSlice({
       state.periodEnd = action.payload.data.data?.periodEnd
       state.periodStart = action.payload.data.data?.periodStart
       state.plan = action.payload.data.data?.plan
-    
-
+      state.dataLimit = action.payload.data.data.dataLimit || 0
       if (action.payload.data.data?.pulseCheckActive) {
         const pulseCheckLastResetAt =
           action.payload.data.data?.pulseCheckLastResetAt
