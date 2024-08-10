@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { ApplicationVerifier, RecaptchaVerifier } from "@firebase/auth"
 import { auth } from "@/firebase"
+import { useCallback } from "react"
 
 export const useArray = () => {
   const [array, setArray] = useState<string[]>([])
@@ -50,3 +51,17 @@ export function useRecaptcha(componentId: string) {
 
   return recaptcha
 }
+
+const useDownloadFile = () => {
+  const handleDownload = useCallback((url: string, filename: string) => {
+    try {
+      window.open(url, "_blank")
+    } catch (error) {
+      console.error("Error downloading file:", error)
+    }
+  }, [])
+
+  return { handleDownload }
+}
+
+export default useDownloadFile

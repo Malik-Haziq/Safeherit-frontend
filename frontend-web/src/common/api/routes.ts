@@ -46,5 +46,8 @@ export const PULSE_CHECK = "/api-pulseCheck"
 export const CREATE_PAYMENT_SESSION = "/api-payment/create-subscription-session"
 export const CREATE_PAYMENT_SESSION_PORTAL =
   "/api-payment/create-portal-session"
+
+export const GET_PAYMENT_METHODS = "/api-payment/payment-methods"
+export const GET_PAYMENT_HISTORY = "/api-payment/billing-history"
 export const OFFER_FREE_TRIAL = "/api-admin/trail"
 export const ADMIN_UPDATE_PULSE_CHECK = "/api-admin/pulse-check"

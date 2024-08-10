@@ -67,7 +67,10 @@ export default function AccountView() {
   const [modalVisibility, setModalVisibility] = useState("none")
   // const [modalVisibility, setModalVisibility] = useState("none")
   const [auth2FAEnabled, setAuth2FAEnabled] = useState(false)
-  const memberhipPlanDetail = React.useMemo(() => convertTimestampsToPlanDuration(user.periodEnd, user.periodStart), [user])
+  const memberhipPlanDetail = React.useMemo(
+    () => convertTimestampsToPlanDuration(user.periodEnd, user.periodStart),
+    [user],
+  )
 
   useEffect(() => {
     const key = localStorage.getItem("_privateKey")
@@ -91,7 +94,7 @@ export default function AccountView() {
     }
   }, [user.profile_image])
 
-  // const showPlanView = () => setShowMemberShipPlan(true)
+  const showPlanView = () => setShowMemberShipPlan(true)
   const hidePlanView = () => setShowMemberShipPlan(false)
   const startLoader = () => dispatch<any>(setLoaderVisibility(true))
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
@@ -180,11 +183,10 @@ export default function AccountView() {
     const storageKey = encryptionService.basicEncryption(user.email + user.role)
     const _key = localStorage.getItem(storageKey)
     if (_key) {
-      localStorage.setItem('_privateKey', _key)
+      localStorage.setItem("_privateKey", _key)
       localStorage.removeItem(storageKey)
       toast("Operation Successful", "success")
-    }
-    else {
+    } else {
       toast("Device not saved", "error")
     }
   }
@@ -267,9 +269,11 @@ export default function AccountView() {
                     user.uid,
                   )
                 : ""
-              const storageKey = encryptionService.basicEncryption(user.email + user.role)
+              const storageKey = encryptionService.basicEncryption(
+                user.email + user.role,
+              )
               localStorage.setItem(storageKey, _privateKey)
-              localStorage.setItem('_privateKey', _privateKey)
+              localStorage.setItem("_privateKey", _privateKey)
             })
             .catch()
             .finally(() => {
@@ -331,7 +335,10 @@ export default function AccountView() {
       ) : showTwoFAAuth ? (
         <TwoFAAuth hideTwoFA={hideTwoFA} />
       ) : showMemberShipPlan ? (
-        <MembershipPlanView hidePlanView={hidePlanView} />
+        <MembershipPlanView
+          hidePlanView={hidePlanView}
+          updatePlan={updatePlan}
+        />
       ) : (
         <>
           <ViewPrivateKey
@@ -404,7 +411,8 @@ export default function AccountView() {
                   plan={user.plan}
                   duration={`${memberhipPlanDetail.duration} days`}
                   date={memberhipPlanDetail.renewalDate}
-                  showPlanView={updatePlan}
+                  // showPlanView={updatePlan}
+                  showPlanView={showPlanView}
                 />
                 <section className="rounded-2xl shadow-md mb-4 ">
                   <div className="p-5 flex justify-between items-center border-b-[1px]">
