@@ -2,7 +2,6 @@ import React, { useEffect } from "react"
 import tick from "@images/tick.svg"
 import creditCardImg from "@images/credit-card.svg"
 import cancelIcon from "@images/cancel.svg"
-
 import styles from "../../Dashboard.module.css"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/redux"
@@ -18,22 +17,15 @@ export default function MembershipPlanView(_props: {
   const { billingHistory, creditCards, loading } = useSelector(
     (state: RootState) => state.payment,
   )
-  console.log("data_1", billingHistory)
-  console.log("data_2", creditCards)
   useEffect(() => {
     dispatch(fetchBillingHistory())
     dispatch(fetchCreditCards())
   }, [dispatch])
+
   const pricingInfoArr = [
     { duration: "Monthly", price: "20", time: "month", currentPlan: true },
     { duration: "Yearly", price: "200", time: "month", currentPlan: false },
     { duration: "Lifetime", price: "1999", time: "month", currentPlan: false },
-  ]
-
-  const creditCardArr = [
-    { cardImg: creditCardImg, cardNum: "**** **** **** 1234" },
-    { cardImg: creditCardImg, cardNum: "**** **** **** 1234" },
-    { cardImg: creditCardImg, cardNum: "**** **** **** 1234" },
   ]
 
   return (
@@ -74,12 +66,9 @@ export default function MembershipPlanView(_props: {
             ) : (
               <>
                 {creditCards?.length > 0 ? (
-                  creditCards?.map(
-                    (item, index) => (
-                      console.log("data_4", item),
-                      (<CreditCard key={index} item={item || "N/A"} />)
-                    ),
-                  )
+                  creditCards?.map((item, index) => (
+                    <CreditCard key={index} item={item || {}} />
+                  ))
                 ) : (
                   <p>No Payment Method Registered</p>
                 )}
@@ -195,7 +184,6 @@ function BillingHistory(_props: {
   invoice: string
 }) {
   const { handleDownload } = useDownloadFile()
-  console.log("_props.invoice", _props.invoice)
   return (
     <div className="grid grid-cols-4 text-sm px-5 py-2">
       <p>{_props.date || "N/A"}</p>

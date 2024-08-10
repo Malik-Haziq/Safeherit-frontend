@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { ApplicationVerifier, RecaptchaVerifier } from "@firebase/auth"
 import { auth } from "@/firebase"
 import { useCallback } from "react"
+import { toast } from "@/components"
 
 export const useArray = () => {
   const [array, setArray] = useState<string[]>([])
@@ -57,7 +58,7 @@ const useDownloadFile = () => {
     try {
       window.open(url, "_blank")
     } catch (error) {
-      console.error("Error downloading file:", error)
+      toast("Error downloading file: " + error, "error")
     }
   }, [])
 
