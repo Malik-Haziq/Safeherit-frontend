@@ -18,8 +18,8 @@ export default function MembershipPlanView(_props: {
     (state: RootState) => state.payment,
   )
   useEffect(() => {
-    dispatch(fetchBillingHistory())
-    dispatch(fetchCreditCards())
+    dispatch(fetchBillingHistory() as any)
+    dispatch(fetchCreditCards() as any)
   }, [dispatch])
 
   const pricingInfoArr = [

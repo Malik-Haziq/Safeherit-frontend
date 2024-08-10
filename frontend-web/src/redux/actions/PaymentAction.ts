@@ -4,7 +4,7 @@ import { setLoaderVisibility } from "../reducers/LoaderSlice"
 
 export const fetchCreditCards = createAsyncThunk(
   "payment/fetchCreditCards",
-  async (Data: object, { dispatch, rejectWithValue }) => {
+  async (Data: object | undefined, { dispatch, rejectWithValue }) => {
     const params = { ROUTE: GET_PAYMENT_METHODS, Body: {} }
     dispatch(setLoaderVisibility(true))
     try {
@@ -20,7 +20,7 @@ export const fetchCreditCards = createAsyncThunk(
 
 export const fetchBillingHistory = createAsyncThunk(
   "payment/fetchBillingHistory",
-  async (Data: object, { dispatch, rejectWithValue }) => {
+  async (Data: object | undefined, { dispatch, rejectWithValue }) => {
     const params = { ROUTE: GET_PAYMENT_HISTORY, Body: {} }
     dispatch(setLoaderVisibility(true))
     try {
