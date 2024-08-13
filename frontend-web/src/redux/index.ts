@@ -6,7 +6,7 @@ import asset from "./reducers/AssetSlice"
 import dashboard from "./reducers/DashboardSlice"
 import admin from "./reducers/AdminSlice"
 import loader from "./reducers/LoaderSlice"
-
+import payment from "./reducers/PaymentSlice"
 // const rootPersistConfig = {
 //   key: "data",
 //   storage,
@@ -20,6 +20,7 @@ const rootReducer = combineReducers({
   asset: asset,
   dashboard: dashboard,
   admin: admin,
+  payment: payment,
 })
 // const persistedReducer = persistReducer(rootPersistConfig, rootReducer)
 

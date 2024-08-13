@@ -1,51 +1,33 @@
-import React from "react"
+import React, { useEffect } from "react"
 import tick from "@images/tick.svg"
 import creditCardImg from "@images/credit-card.svg"
 import cancelIcon from "@images/cancel.svg"
-
 import styles from "../../Dashboard.module.css"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "@/redux"
+import { fetchBillingHistory, fetchCreditCards } from "@/redux/actions"
+import { Spinner } from "@/components"
+import useDownloadFile from "@/common/hooks"
 
 export default function MembershipPlanView(_props: {
   hidePlanView: React.MouseEventHandler<HTMLButtonElement>
+  updatePlan: (plan: any) => void
 }) {
+  const dispatch = useDispatch()
+  const { billingHistory, creditCards, loading } = useSelector(
+    (state: RootState) => state.payment,
+  )
+  useEffect(() => {
+    dispatch(fetchBillingHistory() as any)
+    dispatch(fetchCreditCards() as any)
+  }, [dispatch])
+
   const pricingInfoArr = [
     { duration: "Monthly", price: "20", time: "month", currentPlan: true },
     { duration: "Yearly", price: "200", time: "month", currentPlan: false },
     { duration: "Lifetime", price: "1999", time: "month", currentPlan: false },
   ]
 
-  const creditCardArr = [
-    { cardImg: creditCardImg, cardNum: "**** **** **** 1234" },
-    { cardImg: creditCardImg, cardNum: "**** **** **** 1234" },
-    { cardImg: creditCardImg, cardNum: "**** **** **** 1234" },
-  ]
-
-  const billingHistoryArr = [
-    {
-      date: "08/7/2022",
-      details: "08/7/2022",
-      amount: "20",
-      invoice: "Invoice 08 July 22",
-    },
-    {
-      date: "08/7/2022",
-      details: "08/7/2022",
-      amount: "20",
-      invoice: "Invoice 08 July 22",
-    },
-    {
-      date: "08/7/2022",
-      details: "08/7/2022",
-      amount: "20",
-      invoice: "Invoice 08 July 22",
-    },
-    {
-      date: "08/7/2022",
-      details: "08/7/2022",
-      amount: "20",
-      invoice: "Invoice 08 July 22",
-    },
-  ]
   return (
     <div className={styles.AppView}>
       <button
@@ -67,6 +49,7 @@ export default function MembershipPlanView(_props: {
                   price={info.price}
                   time={info.time}
                   currentPlan={info.currentPlan}
+                  updatePlan={() => _props.updatePlan(info)}
                 />
               )
             })}
@@ -78,15 +61,19 @@ export default function MembershipPlanView(_props: {
             Registered Payment Methods
           </h1>
           <div className="flex items-center gap-3">
-            {creditCardArr.map((card, index) => {
-              return (
-                <CreditCard
-                  key={index}
-                  cardImg={card.cardImg}
-                  cardNum={card.cardNum}
-                />
-              )
-            })}
+            {loading ? (
+              <Spinner />
+            ) : (
+              <>
+                {creditCards?.length > 0 ? (
+                  creditCards?.map((item, index) => (
+                    <CreditCard key={index} item={item || {}} />
+                  ))
+                ) : (
+                  <p>No Payment Method Registered</p>
+                )}
+              </>
+            )}
           </div>
         </section>
         <section>
@@ -98,17 +85,19 @@ export default function MembershipPlanView(_props: {
               <h3>Amount</h3>
               <h3>Download</h3>
             </div>
-            {billingHistoryArr.map((bill, index) => {
-              return (
+            {loading ? (
+              <Spinner />
+            ) : (
+              billingHistory?.map((bill, index) => (
                 <BillingHistory
                   key={index}
-                  date={bill.date}
-                  details={bill.details}
-                  amount={bill.amount}
-                  invoice={bill.invoice}
+                  date={bill?.date}
+                  details={bill?.details}
+                  amount={bill?.amount}
+                  invoice={bill?.download}
                 />
-              )
-            })}
+              ))
+            )}
           </div>
         </section>
       </main>
@@ -121,6 +110,7 @@ function PricingPlan(_props: {
   price: string
   time: string
   currentPlan: boolean
+  updatePlan: React.MouseEventHandler<HTMLAnchorElement>
 }) {
   return (
     <article className="py-5 shadow-md w-[300px] rounded-xl">
@@ -161,6 +151,7 @@ function PricingPlan(_props: {
             ? "primary-btn w-fit mx-auto bg-[#F2F2F2] px-12 text-[#858992] font-medium"
             : "primary-btn w-fit mx-auto bg-[#B4DBEC] px-12 text-[#04477B] font-bold"
         }
+        onClick={_props.updatePlan}
       >
         {_props.currentPlan ? "Cancel plan" : "Upgrade"}
       </a>
@@ -168,15 +159,18 @@ function PricingPlan(_props: {
   )
 }
 
-function CreditCard(_props: { cardImg: any; cardNum: string }) {
+function CreditCard(_props: { item: any }) {
+  const { cardImg, card: cardDetail } = _props?.item
   return (
     <article className="border-[1px] border-[#D8D8D8] p-4 flex flex-col gap-5 rounded-lg w-[250px]">
       <small className="text-xm text-[#888] font-medium mb-5">
-        Credit Card
+        {`${cardDetail?.funding?.toUpperCase()} CARD` || "N/A"}
       </small>
       <div className="flex items-center gap-2">
-        <img src={_props.cardImg} alt="credit card image" />
-        <p className="font-medium">{_props.cardNum}</p>
+        <img src={cardImg || creditCardImg} alt="credit card image" />
+        <p className="font-medium">
+          {`**** **** **** ${cardDetail?.last4}` || "N/A"}
+        </p>
       </div>
       <img src={cancelIcon} alt="cancel icon" className="self-end" />
     </article>
@@ -189,18 +183,22 @@ function BillingHistory(_props: {
   amount: string
   invoice: string
 }) {
+  const { handleDownload } = useDownloadFile()
   return (
     <div className="grid grid-cols-4 text-sm px-5 py-2">
-      <p>{_props.date}</p>
-      <p>{_props.details}</p>
-      <p>${_props.amount}</p>
-      <a
-        href="#"
-        onClick={() => {}}
-        className="cy-invoice-btn text-[#0C8AC1] font-semibold"
-      >
-        {_props.invoice}
-      </a>
+      <p>{_props.date || "N/A"}</p>
+      <p>{_props.details || "N/A"}</p>
+      <p>${_props.amount || "N/A"}</p>
+      {_props.invoice ? (
+        <a
+          onClick={() => handleDownload(_props.invoice, "invoice.pdf")}
+          className="cy-invoice-btn text-[#0C8AC1] font-semibold cursor-pointer"
+        >
+          Download
+        </a>
+      ) : (
+        <p>N/A</p>
+      )}
     </div>
   )
 }

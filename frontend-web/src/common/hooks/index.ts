@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { ApplicationVerifier, RecaptchaVerifier } from "@firebase/auth"
 import { auth } from "@/firebase"
+import { useCallback } from "react"
 import { toast } from "@/components"
 
 export const useArray = () => {
@@ -52,6 +53,19 @@ export function useRecaptcha(componentId: string) {
   return recaptcha
 }
 
+const useDownloadFile = () => {
+  const handleDownload = useCallback((url: string, filename: string) => {
+    try {
+      window.open(url, "_blank")
+    } catch (error) {
+      toast("Error downloading file: " + error, "error")
+    }
+  }, [])
+
+  return { handleDownload }
+}
+
+export default useDownloadFile
 /* Image and Video upload hooks */
 // types
 interface CustomChangeEvent {

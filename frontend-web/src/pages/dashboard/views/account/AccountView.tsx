@@ -95,7 +95,7 @@ export default function AccountView() {
     }
   }, [user.profile_image])
 
-  // const showPlanView = () => setShowMemberShipPlan(true)
+  const showPlanView = () => setShowMemberShipPlan(true)
   const hidePlanView = () => setShowMemberShipPlan(false)
   const startLoader = () => dispatch<any>(setLoaderVisibility(true))
   const stopLoader = () => dispatch<any>(setLoaderVisibility(false))
@@ -337,7 +337,10 @@ export default function AccountView() {
       ) : showTwoFAAuth ? (
         <TwoFAAuth hideTwoFA={hideTwoFA} />
       ) : showMemberShipPlan ? (
-        <MembershipPlanView hidePlanView={hidePlanView} />
+        <MembershipPlanView
+          hidePlanView={hidePlanView}
+          updatePlan={updatePlan}
+        />
       ) : (
         <>
           <ViewPrivateKey
@@ -410,7 +413,8 @@ export default function AccountView() {
                   plan={user.plan}
                   duration={`${memberhipPlanDetail.duration} days`}
                   date={memberhipPlanDetail.renewalDate}
-                  showPlanView={updatePlan}
+                  // showPlanView={updatePlan}
+                  showPlanView={showPlanView}
                 />
                 <section className="rounded-2xl shadow-md mb-4 ">
                   <div className="p-5 flex justify-between items-center border-b-[1px]">
