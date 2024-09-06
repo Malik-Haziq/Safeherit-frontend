@@ -104,6 +104,10 @@ export default function AssetsView() {
   ] = useArray()
 
   useEffect(() => {
+    setSelected(assetCostFilter)
+  }, [assetCostFilter])
+
+  useEffect(() => {
     // reset values incase of creating an asset
     if (!isEditingAsset.current) {
       setModalControl({ category: modalControl.category })
@@ -626,7 +630,7 @@ function Assets(_props: {
 }) {
   const [images, setImages] = useState<ImageType[][]>([])
 
-  const beneficiaries = _props.assetDetailsArr[0].beneficiaries.map(
+  const beneficiaries = _props.assetDetailsArr[0]?.beneficiaries.map(
     (beneficiary) => {
       return {
         profile_image: beneficiary.profile_image,
