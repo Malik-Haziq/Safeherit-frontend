@@ -230,13 +230,6 @@ We welcome contributions to make Safeherit more secure and user-friendly!
 - Maintain security-first development approach
 - Update documentation for any API changes
 
-## 📖 Documentation
-
-- [API Documentation](./docs/api.md)
-- [Security Architecture](./docs/security.md)
-- [User Manual](./docs/user-guide.md)
-- [Developer Guide](./docs/development.md)
-
 ## 🐛 Bug Reports
 
 If you discover a security vulnerability, please send an email to security@safeherit.com instead of using the issue tracker.
@@ -251,8 +244,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Malik Haziq**
 - GitHub: [@Malik-Haziq](https://github.com/Malik-Haziq)
-- LinkedIn: [Malik Haziq](your-linkedin-url)
-- Email: [your-email@example.com](mailto:your-email@example.com)
+- LinkedIn: [Malik Haziq]([your-linkedin-url](https://www.linkedin.com/in/malik-haziq-b5233a231/))
+- Email: [malikhaziq153@gmail.com](mailto:malikhaziq153@gmail.com)
 
 ## 🙏 Acknowledgments
 
