@@ -1,7 +1,7 @@
 
-# 🛡️ ![safeherit](https://github.com/user-attachments/assets/9dafdee6-ba28-4be8-9920-d7fce458a257)
+![safeherit](https://github.com/user-attachments/assets/9dafdee6-ba28-4be8-9920-d7fce458a257)
 
-Safeherit Frontend
+# Safeherit
 
 A secure digital asset inheritance platform that ensures your digital legacy is safely transferred to beneficiaries. Built with modern web technologies to provide a trustworthy and user-friendly interface for managing digital asset handoffs with death confirmation protocols.
 
@@ -10,37 +10,37 @@ A secure digital asset inheritance platform that ensures your digital legacy is 
 ![Security](https://img.shields.io/badge/Security-First-red?style=flat-square&logo=security&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-## 🎯 Overview
+## Overview
 
 Safeherit is a comprehensive digital inheritance solution that allows users to securely store and transfer their digital assets to designated beneficiaries upon verified death confirmation. The platform ensures that your digital legacy—passwords, documents, crypto wallets, and other sensitive information—reaches the right people at the right time.
 
-## ✨ Key Features
+## Key Features
 
-### 🔐 Security & Privacy
+### Security & Privacy
 - **End-to-End Encryption**: All sensitive data is encrypted before storage
 - **Multi-Factor Authentication**: Enhanced security with MFA support
 - **Zero-Knowledge Architecture**: Service providers cannot access your data
 - **Secure Asset Storage**: Encrypted storage for passwords, documents, and keys
 
-### 👥 Beneficiary Management
+### Beneficiary Management
 - **Multiple Beneficiaries**: Designate different assets to different people
 - **Conditional Access**: Set specific conditions for asset release
 - **Beneficiary Verification**: Multi-step verification process for recipients
 - **Asset Categories**: Organize digital assets by type and importance
 
-### 📋 Death Confirmation System
+### Death Confirmation System
 - **Multiple Verification Methods**: Various ways to confirm death events
 - **Trusted Contacts**: Designated individuals who can initiate confirmation
 - **Document Verification**: Legal document upload and verification
 - **Time-Based Triggers**: Automated systems for inactive accounts
 
-### 📱 User Experience
+### User Experience
 - **Intuitive Dashboard**: Easy-to-use interface for asset management
 - **Real-time Notifications**: Updates on system activities
 - **Mobile Responsive**: Full functionality across all devices
 - **Guided Setup**: Step-by-step onboarding process
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Frontend Framework**: React 18+ with TypeScript
 - **State Management**: Redux Toolkit
@@ -51,7 +51,7 @@ Safeherit is a comprehensive digital inheritance solution that allows users to s
 - **Build Tool**: Vite
 - **Testing**: Jest, React Testing Library, Cypress
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -139,7 +139,7 @@ Safeherit-frontend/
 └── README.md
 ```
 
-## 🔧 Available Scripts
+## Available Scripts
 
 | Command | Description |
 |---------|-------------|
@@ -150,7 +150,7 @@ Safeherit-frontend/
 | `npm run lint` | Run ESLint |
 | `npm run type-check` | Run TypeScript checks |
 
-## 🔒 Security Features
+## Security Features
 
 ### Data Protection
 - **Client-Side Encryption**: All sensitive data encrypted before transmission
@@ -164,7 +164,7 @@ Safeherit-frontend/
 - **Session Management**: Secure session handling with automatic expiration
 - **Audit Logging**: Complete audit trail of all activities
 
-## 📚 User Guides
+## User Guides
 
 ### For Asset Owners
 1. **Account Setup**: Create secure account with strong authentication
@@ -179,7 +179,7 @@ Safeherit-frontend/
 3. **Asset Access**: Access inherited assets after confirmation
 4. **Support**: Get help throughout the inheritance process
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run all tests
@@ -195,7 +195,7 @@ npm run test:e2e
 npm run test:coverage
 ```
 
-## 🚀 Deployment
+## Deployment
 
 ### Production Build
 ```bash
@@ -217,7 +217,7 @@ REACT_APP_SENTRY_DSN=your-sentry-dsn
 - **AWS S3**: Deploy static files with CloudFront
 - **Docker**: Use provided Dockerfile for containerization
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions to make Safeherit more secure and user-friendly!
 
@@ -233,24 +233,24 @@ We welcome contributions to make Safeherit more secure and user-friendly!
 - Maintain security-first development approach
 - Update documentation for any API changes
 
-## 🐛 Bug Reports
+## Bug Reports
 
 If you discover a security vulnerability, please send an email to security@safeherit.com instead of using the issue tracker.
 
 For general bugs, please use the [GitHub Issues](https://github.com/Malik-Haziq/Safeherit-frontend/issues) page.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Author
+## Author
 
 **Malik Haziq**
 - GitHub: [@Malik-Haziq](https://github.com/Malik-Haziq)
 - LinkedIn: [Malik Haziq]([your-linkedin-url](https://www.linkedin.com/in/malik-haziq-b5233a231/))
 - Email: [malikhaziq153@gmail.com](mailto:malikhaziq153@gmail.com)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Security best practices from OWASP
 - Encryption standards from industry leaders
