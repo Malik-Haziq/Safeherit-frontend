@@ -1,4 +1,7 @@
-# 🛡️ Safeherit Frontend
+
+# 🛡️ ![safeherit](https://github.com/user-attachments/assets/9dafdee6-ba28-4be8-9920-d7fce458a257)
+
+Safeherit Frontend
 
 A secure digital asset inheritance platform that ensures your digital legacy is safely transferred to beneficiaries. Built with modern web technologies to provide a trustworthy and user-friendly interface for managing digital asset handoffs with death confirmation protocols.
 
